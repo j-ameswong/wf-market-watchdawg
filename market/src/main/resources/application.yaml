@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: market
+  docker:
+    compose:
+      lifecycle-management: start_and_stop
+
+wfm:
+  base-url: https://api.warframe.market/v2
+  base-url-legacy: https://api.warframe.market/v1
+  user-agent: wf-market-watchdawg/0.1
+  rate-limit: 3
+  platform: pc
+  crossplay: false

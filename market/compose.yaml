@@ -1,0 +1,18 @@
+services:
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: watchdawg
+      POSTGRES_USER: watchdawg
+      POSTGRES_PASSWORD: watchdawg
+    ports:
+      - "5433:5432"
+    volumes:
+      - watchdawg-pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U watchdawg -d watchdawg"]
+      interval: 5s
+      retries: 10
+
+volumes:
+  watchdawg-pgdata:

@@ -6,7 +6,7 @@ services:
       POSTGRES_USER: watchdawg
       POSTGRES_PASSWORD: watchdawg
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
       - watchdawg-pgdata:/var/lib/postgresql
     healthcheck:

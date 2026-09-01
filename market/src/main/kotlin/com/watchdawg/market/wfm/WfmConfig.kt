@@ -13,7 +13,7 @@ data class WfmProperties(
 	val userAgent: String,
 	val platform: String = "pc",
 	val crossplay: Boolean = false,
-    val rateLimit: Int = 3,
+    val requestsPerSecond: Int = 3,
 )
 
 @Configuration

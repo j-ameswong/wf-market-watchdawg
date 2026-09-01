@@ -36,3 +36,24 @@ data class VersionCollections(
 	val npcs: String? = null,
 	val locations: String? = null,
 )
+
+data class Items(
+	val id: String,
+	val slug: String,
+	val gameRef: String? = null,
+	val ducats: Int? = null,
+	val maxRank: Int? = null,
+	val vaulted: Boolean = false,
+	val tags: List<String> = emptyList(),
+	val updatedAt: Instant = Instant.EPOCH,
+)
+
+fun VersionCollections.asMap(): Map<String, String> = buildMap {
+    items?.let { put("items", it) }
+    rivens?.let { put("rivens", it) }
+    liches?.let { put("liches", it) }
+    sisters?.let { put("sisters", it) }
+    missions?.let { put("missions", it) }
+    npcs?.let { put("npcs", it) }
+    locations?.let { put("locations", it) }
+ }

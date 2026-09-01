@@ -6,7 +6,23 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface CollectionVersionRepository : CrudRepository<CollectionVersionRecord, String>
+interface CollectionVersionRepository : CrudRepository<CollectionVersionRecord, String> {
+    @Modifying
+    @Query(
+             """
+             insert into collection_version (name, hash, updated_at)
+             values (:name, :hash, :updatedAt)
+             on conflict (name) do update set
+                     hash       = excluded.hash,
+                     updated_at = excluded.updated_at
+             """,
+     )
+
+     fun upsert(name: String, hash: String, updatedAt: java.time.Instant)
+}
+
+fun CollectionVersionRepository.upsert(record: CollectionVersionRecord) =
+     upsert(record.name, record.hash, record.updatedAt)
 
 @Repository
 interface ItemRepository : CrudRepository<ItemRecord, String> {

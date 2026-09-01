@@ -38,6 +38,9 @@
               mdb-reset      (cd market && docker compose down -v)
                                                                drop the volume, re-run migrations
               mdb-logs       (cd market && docker compose logs -f postgres)
+              mflyway ARGS.. flyway -url=... -locations=filesystem:...db/migration ARGS...
+                                                               run the Flyway CLI against the
+                                                               dev container, e.g. mflyway info
 
             api
               bruno-run      (cd bruno && npx @usebruno/cli run \
@@ -61,6 +64,7 @@
               pkgs.docker-client  # bootRun (spring-boot-docker-compose) and Testcontainers
               pkgs.docker-compose # the `docker compose` v2 subcommand
               pkgs.postgresql_18  # psql client only; the server is the compose container
+              pkgs.flyway         # same migrations as the app, driven without Gradle
               pkgs.nodejs_22      # npx, for the Bruno collection
               mhelp
             ];
@@ -83,6 +87,17 @@
               mpsql()     { psql -h localhost -p 5432 -U watchdawg -d watchdawg "$@"; }
               mdb-reset() { ( cd "$REPO_ROOT/market" && docker compose down -v ); }
               mdb-logs()  { ( cd "$REPO_ROOT/market" && docker compose logs -f postgres ); }
+              # The app and this share one flyway_schema_history table, which is the point:
+              # a migration applied here is seen as applied by bootRun, and vice versa.
+              mflyway()   {
+                ( cd "$REPO_ROOT/market" \
+                  && flyway \
+                       -url=jdbc:postgresql://localhost:5432/watchdawg \
+                       -user=watchdawg \
+                       -password=watchdawg \
+                       -locations=filesystem:src/main/resources/db/migration \
+                       "$@" )
+              }
               bruno-run() {
                 ( cd "$REPO_ROOT/bruno" \
                   && npx @usebruno/cli run --env production --delay 400 -r "$@" )

@@ -12,3 +12,6 @@ wfm:
   requests-per-second: 3
   platform: pc
   crossplay: false
+  sync:
+    interval: 1h
+    initial-delay: 30s

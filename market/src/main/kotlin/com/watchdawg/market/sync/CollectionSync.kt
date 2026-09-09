@@ -8,9 +8,9 @@ package com.watchdawg.market.sync
  */
 interface CollectionSync {
 
-	/** Key in [com.watchdawg.market.wfm.VersionCollections] — "items", "rivens", ... */
-	val collection: String
+    /** Key in [com.watchdawg.market.wfm.VersionCollections] — "items", "rivens", ... */
+    val collection: String
 
-	/** Fetch the collection and upsert it. Called only when the hash changed; runs in a transaction. */
-	fun refresh()
+    /** Fetch the collection and upsert it. Called only when the hash changed; runs in a transaction. */
+    fun refresh()
 }

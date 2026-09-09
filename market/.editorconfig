@@ -1,0 +1,26 @@
+# Kotlin official style: 4 spaces (Kotlin coding conventions; ktlint/IntelliJ default).
+#
+# This file MUST live in the Gradle root (market/), not the repo root: Spotless discovers
+# .editorconfig from the Gradle project directory and does not walk up past it, so a copy
+# at the repo root is silently ignored. Enforced by `./gradlew spotlessCheck` (mbuild).
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{kt,kts}]
+indent_style = space
+indent_size = 4
+ktlint_code_style = intellij_idea
+max_line_length = 120
+
+[*.sql]
+indent_style = space
+indent_size = 4
+
+[*.{yaml,yml,json}]
+indent_style = space
+indent_size = 2

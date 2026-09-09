@@ -8,8 +8,7 @@ import org.springframework.context.annotation.Import
 @Import(TestcontainersConfiguration::class)
 class MarketApplicationTests {
 
-	@Test
-	fun contextLoads() {
-	}
-
+    @Test
+    fun contextLoads() {
+    }
 }

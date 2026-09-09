@@ -1,0 +1,29 @@
+meta {
+  name: Get Item Drop Sources
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseV1}}/items/{{itemSlug}}/dropsources
+  body: none
+  auth: none
+}
+
+params:query {
+  ~include: item
+}
+
+headers {
+  Platform: {{platform}}
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Drop sources for an item. Often `[]` (as for frost_prime_set) — still a 200.
+  `include=item` returns the item manifest entry alongside.
+}

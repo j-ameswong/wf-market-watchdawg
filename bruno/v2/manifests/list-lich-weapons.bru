@@ -1,0 +1,23 @@
+meta {
+  name: List Lich Weapons
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{baseV2}}/lich/weapons
+  body: none
+  auth: none
+}
+
+headers {
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Kuva lich weapons.
+}

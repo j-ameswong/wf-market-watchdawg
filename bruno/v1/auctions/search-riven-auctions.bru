@@ -1,0 +1,39 @@
+meta {
+  name: Search Riven Auctions
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseV1}}/auctions/search?type=riven&weapon_url_name={{rivenWeaponSlug}}
+  body: none
+  auth: none
+}
+
+params:query {
+  type: riven
+  weapon_url_name: {{rivenWeaponSlug}}
+  ~polarity: any
+  ~sort_by: price_asc
+  ~positive_stats: critical_chance
+  ~negative_stats: None
+}
+
+headers {
+  Platform: {{platform}}
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Riven auction search. **No v2 auction endpoints exist yet**, so v1 is the only way
+  to reach auctions.
+
+  Requires `weapon_url_name` or at least one positive stat. Other filters:
+  positive_stats, negative_stats (`None` for no negatives), operation (allOf|anyOf),
+  mastery_rank_min/max, re_rolls_min/max, mod_rank (any|maxed), polarity, buyout_policy
+  (with|direct), sort_by (price_desc|price_asc|positive_attr_desc|positive_attr_asc).
+}

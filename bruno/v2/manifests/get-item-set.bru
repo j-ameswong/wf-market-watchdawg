@@ -1,0 +1,23 @@
+meta {
+  name: Get Item Set
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseV2}}/item/{{itemSlug}}/set
+  body: none
+  auth: none
+}
+
+headers {
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  The item plus every other part of its set.
+}

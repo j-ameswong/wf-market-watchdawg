@@ -1,0 +1,25 @@
+meta {
+  name: Get Top Orders By Item Id
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseV2}}/orders/itemId/{{itemId}}/top
+  body: none
+  auth: none
+}
+
+headers {
+  Platform: {{platform}}
+  Crossplay: {{crossplay}}
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Alias of Get Top Orders By Item, keyed on the item `id`.
+}

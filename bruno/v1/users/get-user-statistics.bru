@@ -1,0 +1,25 @@
+meta {
+  name: Get User Statistics
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseV1}}/profile/{{userSlug}}/statistics
+  body: none
+  auth: none
+}
+
+headers {
+  Platform: {{platform}}
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Per-user trade statistics. Undocumented in v1.yml, but live and large (~1.3 MB).
+  Note `/v1/profile/{user}` itself is gone (404) — only the statistics sub-route survives.
+}

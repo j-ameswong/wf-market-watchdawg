@@ -1,0 +1,23 @@
+meta {
+  name: List Sister Weapons
+  type: http
+  seq: 12
+}
+
+get {
+  url: {{baseV2}}/sister/weapons
+  body: none
+  auth: none
+}
+
+headers {
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Tenet sister weapons.
+}

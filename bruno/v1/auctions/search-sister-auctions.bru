@@ -1,0 +1,31 @@
+meta {
+  name: Search Sister Auctions
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseV1}}/auctions/search?type=sister&weapon_url_name={{sisterWeaponSlug}}
+  body: none
+  auth: none
+}
+
+params:query {
+  type: sister
+  weapon_url_name: {{sisterWeaponSlug}}
+  ~sort_by: price_asc
+}
+
+headers {
+  Platform: {{platform}}
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Tenet sister auction search. Undocumented in v1.yml but live and returning auctions;
+  it takes the same shape as the lich search.
+}

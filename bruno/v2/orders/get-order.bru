@@ -1,0 +1,23 @@
+meta {
+  name: Get Order
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseV2}}/order/{{orderId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  One order by id.
+
+  Note: ids harvested from /orders/recent are not always resolvable here — the id
+  in this collection came from /orders/item/{slug} and does resolve. Expect 404 on
+  orders that have since been closed or deleted.
+}

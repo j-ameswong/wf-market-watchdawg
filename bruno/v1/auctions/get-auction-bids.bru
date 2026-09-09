@@ -1,0 +1,24 @@
+meta {
+  name: Get Auction Bids
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseV1}}/auctions/entry/{{auctionId}}/bids
+  body: none
+  auth: none
+}
+
+headers {
+  Platform: {{platform}}
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Bids on an auction. Empty payload for auctions with no bids — still a 200.
+}

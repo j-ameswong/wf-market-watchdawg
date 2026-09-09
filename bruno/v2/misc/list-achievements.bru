@@ -1,0 +1,23 @@
+meta {
+  name: List Achievements
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseV2}}/achievements
+  body: none
+  auth: none
+}
+
+headers {
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Every achievement definition.
+}

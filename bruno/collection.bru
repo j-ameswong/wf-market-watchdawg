@@ -1,0 +1,22 @@
+headers {
+  User-Agent: {{userAgent}}
+  Accept: application/json
+}
+
+auth {
+  mode: none
+}
+
+docs {
+  warframe.market HTTP API — v2 (current) and v1 (legacy remnants).
+
+  Every request in this collection was executed against the live API on
+  2026-08-31 and returned 200 with a well-formed body. Endpoints that are
+  documented but do not work (v1 routes removed, deprecated, or requiring
+  credentials) are deliberately absent — see README.md for the exclusion list.
+
+  Rate limit is 3 req/s (Cloudflare answers 429 over it, 509 on too many
+  concurrent connections), so run the collection with a delay:
+
+    bru run --env production --delay 400 -r
+}

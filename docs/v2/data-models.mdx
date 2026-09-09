@@ -1,0 +1,573 @@
+---
+sidebar_position: 3
+toc_min_heading_level: 2
+toc_max_heading_level: 2
+---
+
+import { ApiBadge, ApiCallout, BadgeGrid } from '@site/src/components/ApiEndpoint';
+
+# Data Models
+
+Reusable public JSON shapes and enum values used by the Warframe.market API.
+
+<BadgeGrid
+  badges={[
+    { kind: 'neutral', label: 'optional/contextual' },
+    { kind: 'auth', icon: '👤', label: 'owner/self' },
+    { kind: 'auth', icon: '🛡️', label: 'moderator+' },
+    { kind: 'firstParty', icon: '◆', label: 'first-party' },
+    { kind: 'auth', icon: '🔒', label: 'auth required' },
+    { kind: 'danger', icon: '🚧', label: 'unstable' },
+  ]}
+/>
+
+<ApiCallout kind="info" icon="ℹ" title="Field Flags">
+
+Empty `Flags` means the field is public and normally present for that model. `optional/contextual` means the field is returned only for specific item kinds, user context, endpoint shape, language/platform context, or when data exists.
+
+</ApiCallout>
+
+## Item
+
+Full item model with all possible fields.
+
+| Field            | Flags                                                   | Type                                                        | Description                                  |
+| ---------------- | ------------------------------------------------------- | ----------------------------------------------------------- | -------------------------------------------- |
+| `id`             |                                                         | <ApiBadge kind="neutral" label="string" />                  | Unique identifier.                           |
+| `slug`           |                                                         | <ApiBadge kind="neutral" label="string" />                  | URL-safe slug.                               |
+| `gameRef`        |                                                         | <ApiBadge kind="neutral" label="string" />                  | Internal Warframe game reference path.       |
+| `tags`           |                                                         | <ApiBadge kind="neutral" label="[]string" />                | Item tags.                                   |
+| `setRoot`        | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="boolean" />                 | Whether this item is the root of a set.      |
+| `setParts`       | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="[]string" />                | Set member item IDs.                         |
+| `quantityInSet`  | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int" />                     | Number of items in the set.                  |
+| `rarity`         | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" />                  | Item rarity.                                 |
+| `bulkTradable`   | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="boolean" />                 | Whether the item can be traded in bulk.      |
+| `subtypes`       | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="[]string" />                | Item subtypes.                               |
+| `maxRank`        | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int" />                     | Maximum rank.                                |
+| `maxCharges`     | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int" />                     | Maximum charges.                             |
+| `maxAmberStars`  | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int" />                     | Maximum amber stars.                         |
+| `maxCyanStars`   | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int" />                     | Maximum cyan stars.                          |
+| `baseEndo`       | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int" />                     | Base endo value.                             |
+| `endoMultiplier` | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="number" />                  | Endo multiplier.                             |
+| `ducats`         | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int" />                     | Ducat value.                                 |
+| `vosfor`         | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int" />                     | Vosfor value.                                |
+| `reqMasteryRank` | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int" />                     | Required mastery rank.                       |
+| `vaulted`        | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="boolean" />                 | Whether the item is vaulted.                 |
+| `tradingTax`     | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int" />                     | Trading tax.                                 |
+| `i18n`           | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="map[string]ItemI18NJson" /> | Localized item data, keyed by language code. |
+| `tradable`       | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="boolean" />                 | Whether the item is tradable.                |
+
+### ItemI18NJson
+
+| Field         | Flags                                                   | Type                                       | Description            |
+| ------------- | ------------------------------------------------------- | ------------------------------------------ | ---------------------- |
+| `name`        |                                                         | <ApiBadge kind="neutral" label="string" /> | Display name.          |
+| `description` | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" /> | Item description.      |
+| `wikiLink`    | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" /> | Link to the wiki page. |
+| `icon`        |                                                         | <ApiBadge kind="neutral" label="string" /> | Icon image path.       |
+| `thumb`       |                                                         | <ApiBadge kind="neutral" label="string" /> | Thumbnail image path.  |
+| `subIcon`     | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" /> | Sub-icon image path.   |
+
+## Riven Item
+
+Full riven weapon model with all possible fields. `rivenType` currently includes `kitgun`, `melee`, `pistol`, `rifle`, `shotgun`, and `zaw`, but new values may be added. `group` is used by the frontend for display grouping.
+
+| Field            | Flags                                                   | Type                                       | Description                            |
+| ---------------- | ------------------------------------------------------- | ------------------------------------------ | -------------------------------------- |
+| `id`             |                                                         | <ApiBadge kind="neutral" label="string" /> | Unique identifier.                     |
+| `slug`           |                                                         | <ApiBadge kind="neutral" label="string" /> | URL-safe slug.                         |
+| `gameRef`        |                                                         | <ApiBadge kind="neutral" label="string" /> | Internal Warframe game reference path. |
+| `group`          | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" /> | Group category.                        |
+| `rivenType`      | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" /> | Weapon type.                           |
+| `disposition`    |                                                         | <ApiBadge kind="neutral" label="number" /> | Disposition value.                     |
+| `reqMasteryRank` |                                                         | <ApiBadge kind="neutral" label="int" />    | Required mastery rank.                 |
+
+### RivenItemI18NJson
+
+| Field      | Flags                                                   | Type                                       | Description            |
+| ---------- | ------------------------------------------------------- | ------------------------------------------ | ---------------------- |
+| `name`     |                                                         | <ApiBadge kind="neutral" label="string" /> | Display name.          |
+| `wikiLink` | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" /> | Link to the wiki page. |
+| `icon`     |                                                         | <ApiBadge kind="neutral" label="string" /> | Icon image path.       |
+| `thumb`    |                                                         | <ApiBadge kind="neutral" label="string" /> | Thumbnail image path.  |
+| `subIcon`  |                                                         | <ApiBadge kind="neutral" label="string" /> | Sub-icon image path.   |
+
+## Riven Attribute
+
+Full riven attribute model with all possible fields.
+
+| Field                | Flags                                                   | Type                                                                  | Description                                           |
+| -------------------- | ------------------------------------------------------- | --------------------------------------------------------------------- | ----------------------------------------------------- |
+| `id`                 |                                                         | <ApiBadge kind="neutral" label="string" />                            | Unique identifier.                                    |
+| `slug`               |                                                         | <ApiBadge kind="neutral" label="string" />                            | URL-safe slug.                                        |
+| `gameRef`            |                                                         | <ApiBadge kind="neutral" label="string" />                            | Internal Warframe game reference path.                |
+| `group`              | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" />                            | Group category.                                       |
+| `prefix`             |                                                         | <ApiBadge kind="neutral" label="string" />                            | Prefix name.                                          |
+| `suffix`             |                                                         | <ApiBadge kind="neutral" label="string" />                            | Suffix name.                                          |
+| `exclusiveTo`        | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="[]string" />                          | Riven types this attribute is exclusive to.           |
+| `positiveIsNegative` | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="boolean" />                           | Whether positive values are treated as negative.      |
+| `unit`               | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" />                            | Unit of measurement.                                  |
+| `positiveOnly`       | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="boolean" />                           | Whether this attribute can only have positive values. |
+| `negativeOnly`       | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="boolean" />                           | Whether this attribute can only have negative values. |
+| `i18n`               | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="map[string]RivenAttributeI18NJson" /> | Localized text map by language code.                  |
+
+### RivenAttributeI18NJson
+
+| Field   | Flags                                                   | Type                                       | Description            |
+| ------- | ------------------------------------------------------- | ------------------------------------------ | ---------------------- |
+| `name`  | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" /> | Attribute effect name. |
+| `icon`  | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" /> | Icon image path.       |
+| `thumb` | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" /> | Thumbnail image path.  |
+
+## Lich Weapon
+
+| Field            | Flags                                                   | Type                                                              | Description                            |
+| ---------------- | ------------------------------------------------------- | ----------------------------------------------------------------- | -------------------------------------- |
+| `id`             |                                                         | <ApiBadge kind="neutral" label="string" />                        | Unique identifier.                     |
+| `slug`           |                                                         | <ApiBadge kind="neutral" label="string" />                        | URL-safe slug.                         |
+| `gameRef`        |                                                         | <ApiBadge kind="neutral" label="string" />                        | Internal Warframe game reference path. |
+| `reqMasteryRank` |                                                         | <ApiBadge kind="neutral" label="int" />                           | Required mastery rank.                 |
+| `i18n`           | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="map[string]LichWeaponI18NJson" /> | Localized text map by language code.   |
+
+### LichWeaponI18NJson
+
+| Field      | Flags | Type                                       | Description            |
+| ---------- | ----- | ------------------------------------------ | ---------------------- |
+| `name`     |       | <ApiBadge kind="neutral" label="string" /> | Display name.          |
+| `wikiLink` |       | <ApiBadge kind="neutral" label="string" /> | Link to the wiki page. |
+| `icon`     |       | <ApiBadge kind="neutral" label="string" /> | Icon image path.       |
+| `thumb`    |       | <ApiBadge kind="neutral" label="string" /> | Thumbnail image path.  |
+
+## Lich Ephemera
+
+| Field       | Flags                                                   | Type                                                                | Description                            |
+| ----------- | ------------------------------------------------------- | ------------------------------------------------------------------- | -------------------------------------- |
+| `id`        |                                                         | <ApiBadge kind="neutral" label="string" />                          | Unique identifier.                     |
+| `slug`      |                                                         | <ApiBadge kind="neutral" label="string" />                          | URL-safe slug.                         |
+| `gameRef`   |                                                         | <ApiBadge kind="neutral" label="string" />                          | Internal Warframe game reference path. |
+| `animation` |                                                         | <ApiBadge kind="neutral" label="string" />                          | Animation path.                        |
+| `element`   |                                                         | <ApiBadge kind="neutral" label="string" />                          | Elemental type.                        |
+| `i18n`      | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="map[string]LichEphemeraI18NJson" /> | Localized text map by language code.   |
+
+### LichEphemeraI18NJson
+
+| Field   | Flags | Type                                       | Description           |
+| ------- | ----- | ------------------------------------------ | --------------------- |
+| `name`  |       | <ApiBadge kind="neutral" label="string" /> | Display name.         |
+| `icon`  |       | <ApiBadge kind="neutral" label="string" /> | Icon image path.      |
+| `thumb` |       | <ApiBadge kind="neutral" label="string" /> | Thumbnail image path. |
+
+## Lich Quirk
+
+| Field   | Flags                                                   | Type                                                             | Description                          |
+| ------- | ------------------------------------------------------- | ---------------------------------------------------------------- | ------------------------------------ |
+| `id`    |                                                         | <ApiBadge kind="neutral" label="string" />                       | Unique identifier.                   |
+| `slug`  |                                                         | <ApiBadge kind="neutral" label="string" />                       | URL-safe slug.                       |
+| `group` | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" />                       | Group category.                      |
+| `i18n`  | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="map[string]LichQuirkI18NJson" /> | Localized text map by language code. |
+
+### LichQuirkI18NJson
+
+| Field         | Flags | Type                                       | Description           |
+| ------------- | ----- | ------------------------------------------ | --------------------- |
+| `name`        |       | <ApiBadge kind="neutral" label="string" /> | Display name.         |
+| `description` |       | <ApiBadge kind="neutral" label="string" /> | Quirk description.    |
+| `icon`        |       | <ApiBadge kind="neutral" label="string" /> | Icon image path.      |
+| `thumb`       |       | <ApiBadge kind="neutral" label="string" /> | Thumbnail image path. |
+
+## Sister Weapon
+
+| Field            | Flags                                                   | Type                                                                | Description                            |
+| ---------------- | ------------------------------------------------------- | ------------------------------------------------------------------- | -------------------------------------- |
+| `id`             |                                                         | <ApiBadge kind="neutral" label="string" />                          | Unique identifier.                     |
+| `slug`           |                                                         | <ApiBadge kind="neutral" label="string" />                          | URL-safe slug.                         |
+| `gameRef`        |                                                         | <ApiBadge kind="neutral" label="string" />                          | Internal Warframe game reference path. |
+| `reqMasteryRank` |                                                         | <ApiBadge kind="neutral" label="int" />                             | Required mastery rank.                 |
+| `i18n`           | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="map[string]SisterWeaponI18NJson" /> | Localized text map by language code.   |
+
+### SisterWeaponI18NJson
+
+| Field      | Flags | Type                                       | Description            |
+| ---------- | ----- | ------------------------------------------ | ---------------------- |
+| `name`     |       | <ApiBadge kind="neutral" label="string" /> | Display name.          |
+| `wikiLink` |       | <ApiBadge kind="neutral" label="string" /> | Link to the wiki page. |
+| `icon`     |       | <ApiBadge kind="neutral" label="string" /> | Icon image path.       |
+| `thumb`    |       | <ApiBadge kind="neutral" label="string" /> | Thumbnail image path.  |
+
+## Sister Ephemera
+
+| Field       | Flags                                                   | Type                                                                  | Description                            |
+| ----------- | ------------------------------------------------------- | --------------------------------------------------------------------- | -------------------------------------- |
+| `id`        |                                                         | <ApiBadge kind="neutral" label="string" />                            | Unique identifier.                     |
+| `slug`      |                                                         | <ApiBadge kind="neutral" label="string" />                            | URL-safe slug.                         |
+| `gameRef`   |                                                         | <ApiBadge kind="neutral" label="string" />                            | Internal Warframe game reference path. |
+| `animation` |                                                         | <ApiBadge kind="neutral" label="string" />                            | Animation path.                        |
+| `element`   |                                                         | <ApiBadge kind="neutral" label="string" />                            | Elemental type.                        |
+| `i18n`      | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="map[string]SisterEphemeraI18NJson" /> | Localized text map by language code.   |
+
+### SisterEphemeraI18NJson
+
+| Field   | Flags | Type                                       | Description           |
+| ------- | ----- | ------------------------------------------ | --------------------- |
+| `name`  |       | <ApiBadge kind="neutral" label="string" /> | Display name.         |
+| `icon`  |       | <ApiBadge kind="neutral" label="string" /> | Icon image path.      |
+| `thumb` |       | <ApiBadge kind="neutral" label="string" /> | Thumbnail image path. |
+
+## Sister Quirk
+
+| Field   | Flags                                                   | Type                                                               | Description                          |
+| ------- | ------------------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------ |
+| `id`    |                                                         | <ApiBadge kind="neutral" label="string" />                         | Unique identifier.                   |
+| `slug`  |                                                         | <ApiBadge kind="neutral" label="string" />                         | URL-safe slug.                       |
+| `group` | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" />                         | Group category.                      |
+| `i18n`  | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="map[string]SisterQuirkI18NJson" /> | Localized text map by language code. |
+
+### SisterQuirkI18NJson
+
+| Field         | Flags | Type                                       | Description           |
+| ------------- | ----- | ------------------------------------------ | --------------------- |
+| `name`        |       | <ApiBadge kind="neutral" label="string" /> | Display name.         |
+| `description` |       | <ApiBadge kind="neutral" label="string" /> | Quirk description.    |
+| `icon`        |       | <ApiBadge kind="neutral" label="string" /> | Icon image path.      |
+| `thumb`       |       | <ApiBadge kind="neutral" label="string" /> | Thumbnail image path. |
+
+## Npc
+
+| Field     | Flags                                                   | Type                                                       | Description                            |
+| --------- | ------------------------------------------------------- | ---------------------------------------------------------- | -------------------------------------- |
+| `id`      |                                                         | <ApiBadge kind="neutral" label="string" />                 | Unique identifier.                     |
+| `slug`    |                                                         | <ApiBadge kind="neutral" label="string" />                 | URL-safe slug.                         |
+| `gameRef` |                                                         | <ApiBadge kind="neutral" label="string" />                 | Internal Warframe game reference path. |
+| `i18n`    | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="map[string]NpcI18NJson" /> | Localized text map by language code.   |
+
+### NpcI18NJson
+
+| Field   | Flags | Type                                       | Description           |
+| ------- | ----- | ------------------------------------------ | --------------------- |
+| `name`  |       | <ApiBadge kind="neutral" label="string" /> | Display name.         |
+| `icon`  |       | <ApiBadge kind="neutral" label="string" /> | Icon image path.      |
+| `thumb` |       | <ApiBadge kind="neutral" label="string" /> | Thumbnail image path. |
+
+## Location
+
+| Field      | Flags                                                   | Type                                                            | Description                            |
+| ---------- | ------------------------------------------------------- | --------------------------------------------------------------- | -------------------------------------- |
+| `id`       |                                                         | <ApiBadge kind="neutral" label="string" />                      | Unique identifier.                     |
+| `slug`     |                                                         | <ApiBadge kind="neutral" label="string" />                      | URL-safe slug.                         |
+| `gameRef`  |                                                         | <ApiBadge kind="neutral" label="string" />                      | Internal Warframe game reference path. |
+| `faction`  | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" />                      | Faction name.                          |
+| `minLevel` | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int" />                         | Minimum level for missions.            |
+| `maxLevel` | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int" />                         | Maximum level for missions.            |
+| `i18n`     | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="map[string]LocationI18NJson" /> | Localized text map by language code.   |
+
+### LocationI18NJson
+
+| Field        | Flags | Type                                       | Description           |
+| ------------ | ----- | ------------------------------------------ | --------------------- |
+| `nodeName`   |       | <ApiBadge kind="neutral" label="string" /> | Node display name.    |
+| `systemName` |       | <ApiBadge kind="neutral" label="string" /> | System name.          |
+| `icon`       |       | <ApiBadge kind="neutral" label="string" /> | Icon image path.      |
+| `thumb`      |       | <ApiBadge kind="neutral" label="string" /> | Thumbnail image path. |
+
+## Mission
+
+| Field     | Flags                                                   | Type                                                           | Description                            |
+| --------- | ------------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------- |
+| `id`      |                                                         | <ApiBadge kind="neutral" label="string" />                     | Unique identifier.                     |
+| `slug`    |                                                         | <ApiBadge kind="neutral" label="string" />                     | URL-safe slug.                         |
+| `gameRef` |                                                         | <ApiBadge kind="neutral" label="string" />                     | Internal Warframe game reference path. |
+| `i18n`    | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="map[string]MissionI18NJson" /> | Localized text map by language code.   |
+
+### MissionI18NJson
+
+| Field   | Flags | Type                                       | Description           |
+| ------- | ----- | ------------------------------------------ | --------------------- |
+| `name`  |       | <ApiBadge kind="neutral" label="string" /> | Display name.         |
+| `icon`  |       | <ApiBadge kind="neutral" label="string" /> | Icon image path.      |
+| `thumb` |       | <ApiBadge kind="neutral" label="string" /> | Thumbnail image path. |
+
+## Order
+
+Order without specifying the owner. Used where the owner is already known, such as a user profile or your own profile.
+
+| Field        | Flags                                                   | Type                                          | Description                                       |
+| ------------ | ------------------------------------------------------- | --------------------------------------------- | ------------------------------------------------- |
+| `id`         |                                                         | <ApiBadge kind="neutral" label="string" />    | Unique identifier.                                |
+| `type`       |                                                         | <ApiBadge kind="neutral" label="string" />    | `buy` or `sell`.                                  |
+| `platinum`   |                                                         | <ApiBadge kind="neutral" label="int" />       | Total platinum currency.                          |
+| `quantity`   |                                                         | <ApiBadge kind="neutral" label="int" />       | Number of items.                                  |
+| `perTrade`   | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int" />       | Items quantity per transaction.                   |
+| `subtype`    | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" />    | Specific subtype or category.                     |
+| `rank`       | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int" />       | Rank or level of the item.                        |
+| `charges`    | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int" />       | Number of charges left.                           |
+| `amberStars` | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int" />       | Count of amber stars in a sculpture.              |
+| `cyanStars`  | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int" />       | Count of cyan stars in a sculpture.               |
+| `visible`    |                                                         | <ApiBadge kind="neutral" label="boolean" />   | Whether the order is publicly visible.            |
+| `createdAt`  |                                                         | <ApiBadge kind="neutral" label="string" />    | Creation timestamp.                               |
+| `updatedAt`  |                                                         | <ApiBadge kind="neutral" label="string" />    | Last modification timestamp.                      |
+| `itemId`     | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" />    | Item identifier.                                  |
+| `groupId`    | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" />    | User-defined group. Default group is named `all`. |
+| `user`       | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="UserShort" /> | User who created the order.                       |
+
+## Transaction
+
+Represents an order that has been fully or partially closed.
+
+| Field       | Flags                                                   | Type                                          | Description                               |
+| ----------- | ------------------------------------------------------- | --------------------------------------------- | ----------------------------------------- |
+| `id`        |                                                         | <ApiBadge kind="neutral" label="string" />    | Unique identifier.                        |
+| `type`      |                                                         | <ApiBadge kind="neutral" label="string" />    | Trade type.                               |
+| `originId`  |                                                         | <ApiBadge kind="neutral" label="string" />    | Original order identifier.                |
+| `platinum`  |                                                         | <ApiBadge kind="neutral" label="number" />    | Platinum amount.                          |
+| `quantity`  |                                                         | <ApiBadge kind="neutral" label="int" />       | Number of items.                          |
+| `createdAt` |                                                         | <ApiBadge kind="neutral" label="string" />    | Creation timestamp.                       |
+| `updatedAt` |                                                         | <ApiBadge kind="neutral" label="string" />    | Last modification timestamp.              |
+| `item`      | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="TxItem" />    | Item details involved in the transaction. |
+| `user`      | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="UserShort" /> | User involved in the transaction.         |
+
+### TxItem
+
+| Field        | Flags                                                   | Type                                       | Description           |
+| ------------ | ------------------------------------------------------- | ------------------------------------------ | --------------------- |
+| `id`         | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" /> | Item identifier.      |
+| `rank`       | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int" />    | Rank of the item.     |
+| `charges`    | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int" />    | Number of charges.    |
+| `subtype`    | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" /> | Item subtype.         |
+| `amberStars` | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int" />    | Count of amber stars. |
+| `cyanStars`  | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int" />    | Count of cyan stars.  |
+
+## UserShort
+
+Shortened user model returned inside orders, transactions, and other embedded user references.
+
+| Field        | Flags                                                   | Type                                                 | Description                                                 |
+| ------------ | ------------------------------------------------------- | ---------------------------------------------------- | ----------------------------------------------------------- |
+| `id`         |                                                         | <ApiBadge kind="neutral" label="string" />           | Unique identifier.                                          |
+| `ingameName` |                                                         | <ApiBadge kind="neutral" label="string" />           | In-game name.                                               |
+| `slug`       |                                                         | <ApiBadge kind="neutral" label="string" />           | URL-safe slug.                                              |
+| `reputation` |                                                         | <ApiBadge kind="neutral" label="int" />              | Reputation score.                                           |
+| `platform`   |                                                         | <ApiBadge kind="neutral" label="string" />           | Gaming platform.                                            |
+| `crossplay`  |                                                         | <ApiBadge kind="neutral" label="boolean" />          | Whether the user supports cross-platform trading.           |
+| `locale`     |                                                         | <ApiBadge kind="neutral" label="string" />           | Preferred communication language.                           |
+| `status`     |                                                         | <ApiBadge kind="neutral" label="string" />           | Current online status. `invisible` is exposed as `offline`. |
+| `avatar`     | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" />           | Avatar image path.                                          |
+| `activity`   |                                                         | <ApiBadge kind="neutral" label="Activity or null" /> | Current activity, or `null` when no activity is set.        |
+| `lastSeen`   |                                                         | <ApiBadge kind="neutral" label="string" />           | Last seen timestamp.                                        |
+
+## User
+
+Public user profile.
+
+| Field         | Flags                                                                                                                                                               | Type                                                 | Description                                                                       |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `id`          |                                                                                                                                                                     | <ApiBadge kind="neutral" label="string" />           | Unique user identifier.                                                           |
+| `role`        |                                                                                                                                                                     | <ApiBadge kind="neutral" label="Role" />             | User role.                                                                        |
+| `tier`        |                                                                                                                                                                     | <ApiBadge kind="neutral" label="Tier" />             | Subscription/support tier.                                                        |
+| `ingameName`  |                                                                                                                                                                     | <ApiBadge kind="neutral" label="string" />           | User's in-game name.                                                              |
+| `slug`        |                                                                                                                                                                     | <ApiBadge kind="neutral" label="string" />           | URL-safe user slug.                                                               |
+| `avatar`      | <ApiBadge kind="neutral" label="optional/contextual" />                                                                                                             | <ApiBadge kind="neutral" label="string" />           | Avatar image path.                                                                |
+| `background`  | <ApiBadge kind="neutral" label="optional/contextual" />                                                                                                             | <ApiBadge kind="neutral" label="string" />           | Profile background image path.                                                    |
+| `about`       |                                                                                                                                                                     | <ApiBadge kind="neutral" label="string" />           | Sanitized HTML profile text.                                                      |
+| `reputation`  |                                                                                                                                                                     | <ApiBadge kind="neutral" label="int" />              | User reputation score.                                                            |
+| `masteryRank` |                                                                                                                                                                     | <ApiBadge kind="neutral" label="int" />              | Warframe mastery rank; `0` when unset.                                            |
+| `status`      |                                                                                                                                                                     | <ApiBadge kind="neutral" label="Status" />           | Current online status. `invisible` is exposed as `offline` for public viewers.    |
+| `activity`    |                                                                                                                                                                     | <ApiBadge kind="neutral" label="Activity or null" /> | Current rich activity, or `null` when no activity is set.                         |
+| `lastSeen`    |                                                                                                                                                                     | <ApiBadge kind="neutral" label="string" />           | Last seen timestamp.                                                              |
+| `platform`    |                                                                                                                                                                     | <ApiBadge kind="neutral" label="Platform" />         | User's platform.                                                                  |
+| `crossplay`   |                                                                                                                                                                     | <ApiBadge kind="neutral" label="boolean" />          | Whether the user supports cross-platform trading.                                 |
+| `locale`      |                                                                                                                                                                     | <ApiBadge kind="neutral" label="Language" />         | User's locale.                                                                    |
+| `banned`      | <ApiBadge kind="neutral" label="optional/contextual" />                                                                                                             | <ApiBadge kind="neutral" label="boolean" />          | Public ban flag.                                                                  |
+| `banUntil`    | <ApiBadge kind="neutral" label="optional/contextual" />                                                                                                             | <ApiBadge kind="neutral" label="string" />           | Public ban expiration timestamp.                                                  |
+| `banMessage`  | <ApiBadge kind="neutral" label="optional/contextual" /> <ApiBadge kind="auth" icon="👤" label="owner/self" /> <ApiBadge kind="auth" icon="🛡️" label="moderator+" /> | <ApiBadge kind="neutral" label="string" />           | Ban reason, returned to the affected user or moderators+.                         |
+| `createdAt`   | <ApiBadge kind="neutral" label="optional/contextual" /> <ApiBadge kind="auth" icon="🛡️" label="moderator+" />                                                       | <ApiBadge kind="neutral" label="string" />           | Account creation timestamp, returned to moderators+.                              |
+| `warned`      | <ApiBadge kind="neutral" label="optional/contextual" /> <ApiBadge kind="auth" icon="👤" label="owner/self" /> <ApiBadge kind="auth" icon="🛡️" label="moderator+" /> | <ApiBadge kind="neutral" label="boolean" />          | Warning flag, returned to affected user or moderators+.                           |
+| `warnMessage` | <ApiBadge kind="neutral" label="optional/contextual" /> <ApiBadge kind="auth" icon="👤" label="owner/self" /> <ApiBadge kind="auth" icon="🛡️" label="moderator+" /> | <ApiBadge kind="neutral" label="string" />           | Warning message, returned to affected user or moderators+.                        |
+| `warnedBy`    | <ApiBadge kind="neutral" label="optional/contextual" /> <ApiBadge kind="auth" icon="👤" label="owner/self" /> <ApiBadge kind="auth" icon="🛡️" label="moderator+" /> | <ApiBadge kind="neutral" label="string" />           | Moderator/admin user ID that issued the warning.                                  |
+| `warnedAt`    | <ApiBadge kind="neutral" label="optional/contextual" /> <ApiBadge kind="auth" icon="👤" label="owner/self" /> <ApiBadge kind="auth" icon="🛡️" label="moderator+" /> | <ApiBadge kind="neutral" label="string" />           | Warning timestamp.                                                                |
+| `bannedBy`    | <ApiBadge kind="neutral" label="optional/contextual" /> <ApiBadge kind="auth" icon="👤" label="owner/self" /> <ApiBadge kind="auth" icon="🛡️" label="moderator+" /> | <ApiBadge kind="neutral" label="string" />           | Moderator/admin user ID that issued the ban.                                      |
+| `bannedAt`    | <ApiBadge kind="neutral" label="optional/contextual" /> <ApiBadge kind="auth" icon="👤" label="owner/self" /> <ApiBadge kind="auth" icon="🛡️" label="moderator+" /> | <ApiBadge kind="neutral" label="string" />           | Ban timestamp.                                                                    |
+| `nameHistory` | <ApiBadge kind="neutral" label="optional/contextual" /> <ApiBadge kind="auth" icon="🛡️" label="moderator+" />                                                       | <ApiBadge kind="neutral" label="[]NameHistory" />    | Previous names, returned to moderators+ when present.                             |
+| `uid`         | <ApiBadge kind="neutral" label="optional/contextual" /> <ApiBadge kind="auth" icon="🛡️" label="moderator+" />                                                       | <ApiBadge kind="neutral" label="string" />           | Platform-specific unique user identifier, returned to moderators+ when available. |
+
+## UserPrivate
+
+Private self profile returned for the authenticated user.
+
+| Field                 | Flags                                                                                                                                                               | Type                                        | Description                                       |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ------------------------------------------------- |
+| `id`                  |                                                                                                                                                                     | <ApiBadge kind="neutral" label="string" />  | Unique identifier.                                |
+| `role`                |                                                                                                                                                                     | <ApiBadge kind="neutral" label="string" />  | User role.                                        |
+| `tier`                |                                                                                                                                                                     | <ApiBadge kind="neutral" label="string" />  | Subscription tier.                                |
+| `subscription`        |                                                                                                                                                                     | <ApiBadge kind="neutral" label="boolean" /> | Subscription status.                              |
+| `ingameName`          |                                                                                                                                                                     | <ApiBadge kind="neutral" label="string" />  | In-game name.                                     |
+| `slug`                |                                                                                                                                                                     | <ApiBadge kind="neutral" label="string" />  | URL-safe slug.                                    |
+| `avatar`              | <ApiBadge kind="neutral" label="optional/contextual" />                                                                                                             | <ApiBadge kind="neutral" label="string" />  | Avatar image path.                                |
+| `background`          | <ApiBadge kind="neutral" label="optional/contextual" />                                                                                                             | <ApiBadge kind="neutral" label="string" />  | Profile background image path.                    |
+| `about`               |                                                                                                                                                                     | <ApiBadge kind="neutral" label="string" />  | Sanitized HTML profile text.                      |
+| `aboutRaw`            |                                                                                                                                                                     | <ApiBadge kind="neutral" label="string" />  | About text in raw markdown.                       |
+| `reputation`          |                                                                                                                                                                     | <ApiBadge kind="neutral" label="int" />     | Reputation score.                                 |
+| `masteryRank`         |                                                                                                                                                                     | <ApiBadge kind="neutral" label="int" />     | Warframe mastery rank.                            |
+| `credits`             |                                                                                                                                                                     | <ApiBadge kind="neutral" label="int" />     | In-game currency balance.                         |
+| `lastSeen`            |                                                                                                                                                                     | <ApiBadge kind="neutral" label="string" />  | Last seen timestamp.                              |
+| `platform`            |                                                                                                                                                                     | <ApiBadge kind="neutral" label="string" />  | Gaming platform.                                  |
+| `crossplay`           |                                                                                                                                                                     | <ApiBadge kind="neutral" label="boolean" /> | Whether the user supports cross-platform trading. |
+| `locale`              |                                                                                                                                                                     | <ApiBadge kind="neutral" label="string" />  | Preferred communication language.                 |
+| `theme`               |                                                                                                                                                                     | <ApiBadge kind="neutral" label="string" />  | Preferred color scheme for UI.                    |
+| `syncLocale`          |                                                                                                                                                                     | <ApiBadge kind="neutral" label="boolean" /> | Sync locale across devices.                       |
+| `syncTheme`           |                                                                                                                                                                     | <ApiBadge kind="neutral" label="boolean" /> | Sync theme across devices.                        |
+| `verification`        |                                                                                                                                                                     | <ApiBadge kind="neutral" label="boolean" /> | Verification status.                              |
+| `checkCode`           |                                                                                                                                                                     | <ApiBadge kind="neutral" label="string" />  | Unique check code for the user.                   |
+| `createdAt`           | <ApiBadge kind="auth" icon="🛡️" label="moderator+" />                                                                                                               | <ApiBadge kind="neutral" label="string" />  | Account creation timestamp.                       |
+| `warned`              | <ApiBadge kind="neutral" label="optional/contextual" /> <ApiBadge kind="auth" icon="👤" label="owner/self" /> <ApiBadge kind="auth" icon="🛡️" label="moderator+" /> | <ApiBadge kind="neutral" label="boolean" /> | Warning flag.                                     |
+| `warnMessage`         | <ApiBadge kind="neutral" label="optional/contextual" /> <ApiBadge kind="auth" icon="👤" label="owner/self" /> <ApiBadge kind="auth" icon="🛡️" label="moderator+" /> | <ApiBadge kind="neutral" label="string" />  | Warning message.                                  |
+| `warnedBy`            | <ApiBadge kind="neutral" label="optional/contextual" /> <ApiBadge kind="auth" icon="👤" label="owner/self" /> <ApiBadge kind="auth" icon="🛡️" label="moderator+" /> | <ApiBadge kind="neutral" label="string" />  | Moderator who issued the warning.                 |
+| `banned`              | <ApiBadge kind="neutral" label="optional/contextual" /> <ApiBadge kind="auth" icon="👤" label="owner/self" /> <ApiBadge kind="auth" icon="🛡️" label="moderator+" /> | <ApiBadge kind="neutral" label="boolean" /> | Ban status.                                       |
+| `banUntil`            | <ApiBadge kind="neutral" label="optional/contextual" /> <ApiBadge kind="auth" icon="👤" label="owner/self" /> <ApiBadge kind="auth" icon="🛡️" label="moderator+" /> | <ApiBadge kind="neutral" label="string" />  | Ban expiration timestamp.                         |
+| `banMessage`          | <ApiBadge kind="neutral" label="optional/contextual" /> <ApiBadge kind="auth" icon="👤" label="owner/self" /> <ApiBadge kind="auth" icon="🛡️" label="moderator+" /> | <ApiBadge kind="neutral" label="string" />  | Reason for the ban.                               |
+| `bannedBy`            | <ApiBadge kind="neutral" label="optional/contextual" /> <ApiBadge kind="auth" icon="👤" label="owner/self" /> <ApiBadge kind="auth" icon="🛡️" label="moderator+" /> | <ApiBadge kind="neutral" label="string" />  | Moderator who issued the ban.                     |
+| `unreadNotifications` |                                                                                                                                                                     | <ApiBadge kind="neutral" label="int" />     | Count of unread notifications.                    |
+| `deleteInProgress`    | <ApiBadge kind="neutral" label="optional/contextual" />                                                                                                             | <ApiBadge kind="neutral" label="boolean" /> | Flag for pending account deletion.                |
+| `deleteAt`            | <ApiBadge kind="neutral" label="optional/contextual" />                                                                                                             | <ApiBadge kind="neutral" label="string" />  | Scheduled deletion date.                          |
+| `linkedAccounts`      |                                                                                                                                                                     | <ApiBadge kind="neutral" label="object" />  | Accounts linked with the user's profile.          |
+| `hasEmail`            | <ApiBadge kind="neutral" label="optional/contextual" />                                                                                                             | <ApiBadge kind="neutral" label="boolean" /> | Whether the user has an email address.            |
+| `email`               | <ApiBadge kind="neutral" label="optional/contextual" /> <ApiBadge kind="firstParty" icon="◆" label="first-party" />                                                 | <ApiBadge kind="neutral" label="string" />  | Email address.                                    |
+
+## Activity
+
+| Field       | Flags                                                   | Type                                       | Description                            |
+| ----------- | ------------------------------------------------------- | ------------------------------------------ | -------------------------------------- |
+| `type`      |                                                         | <ApiBadge kind="neutral" label="string" /> | Activity type.                         |
+| `details`   | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" /> | Optional specifics about the activity. |
+| `startedAt` | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" /> | Timestamp of the activity start.       |
+
+Activity type values currently include `on_mission`, `dojo`, `unknown`, and an empty string.
+
+## Achievement
+
+| Field             | Flags                                                   | Type                                                         | Description                                                 |
+| ----------------- | ------------------------------------------------------- | ------------------------------------------------------------ | ----------------------------------------------------------- |
+| `id`              |                                                         | <ApiBadge kind="neutral" label="string" />                   | Unique identifier.                                          |
+| `slug`            |                                                         | <ApiBadge kind="neutral" label="string" />                   | URL-safe slug.                                              |
+| `type`            |                                                         | <ApiBadge kind="neutral" label="string" />                   | Type of the achievement.                                    |
+| `secret`          | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="boolean" />                  | If true, hidden from the public.                            |
+| `reputationBonus` | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int" />                      | Reputation bonus for the achievement.                       |
+| `goal`            | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int" />                      | Goal to achieve.                                            |
+| `i18n`            |                                                         | <ApiBadge kind="neutral" label="object" />                   | Localized text map by language code.                        |
+| `state`           | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="AchievementState or null" /> | Current state, only present for user-specific achievements. |
+
+### AchievementState
+
+| Field         | Flags                                                   | Type                                            | Description                           |
+| ------------- | ------------------------------------------------------- | ----------------------------------------------- | ------------------------------------- |
+| `featured`    | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="boolean" />     | If true, the achievement is featured. |
+| `hidden`      | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="boolean" />     | If true, hidden from the public.      |
+| `progress`    | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="int or null" /> | Current progress towards the goal.    |
+| `completedAt` | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" />      | Timestamp when achieved.              |
+
+## DashboardShowcase
+
+Mobile app main screen dashboard with featured items.
+
+| Field   | Flags                                                   | Type                                                        | Description                          |
+| ------- | ------------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------ |
+| `i18n`  | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="object or null" />          | Localized text map by language code. |
+| `items` |                                                         | <ApiBadge kind="neutral" label="DashboardShowcaseItem[]" /> | Featured items.                      |
+
+### DashboardShowcaseItem
+
+| Field           | Flags                                                   | Type                                        | Description                      |
+| --------------- | ------------------------------------------------------- | ------------------------------------------- | -------------------------------- |
+| `item`          |                                                         | <ApiBadge kind="neutral" label="string" />  | Item slug/key.                   |
+| `background`    |                                                         | <ApiBadge kind="neutral" label="string" />  | Background image path.           |
+| `bigCard`       |                                                         | <ApiBadge kind="neutral" label="boolean" /> | Whether to render as a big card. |
+| `label`         | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" />  | Label text.                      |
+| `labelPosition` | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" />  | Label position.                  |
+
+## Client
+
+OAuth client model.
+
+| Field         | Flags                                                   | Type                                               | Description                           |
+| ------------- | ------------------------------------------------------- | -------------------------------------------------- | ------------------------------------- |
+| `id`          |                                                         | <ApiBadge kind="neutral" label="string" />         | Unique identifier.                    |
+| `slug`        |                                                         | <ApiBadge kind="neutral" label="string" />         | URL-safe slug.                        |
+| `active`      | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="bool or null" />   | Whether the client is active.         |
+| `firstParty`  | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="bool or null" />   | Whether this is a first-party client. |
+| `logo`        | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" />         | Client logo path.                     |
+| `redirectUri` | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string[]" />       | Allowed redirect URIs.                |
+| `scopes`      | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string[]" />       | Granted scopes.                       |
+| `secret`      | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" />         | Client secret.                        |
+| `i18n`        | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="object or null" /> | Localized client info.                |
+
+### ClientI18N
+
+| Field         | Flags                                                   | Type                                       | Description            |
+| ------------- | ------------------------------------------------------- | ------------------------------------------ | ---------------------- |
+| `name`        | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" /> | Localized client name. |
+| `description` | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" /> | Localized description. |
+
+## Group
+
+User-defined order or contract group.
+
+| Field    | Flags | Type                                       | Description              |
+| -------- | ----- | ------------------------------------------ | ------------------------ |
+| `id`     |       | <ApiBadge kind="neutral" label="string" /> | Unique identifier.       |
+| `userId` |       | <ApiBadge kind="neutral" label="string" /> | Owner user ID.           |
+| `kind`   |       | <ApiBadge kind="neutral" label="string" /> | `orders` or `contracts`. |
+| `name`   |       | <ApiBadge kind="neutral" label="string" /> | Display name.            |
+
+## RichStatus
+
+Rich user status for status endpoints.
+
+| Field         | Flags                                                   | Type                                                 | Description                  |
+| ------------- | ------------------------------------------------------- | ---------------------------------------------------- | ---------------------------- |
+| `status`      |                                                         | <ApiBadge kind="neutral" label="string" />           | Status string.               |
+| `statusUntil` | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="string" />           | Status expiration timestamp. |
+| `statusSetAt` |                                                         | <ApiBadge kind="neutral" label="string" />           | When the status was set.     |
+| `activity`    | <ApiBadge kind="neutral" label="optional/contextual" /> | <ApiBadge kind="neutral" label="Activity or null" /> | Current activity.            |
+
+## Versions
+
+Version information for apps and collections.
+
+| Field         | Flags | Type                                       | Description                |
+| ------------- | ----- | ------------------------------------------ | -------------------------- |
+| `id`          |       | <ApiBadge kind="neutral" label="string" /> | Unique identifier.         |
+| `apps`        |       | <ApiBadge kind="neutral" label="object" /> | App version info.          |
+| `collections` |       | <ApiBadge kind="neutral" label="object" /> | Collection version hashes. |
+| `updatedAt`   |       | <ApiBadge kind="neutral" label="string" /> | Last update timestamp.     |
+
+### VersionApps
+
+| Field        | Flags | Type                                       | Description                        |
+| ------------ | ----- | ------------------------------------------ | ---------------------------------- |
+| `ios`        |       | <ApiBadge kind="neutral" label="string" /> | Latest iOS version.                |
+| `android`    |       | <ApiBadge kind="neutral" label="string" /> | Latest Android version.            |
+| `minIos`     |       | <ApiBadge kind="neutral" label="string" /> | Minimum supported iOS version.     |
+| `minAndroid` |       | <ApiBadge kind="neutral" label="string" /> | Minimum supported Android version. |
+
+### VersionCollections
+
+| Field       | Flags | Type                                       | Description                        |
+| ----------- | ----- | ------------------------------------------ | ---------------------------------- |
+| `items`     |       | <ApiBadge kind="neutral" label="string" /> | Items collection version hash.     |
+| `rivens`    |       | <ApiBadge kind="neutral" label="string" /> | Rivens collection version hash.    |
+| `liches`    |       | <ApiBadge kind="neutral" label="string" /> | Liches collection version hash.    |
+| `sisters`   |       | <ApiBadge kind="neutral" label="string" /> | Sisters collection version hash.   |
+| `missions`  |       | <ApiBadge kind="neutral" label="string" /> | Missions collection version hash.  |
+| `npcs`      |       | <ApiBadge kind="neutral" label="string" /> | NPCs collection version hash.      |
+| `locations` |       | <ApiBadge kind="neutral" label="string" /> | Locations collection version hash. |
+
+## Enums And Constants
+
+| Name           | Values                                                                                       |
+| -------------- | -------------------------------------------------------------------------------------------- |
+| `Status`       | `invisible`, `offline`, `online`, `ingame`                                                   |
+| `ActivityType` | `UNKNOWN`, `IDLE`, `ON_MISSION`, `IN_DOJO`, `IN_ORBITER`, `IN_RELAY`                         |
+| `Role`         | `none`, `user`, `moderator`, `admin`                                                         |
+| `Tier`         | `none`, `bronze`, `silver`, `gold`, `platinum`, `diamond`                                    |
+| `Language`     | `ko`, `ru`, `de`, `fr`, `pt`, `zh-hans`, `zh-hant`, `es`, `it`, `pl`, `uk`, `tr`, `ja`, `en` |
+| `Platform`     | `pc`, `ps4`, `xbox`, `switch`, `mobile`                                                      |
+| `Scope`        | `all`, `orders`, `contracts`, `chats`, `inventory`, `advanceSub`                             |

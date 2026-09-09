@@ -1,0 +1,32 @@
+meta {
+  name: Search Lich Auctions
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseV1}}/auctions/search?type=lich&weapon_url_name={{lichWeaponSlug}}
+  body: none
+  auth: none
+}
+
+params:query {
+  type: lich
+  weapon_url_name: {{lichWeaponSlug}}
+  ~element: radiation
+  ~sort_by: price_asc
+}
+
+headers {
+  Platform: {{platform}}
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Kuva lich auction search. Filters: weapon_url_name, element, ephemera, damage_min,
+  damage_max, quirk, buyout_policy, sort_by (price_*|damage_*).
+}

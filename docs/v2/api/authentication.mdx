@@ -1,0 +1,243 @@
+---
+sidebar_position: 7
+toc_min_heading_level: 2
+toc_max_heading_level: 2
+---
+
+import ApiEndpoint, { ApiBadge, ApiCallout } from '@site/src/components/ApiEndpoint';
+
+# Authentication
+
+Session endpoints for first-party clients. OAuth 2.0 authorization-code endpoints are documented separately in [OAuth 2.0](../oauth/overview.md).
+
+## Sign In
+
+<ApiEndpoint
+  method="POST"
+  path="/auth/signin"
+  summary="Sign in with a first-party client and create a session."
+  badges={[{ kind: 'firstParty', icon: '💔', label: 'First-party only' }]}
+/>
+
+<ApiCallout kind="warning" icon="⚠" title="Restriction">
+
+First-party applications only. The client must be a registered first-party client and the request must pass Firebase App Check.
+
+</ApiCallout>
+
+### Request
+
+#### Headers
+
+| Name                  | Type                                       | Description                            |
+| --------------------- | ------------------------------------------ | -------------------------------------- |
+| `Content-Type`        | <ApiBadge kind="neutral" label="string" /> | Must be `application/json`.            |
+| `X-Firebase-AppCheck` | <ApiBadge kind="neutral" label="string" /> | Firebase App Check verification token. |
+
+#### Body
+
+```json
+{
+  "email": "whatever@gmail.com",
+  "password": "12345",
+  "clientId": "wfm-0000",
+  "deviceId": "random unique id",
+  "deviceName": "My cool Nokia 3310"
+}
+```
+
+#### Body Fields
+
+| Field        | Type                                       | Description                                                                                           |
+| ------------ | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `email`      | <ApiBadge kind="neutral" label="string" /> | User email. Normalized to lowercase. Max: `128` characters.                                           |
+| `password`   | <ApiBadge kind="neutral" label="string" /> | User password. Min: `1` character for legacy compatibility. Max: `128` characters.                    |
+| `clientId`   | <ApiBadge kind="neutral" label="string" /> | Registered first-party client ID. Min: `6` characters. Max: `64` characters.                          |
+| `deviceId`   | <ApiBadge kind="neutral" label="string" /> | Unique device ID used to bind the session to this device. Min: `6` characters. Max: `256` characters. |
+| `deviceName` | <ApiBadge kind="neutral" label="string" /> | Human-readable device name. Defaults to `Unknown`. Max: `128` characters.                             |
+
+### Response
+
+#### Body
+
+```json
+{
+  "apiVersion": "x.x.x",
+  "data": {
+    "accessToken": "...",
+    "refreshToken": "...",
+    "tokenType": "Bearer",
+    "expiresIn": 12345
+  },
+  "error": null
+}
+```
+
+#### Data Fields
+
+| Field          | Type                                       | Description                                  |
+| -------------- | ------------------------------------------ | -------------------------------------------- |
+| `accessToken`  | <ApiBadge kind="neutral" label="string" /> | JWT access token for authenticated requests. |
+| `refreshToken` | <ApiBadge kind="neutral" label="string" /> | Refresh token for this session.              |
+| `tokenType`    | <ApiBadge kind="neutral" label="Bearer" /> | Token type for the `Authorization` header.   |
+| `expiresIn`    | <ApiBadge kind="neutral" label="int" />    | Access token lifetime in seconds.            |
+
+## Sign Up
+
+<ApiEndpoint
+  method="POST"
+  path="/auth/signup"
+  summary="Register a new user with a first-party client and create a session."
+  badges={[{ kind: 'firstParty', icon: '💔', label: 'First-party only' }]}
+/>
+
+<ApiCallout kind="warning" icon="⚠" title="Restriction">
+
+First-party applications only. The client must be a registered first-party client and the request must pass Firebase App Check.
+
+</ApiCallout>
+
+### Request
+
+#### Headers
+
+| Name                  | Type                                       | Description                            |
+| --------------------- | ------------------------------------------ | -------------------------------------- |
+| `Content-Type`        | <ApiBadge kind="neutral" label="string" /> | Must be `application/json`.            |
+| `X-Firebase-AppCheck` | <ApiBadge kind="neutral" label="string" /> | Firebase App Check verification token. |
+
+#### Body
+
+```json
+{
+  "email": "whatever@gmail.com",
+  "password": "123456",
+  "passwordConfirmation": "123456",
+  "clientId": "wfm-0000",
+  "deviceId": "random unique id",
+  "deviceName": "My Nokia 3310",
+  "platform": "pc",
+  "locale": "ko"
+}
+```
+
+#### Body Fields
+
+| Field                  | Type                                         | Description                                                                                           |
+| ---------------------- | -------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `email`                | <ApiBadge kind="neutral" label="string" />   | User email. Normalized to lowercase. Max: `128` characters.                                           |
+| `password`             | <ApiBadge kind="neutral" label="string" />   | User password. Min: `6` characters. Max: `128` characters.                                            |
+| `passwordConfirmation` | <ApiBadge kind="neutral" label="string" />   | Must match `password`. Min: `6` characters. Max: `128` characters.                                    |
+| `clientId`             | <ApiBadge kind="neutral" label="string" />   | Registered first-party client ID. Min: `6` characters. Max: `64` characters.                          |
+| `deviceId`             | <ApiBadge kind="neutral" label="string" />   | Unique device ID used to bind the session to this device. Min: `6` characters. Max: `256` characters. |
+| `deviceName`           | <ApiBadge kind="neutral" label="string" />   | Human-readable device name. Defaults to `Unknown`. Max: `128` characters.                             |
+| `platform`             | <ApiBadge kind="neutral" label="Platform" /> | User's starting platform. Must be one of the supported platforms.                                     |
+| `locale`               | <ApiBadge kind="neutral" label="Language" /> | Preferred communication language.                                                                     |
+
+### Response
+
+#### Body
+
+```json
+{
+  "apiVersion": "x.x.x",
+  "data": {
+    "accessToken": "...",
+    "refreshToken": "...",
+    "tokenType": "Bearer",
+    "expiresIn": 12345
+  },
+  "error": null
+}
+```
+
+## Refresh Session
+
+<ApiEndpoint
+  method="POST"
+  path="/auth/refresh"
+  summary="Refresh a session using a refresh token."
+/>
+
+This endpoint does not use the `Authorization` header.
+
+<ApiCallout kind="info" icon="ℹ" title="App Check">
+
+First-party clients must include `X-Firebase-AppCheck`. Third-party clients do not use this header.
+
+</ApiCallout>
+
+### Request
+
+#### Headers
+
+| Name                  | Type                                       | Description                                                    |
+| --------------------- | ------------------------------------------ | -------------------------------------------------------------- |
+| `Content-Type`        | <ApiBadge kind="neutral" label="string" /> | Must be `application/json`.                                    |
+| `X-Firebase-AppCheck` | <ApiBadge kind="neutral" label="string" /> | Required only when `clientId` belongs to a first-party client. |
+
+#### Body
+
+```json
+{
+  "grantType": "refresh_token",
+  "clientId": "wfm-0000",
+  "deviceId": "BASD001-KSADFDG",
+  "refreshToken": "JwtRefreshToken"
+}
+```
+
+#### Body Fields
+
+| Field          | Type                                              | Description                                                                         |
+| -------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `grantType`    | <ApiBadge kind="neutral" label="refresh_token" /> | OAuth-style grant type for refresh-token flow.                                      |
+| `clientId`     | <ApiBadge kind="neutral" label="string" />        | Registered client ID. Min: `6` characters. Max: `64` characters.                    |
+| `deviceId`     | <ApiBadge kind="neutral" label="string" />        | Device ID bound to the session. Min: `6` characters. Max: `256` characters.         |
+| `refreshToken` | <ApiBadge kind="neutral" label="string" />        | Refresh token for the existing session. Min: `6` characters. Max: `256` characters. |
+
+### Response
+
+#### Body
+
+```json
+{
+  "apiVersion": "x.x.x",
+  "data": {
+    "accessToken": "...",
+    "refreshToken": "...",
+    "tokenType": "Bearer",
+    "expiresIn": 12345
+  },
+  "error": null
+}
+```
+
+## Sign Out
+
+<ApiEndpoint
+  method="POST"
+  path="/auth/signout"
+  summary="Terminate the current session."
+  badges={[{ kind: 'auth', icon: '🔒', label: 'Auth required' }]}
+/>
+
+The current access token and its session refresh tokens become unusable.
+
+<ApiCallout kind="warning" icon="🔒" title="Requires">
+
+- Authentication
+
+</ApiCallout>
+
+### Request
+
+#### Headers
+
+| Name            | Type                                    | Description                                                 |
+| --------------- | --------------------------------------- | ----------------------------------------------------------- |
+| `Authorization` | <ApiBadge kind="auth" label="string" /> | JWT access token in the format `Bearer YourJWTAccessToken`. |
+
+### Response
+
+Empty response body with status code `200`.

@@ -1,0 +1,23 @@
+meta {
+  name: List Lich Ephemeras
+  type: http
+  seq: 10
+}
+
+get {
+  url: {{baseV2}}/lich/ephemeras
+  body: none
+  auth: none
+}
+
+headers {
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Lich ephemeras.
+}

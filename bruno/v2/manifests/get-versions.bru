@@ -1,0 +1,19 @@
+meta {
+  name: Get Versions
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseV2}}/versions
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Collection hashes under `data.collections`. Poll this and refetch `/items` only when `collections.items` changes.
+}

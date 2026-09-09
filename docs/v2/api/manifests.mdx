@@ -1,0 +1,535 @@
+---
+sidebar_position: 2
+toc_min_heading_level: 2
+toc_max_heading_level: 2
+---
+
+import ApiEndpoint, { ApiBadge } from '@site/src/components/ApiEndpoint';
+
+# Manifests And Collections
+
+Endpoints for version metadata and public collection manifests.
+
+## Get Versions
+
+<ApiEndpoint
+  method="GET"
+  path="/v2/versions"
+  summary="Get current server, app, and collection versions."
+/>
+
+Clients can poll this endpoint to detect when local cached collections should be refreshed.
+
+### Request
+
+#### URL Parameters
+
+None.
+
+### Response
+
+#### Body
+
+```json
+{
+  "apiVersion": "x.x.x",
+  "data": {
+    "apps": {
+      "ios": "x.x.x",
+      "android": "x.x.x",
+      "minIos": "x.x.x",
+      "minAndroid": "x.x.x"
+    },
+    "collections": {
+      "items": "base64",
+      "rivens": "base64",
+      "liches": "base64",
+      "sisters": "base64",
+      "missions": "base64",
+      "npcs": "base64",
+      "locations": "base64"
+    },
+    "updatedAt": "2021-05-21T14:59:02Z"
+  },
+  "error": null
+}
+```
+
+#### Data Fields
+
+| Field         | Type                                                   | Description                                        |
+| ------------- | ------------------------------------------------------ | -------------------------------------------------- |
+| `apps`        | <ApiBadge kind="neutral" label="VersionApps" />        | Current and minimum supported mobile app versions. |
+| `collections` | <ApiBadge kind="neutral" label="VersionCollections" /> | Collection version hashes.                         |
+| `updatedAt`   | <ApiBadge kind="neutral" label="string" />             | Last version update timestamp.                     |
+
+See [Versions](../data-models.mdx#versions).
+
+## List Items
+
+<ApiEndpoint
+  method="GET"
+  path="/v2/items"
+  summary="Get all tradable items."
+  badges={[{ kind: 'i18n', icon: '🇬🇧', label: 'Language aware' }]}
+/>
+
+### Request
+
+#### URL Parameters
+
+None.
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: Item[],
+  error: null,
+}
+```
+
+`data` is an array of [Item](../data-models.mdx#item) models.
+
+## Get Item
+
+<ApiEndpoint
+  method="GET"
+  path="/v2/item/{slug}"
+  aliases={['/v2/itemId/{itemId}']}
+  summary="Get full information about one item."
+  badges={[{ kind: 'i18n', icon: '🇬🇧', label: 'Language aware' }]}
+/>
+
+### Request
+
+#### URL Parameters
+
+| Name     | Type                                       | Description                                                  |
+| -------- | ------------------------------------------ | ------------------------------------------------------------ |
+| `slug`   | <ApiBadge kind="neutral" label="string" /> | `slug` field from the [Item](../data-models.mdx#item) model. |
+| `itemId` | <ApiBadge kind="neutral" label="string" /> | `id` field from the [Item](../data-models.mdx#item) model.   |
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: Item,
+  error: null,
+}
+```
+
+`data` is an [Item](../data-models.mdx#item) model.
+
+## Get Item Set
+
+<ApiEndpoint
+  method="GET"
+  path="/v2/item/{slug}/set"
+  aliases={['/v2/itemId/{itemId}/set']}
+  summary="Get the requested item and related set items."
+  badges={[{ kind: 'i18n', icon: '🇬🇧', label: 'Language aware' }]}
+/>
+
+If the requested item is not part of a set, the response contains only that item. If the item is part of a set or is the set root, the response contains all items in that set.
+
+### Request
+
+#### URL Parameters
+
+| Name     | Type                                       | Description                                                  |
+| -------- | ------------------------------------------ | ------------------------------------------------------------ |
+| `slug`   | <ApiBadge kind="neutral" label="string" /> | `slug` field from the [Item](../data-models.mdx#item) model. |
+| `itemId` | <ApiBadge kind="neutral" label="string" /> | `id` field from the [Item](../data-models.mdx#item) model.   |
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: {
+    id: "54a73e65e779893a797fff72",
+    items: Item[],
+  },
+  error: null,
+}
+```
+
+#### Data Fields
+
+| Field   | Type                                       | Description                                                                |
+| ------- | ------------------------------------------ | -------------------------------------------------------------------------- |
+| `id`    | <ApiBadge kind="neutral" label="string" /> | ID of the requested item.                                                  |
+| `items` | <ApiBadge kind="neutral" label="Item[]" /> | Items in the set, or only the requested item when it is not part of a set. |
+
+## List Riven Weapons
+
+<ApiEndpoint
+  method="GET"
+  path="/v2/riven/weapons"
+  summary="Get all tradable riven weapons."
+  badges={[{ kind: 'i18n', icon: '🇬🇧', label: 'Language aware' }]}
+/>
+
+### Request
+
+#### URL Parameters
+
+None.
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: RivenItem[],
+  error: null,
+}
+```
+
+`data` is an array of [Riven Item](../data-models.mdx#riven-item) models.
+
+## Get Riven Weapon
+
+<ApiEndpoint
+  method="GET"
+  path="/v2/riven/weapon/{slug}"
+  summary="Get full information about one riven weapon."
+  badges={[{ kind: 'i18n', icon: '🇬🇧', label: 'Language aware' }]}
+/>
+
+### Request
+
+#### URL Parameters
+
+| Name   | Type                                       | Description                                                              |
+| ------ | ------------------------------------------ | ------------------------------------------------------------------------ |
+| `slug` | <ApiBadge kind="neutral" label="string" /> | `slug` field from the [Riven Item](../data-models.mdx#riven-item) model. |
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: RivenItem,
+  error: null,
+}
+```
+
+`data` is a [Riven Item](../data-models.mdx#riven-item) model.
+
+## List Riven Attributes
+
+<ApiEndpoint
+  method="GET"
+  path="/v2/riven/attributes"
+  summary="Get all riven weapon attributes."
+  badges={[{ kind: 'i18n', icon: '🇬🇧', label: 'Language aware' }]}
+/>
+
+### Request
+
+#### URL Parameters
+
+None.
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: RivenAttribute[],
+  error: null,
+}
+```
+
+`data` is an array of [Riven Attribute](../data-models.mdx#riven-attribute) models.
+
+## List Lich Weapons
+
+<ApiEndpoint
+  method="GET"
+  path="/v2/lich/weapons"
+  summary="Get all tradable lich weapons."
+  badges={[{ kind: 'i18n', icon: '🇬🇧', label: 'Language aware' }]}
+/>
+
+### Request
+
+#### URL Parameters
+
+None.
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: LichWeapon[],
+  error: null,
+}
+```
+
+`data` is an array of [Lich Weapon](../data-models.mdx#lich-weapon) models.
+
+## Get Lich Weapon
+
+<ApiEndpoint
+  method="GET"
+  path="/v2/lich/weapon/{slug}"
+  summary="Get full information about one lich weapon."
+  badges={[{ kind: 'i18n', icon: '🇬🇧', label: 'Language aware' }]}
+/>
+
+### Request
+
+#### URL Parameters
+
+| Name   | Type                                       | Description                                                                |
+| ------ | ------------------------------------------ | -------------------------------------------------------------------------- |
+| `slug` | <ApiBadge kind="neutral" label="string" /> | `slug` field from the [Lich Weapon](../data-models.mdx#lich-weapon) model. |
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: LichWeapon,
+  error: null,
+}
+```
+
+`data` is a [Lich Weapon](../data-models.mdx#lich-weapon) model.
+
+## List Lich Ephemeras
+
+<ApiEndpoint
+  method="GET"
+  path="/v2/lich/ephemeras"
+  summary="Get all tradable lich ephemeras."
+  badges={[{ kind: 'i18n', icon: '🇬🇧', label: 'Language aware' }]}
+/>
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: LichEphemera[],
+  error: null,
+}
+```
+
+`data` is an array of [Lich Ephemera](../data-models.mdx#lich-ephemera) models.
+
+## List Lich Quirks
+
+<ApiEndpoint
+  method="GET"
+  path="/v2/lich/quirks"
+  summary="Get all tradable lich quirks."
+  badges={[{ kind: 'i18n', icon: '🇬🇧', label: 'Language aware' }]}
+/>
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: LichQuirk[],
+  error: null,
+}
+```
+
+`data` is an array of [Lich Quirk](../data-models.mdx#lich-quirk) models.
+
+## List Sister Weapons
+
+<ApiEndpoint
+  method="GET"
+  path="/v2/sister/weapons"
+  summary="Get all tradable sister weapons."
+  badges={[{ kind: 'i18n', icon: '🇬🇧', label: 'Language aware' }]}
+/>
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: SisterWeapon[],
+  error: null,
+}
+```
+
+`data` is an array of [Sister Weapon](../data-models.mdx#sister-weapon) models.
+
+## Get Sister Weapon
+
+<ApiEndpoint
+  method="GET"
+  path="/v2/sister/weapon/{slug}"
+  summary="Get full information about one sister weapon."
+  badges={[{ kind: 'i18n', icon: '🇬🇧', label: 'Language aware' }]}
+/>
+
+### Request
+
+#### URL Parameters
+
+| Name   | Type                                       | Description                                                                    |
+| ------ | ------------------------------------------ | ------------------------------------------------------------------------------ |
+| `slug` | <ApiBadge kind="neutral" label="string" /> | `slug` field from the [Sister Weapon](../data-models.mdx#sister-weapon) model. |
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: SisterWeapon,
+  error: null,
+}
+```
+
+`data` is a [Sister Weapon](../data-models.mdx#sister-weapon) model.
+
+## List Sister Ephemeras
+
+<ApiEndpoint
+  method="GET"
+  path="/v2/sister/ephemeras"
+  summary="Get all tradable sister ephemeras."
+  badges={[{ kind: 'i18n', icon: '🇬🇧', label: 'Language aware' }]}
+/>
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: SisterEphemera[],
+  error: null,
+}
+```
+
+`data` is an array of [Sister Ephemera](../data-models.mdx#sister-ephemera) models.
+
+## List Sister Quirks
+
+<ApiEndpoint
+  method="GET"
+  path="/v2/sister/quirks"
+  summary="Get all tradable sister quirks."
+  badges={[{ kind: 'i18n', icon: '🇬🇧', label: 'Language aware' }]}
+/>
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: SisterQuirk[],
+  error: null,
+}
+```
+
+`data` is an array of [Sister Quirk](../data-models.mdx#sister-quirk) models.
+
+## List Locations
+
+<ApiEndpoint
+  method="GET"
+  path="/v2/locations"
+  summary="Get all known locations."
+  badges={[{ kind: 'i18n', icon: '🇬🇧', label: 'Language aware' }]}
+/>
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: Location[],
+  error: null,
+}
+```
+
+`data` is an array of [Location](../data-models.mdx#location) models.
+
+## List NPCs
+
+<ApiEndpoint
+  method="GET"
+  path="/v2/npcs"
+  summary="Get all known NPCs."
+  badges={[{ kind: 'i18n', icon: '🇬🇧', label: 'Language aware' }]}
+/>
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: Npc[],
+  error: null,
+}
+```
+
+`data` is an array of [Npc](../data-models.mdx#npc) models.
+
+## List Missions
+
+<ApiEndpoint
+  method="GET"
+  path="/v2/missions"
+  summary="Get all known missions."
+  badges={[{ kind: 'i18n', icon: '🇬🇧', label: 'Language aware' }]}
+/>
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: Mission[],
+  error: null,
+}
+```
+
+`data` is an array of [Mission](../data-models.mdx#mission) models.

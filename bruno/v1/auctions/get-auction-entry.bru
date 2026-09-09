@@ -1,0 +1,25 @@
+meta {
+  name: Get Auction Entry
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseV1}}/auctions/entry/{{auctionId}}
+  body: none
+  auth: none
+}
+
+headers {
+  Platform: {{platform}}
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  One auction by id. The seeded id is a live riven auction and will eventually close —
+  refresh it from Search Riven Auctions if this starts 404ing.
+}

@@ -1,0 +1,23 @@
+meta {
+  name: List Missions
+  type: http
+  seq: 18
+}
+
+get {
+  url: {{baseV2}}/missions
+  body: none
+  auth: none
+}
+
+headers {
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Missions (drop sources).
+}

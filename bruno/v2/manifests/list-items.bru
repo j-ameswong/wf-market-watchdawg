@@ -1,0 +1,23 @@
+meta {
+  name: List Items
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseV2}}/items
+  body: none
+  auth: none
+}
+
+headers {
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Full tradable-item catalogue (~3.8k items, ~1.6 MB). Cache it; gate refreshes on Get Versions.
+}

@@ -1,0 +1,242 @@
+---
+sidebar_position: 5
+toc_min_heading_level: 2
+toc_max_heading_level: 2
+---
+
+import ApiEndpoint, { ApiBadge, ApiCallout } from '@site/src/components/ApiEndpoint';
+
+# Users
+
+Endpoints for authenticated user data, public profiles, and profile media uploads.
+
+## Get Me
+
+<ApiEndpoint
+  method="GET"
+  path="/v2/me"
+  summary="Get information about the authenticated user."
+  badges={[{ kind: 'auth', icon: '🔒', label: 'Auth required' }]}
+/>
+
+<ApiCallout kind="warning" icon="🔒" title="Requires">
+
+- Authentication
+
+</ApiCallout>
+
+### Request
+
+#### URL Parameters
+
+None.
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: UserPrivate,
+  error: null,
+}
+```
+
+`data` is a [UserPrivate](../data-models.mdx#userprivate) model.
+
+## Update Me
+
+<ApiEndpoint
+  method="PATCH"
+  path="/v2/me"
+  summary="Update the authenticated user's profile preferences."
+  badges={[{ kind: 'auth', icon: '🔒', label: 'Auth required' }]}
+/>
+
+<ApiCallout kind="warning" icon="🔒" title="Requires">
+
+- Authentication
+
+</ApiCallout>
+
+### Request
+
+#### Body
+
+```json
+{
+  "about": "something",
+  "platform": "mobile",
+  "crossplay": true,
+  "locale": "pt",
+  "theme": "light",
+  "syncLocale": true,
+  "syncTheme": true
+}
+```
+
+#### Body Fields
+
+| Field        | Type                                                       | Description                                                                                                             |
+| ------------ | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `about`      | <ApiBadge kind="neutral" label="string" />                 | Profile description in Markdown. Max: `300` characters. Returned as `about` HTML and `aboutRaw` Markdown.               |
+| `platform`   | <ApiBadge kind="neutral" label="Platform" />               | Main platform the user plays on.                                                                                        |
+| `crossplay`  | <ApiBadge kind="neutral" label="bool" />                   | Whether crossplay is enabled for the user's Warframe account. Cannot be `true` when the effective platform is `switch`. |
+| `locale`     | <ApiBadge kind="neutral" label="Language" />               | UI locale and preferred communication language.                                                                         |
+| `theme`      | <ApiBadge kind="neutral" label="light, dark, or system" /> | UI theme preference.                                                                                                    |
+| `syncLocale` | <ApiBadge kind="neutral" label="bool" />                   | Whether locale should sync across devices.                                                                              |
+| `syncTheme`  | <ApiBadge kind="neutral" label="bool" />                   | Whether theme should sync across devices.                                                                               |
+
+#### Constraints
+
+- Omitted or `null` fields are ignored.
+- If `platform` is set to `switch` and `crossplay` is omitted, `crossplay` is set to `false`.
+- If `crossplay` is `true` while the effective platform is `switch`, the request is rejected.
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: UserPrivate,
+  error: null,
+}
+```
+
+## Upload Avatar
+
+<ApiEndpoint
+  method="POST"
+  path="/v2/me/avatar"
+  summary="Update the authenticated user's avatar."
+  badges={[
+    { kind: 'auth', icon: '🔒', label: 'Auth required' },
+    { kind: 'neutral', icon: '☁', label: 'File upload' },
+  ]}
+/>
+
+The uploaded image is center-cropped to the target aspect ratio, resized to `256x256` pixels, encoded as WebP, and stored as the new avatar.
+
+### Request
+
+#### Body
+
+Content-Type: `multipart/form-data`
+
+```http
+form-data; name="avatar"; filename="whatever.png"
+```
+
+#### Body Fields
+
+| Field    | Type                                     | Description                             |
+| -------- | ---------------------------------------- | --------------------------------------- |
+| `avatar` | <ApiBadge kind="neutral" label="file" /> | Image file to upload as the new avatar. |
+
+#### Constraints
+
+- Accepts image formats: `.png`, `.jpg`, `.jpeg`, `.webp`, `.gif`, `.bmp`, `.avif`.
+- Maximum upload size is `5 MiB`.
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: UserPrivate,
+  error: null,
+}
+```
+
+## Upload Background
+
+<ApiEndpoint
+  method="POST"
+  path="/v2/me/background"
+  summary="Update the authenticated user's profile background."
+  badges={[
+    { kind: 'auth', icon: '🔒', label: 'Auth required' },
+    { kind: 'firstParty', icon: '◆', label: 'Silver tier+' },
+    { kind: 'neutral', icon: '☁', label: 'File upload' },
+  ]}
+/>
+
+<ApiCallout kind="info" icon="ℹ" title="Subscription Requirement">
+
+Requires the user to have at least a silver subscription tier.
+
+</ApiCallout>
+
+The uploaded image is center-cropped to the target aspect ratio, resized to `1920x820` pixels, encoded as WebP, and stored as the new background.
+
+### Request
+
+#### Body
+
+Content-Type: `multipart/form-data`
+
+```http
+form-data; name="background"; filename="whatever.png"
+```
+
+#### Body Fields
+
+| Field        | Type                                     | Description                                 |
+| ------------ | ---------------------------------------- | ------------------------------------------- |
+| `background` | <ApiBadge kind="neutral" label="file" /> | Image file to upload as the new background. |
+
+#### Constraints
+
+- Accepts image formats: `.png`, `.jpg`, `.jpeg`, `.webp`, `.gif`, `.bmp`, `.avif`.
+- Maximum upload size is `8 MiB`.
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: UserPrivate,
+  error: null,
+}
+```
+
+## Get User
+
+<ApiEndpoint
+  method="GET"
+  path="/v2/user/{slug}"
+  aliases={['/v2/userId/{userId}']}
+  summary="Get public information about a user."
+/>
+
+Users with role `moderator` or higher may receive moderation fields described in the `User` model.
+
+### Request
+
+#### URL Parameters
+
+| Name     | Type                                       | Description                                                  |
+| -------- | ------------------------------------------ | ------------------------------------------------------------ |
+| `slug`   | <ApiBadge kind="neutral" label="string" /> | `slug` field from the [User](../data-models.mdx#user) model. |
+| `userId` | <ApiBadge kind="neutral" label="string" /> | `id` field from the [User](../data-models.mdx#user) model.   |
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: User,
+  error: null,
+}
+```
+
+`data` is a [User](../data-models.mdx#user) model.

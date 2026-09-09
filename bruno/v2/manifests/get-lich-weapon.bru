@@ -1,0 +1,23 @@
+meta {
+  name: Get Lich Weapon
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{baseV2}}/lich/weapon/{{lichWeaponSlug}}
+  body: none
+  auth: none
+}
+
+headers {
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  One lich weapon by slug.
+}

@@ -1,0 +1,24 @@
+meta {
+  name: Get User Achievements
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseV2}}/achievements/user/{{userSlug}}
+  body: none
+  auth: none
+}
+
+headers {
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Achievements earned by a user. Returns `data: []` for users with none — that is a
+  successful response, not a failure.
+}

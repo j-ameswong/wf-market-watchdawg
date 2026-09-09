@@ -1,0 +1,23 @@
+meta {
+  name: List Riven Weapons
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseV2}}/riven/weapons
+  body: none
+  auth: none
+}
+
+headers {
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Riven-capable weapons with `disposition` and `rivenType`.
+}

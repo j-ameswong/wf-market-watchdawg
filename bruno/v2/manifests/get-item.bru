@@ -1,0 +1,23 @@
+meta {
+  name: Get Item
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseV2}}/item/{{itemSlug}}
+  body: none
+  auth: none
+}
+
+headers {
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  One item by slug.
+}

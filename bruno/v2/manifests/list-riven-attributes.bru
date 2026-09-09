@@ -1,0 +1,23 @@
+meta {
+  name: List Riven Attributes
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseV2}}/riven/attributes
+  body: none
+  auth: none
+}
+
+headers {
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Riven stat attributes with units and prefixes/suffixes.
+}

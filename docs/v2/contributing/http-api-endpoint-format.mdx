@@ -1,0 +1,347 @@
+---
+sidebar_position: 2
+toc_min_heading_level: 2
+toc_max_heading_level: 2
+---
+
+import ApiEndpoint, { ApiBadge, ApiCallout, BadgeGrid } from '@site/src/components/ApiEndpoint';
+
+# HTTP API Endpoint Format
+
+Use this page as the Markdown/MDX reference for HTTP endpoint documentation style. The examples are illustrative format samples, not public API contracts.
+
+## Visual Language
+
+Endpoint pages should stay mostly Markdown, with `ApiEndpoint` cards for routes and API UI components for badges, callouts, and field types.
+
+<BadgeGrid
+  badges={[
+    { kind: 'auth', icon: '🔒', label: 'Auth required' },
+    { kind: 'i18n', icon: '🇬🇧', label: 'Language aware' },
+    { kind: 'crossplay', icon: '🌀', label: 'Platform/crossplay aware' },
+    { kind: 'cache', icon: '⏱', label: 'Cached' },
+    { kind: 'firstParty', icon: '◆', label: 'First-party only' },
+    { kind: 'danger', icon: '✕', label: 'Deletes data' },
+  ]}
+/>
+
+### Conventions
+
+- Use `ApiEndpoint` for every documented route behavior.
+- Put the canonical route in `path` and route variants in `aliases`.
+- Do not include the HTTP method in `aliases`.
+- Keep badges text-first; icons and emoji are visual aids, not the only meaning.
+- Split each endpoint into `Request` and `Response` sections.
+- Use `####` headings inside those sections for URL parameters, query parameters, headers, body, fields, constraints, errors, and response fields.
+- Use `json` for concrete copyable payloads.
+- Use `ts` for schematic responses that contain reusable model types, such as `data: Order[]`.
+- Link reusable models to [Data Models](../data-models.mdx) instead of duplicating full schemas.
+- Use `ApiCallout` for auth requirements, restrictions, response context, and implementation notes.
+- Do not use raw `:::warning` blocks unless directive rendering has been verified.
+
+## Badge Table
+
+Render markers directly in tables when explaining endpoint behavior.
+
+| Marker                                                                   | Meaning                                                          |
+| ------------------------------------------------------------------------ | ---------------------------------------------------------------- |
+| <ApiBadge kind="auth" icon="🔒" label="Auth required" />                 | Endpoint requires authentication or returns auth-only data.      |
+| <ApiBadge kind="i18n" icon="🇬🇧" label="Language aware" />                | Response changes with the `Language` header.                     |
+| <ApiBadge kind="crossplay" icon="🌀" label="Platform/crossplay aware" /> | Response changes with `Platform` or `Crossplay` headers.         |
+| <ApiBadge kind="cache" icon="⏱" label="Cached" />                        | Response has documented cache or freshness behavior.             |
+| <ApiBadge kind="firstParty" icon="◆" label="First-party only" />         | Endpoint is restricted to first-party clients or special access. |
+| <ApiBadge kind="danger" icon="✕" label="Deletes data" />                 | Endpoint deletes data or performs destructive behavior.          |
+
+## JSON Endpoint Example
+
+<ApiEndpoint
+  method="PATCH"
+  path="/v2/example/{id}"
+  aliases={['/v2/exampleSlug/{slug}']}
+  summary="Update an example resource and return the updated model."
+  badges={[
+    { kind: 'auth', icon: '🔒', label: 'Auth required' },
+    { kind: 'crossplay', icon: '🌀', label: 'Platform/crossplay aware' },
+    { kind: 'i18n', icon: '🇬🇧', label: 'Language aware' },
+    { kind: 'cache', icon: '⏱', label: '60s cache' },
+  ]}
+/>
+
+<ApiCallout kind="warning" icon="🔒" title="Requires">
+
+- Authentication
+- Scope: `examples.update`
+
+</ApiCallout>
+
+<ApiCallout kind="info" icon="ℹ" title="Response Context">
+
+Response data depends on the `Platform`, `Crossplay`, and `Language` headers. Responses are cached for `60s`.
+
+</ApiCallout>
+
+### Request
+
+#### URL Parameters
+
+| Name   | Type                                       | Description                                     |
+| ------ | ------------------------------------------ | ----------------------------------------------- |
+| `id`   | <ApiBadge kind="neutral" label="string" /> | `id` field from the linked model.               |
+| `slug` | <ApiBadge kind="neutral" label="string" /> | Alternative `slug` field from the linked model. |
+
+#### Query Parameters
+
+| Name     | Type                                       | Description                                                               |
+| -------- | ------------------------------------------ | ------------------------------------------------------------------------- |
+| `limit`  | <ApiBadge kind="neutral" label="int" />    | Optional. Maximum number of records. Default: `50`. Min: `1`. Max: `100`. |
+| `cursor` | <ApiBadge kind="neutral" label="string" /> | Optional. Pagination cursor from a previous response.                     |
+
+#### Headers
+
+| Name            | Type                                         | Description                                                 |
+| --------------- | -------------------------------------------- | ----------------------------------------------------------- |
+| `Authorization` | <ApiBadge kind="auth" label="string" />      | JWT access token in the format `Bearer YourJWTAccessToken`. |
+| `Language`      | <ApiBadge kind="i18n" label="Language" />    | Translation language. Default: `en`.                        |
+| `Platform`      | <ApiBadge kind="neutral" label="Platform" /> | Platform context. Default: `pc`.                            |
+| `Crossplay`     | <ApiBadge kind="crossplay" label="bool" />   | Crossplay context. Default depends on endpoint behavior.    |
+
+#### Body
+
+```json
+{
+  "name": "Example",
+  "visible": true,
+  "note": "Optional note"
+}
+```
+
+#### Body Fields
+
+| Field     | Type                                               | Description                                         |
+| --------- | -------------------------------------------------- | --------------------------------------------------- |
+| `name`    | <ApiBadge kind="neutral" label="string" />         | Required. Display name. Min: `3`. Max: `32`.        |
+| `visible` | <ApiBadge kind="neutral" label="bool" />           | Optional. Whether the resource should be visible.   |
+| `note`    | <ApiBadge kind="neutral" label="string or null" /> | Optional. Owner-only note. Send `null` to clear it. |
+
+#### Constraints
+
+- `name` must be unique for the authenticated user.
+- `limit` is ignored when `cursor` is present.
+
+### Response
+
+#### Body
+
+```json
+{
+  "apiVersion": "x.x.x",
+  "data": {
+    "id": "example-id",
+    "name": "Example",
+    "visible": true,
+    "note": "Optional note"
+  },
+  "error": null
+}
+```
+
+#### Data Fields
+
+| Field     | Access                                           | Type                                               | Description                      |
+| --------- | ------------------------------------------------ | -------------------------------------------------- | -------------------------------- |
+| `id`      |                                                  | <ApiBadge kind="neutral" label="string" />         | Unique example identifier.       |
+| `name`    |                                                  | <ApiBadge kind="neutral" label="string" />         | Display name.                    |
+| `visible` |                                                  | <ApiBadge kind="neutral" label="bool" />           | Whether the resource is visible. |
+| `note`    | <ApiBadge kind="auth" icon="👤" label="owner" /> | <ApiBadge kind="neutral" label="string or null" /> | Owner-only note.                 |
+
+## Model Response Example
+
+Use `ts` when the response body is schematic and refers to reusable models.
+
+<ApiEndpoint
+  method="GET"
+  path="/v2/examples"
+  summary="Get a list of example resources."
+  badges={[{ kind: 'i18n', icon: '🇬🇧', label: 'Language aware' }]}
+/>
+
+### Request
+
+#### URL Parameters
+
+None.
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: Example[],
+  error: null,
+}
+```
+
+`data` is an array of linked reusable model shapes.
+
+## Multipart Endpoint Example
+
+<ApiEndpoint
+  method="POST"
+  path="/v2/example/{id}/image"
+  summary="Upload an image for an example resource."
+  badges={[
+    { kind: 'auth', icon: '🔒', label: 'Auth required' },
+    { kind: 'firstParty', icon: '◆', label: 'First-party only' },
+  ]}
+/>
+
+<ApiCallout kind="warning" icon="⚠" title="Restriction">
+
+First-party applications only.
+
+</ApiCallout>
+
+### Request
+
+#### URL Parameters
+
+| Name | Type                                       | Description                       |
+| ---- | ------------------------------------------ | --------------------------------- |
+| `id` | <ApiBadge kind="neutral" label="string" /> | `id` field from the linked model. |
+
+#### Body
+
+Content-Type: `multipart/form-data`
+
+```http
+form-data; name="image"; filename="example.png"
+```
+
+#### Body Fields
+
+| Field   | Type                                     | Description           |
+| ------- | ---------------------------------------- | --------------------- |
+| `image` | <ApiBadge kind="neutral" label="file" /> | Image file to upload. |
+
+#### Constraints
+
+- Accepts image formats: `.png`, `.jpg`, `.jpeg`, `.webp`, `.gif`, `.bmp`, `.avif`.
+- Maximum upload size is `5 MiB`.
+- Image is resized to `256x256` pixels, focusing on the center of the image.
+
+### Response
+
+#### Body
+
+```json
+{
+  "apiVersion": "x.x.x",
+  "data": {
+    "id": "example-id",
+    "imageUrl": "https://example.com/example.png"
+  },
+  "error": null
+}
+```
+
+## Empty Response Example
+
+<ApiEndpoint
+  method="DELETE"
+  path="/v2/example/{id}"
+  summary="Delete an example resource."
+  badges={[
+    { kind: 'auth', icon: '🔒', label: 'Auth required' },
+    { kind: 'danger', icon: '✕', label: 'Deletes data' },
+  ]}
+/>
+
+### Request
+
+#### URL Parameters
+
+| Name | Type                                       | Description                       |
+| ---- | ------------------------------------------ | --------------------------------- |
+| `id` | <ApiBadge kind="neutral" label="string" /> | `id` field from the linked model. |
+
+### Response
+
+<ApiCallout kind="success" icon="✓" title="Empty Response">
+
+Empty response body with status code `200`.
+
+</ApiCallout>
+
+## Copyable Skeleton
+
+Use this skeleton for a new endpoint.
+
+````mdx
+## Endpoint Name
+
+<ApiEndpoint
+  method="GET"
+  path="/v2/example/{id}"
+  aliases={['/v2/exampleSlug/{slug}']}
+  summary="Short behavior description."
+  badges={[{ kind: 'auth', icon: '🔒', label: 'Auth required' }]}
+/>
+
+<ApiCallout kind="warning" icon="🔒" title="Requires">
+
+- Authentication
+
+</ApiCallout>
+
+### Request
+
+#### URL Parameters
+
+| Name | Type                                       | Description            |
+| ---- | ------------------------------------------ | ---------------------- |
+| `id` | <ApiBadge kind="neutral" label="string" /> | Parameter description. |
+
+#### Query Parameters
+
+| Name    | Type                                    | Description              |
+| ------- | --------------------------------------- | ------------------------ |
+| `limit` | <ApiBadge kind="neutral" label="int" /> | Optional. Default: `50`. |
+
+#### Body
+
+```json
+{
+  "field": "value"
+}
+```
+
+#### Body Fields
+
+| Field   | Type                                       | Description        |
+| ------- | ------------------------------------------ | ------------------ |
+| `field` | <ApiBadge kind="neutral" label="string" /> | Field description. |
+
+### Response
+
+#### Body
+
+```ts
+{
+  apiVersion: "x.x.x",
+  data: Example,
+  error: null,
+}
+```
+````
+
+## Do Not
+
+- Do not document routes that are not implemented.
+- Do not include HTTP methods in `aliases`.
+- Do not render loose badge rows before route text; use `ApiEndpoint`.
+- Do not use `json` for reusable model placeholders such as `"data": "Order"` or `"data": ["Order"]`; use `ts` and link the model.
+- Do not duplicate reusable model schemas on endpoint pages.
+- Do not create nested custom containers around every subsection.
+- Do not use old Notion-only color spans.

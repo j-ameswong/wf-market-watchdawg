@@ -1,0 +1,39 @@
+---
+sidebar_position: 2
+toc_min_heading_level: 2
+toc_max_heading_level: 2
+---
+
+import { ApiBadge, WsMessage } from '@site/src/components/ApiEndpoint';
+
+# Reports
+
+Server-generated reporting events.
+
+## Online Count
+
+<WsMessage
+  type="Event"
+  route="@wfm|event/reports/online"
+  summary="Report current WebSocket connection and authorized-user counts."
+  badges={[{ kind: 'neutral', icon: '🔔', label: 'Event' }]}
+/>
+
+The server sends this event on connect and broadcasts it about once every `30s`.
+
+```json
+{
+  "route": "@wfm|event/reports/online",
+  "payload": {
+    "connections": 1,
+    "authorizedUsers": 1
+  }
+}
+```
+
+### Payload Fields
+
+| Field             | Type                                    | Description                         |
+| ----------------- | --------------------------------------- | ----------------------------------- |
+| `connections`     | <ApiBadge kind="neutral" label="int" /> | Current WebSocket connection count. |
+| `authorizedUsers` | <ApiBadge kind="neutral" label="int" /> | Current count of authorized users.  |

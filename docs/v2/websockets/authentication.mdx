@@ -1,0 +1,115 @@
+---
+sidebar_position: 3
+toc_min_heading_level: 2
+toc_max_heading_level: 2
+---
+
+import { ApiBadge, WsMessage } from '@site/src/components/ApiEndpoint';
+
+# Authentication And Account Events
+
+Authentication commands and account-level server events.
+
+## Sign In
+
+<WsMessage
+  type="Command"
+  route="@wfm|cmd/auth/signIn"
+  summary="Authorize the WebSocket client."
+  badges={[{ kind: 'neutral', icon: '💬', label: 'Command' }]}
+/>
+
+This command supports auth tokens from the v1 API. If `token` is an empty string, the server attempts legacy cookie-based authorization.
+
+### Client Message
+
+```json
+{
+  "route": "@wfm|cmd/auth/signIn",
+  "id": "message-id",
+  "payload": {
+    "token": "jwtToken"
+  }
+}
+```
+
+### Payload Fields
+
+| Field      | Type                                       | Description                                                    |
+| ---------- | ------------------------------------------ | -------------------------------------------------------------- |
+| `token`    | <ApiBadge kind="neutral" label="string" /> | JWT access token. Empty string enables legacy cookie fallback. |
+| `deviceId` | <ApiBadge kind="neutral" label="string" /> | Optional. Device identifier accepted by the payload shape.     |
+
+### Success Message
+
+```json
+{
+  "route": "@wfm|cmd/auth/signIn:ok",
+  "id": "message-id"
+}
+```
+
+After successful sign-in, the server sends the current status with `@wfm|event/status/set`.
+
+### Error Message
+
+```json
+{
+  "route": "@wfm|cmd/auth/signIn:error",
+  "payload": "app.errors.unauthorized",
+  "id": "message-id"
+}
+```
+
+## Sign Out
+
+<WsMessage
+  type="Command"
+  route="@wfm|cmd/auth/signOut"
+  summary="Remove the current actor from this WebSocket client."
+  badges={[{ kind: 'neutral', icon: '💬', label: 'Command' }]}
+/>
+
+### Client Message
+
+```json
+{
+  "route": "@wfm|cmd/auth/signOut",
+  "id": "message-id"
+}
+```
+
+### Success Message
+
+```json
+{
+  "route": "@wfm|cmd/auth/signOut:ok",
+  "id": "message-id"
+}
+```
+
+### Error Message
+
+```json
+{
+  "route": "@wfm|cmd/auth/signOut:error",
+  "payload": "app.errors.wsNotAuthenticated",
+  "id": "message-id"
+}
+```
+
+## Account Patch
+
+<WsMessage
+  type="Event"
+  route="@wfm|event/account/patch"
+  summary="Notify connected clients that account data was patched by backend systems."
+  badges={[{ kind: 'neutral', icon: '🔔', label: 'Event' }]}
+/>
+
+```ts
+{
+  route: "@wfm|event/account/patch",
+  payload: UserPatch,
+}
+```

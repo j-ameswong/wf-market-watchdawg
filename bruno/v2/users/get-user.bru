@@ -1,0 +1,19 @@
+meta {
+  name: Get User
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseV2}}/user/{{userSlug}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Public profile for a user slug.
+}

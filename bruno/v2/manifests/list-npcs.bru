@@ -1,0 +1,23 @@
+meta {
+  name: List NPCs
+  type: http
+  seq: 17
+}
+
+get {
+  url: {{baseV2}}/npcs
+  body: none
+  auth: none
+}
+
+headers {
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  NPCs (drop sources).
+}

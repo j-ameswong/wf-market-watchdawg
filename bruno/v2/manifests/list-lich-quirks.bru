@@ -1,0 +1,23 @@
+meta {
+  name: List Lich Quirks
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{baseV2}}/lich/quirks
+  body: none
+  auth: none
+}
+
+headers {
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Lich quirks.
+}

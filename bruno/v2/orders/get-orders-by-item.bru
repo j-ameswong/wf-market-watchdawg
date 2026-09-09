@@ -1,0 +1,25 @@
+meta {
+  name: Get Orders By Item
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseV2}}/orders/item/{{itemSlug}}
+  body: none
+  auth: none
+}
+
+headers {
+  Platform: {{platform}}
+  Crossplay: {{crossplay}}
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Full visible order book for an item (users seen within 48h). Large payload — use /top unless you need depth.
+}

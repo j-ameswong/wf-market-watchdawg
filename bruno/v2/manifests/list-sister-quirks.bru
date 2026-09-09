@@ -1,0 +1,23 @@
+meta {
+  name: List Sister Quirks
+  type: http
+  seq: 15
+}
+
+get {
+  url: {{baseV2}}/sister/quirks
+  body: none
+  auth: none
+}
+
+headers {
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Sister quirks.
+}

@@ -1,0 +1,31 @@
+meta {
+  name: Get Item Statistics
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseV1}}/items/{{itemSlug}}/statistics
+  body: none
+  auth: none
+}
+
+params:query {
+  ~include: item
+}
+
+headers {
+  Platform: {{platform}}
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  48h and 90d price history buckets. **There is no v2 equivalent** — this is the main
+  reason to still talk to v1 at all.
+
+  `include=item` additionally returns the item manifest entry in `include.item`.
+}

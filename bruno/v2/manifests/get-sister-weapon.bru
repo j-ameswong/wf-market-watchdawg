@@ -1,0 +1,23 @@
+meta {
+  name: Get Sister Weapon
+  type: http
+  seq: 13
+}
+
+get {
+  url: {{baseV2}}/sister/weapon/{{sisterWeaponSlug}}
+  body: none
+  auth: none
+}
+
+headers {
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  One sister weapon by slug.
+}

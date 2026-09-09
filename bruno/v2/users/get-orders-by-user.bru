@@ -1,0 +1,25 @@
+meta {
+  name: Get Orders By User
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseV2}}/orders/user/{{userSlug}}
+  body: none
+  auth: none
+}
+
+headers {
+  Platform: {{platform}}
+  Crossplay: {{crossplay}}
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  All visible orders belonging to a user.
+}

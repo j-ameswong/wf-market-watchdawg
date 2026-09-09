@@ -1,0 +1,23 @@
+meta {
+  name: List Locations
+  type: http
+  seq: 16
+}
+
+get {
+  url: {{baseV2}}/locations
+  body: none
+  auth: none
+}
+
+headers {
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Star-chart locations.
+}

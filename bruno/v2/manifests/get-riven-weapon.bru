@@ -1,0 +1,23 @@
+meta {
+  name: Get Riven Weapon
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseV2}}/riven/weapon/{{rivenWeaponSlug}}
+  body: none
+  auth: none
+}
+
+headers {
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  One riven weapon by slug.
+}

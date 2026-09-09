@@ -1,0 +1,27 @@
+meta {
+  name: Get Recent Orders
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseV2}}/orders/recent
+  body: none
+  auth: none
+}
+
+headers {
+  Platform: {{platform}}
+  Crossplay: {{crossplay}}
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Up to 500 visible orders created in the last 4h from online users, newest first.
+  Server-cached with a 1m refresh, so polling faster than 60s buys nothing.
+  This is the cheap firehose the watchdawg poller should sit on.
+}

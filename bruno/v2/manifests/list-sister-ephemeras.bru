@@ -1,0 +1,23 @@
+meta {
+  name: List Sister Ephemeras
+  type: http
+  seq: 14
+}
+
+get {
+  url: {{baseV2}}/sister/ephemeras
+  body: none
+  auth: none
+}
+
+headers {
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Sister ephemeras. Note the v2 spelling is `ephemeras`; the v1 doc's `ephermeras` typo is dead along with the rest of v1.
+}

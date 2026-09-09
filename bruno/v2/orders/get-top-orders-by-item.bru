@@ -1,0 +1,36 @@
+meta {
+  name: Get Top Orders By Item
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseV2}}/orders/item/{{rankedItemSlug}}/top?rank=0
+  body: none
+  auth: none
+}
+
+params:query {
+  rank: 0
+  ~rankLt: 3
+  ~subtype: regular
+}
+
+headers {
+  Platform: {{platform}}
+  Crossplay: {{crossplay}}
+  Language: {{language}}
+}
+
+assert {
+  res.status: eq 200
+}
+
+docs {
+  Up to 5 buy + 5 sell orders from online users, pre-ranked. The primary price signal.
+
+  Optional query filters (all disabled by default here): rank, rankLt, charges,
+  chargesLt, amberStars, amberStarsLt, cyanStars, cyanStarsLt, subtype.
+  `*Lt` variants take precedence over their exact counterparts; filters that the
+  item does not support are ignored.
+}

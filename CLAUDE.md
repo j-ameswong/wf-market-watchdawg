@@ -8,7 +8,7 @@ A Spring Boot 4 / Kotlin service that mirrors warframe.market data into Postgres
 
 ## Layout
 
-The Gradle root is `market/`, **not** the repo root. `nix/` packages the jar, `bruno/` and `docs/` are local-only references (both are in `.gitignore`).
+The Gradle root is `market/`, **not** the repo root. `nix/` packages the jar; `bruno/` (API collection) and `docs/` (reference material) are tracked in the repo.
 
 ## Commands
 

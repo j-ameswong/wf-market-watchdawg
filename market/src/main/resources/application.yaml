@@ -11,7 +11,7 @@ wfm:
   user-agent: wf-market-watchdawg/0.1
   requests-per-second: 3
   platform: pc
-  crossplay: false
+  crossplay: true
   sync:
     interval: 1h
     initial-delay: 30s

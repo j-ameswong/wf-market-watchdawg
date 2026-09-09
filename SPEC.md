@@ -1,8 +1,9 @@
 # SPEC — wf-market-watchdawg
 
-> **Status: under review.** One review round applied (see §11 for decisions taken, §12 for what is
-> still contested). Not yet broken into tasks, and **no code is written against this** until it is.
-> Task refinement happens as a separate pass.
+> **Status: under review.** Two review rounds applied (see §11 for decisions taken, §12 for what is
+> still contested). Round two added crossplay coverage — §2.7, R1.8, R7.11. Not yet broken into
+> tasks, and **no code is written against this** until it is. Task refinement happens as a
+> separate pass.
 >
 > Drafted 2026-09-09. Grounded in `docs/v2/` (API `v0.25.0`, WebSocket `v0.13.0`), `docs/v1.yml`,
 > and the live-verified route table in `bruno/README.md`.
@@ -23,7 +24,7 @@ A single-operator service that watches warframe.market and does two things off o
 ### Non-goals
 - Placing, modifying or closing orders. This service observes.
 - Mirroring or replacing the warframe.market website (`docs/v2/rules/overview.md` forbids it).
-- Multi-platform coverage. **PC only.**
+- Multi-platform coverage. **PC is the only platform context.** Crossplay-enabled orders from `ps4`, `xbox` and `mobile` *are* in scope — a PC operator can trade with them (§2.7). Per-platform non-PC markets (an `xbox` view of the market in its own right) are not.
 - Any claim about completed trades beyond what §2 says is observable.
 - A query API or UI over the warehouse. Read it with psql. *(Dropped during spec review — see §11.)*
 
@@ -72,6 +73,8 @@ Consequences:
 
 `Order` carries `subtype`, `rank`, `charges`, `amberStars`, `cyanStars`, and `/top` exposes all five as filters. A price without its dimension tuple is meaningless. A **market** is the unique tuple `(item, platform, subtype, rank, charges, amberStars, cyanStars)`.
 
+`platform` in that tuple is the **observer's context** (`pc`), not the counterparty's. A market is the set of mutually-tradable orders — that is the thing whose best bid and best ask mean anything — and with crossplay on, a PC operator can trade with every order returned (§2.7). Partitioning by seller platform would split one tradable pool into four and force every C9a rule to aggregate back across them to stay correct. The counterparty's platform is an **attribute of the order** (`wfm_order.seller_platform`), not a dimension of the book.
+
 ### 2.4 Contracts exist only in v1
 
 v2 has a `contracts` concept (`Group.kind`, OAuth scope) but **ships no public routes**. Riven/lich/sister auctions are reachable only via v1, which uses a `payload`/`include` envelope and snake_case. `/auctions/search` **cannot be enumerated** — it requires a weapon or an attribute.
@@ -89,6 +92,32 @@ Three findings that changed the design rather than merely unblocking it:
 1. Statistics split by the **same subtype dimensions as orders** (`mod_rank`, `subtype`, `amber_stars`, `cyan_stars`), so rows key to a **`market`**, not just an `item` — the dimension table earns its keep twice.
 2. The "48h and 90d buckets" note understated the payload: each window carries **two different series** with different field sets — `statistics_closed` (real trades, OHLC, no side) and `statistics_live` (open book, has `order_type`, no OHLC).
 3. **Mapping hazard:** no `charges` field appears anywhere. Requiem mods, which v2 models with `maxCharges`, report `mod_rank: 3`. Mapping `mod_rank` → `rank` unconditionally would collapse those onto the wrong market.
+
+### 2.7 Crossplay is one setting, and the two APIs disagree on what it means
+
+`Platform: pc` + `Crossplay: true` adds crossplay-enabled orders from other platforms to the PC view. It costs **zero rate budget** — a header on calls already being made, and a payload field on a socket that spends nothing — so §2.1's arithmetic is unchanged. **Measured 2026-09-09:**
+
+| | `Crossplay: false` | `Crossplay: true` |
+| --- | --- | --- |
+| `/v2/orders/item/frost_prime_set` | 856 orders, all `pc` | 899 — `pc` 856, `ps4` 29, `xbox` 12, `mobile` 2 |
+| Set relationship | — | **strict superset**; all 856 PC orders byte-identical |
+| `/v2/orders/recent` | 431, all `pc` | 432, non-PC share **32/432 = 7.4%** |
+
+Three properties that shape the design:
+
+1. **Every order is platform-attributable.** `user.platform` and `user.crossplay` were present on 1,331 of 1,331 sampled orders, despite `Order.user` being flagged `optional/contextual` in `docs/v2/data-models.mdx`.
+2. **`switch` never appears.** The server forces `crossplay: false` for it (`docs/v2/websockets/subscriptions.mdx`). Crossplay is not "all platforms".
+3. **The two APIs disagree.** For `/v2/orders/*`, `crossplay=true` is a strict superset. For v1 `/items/{slug}/statistics` it is a **different population** — see R7.11.
+
+**The failure R1.8 exists to prevent.** REST defaults `Crossplay` to `false`; the socket defaults it to **`true`**. Mixing them breaks C4's classifier:
+
+1. Socket sees a new `xbox` order → `appeared`, `source=ws` (R4.2).
+2. The next full book poll runs with `Crossplay: false`, so that order is absent from the response.
+3. R4.1 diffs the book against known state → classifies it **`vanished`**.
+
+That is a false `vanished` on ~7% of ingested orders, on exactly the event §2.2 treats as evidence-of-sale and R9b.2 measures lifetimes from. It would stay invisible until someone asked why non-PC sellers appear to sell instantly.
+
+**Why orders are safe to widen and statistics are not.** For orders the setting is lossless: a superset plus a per-order platform tag means the PC-only view stays reconstructible forever with a `where` clause, so *not* enabling it is the lossy choice. For statistics, no field distinguishes the two populations, so the scope has to be recorded in the row (R7.11).
 
 ---
 
@@ -199,7 +228,7 @@ erDiagram
   market {
     bigint id PK
     text item_id FK
-    text platform "'pc'"
+    text platform "'pc' — observer context, NOT seller platform"
     text subtype "NULLs must compare EQUAL"
     int rank
     int charges
@@ -211,6 +240,7 @@ erDiagram
     bigint market_id FK
     int platinum
     int quantity
+    text seller_platform "pc|ps4|xbox|mobile — from user.platform"
     timestamptz first_seen_at
     timestamptz last_seen_at
     timestamptz gone_at
@@ -236,6 +266,7 @@ erDiagram
     text granularity PK "hourly (48h) | daily (90d)"
     timestamptz bucket PK "partition column"
     text order_type PK "live only; closed has no side"
+    boolean crossplay PK "different population, not a superset"
     numeric volume "closed=trades, live=OPEN ORDER COUNT"
     numeric closed_price "closed only"
     numeric donch_top "closed only"
@@ -332,12 +363,14 @@ Every outbound call goes through one compliant, paced, observable path.
 - **R1.5** `User-Agent` identifies the project and a contact URL, per `rules/overview.md`. Currently a bare `wf-market-watchdawg/0.1`.
 - **R1.6** Two envelope shapes: v2 `apiVersion`/`data`/`error` camelCase, v1 `payload`/`include` snake_case.
 - **R1.7** Non-JSON and 5xx error bodies must not produce a deserialization crash. v1 `/items/{slug}/orders` answers `403` as plain text.
+- **R1.8** **Crossplay is one global setting applied identically to every channel** — the REST `Crossplay` header *and* the WebSocket `subscribe/newOrders` payload. It is not a per-call option and no call site may omit it. The two upstream defaults point opposite ways: REST defaults to `false` (`docs/v2/api/overview.mdx`), the socket to **`true`** (`docs/v2/websockets/subscriptions.mdx`). Taking either default mixes populations across channels and corrupts C4's diff — the failure is walked through in §2.7.
 
 **Acceptance**
 - N sequential calls at limit L take ≥ (N−1)/L seconds.
 - A `429` fixture with `Retry-After: 2` yields exactly one retry, after ≥2s, then success.
 - A plain-text `403` surfaces a typed error, not a Jackson exception.
 - Over a 1h live run: sustained req/s ≤ configured, **zero** `429`/`509`.
+- A recorded REST call and a recorded socket subscribe frame carry the **same** crossplay value; the test fails if either silently falls back to an upstream default (R1.8).
 
 ### C2 — Time-series storage & test harness
 
@@ -411,7 +444,7 @@ stateDiagram-v2
 ### C5 — Realtime feed
 
 - **R5.1** Connect with the required `wfm` subprotocol. Connections without it are rejected by the server.
-- **R5.2** Subscribe to `newOrders` for the configured platform; handle `:ok` and `:error` (`alreadySubscribed`).
+- **R5.2** Subscribe to `newOrders` for the configured platform, sending `crossplay` **explicitly** from the single global setting (R1.8) rather than relying on the socket's `true` default; handle `:ok` and `:error` (`alreadySubscribed`).
 - **R5.3** Reconnect indefinitely with exponential backoff plus jitter.
 - **R5.4** On every (re)connect, gap-fill from `/v2/orders/recent` — its 4h window covers any realistic outage.
 - **R5.5** Socket events feed the same ingest path as polling, tagged `source=ws`.
@@ -443,7 +476,7 @@ Schema captured (§2.6, `docs/v1-statistics.md`). Requirements are now concrete.
 
 - **R7.1** Both series are stored and **never conflated**: `statistics_closed` (real trades, OHLC + Donchian, no side) and `statistics_live` (open-book aggregates, has `order_type`, no OHLC). `volume` means different things in each — trades vs open-order count. A single table discriminated by a `section` column is acceptable; merging the two into one row shape is not.
 - **R7.2** Both granularities recorded: hourly (48h window) and daily (90d).
-- **R7.3** Upsert key is the logical tuple `(section, granularity, bucket, dimensions[, order_type])`, verified unique across all 3,386 sampled rows. The row's own `id` is stored alongside but **not** used as the key — its stability across refetches is assumed, not confirmed.
+- **R7.3** Upsert key is the logical tuple `(section, granularity, bucket, dimensions[, order_type], crossplay)`, verified unique across all 3,386 sampled rows. The row's own `id` is stored alongside but **not** used as the key. **Confirmed 2026-09-09: `id` is unstable.** Refetching `frost_prime_set` at an unchanged crossplay setting is byte-identical (0/88 rows differ, ids stable), but flipping `Crossplay` changes **88/88 row ids** on historical buckets whose values did not move. Keying on `id` would have duplicated the entire history the first time that header changed. The earlier "assumed, not confirmed" caveat is now resolved — against `id`.
 - **R7.4** Rows key to a **`market`** (C3), not an `item`, since statistics carry the same subtype dimensions as orders. Field names are snake_case: `mod_rank` → `rank`, `amber_stars` → `amberStars`, `cyan_stars` → `cyanStars`.
 - **R7.5** **`mod_rank` must not be mapped to `rank` unconditionally.** Requiem mods report `mod_rank: 3` where v2 models `maxCharges`; a naive mapping collapses them onto the wrong market. Resolve using the item's own `maxRank`/`maxCharges` from C3.
 - **R7.6** All price fields bind as **decimal**, never integer — `donch_top`, `donch_bot`, `median`, `min_price`, `max_price` arrive as JSON int *or* float depending on value (`150` vs `80.0`). `volume` is always an integer.
@@ -451,6 +484,7 @@ Schema captured (§2.6, `docs/v1-statistics.md`). Requirements are now concrete.
 - **R7.8** A dimension field is *absent*, not null, when the item lacks that dimension. Parsing must not treat absence as zero — rank 0 is a real, distinct market.
 - **R7.9** v1 timestamps (`+00:00` with millis) parse alongside v2 (`Z`).
 - **R7.10** `statistics_closed` is sparse — buckets exist only where trades occurred. Gaps are data, not errors, and must not be interpolated on ingest.
+- **R7.11** **`crossplay` is part of the row's identity**, because the two settings return *different populations, not a superset*. Flipping the header changed 76 of 88 historical closed-daily rows on `frost_prime_set`, and `volume` moved **down** (51 → 41 for the 2026-06-12 bucket), so `crossplay=true` here is not additive the way `/v2/orders/*` is (§2.7). Nothing in the row records which population produced it, so the column must. Storing it keeps the choice reversible; omitting it makes any later change to the setting silently overwrite history with differently-scoped numbers — an unrecoverable corruption with no error at the time it happens.
 
 **Acceptance**
 - Ingesting the captured `frost_prime_set` fixture twice leaves one row per logical key.
@@ -459,6 +493,8 @@ Schema captured (§2.6, `docs/v1-statistics.md`). Requirements are now concrete.
 - A row with `donch_top: 150` and one with `80.0` both persist without error.
 - A row lacking `moving_avg` persists as null.
 - Closed and live volume for one bucket are retrievable separately and differ by orders of magnitude on a liquid item.
+- Ingesting one slug at both crossplay settings leaves **two** distinct row sets, not one overwritten set (R7.11).
+- Refetching at an unchanged setting is idempotent even though every row `id` would differ at the other setting (R7.3).
 
 ### C8 — Contracts / auctions
 
@@ -638,11 +674,12 @@ Gradle root is `market/`, not the repo root.
 
 ## 10. Open questions
 
-1. ~~C7 blocked on a statistics capture.~~ **Resolved 2026-09-09** — captured across six slugs, documented in `docs/v1-statistics.md`, C7 requirements now concrete (R7.1–R7.10). One residual unknown: whether v1 `mod_rank` carries v2 `charges` for requiem items (R7.5) — resolvable from the C3 catalog's `maxRank`/`maxCharges` rather than more captures.
+1. ~~C7 blocked on a statistics capture.~~ **Resolved 2026-09-09** — captured across six slugs, documented in `docs/v1-statistics.md`, C7 requirements now concrete (R7.1–R7.11). One residual unknown: whether v1 `mod_rank` carries v2 `charges` for requiem items (R7.5) — resolvable from the C3 catalog's `maxRank`/`maxCharges` rather than more captures.
 2. **Timescale + Postgres version.** `compose.yaml` pins `postgres:18-alpine`. Confirm whether a TimescaleDB pg18 image exists; if not, C2 pins pg17 and the dev volume must be reset (`mdb-reset`) since the data directory is incompatible.
 3. **C9b thresholds are deliberately unspecified** — they cannot be chosen honestly before history exists (R9b.3).
 4. **Kafka starters are on the classpath with zero producers.** Recommendation: leave them (they connect lazily, so they're harmless) and do **not** wire Kafka. The event log *is* the replayable append-only log `docs/response.md` wanted Kafka for, and ~100k events/day is not a Postgres problem. Kafka earns its place when independent consumers or separate ingest/analysis scaling actually exist.
 5. ~~ntfy topic secrecy.~~ **Resolved:** public `ntfy.sh` with a high-entropy topic, treated as a credential (R10.6, §9).
+6. **What does `Crossplay` actually mean to v1 `/items/{slug}/statistics`?** The header appears nowhere in `docs/v1.yml`, yet it deterministically rewrites 76/88 historical rows and *lowers* `volume` (§2.7, R7.11). Best reading: trades where **both** sides are crossplay-enabled, which would exclude the PC-crossplay-off cohort — 6 such users appeared in the sampled book. That is an inference from one slug and the direction of one number. Resolvable by sampling more slugs, and worth doing before C7 ingests at scale, but R7.11 is written so the answer is **not** load-bearing.
 
 ---
 
@@ -665,6 +702,10 @@ Gradle root is `market/`, not the repo root.
 | **§2.2 widened after the capture** | Aggregated completed-trade data *is* available; the original "no trade tape" claim was too strong. Per-trade and real-time remain unavailable. |
 | **`item_stat` keys to `market`, not `item`** | Statistics carry the same subtype dimensions as orders, so the dimension table serves both fact families. |
 | **Two statistics series kept separate** | `closed.volume` counts trades, `live.volume` counts open orders. Merging them would corrupt every volume metric. |
+| **Crossplay enabled, PC context** | Zero budget cost, +7.4% of the new-order feed, and losslessly reversible for orders since every order carries `user.platform` (§2.7). Not enabling it is the lossy choice. |
+| **Crossplay is one global setting (R1.8)** | REST and the socket default opposite ways; mixing them fabricates `vanished` events on ~7% of orders. |
+| **`market.platform` is observer context, not seller platform** | A market is a mutually-tradable pool; seller platform is an attribute of the order (§2.3). |
+| **`crossplay` joins `item_stat`'s logical key** | The two settings return different populations and the row records neither. One column keeps the decision reversible (R7.11). |
 
 ## 12. Still worth disagreeing with
 
@@ -673,4 +714,6 @@ Gradle root is `market/`, not the repo root.
 - **§2.2** caps what any analysis built on this warehouse can honestly claim. Worth confirming that limitation is understood *before* building on it, not after.
 - **R9a.8's 10–50/day budget** is currently the only number in the spec constraining signal quality. If it turns out to be the wrong ceiling, most of C9a and all of C9b get retuned.
 - **C9b's volume-spike rule is now clearly implementable** — the capture confirms 90 days of real traded volume per market, which is exactly the baseline it needs. The remaining risk moved from "is the data there" to "is 90 days enough history to call a spike", which only running the thing will answer.
+- **The semantics of `Crossplay` on v1 statistics are inferred, not documented** (§10 q6). R7.11 stores the flag so a wrong guess stays recoverable, but the inference is currently one slug deep and nobody upstream has confirmed it.
+- **Including crossplay orders widens what the warehouse means.** Every order-book series from here on describes a PC+crossplay pool, not a PC pool, while `statistics` describes a third thing again. Anyone querying the warehouse a year out needs that in front of them, which is what `seller_platform` and `item_stat.crossplay` are for — but they only help if the query author knows to use them.
 - **R7.5's `mod_rank` ambiguity** is the one unresolved correctness question in the spec. Getting it wrong silently merges requiem-mod charge levels into rank buckets, and the corruption would be invisible until someone queried those items specifically.

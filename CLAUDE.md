@@ -26,7 +26,7 @@ The Gradle root is `market/`, **not** the repo root. `nix/` packages the jar; `b
 | Flyway without Gradle | `mflyway info` | see `flake.nix` for the full invocation |
 | Replay the API collection | `bruno-run` | `cd bruno && npx @usebruno/cli run --env production --delay 400 -r` |
 
-**Docker must be running.** `bootRun` starts the Postgres in `market/compose.yaml` via `spring-boot-docker-compose` (lifecycle `start_and_stop`), and every test is a `@SpringBootTest` that boots a Testcontainers Postgres.
+**Docker must be running.** `bootRun` starts the Postgres in `market/compose.yaml` via `spring-boot-docker-compose` (lifecycle `start_and_stop`), and any test touching Spring, HTTP or storage is a `@SpringBootTest` that boots a Testcontainers Postgres. Classes with no Spring or JDBC dependency (`WfmRateLimiterTest`) are plain JUnit and need neither. The test task pins `wfm.sync.initial-delay` out of reach so `@EnableScheduling` cannot tick mid-run and call the live API — `MarketApplicationTests` fails if that override is removed.
 
 Hermetic jar: `nix build .#market`. It builds with nixpkgs' `gradle_9` rather than `./gradlew` (the wrapper can't download inside the sandbox) and runs `bootJar` with `doCheck = false`, since tests need a Docker daemon. **After any dependency change in `build.gradle.kts`, regenerate the lock from the repo root:**
 
@@ -54,7 +54,15 @@ The transaction boundary is the important invariant: if a refresh throws, the st
 
 `WfmClient` wraps a single `RestClient` bean built in `WfmConfig`. Every v2 response is an `Envelope<T>` with `data` xor `error`; the private `get()` unwraps it and throws on either an empty body or a populated `error`.
 
-The public API allows **3 req/s** — Cloudflare answers `429` above it and `509` on too many concurrent connections. `WfmConfig`'s `defaultStatusHandler` turns both into `RateLimitedException` carrying `Retry-After`. Nothing throttles outbound calls yet; `wfm.requests-per-second` is declared but unused. Any code that sweeps per-item endpoints (~4000 tradable items) has to budget against that limit.
+The public API allows **3 req/s** — Cloudflare answers `429` above it and `509` on too many concurrent connections. `WfmConfig`'s `defaultStatusHandler` turns both into `RateLimitedException` carrying `Retry-After`. Any code that sweeps per-item endpoints (~4000 tradable items) has to budget against that limit.
+
+### Outbound pacing
+
+Every outbound call is paced and nothing opts in. `WfmConfig` registers a `RestClientCustomizer` that installs `WfmRateLimitInterceptor` on **every** `RestClient.Builder` the context hands out, so a new client bean is governed the moment it is built. That is what makes "no call site may bypass the limiter" a property of the wiring rather than a convention; `RateLimitWiringTest` enumerates `RestClient` beans and fails if one lacks the interceptor, so it covers clients added later without being edited.
+
+`WfmRateLimiter` holds two independent budgets keyed by **route**, not by API version and not by which bean called ([ADR-0005](docs/adr/0005-rate-buckets-keyed-by-route-class.md)): `contract-search` for auction-search routes, `public` for everything else — including v1 `statistics`. Both live under `wfm.limits` as `permits`/`per`, alongside `max-concurrency` and `max-retry-after`. Turns are **evenly spaced with no burst allowance**, and are taken *before* the concurrency permit so a thread waiting out pacing never holds a connection slot.
+
+Call it as `limiter.acquire(bucket) { … }`. The block form is what guarantees the permit is released when a call throws, so a retry must call `acquire` **again, sequentially** — nesting a re-acquire inside an outstanding one deadlocks against `max-concurrency`.
 
 `baseUrl` is v2. `baseUrlLegacy` (v1) exists because three v1 routes have no v2 equivalent — auctions, `/items/{slug}/statistics` (price history), and `/items/{slug}/dropsources`. Everything else in `docs/v1.yml` is dead; `bruno/README.md` has the verified route-by-route table.
 

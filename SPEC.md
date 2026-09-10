@@ -634,8 +634,8 @@ Gradle root is `market/`, not the repo root.
 
 ## 8. Testing strategy
 
-- Every test is a `@SpringBootTest` with a Testcontainers Postgres. Identical annotation sets share one context **and one container**, so **order-independence is mandatory** (R2.7).
-- `MockRestServiceServer` bound to `RestClient.Builder` for HTTP — already available via `spring-boot-starter-webmvc-test`, no new dependency. **No test reaches the live API** (R2.6).
+- Any test touching Spring, HTTP or storage is a `@SpringBootTest` with a Testcontainers Postgres. Identical annotation sets share one context **and one container**, so **order-independence is mandatory** (R2.7). Classes with no Spring or JDBC dependency are plain JUnit — booting a container to test token arithmetic buys nothing.
+- `MockRestServiceServer` bound to `RestClient.Builder` for HTTP — already available via `spring-boot-starter-webmvc-test`, no new dependency. **No test reaches the live API** (R2.6). The Gradle test task pins `wfm.sync.initial-delay` out of reach so `@EnableScheduling` cannot tick mid-run; `MarketApplicationTests` asserts it. A `src/test/resources/application.yaml` would *not* work here — it shadows the main file by classpath name rather than layering on it.
 - Fixtures are captured from the `bruno` collection so they match reality.
 - `WfmClient.get()` is `private inline` and cannot be stubbed — test through the HTTP layer, not by mocking the client.
 - **C4's diff logic gets the densest coverage.** It is where correctness actually lives; everything downstream trusts its output.

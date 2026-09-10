@@ -22,6 +22,9 @@ outbound call, enforced at the transport layer so no call site can bypass it, an
 treated as a bug in our pacing. Raising effective throughput via proxy rotation, multiple egress
 paths, or a browser-impersonating `User-Agent` is prohibited.
 
+**Refined 2026-09-10 (C1 T2):** the limiter spaces turns evenly at `per / permits` rather than
+letting a bucket's allowance be spent in a burst — see Alternative 3.
+
 ## Alternatives Considered
 
 ### Alternative 1: Pace at call sites, by convention
@@ -36,6 +39,16 @@ paths, or a browser-impersonating `User-Agent` is prohibited.
 - **Why not**: No capability in the spec needs more than 1.3 req/s, so the entire upside is
   hypothetical while the downside is being blocked from a service with no alternative.
 
+### Alternative 3: Spend a bucket's allowance in bursts, up to the window
+- **Pros**: Lower latency for work that arrives in batches — C8's auction sweep could issue 12
+  requests at once rather than spread over a minute.
+- **Cons**: "12 req/min" is our own restatement of a limit the rules express as a *rate*
+  ("expected to be limited to 10–20 req/minute"), not as a window the server promises to refill.
+  Measured over a sliding window, a burst reads as 12 requests in the first second.
+- **Why not**: The upside is latency on a sweep with no deadline; the downside is precisely the
+  `429` this ADR defines as a bug. Revisit only if T8's live run shows the spaced rate leaving
+  budget unused.
+
 ## Consequences
 
 ### Positive
@@ -47,6 +60,9 @@ paths, or a browser-impersonating `User-Agent` is prohibited.
 ### Negative
 - Latency on any signal that requires a poll is bounded by the budget, not by need. See
   [ADR-0008](0008-vanished-only-from-full-book-polls.md).
+- Even spacing means a bucket cannot absorb a spike: contract search issues one request every 5s
+  rather than 12 and then idling. Any sweep sized against a burst — C8's is the one that would be —
+  must be sized against the spaced rate instead.
 
 ### Risks
 - A hand-rolled limiter can be subtly wrong under concurrency. Mitigated by deterministic tests

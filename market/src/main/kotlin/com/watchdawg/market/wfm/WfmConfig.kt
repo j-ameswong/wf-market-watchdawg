@@ -41,8 +41,8 @@ class WfmConfig {
      * customizer is the right blast radius.
      */
     @Bean
-    fun wfmRateLimitCustomizer(limiter: WfmRateLimiter): RestClientCustomizer =
-        RestClientCustomizer { it.requestInterceptor(WfmRateLimitInterceptor(limiter)) }
+    fun wfmRateLimitCustomizer(limiter: WfmRateLimiter, props: WfmProperties): RestClientCustomizer =
+        RestClientCustomizer { it.requestInterceptor(WfmRateLimitInterceptor(limiter, props.limits.maxRetryAfter)) }
 
     @Bean
     fun wfmRestClient(builder: RestClient.Builder, props: WfmProperties): RestClient = builder
@@ -50,11 +50,5 @@ class WfmConfig {
         .defaultHeader("User-Agent", props.userAgent)
         .defaultHeader("Platform", props.platform)
         .defaultHeader("Crossplay", props.crossplay.toString())
-        .defaultStatusHandler({ it.value() == 429 || it.value() == 509 }) { _, res ->
-            throw RateLimitedException(res.headers.getFirst("Retry-After")?.toLongOrNull())
-        }
         .build()
 }
-
-class RateLimitedException(val retryAfterSeconds: Long?) :
-    RuntimeException("warframe.market rate limited, retry after ${retryAfterSeconds ?: "?"}s")

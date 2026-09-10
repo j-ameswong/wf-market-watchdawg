@@ -1,0 +1,61 @@
+package com.watchdawg.market.wfm
+
+import org.springframework.http.HttpHeaders
+import java.time.Clock
+import java.time.Duration
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
+
+/**
+ * Every failure the warframe.market transport raises. One base type so a caller can catch the
+ * boundary rather than enumerate its causes; the subtypes exist because C6's poll scheduler has to
+ * tell "slow down" (R1.3) from "too many connections" (R1.4) from "the route answered badly" (R1.7).
+ */
+sealed class WfmException(message: String) : RuntimeException(message)
+
+/**
+ * The server refused this call for spending too much budget. Carries the cooloff it asked for, when
+ * it named one — a `429` frequently omits `Retry-After` entirely.
+ */
+sealed class ThrottledException(val retryAfter: Duration?, message: String) : WfmException(message)
+
+/** `429` — the pacing itself was too fast. SPEC 9 treats one of these as a bug in our limiter. */
+class RateLimitedException(retryAfter: Duration?) :
+    ThrottledException(
+        retryAfter,
+        "warframe.market rate limited (429), retry after ${retryAfter ?: "<unstated>"}",
+    )
+
+/**
+ * `509` — too many connections open at once, which Cloudflare signals separately from `429`
+ * (R1.4). Distinct from [RateLimitedException] because the remedy is fewer concurrent calls, not
+ * slower ones.
+ */
+class ConcurrencyLimitedException(retryAfter: Duration?) :
+    ThrottledException(
+        retryAfter,
+        "warframe.market refused a concurrent connection (509), retry after ${retryAfter ?: "<unstated>"}",
+    )
+
+/**
+ * `RFC 9110 §10.2.3` allows `Retry-After` in two forms — delta-seconds or an HTTP-date — and the
+ * upstream sends both. Reading only the first silently yields `null` for the second, which is how a
+ * stated cooloff turns into an immediate retry.
+ *
+ * Returns `null` when the header is absent or unparseable, and never a negative duration: a date
+ * already in the past means "now".
+ */
+fun retryAfterOf(headers: HttpHeaders, clock: Clock): Duration? {
+    val raw = headers.getFirst(HttpHeaders.RETRY_AFTER)?.trim().orEmpty()
+    if (raw.isEmpty()) return null
+
+    raw.toLongOrNull()?.let { return maxOf(Duration.ZERO, Duration.ofSeconds(it)) }
+
+    return try {
+        val until = ZonedDateTime.parse(raw, DateTimeFormatter.RFC_1123_DATE_TIME).toInstant()
+        maxOf(Duration.ZERO, Duration.between(clock.instant(), until))
+    } catch (_: DateTimeParseException) {
+        null
+    }
+}

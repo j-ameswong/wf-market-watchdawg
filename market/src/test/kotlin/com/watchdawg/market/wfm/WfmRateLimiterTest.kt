@@ -98,6 +98,43 @@ class WfmRateLimiterTest {
         assertTrue(ran)
     }
 
+    @Test
+    fun `narrowing concurrency gives up a slot, down to a floor of one`() {
+        val limiter = WfmRateLimiter(limits(public = UNPACED, maxConcurrency = 2))
+
+        assertEquals(1, limiter.narrowConcurrency())
+        assertEquals(1, limiter.narrowConcurrency(), "the cap fell below one connection")
+
+        val holding = CountDownLatch(1)
+        val release = CountDownLatch(1)
+        thread(isDaemon = true) {
+            limiter.acquire(Bucket.PUBLIC) {
+                holding.countDown()
+                release.await()
+            }
+        }
+        assertTrue(holding.await(5, SECONDS), "the first acquire never got its permit")
+
+        val second = CountDownLatch(1)
+        thread(isDaemon = true) { limiter.acquire(Bucket.PUBLIC) { second.countDown() } }
+
+        assertFalse(second.await(150, MILLISECONDS), "a second call ran after the cap narrowed to one")
+        release.countDown()
+        assertTrue(second.await(5, SECONDS), "the second call never got the released permit")
+    }
+
+    @Test
+    fun `each turn is counted against its own bucket`() {
+        // T4's retry proves it spent budget by this counter, so the counter has to be per bucket.
+        val limiter = WfmRateLimiter(limits(public = UNPACED, contractSearch = UNPACED))
+
+        repeat(3) { limiter.acquire(Bucket.PUBLIC) {} }
+        limiter.acquire(Bucket.CONTRACT_SEARCH) {}
+
+        assertEquals(3L, limiter.turnsTaken(Bucket.PUBLIC))
+        assertEquals(1L, limiter.turnsTaken(Bucket.CONTRACT_SEARCH))
+    }
+
     private fun limits(
         public: WfmProperties.Rate = WfmProperties.Rate(2, Duration.ofSeconds(1)),
         contractSearch: WfmProperties.Rate = WfmProperties.Rate(12, Duration.ofMinutes(1)),

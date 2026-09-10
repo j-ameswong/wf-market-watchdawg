@@ -76,7 +76,7 @@ review. One blocker surfaced and was fixed during the checkpoint — the test-ru
 reach the live API; see `tasks/todo.md`.*
 
 ### Phase 2 — Failing correctly, and one context
-- [ ] T4: `429`/`509` → bounded retry that honors `Retry-After` and consumes budget
+- [x] T4: `429`/`509` → bounded retry that honors `Retry-After` and consumes budget
 - [ ] T5: Non-JSON and 5xx bodies never reach Jackson
 - [ ] T6: Crossplay as one setting, structurally un-omittable
 
@@ -145,10 +145,18 @@ Full task bodies with acceptance criteria live in `tasks/todo.md`.
    crossplay value. It was untestable inside C1 — there is no socket until C5 — and R5.2 already
    obliges the socket to send the value explicitly from the global setting. Removed from
    `SPEC.md` §4 C1. **R1.8 itself is unchanged**; only its acceptance test is gone.
+8. **A `509` permanently narrows the connection cap; it never widens back.** *(Delegated, decided
+   2026-09-10 during T4.)* R1.4's acceptance asks that `509` "narrow effective concurrency rather
+   than only wait", which leaves open whether the cap recovers. It does not: the limiter gives up
+   one slot per `509`, floored at one, and only a restart resets it. Under
+   [ADR-0004](docs/adr/0004-rate-limit-discipline-is-a-hard-boundary.md) a `509` is a bug in our own
+   budgeting, so creeping back toward a concurrency the server has already refused is precisely the
+   "traffic pattern" the upstream rules police. The configured cap is 2, so the only move available
+   is 2 → 1; a decaying cap would be machinery with one step to walk.
 
 ## Open Questions
 
-**None outstanding.** All six are recorded above as Resolved Decisions.
+**None outstanding.** All eight are recorded above as Resolved Decisions.
 
 One carries forward as an obligation rather than a question:
 

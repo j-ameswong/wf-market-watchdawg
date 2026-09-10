@@ -135,19 +135,30 @@ test copy of the config instead of the real one.
 from the limiter** before reissuing, so retries spend budget rather than bypass it (R1.3, R1.4).
 
 **Acceptance criteria:**
-- [ ] A `429` fixture with `Retry-After: 2` yields exactly one retry, no sooner than 2s, then
+- [x] A `429` fixture with `Retry-After: 2` yields exactly one retry, no sooner than 2s, then
       success — the spec's second acceptance bullet.
-- [ ] A second consecutive `429` surfaces a typed `RateLimitedException`; there is no third attempt.
-- [ ] `509` produces a distinct type from `429` and narrows effective concurrency rather than only
+- [x] A second consecutive `429` surfaces a typed `RateLimitedException`; there is no third attempt.
+- [x] `509` produces a distinct type from `429` and narrows effective concurrency rather than only
       waiting (R1.4).
-- [ ] `Retry-After` parses as both delta-seconds and HTTP-date; a value above
+- [x] `Retry-After` parses as both delta-seconds and HTTP-date; a value above
       `wfm.limits.max-retry-after` (60s) surfaces immediately instead of parking a thread
       (Decision 4).
-- [ ] The retry is visible to the limiter — asserted via a limiter counter, not by inspection.
+- [x] The retry is visible to the limiter — asserted via a limiter counter, not by inspection.
 
 **Verification:**
-- [ ] `mtest --tests '*WfmRetryTest'`
-- [ ] `mbuild` green
+- [x] `mtest --tests '*WfmRetryTest' --tests '*WfmRateLimiterTest'` — 13 tests
+- [x] `mbuild` green
+
+**Notes:** the retry lives in the interceptor rather than in a `defaultStatusHandler`, because only
+the interceptor sits *above* the limiter and can re-acquire a turn before reissuing; a status
+handler runs after the transport has already spent its budget. Both attempts share one
+`limiter.acquire` call site inside the loop, so "the retry spends budget" is structural rather than
+remembered. A refusal carrying **no** `Retry-After` gets no extra cooloff — the second attempt's own
+turn already spaces it by the bucket rate, so no new config was invented for the gap. `509` narrows
+the connection cap by one per occurrence, floored at one and never widened again (Decision 8). Each
+acceptance criterion was mutation-checked: no-op the cooloff sleep, `ATTEMPTS = 3`, drop the
+`narrowConcurrency` call, drop the ceiling test, and let the retry call `execution.execute` directly
+— all five fail exactly the test that claims them.
 
 **Dependencies:** T3
 **Files likely touched:** `.../wfm/WfmRateLimitInterceptor.kt`, `.../wfm/WfmErrors.kt`,

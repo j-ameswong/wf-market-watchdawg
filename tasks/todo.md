@@ -116,10 +116,13 @@ revisit.
       customizer fails both `RateLimitWiringTest` and the pacing assertion (0.0016s vs ≥0.5s)
 - [ ] Review with human before Phase 2
 
-**Blocker to resolve at this review:** `@EnableScheduling` is active in `@SpringBootTest`, and
-`wfm.sync.initial-delay` is 30s. The suite currently finishes inside that window, but as it grows
-the scheduler will fire mid-test and call the **live** API — violating R2.6 and §9. Fix before the
-suite crosses 30s: a `market/src/test/resources/application.yaml` pinning the delay far out.
+**Resolved during this checkpoint:** `@EnableScheduling` is active in `@SpringBootTest` and
+`wfm.sync.initial-delay` was 30s, so once the suite outgrew that window the scheduler would have
+ticked mid-test and called the **live** API (R2.6, §9). Fixed by a `systemProperty` on the Gradle
+test task, guarded by `MarketApplicationTests.the sync scheduler cannot fire during a test run`.
+Not a `src/test/resources/application.yaml` — that file would shadow the main one by classpath
+name, dropping `base-url` and `limits` from every test and leaving `WfmPropertiesTest` asserting a
+test copy of the config instead of the real one.
 
 ---
 

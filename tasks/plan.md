@@ -72,8 +72,8 @@ T4 retry/429/509   T5 error bodies  T6 crossplay one-setting
 - [x] T3: Route every v2 call through the limiter at the transport layer
 
 **Checkpoint A** — a paced v2 call works end to end and cannot be bypassed. *Met; awaiting human
-review. One blocker surfaced for that review — the test scheduler can reach the live API; see
-`tasks/todo.md`.*
+review. One blocker surfaced and was fixed during the checkpoint — the test-run scheduler could
+reach the live API; see `tasks/todo.md`.*
 
 ### Phase 2 — Failing correctly, and one context
 - [ ] T4: `429`/`509` → bounded retry that honors `Retry-After` and consumes budget

@@ -49,6 +49,12 @@ kotlin {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+
+    // @EnableScheduling is active in every @SpringBootTest, so CollectionSyncScheduler would tick
+    // 30s into the test JVM and call the live warframe.market API -- forbidden by R2.6 and SPEC 9.
+    // A system property outranks application.yaml and applies to every test without a per-class
+    // annotation anyone can forget. Asserted by MarketApplicationTests.
+    systemProperty("wfm.sync.initial-delay", "3650d")
 }
 
 // Style is defined in market/.editorconfig, which Spotless discovers from this directory.

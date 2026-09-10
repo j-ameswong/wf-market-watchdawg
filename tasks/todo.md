@@ -47,17 +47,24 @@ paced token buckets plus one global semaphore capping in-flight calls. Clock and
 injected so pacing is deterministic under test. No HTTP in this task.
 
 **Acceptance criteria:**
-- [ ] Two buckets pace independently: exhausting `contract-search` does not delay a `public`
+- [x] Two buckets pace independently: exhausting `contract-search` does not delay a `public`
       acquire (R1.2).
-- [ ] N sequential acquires on a bucket at limit L return no sooner than (N−1)/L — the spec's
+- [x] N sequential acquires on a bucket at limit L return no sooner than (N−1)/L — the spec's
       first acceptance bullet, tested both on the injected clock and once in real time.
-- [ ] With `max-concurrency` = 2, a third concurrent acquire blocks until a permit is released,
+- [x] With `max-concurrency` = 2, a third concurrent acquire blocks until a permit is released,
       and a permit is released even when the caller throws (R1.4).
 
 **Verification:**
-- [ ] `mtest --tests '*WfmRateLimiterTest'` — plain JUnit, no Spring context, no container
+- [x] `mtest --tests '*WfmRateLimiterTest'` — plain JUnit, no Spring context, no container
       (Decision 5)
-- [ ] `mbuild` green
+- [x] `mbuild` green
+
+**Notes:** the API is `acquire(bucket) { … }` rather than a bare `acquire(bucket)` — release-on-throw
+is only structural if the limiter owns the `try`/`finally`. T4's retry therefore calls `acquire`
+**again, sequentially**, never nested inside the first: nesting would deadlock against
+`max-concurrency`. Turns are evenly spaced with **no burst allowance**, and are taken before the
+semaphore so a thread waiting out pacing doesn't hold a connection slot. Each acceptance criterion
+was mutation-checked (no-op the sleep; widen the cap to 3) to confirm the tests discriminate.
 
 **Dependencies:** T1
 **Files likely touched:** `market/src/main/kotlin/com/watchdawg/market/wfm/WfmRateLimiter.kt`,

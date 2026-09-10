@@ -68,7 +68,7 @@ T4 retry/429/509   T5 error bodies  T6 crossplay one-setting
 
 ### Phase 1 — A governed transport
 - [x] T1: Bucket-aware `WfmProperties`
-- [ ] T2: `WfmRateLimiter` with two independent buckets
+- [x] T2: `WfmRateLimiter` with two independent buckets
 - [ ] T3: Route every v2 call through the limiter at the transport layer
 
 **Checkpoint A** — a paced v2 call works end to end and cannot be bypassed.

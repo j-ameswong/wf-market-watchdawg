@@ -78,9 +78,11 @@ reach the live API; see `tasks/todo.md`.*
 ### Phase 2 — Failing correctly, and one context
 - [x] T4: `429`/`509` → bounded retry that honors `Retry-After` and consumes budget
 - [x] T5: Non-JSON and 5xx bodies never reach Jackson
-- [ ] T6: Crossplay as one setting, structurally un-omittable
+- [x] T6: Crossplay as one setting, structurally un-omittable
 
-**Checkpoint B** — every documented C1 failure mode surfaces as a typed error.
+**Checkpoint B** — every documented C1 failure mode surfaces as a typed error. *Met; awaiting human
+review. One caveat carried forward — an unset `wfm.crossplay` fails startup with Spring's
+primitive-binding NPE rather than a named property; see `tasks/todo.md`.*
 
 ### Phase 3 — The second channel
 - [ ] T7: v1 legacy client and the `payload`/`include` envelope

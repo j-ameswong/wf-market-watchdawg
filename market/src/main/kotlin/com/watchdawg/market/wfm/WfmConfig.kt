@@ -14,8 +14,13 @@ data class WfmProperties(
     val baseUrlLegacy: String,
     val userAgent: String,
     val limits: Limits,
-    val platform: String = "pc",
-    val crossplay: Boolean = false,
+    /**
+     * No Kotlin defaults, deliberately: an unset value must fail startup rather than silently pick
+     * a population (R1.8). A default here would also disagree with `application.yaml` the moment
+     * one of them moved — which is how `crossplay` came to be `false` in code and `true` in config.
+     */
+    val platform: String,
+    val crossplay: Boolean,
 ) {
     /**
      * The outbound budget. Two buckets keyed by route class rather than API version (R1.2), one
@@ -34,6 +39,10 @@ class WfmConfig {
     @Bean
     fun wfmRateLimiter(props: WfmProperties): WfmRateLimiter = WfmRateLimiter(props.limits)
 
+    /** The one read point for crossplay, which C5's socket client is obliged to quote (R5.2). */
+    @Bean
+    fun wfmContext(props: WfmProperties): WfmContext = WfmContext(props.platform, props.crossplay)
+
     /**
      * Everything about the transport that no call site may opt out of, applied to *every*
      * `RestClient.Builder` the context hands out — so a client added later is governed without
@@ -42,20 +51,24 @@ class WfmConfig {
      *
      * The status handler covers `4xx`/`5xx` *except* `429`/`509`, which the interceptor below it
      * has already turned into a [ThrottledException] before the response could get this far.
+     *
+     * The limiter is registered first so it wraps the whole attempt, and the context second so each
+     * of its retried attempts is re-stamped rather than trusting a header set on a previous pass.
      */
     @Bean
-    fun wfmTransportCustomizer(limiter: WfmRateLimiter, props: WfmProperties): RestClientCustomizer =
-        RestClientCustomizer { builder ->
-            builder
-                .requestInterceptor(WfmRateLimitInterceptor(limiter, props.limits.maxRetryAfter))
-                .defaultStatusHandler({ it.isError }) { _, response -> throw WfmHttpException.of(response) }
-        }
+    fun wfmTransportCustomizer(
+        limiter: WfmRateLimiter,
+        context: WfmContext,
+        props: WfmProperties,
+    ): RestClientCustomizer = RestClientCustomizer { builder ->
+        builder
+            .requestInterceptor(WfmRateLimitInterceptor(limiter, props.limits.maxRetryAfter))
+            .requestInterceptor(WfmContextInterceptor(context, props.userAgent))
+            .defaultStatusHandler({ it.isError }) { _, response -> throw WfmHttpException.of(response) }
+    }
 
+    /** Headers are absent on purpose — the customizer above stamps them where no call site can. */
     @Bean
-    fun wfmRestClient(builder: RestClient.Builder, props: WfmProperties): RestClient = builder
-        .baseUrl(props.baseUrl)
-        .defaultHeader("User-Agent", props.userAgent)
-        .defaultHeader("Platform", props.platform)
-        .defaultHeader("Crossplay", props.crossplay.toString())
-        .build()
+    fun wfmRestClient(builder: RestClient.Builder, props: WfmProperties): RestClient =
+        builder.baseUrl(props.baseUrl).build()
 }

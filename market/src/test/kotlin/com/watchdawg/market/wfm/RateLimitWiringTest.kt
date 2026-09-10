@@ -12,8 +12,9 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 /**
- * The standing no-bypass guard for R1.1. It enumerates `RestClient` beans rather than naming them,
- * so a client added later -- T7's v1 legacy client, say -- is covered without editing this test.
+ * The standing no-bypass guard for R1.1 and R1.8. It enumerates `RestClient` beans rather than
+ * naming them, so a client added later -- T7's v1 legacy client, say -- is covered without editing
+ * this test.
  */
 @SpringBootTest
 @Import(TestcontainersConfiguration::class)
@@ -22,13 +23,18 @@ class RateLimitWiringTest {
     @Autowired lateinit var clients: Map<String, RestClient>
 
     @Test
-    fun `every RestClient bean carries the limiter interceptor`() {
+    fun `every RestClient bean carries the transport interceptors`() {
         assertTrue(clients.isNotEmpty(), "no RestClient beans in the context -- this guard is vacuous")
 
         clients.forEach { (name, client) ->
+            val interceptors = interceptorsOf(client)
             assertTrue(
-                interceptorsOf(client).any { it is WfmRateLimitInterceptor },
-                "bean '$name' can issue an unpaced request",
+                interceptors.any { it is WfmRateLimitInterceptor },
+                "bean '$name' can issue an unpaced request (R1.1)",
+            )
+            assertTrue(
+                interceptors.any { it is WfmContextInterceptor },
+                "bean '$name' can issue a request with no crossplay context (R1.8)",
             )
         }
     }

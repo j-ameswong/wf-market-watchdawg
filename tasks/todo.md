@@ -213,19 +213,40 @@ and expose the value as one injectable `WfmContext` that C5's socket client is o
 says `true`.
 
 **Acceptance criteria:**
-- [ ] Every outbound REST request carries `Crossplay` equal to `wfm.crossplay` **even when the call
+- [x] Every outbound REST request carries `Crossplay` equal to `wfm.crossplay` **even when the call
       site sets its own value** — asserted by a test that attempts the override.
-- [ ] `WfmProperties.crossplay` and `.platform` have no Kotlin defaults; an unset value fails
+- [x] `WfmProperties.crossplay` and `.platform` have no Kotlin defaults; an unset value fails
       startup, so no channel can silently inherit an upstream default (R1.8, §2.7).
-- [ ] `WfmContext` is the single read point, and its KDoc states the C5 obligation.
-- [ ] The socket-side obligation is carried by C5/R5.2, not by a C1 test — the cross-channel
+- [x] `WfmContext` is the single read point, and its KDoc states the C5 obligation.
+- [x] The socket-side obligation is carried by C5/R5.2, not by a C1 test — the cross-channel
       acceptance bullet was dropped from `SPEC.md` (Decision 7). `WfmContext`'s KDoc is the only
       thing pointing C5 at it, so it has to say so plainly.
 
 **Verification:**
-- [ ] `mtest --tests '*CrossplayHeaderTest'`
-- [ ] `mbuild` green
-- [ ] Manual: startup fails with a clear message when `wfm.crossplay` is unset
+- [x] `mtest --tests '*CrossplayHeaderTest' --tests '*RateLimitWiringTest'` — 6 tests
+- [x] `mbuild` green
+- [x] Manual: startup fails when `wfm.crossplay` is unset — *but see the caveat below; the message
+      is Spring's, and it is only clear for the reference-typed property*
+
+**Notes:** `User-Agent` moved into the interceptor alongside `Platform`/`Crossplay`, which the task
+body did not ask for. Same argument as R1.8's: a `defaultHeader` is exactly what a call site can
+override, and leaving it on `wfmRestClient` would have had T7's v1 bean ship a bare `User-Agent`
+unless someone remembered to re-add it — the wiring bug the customizer exists to prevent (R1.5).
+`RateLimitWiringTest` was generalized to assert both interceptors on every bean, so R1.8 gets the
+same standing no-bypass guard R1.1 has, covering T7 for free. The header matcher asserts the
+header's *whole* value list, because `MockRestRequestMatchers.header` tolerates extra values and
+appending rather than replacing is the failure worth catching. Mutation-checked: `add` instead of
+`set`, revert to `defaultHeader`s, and restore a Kotlin default.
+
+**Caveat on the startup message:** an unset `wfm.platform` fails with `Parameter specified as
+non-null is null: … parameter platform`, which names the property. An unset `wfm.crossplay` fails
+with `NullPointerException: Cannot invoke "java.lang.Number.intValue()"` — Kotlin's non-null
+`Boolean` is a JVM primitive, so the binder cannot attribute the failure to a name. Startup does
+stop either way, which is what R1.8 needs. Binding it as `Boolean?` would buy the better message at
+the cost of a type that can be `?: false`-ed at a call site, which is the wrong trade for a
+requirement whose point is that it cannot be defaulted. The same applies to every `Int` in
+`Limits`, so this is a property of Kotlin constructor binding, not of crossplay. Left as is; revisit
+only if a `FailureAnalyzer` is ever worth its keep.
 
 **Dependencies:** T3
 **Files likely touched:** `.../wfm/WfmConfig.kt`, `.../wfm/WfmContext.kt`,
@@ -236,10 +257,28 @@ says `true`.
 ---
 
 ## Checkpoint B — failure modes and context
-- [ ] `mbuild` green; tests order-independent
-- [ ] Each of R1.3, R1.4, R1.7, R1.8 has a named test asserting it
-- [ ] Three of the spec's four C1 acceptance bullets pass; the fourth needs T8
+- [x] `mbuild` green; tests order-independent — 37 tests, also green as a `wfm`-only subset and with
+      each new class run in isolation
+- [x] Each of R1.3, R1.4, R1.7, R1.8 has a named test asserting it:
+      - R1.3 → `WfmRetryTest.a 429 carrying Retry-After is retried once…` and
+        `…the retry spends budget rather than bypassing it`
+      - R1.4 → `WfmRetryTest.a 509 is a type distinct from 429 and narrows effective concurrency`,
+        `WfmRateLimiterTest.narrowing concurrency gives up a slot, down to a floor of one`
+      - R1.7 → `WfmErrorBodyTest` (all five)
+      - R1.8 → `CrossplayHeaderTest.a request carries the configured context even when the call site
+        sets its own`, plus `RateLimitWiringTest.every RestClient bean carries the transport
+        interceptors`
+- [x] Three of the spec's four C1 acceptance bullets pass; the fourth needs T8
+      - "N sequential calls at limit L take ≥ (N−1)/L" — `WfmRateLimiterTest`, `WfmClientTest`
+      - "a `429` with `Retry-After: 2` yields exactly one retry, after ≥2s, then success" —
+        `WfmRetryTest`
+      - "a plain-text `403` surfaces a typed error, not a Jackson exception" — `WfmErrorBodyTest`
+      - the 1h live run is T8's
 - [ ] Review with human before Phase 3
+
+**Open for review:** the startup message for an unset `wfm.crossplay` is Spring's primitive-binding
+NPE rather than a named property — see the caveat under T6. Startup still fails; only the diagnosis
+is poor.
 
 ---
 

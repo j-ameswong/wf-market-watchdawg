@@ -25,6 +25,12 @@ paths, or a browser-impersonating `User-Agent` is prohibited.
 **Refined 2026-09-10 (C1 T2):** the limiter spaces turns evenly at `per / permits` rather than
 letting a bucket's allowance be spent in a burst — see Alternative 3.
 
+**Refined 2026-09-10 (C1 T4):** a refusal costs budget rather than skipping it — the single retry
+takes its own turn from the limiter before reissuing. A `509` additionally gives up one connection
+slot permanently, floored at one, and the cap never widens again within a run. The server has told
+us the concurrency it will not accept; creeping back toward it is the kind of "traffic pattern" the
+rules reserve the right to police, and the configured cap of 2 leaves exactly one step to give.
+
 ## Alternatives Considered
 
 ### Alternative 1: Pace at call sites, by convention

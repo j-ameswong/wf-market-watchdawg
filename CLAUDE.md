@@ -54,17 +54,31 @@ The transaction boundary is the important invariant: if a refresh throws, the st
 
 `WfmClient` wraps a single `RestClient` bean built in `WfmConfig`. Every v2 response is an `Envelope<T>` with `data` xor `error`; the private `get()` unwraps it and throws on either an empty body or a populated `error`.
 
-The public API allows **3 req/s** — Cloudflare answers `429` above it and `509` on too many concurrent connections. `WfmConfig`'s `defaultStatusHandler` turns both into `RateLimitedException` carrying `Retry-After`. Any code that sweeps per-item endpoints (~4000 tradable items) has to budget against that limit.
+The public API allows **3 req/s** — Cloudflare answers `429` above it and `509` on too many concurrent connections. Any code that sweeps per-item endpoints (~4000 tradable items) has to budget against that limit.
 
-### Outbound pacing
+Failures are typed, in `WfmErrors.kt`, all under one sealed `WfmException`: `RateLimitedException` (`429`) and `ConcurrencyLimitedException` (`509`) share a `ThrottledException` parent carrying the parsed `Retry-After`, and `WfmHttpException` covers every other `4xx`/`5xx` — v1 `/items/{slug}/orders` answers `403` in plain text and a `502` arrives as Cloudflare HTML, so an error body must never reach Jackson (R1.7). It carries the status, the content type and a **200-character** excerpt with whitespace collapsed; only the first 800 bytes of the body are read at all.
 
-Every outbound call is paced and nothing opts in. `WfmConfig` registers a `RestClientCustomizer` that installs `WfmRateLimitInterceptor` on **every** `RestClient.Builder` the context hands out, so a new client bean is governed the moment it is built. That is what makes "no call site may bypass the limiter" a property of the wiring rather than a convention; `RateLimitWiringTest` enumerates `RestClient` beans and fails if one lacks the interceptor, so it covers clients added later without being edited.
+`baseUrl` is v2. `baseUrlLegacy` (v1) exists because three v1 routes have no v2 equivalent — auctions, `/items/{slug}/statistics` (price history), and `/items/{slug}/dropsources`. Everything else in `docs/v1.yml` is dead; `bruno/README.md` has the verified route-by-route table.
+
+### The transport stack
+
+`WfmConfig.wfmTransportCustomizer` is one `RestClientCustomizer` applied to **every** `RestClient.Builder` the context hands out, so a new client bean is governed the moment it is built rather than when someone remembers to wire it. It installs, in order:
+
+1. `WfmRateLimitInterceptor` — pacing, plus the `429`/`509` retry.
+2. `WfmContextInterceptor` — `Platform`, `Crossplay` and `User-Agent`, `set` rather than added, so a call site that names its own value is overridden ([ADR-0002](docs/adr/0002-crossplay-single-global-setting.md), R1.5). These were `defaultHeader`s, which is precisely what a call site *can* override.
+3. The `defaultStatusHandler` for `4xx`/`5xx` other than `429`/`509`, which the interceptor above has already converted.
+
+`RateLimitWiringTest` enumerates `RestClient` beans and fails if one lacks either interceptor, so it is the standing no-bypass guard for both R1.1 and R1.8 and covers clients added later without being edited.
+
+`WfmContext` (`platform` + `crossplay`) is the single read point for the observer's context, and **C5's socket client is obliged to quote its `crossplay` explicitly** — the two channels take opposite upstream defaults, and mixing them fabricates a `vanished` on ~7% of ingested orders. `WfmProperties.platform` and `.crossplay` deliberately have no Kotlin defaults, so an unset value fails startup.
 
 `WfmRateLimiter` holds two independent budgets keyed by **route**, not by API version and not by which bean called ([ADR-0005](docs/adr/0005-rate-buckets-keyed-by-route-class.md)): `contract-search` for auction-search routes, `public` for everything else — including v1 `statistics`. Both live under `wfm.limits` as `permits`/`per`, alongside `max-concurrency` and `max-retry-after`. Turns are **evenly spaced with no burst allowance**, and are taken *before* the concurrency permit so a thread waiting out pacing never holds a connection slot.
 
 Call it as `limiter.acquire(bucket) { … }`. The block form is what guarantees the permit is released when a call throws, so a retry must call `acquire` **again, sequentially** — nesting a re-acquire inside an outstanding one deadlocks against `max-concurrency`.
 
-`baseUrl` is v2. `baseUrlLegacy` (v1) exists because three v1 routes have no v2 equivalent — auctions, `/items/{slug}/statistics` (price history), and `/items/{slug}/dropsources`. Everything else in `docs/v1.yml` is dead; `bruno/README.md` has the verified route-by-route table.
+### Retries
+
+One initial call and **exactly one** retry, issued from `WfmRateLimitInterceptor`. It takes its own turn before reissuing, so a retry spends budget rather than bypassing it. `Retry-After` is parsed in both RFC 9110 forms (delta-seconds and HTTP-date); a value above `wfm.limits.max-retry-after` surfaces immediately instead of parking a worker thread, and one that is absent gets no extra cooloff at all, because the retry's own turn already spaces it. A `509` additionally narrows the connection cap by one, floored at one and never widened again within a run.
 
 ### Persistence
 

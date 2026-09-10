@@ -81,17 +81,25 @@ not of which bean issued the call (Decision 1). This is the first vertical slice
 call, paced, end to end.
 
 **Acceptance criteria:**
-- [ ] Every request through the v2 client acquires from the `public` bucket before the connection
+- [x] Every request through the v2 client acquires from the `public` bucket before the connection
       opens, and releases on completion **including on exception**.
-- [ ] A context test asserts every `RestClient` bean carries the limiter interceptor — this is the
+- [x] A context test asserts every `RestClient` bean carries the limiter interceptor — this is the
       standing no-bypass guard for R1.1, and it covers beans added later for free.
-- [ ] `WfmClient.getVersions()` and `getItems()` still pass against `MockRestServiceServer`, with
+- [x] `WfmClient.getVersions()` and `getItems()` still pass against `MockRestServiceServer`, with
       no change to their signatures.
 
 **Verification:**
-- [ ] `mtest --tests '*WfmClientTest' --tests '*RateLimitWiringTest'`
-- [ ] `mbuild` green
-- [ ] Manual: `mrun` completes one catalog sync with no behavioral change
+- [x] `mtest --tests '*WfmClientTest' --tests '*RateLimitWiringTest'`
+- [x] `mbuild` green
+- [x] Manual: `mrun` completes one catalog sync with no behavioral change — one live
+      `/v2/versions` call, then `items unchanged (MjAyNi0wOC0yNVQwMToxMzoyMw==)`
+
+**Notes:** the interceptor is registered through a `RestClientCustomizer`, not added to
+`wfmRestClient` directly, so every `RestClient.Builder` the context hands out is paced and T7's v1
+bean inherits pacing without a wiring step. `WfmClientTest` binds `MockRestServiceServer` to the
+**real** bean via `RestClient.mutate()`, so only the request factory is faked. `bucketFor` is
+implemented in full here (both directions asserted) rather than hardcoding `PUBLIC` for T7 to
+revisit.
 
 **Dependencies:** T2
 **Files likely touched:** `market/src/main/kotlin/com/watchdawg/market/wfm/WfmConfig.kt`,
@@ -102,9 +110,16 @@ call, paced, end to end.
 ---
 
 ## Checkpoint A — governed transport
-- [ ] `mbuild` green; all tests pass in any order (R2.7)
-- [ ] A paced v2 call works end to end and demonstrably cannot be bypassed
+- [x] `mbuild` green; all tests pass in any order (R2.7) — 19 tests, also green with `WfmClientTest`
+      run in isolation and as a `wfm`-only subset
+- [x] A paced v2 call works end to end and demonstrably cannot be bypassed — removing the
+      customizer fails both `RateLimitWiringTest` and the pacing assertion (0.0016s vs ≥0.5s)
 - [ ] Review with human before Phase 2
+
+**Blocker to resolve at this review:** `@EnableScheduling` is active in `@SpringBootTest`, and
+`wfm.sync.initial-delay` is 30s. The suite currently finishes inside that window, but as it grows
+the scheduler will fire mid-test and call the **live** API — violating R2.6 and §9. Fix before the
+suite crosses 30s: a `market/src/test/resources/application.yaml` pinning the delay far out.
 
 ---
 

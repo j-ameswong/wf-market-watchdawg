@@ -69,9 +69,11 @@ T4 retry/429/509   T5 error bodies  T6 crossplay one-setting
 ### Phase 1 — A governed transport
 - [x] T1: Bucket-aware `WfmProperties`
 - [x] T2: `WfmRateLimiter` with two independent buckets
-- [ ] T3: Route every v2 call through the limiter at the transport layer
+- [x] T3: Route every v2 call through the limiter at the transport layer
 
-**Checkpoint A** — a paced v2 call works end to end and cannot be bypassed.
+**Checkpoint A** — a paced v2 call works end to end and cannot be bypassed. *Met; awaiting human
+review. One blocker surfaced for that review — the test scheduler can reach the live API; see
+`tasks/todo.md`.*
 
 ### Phase 2 — Failing correctly, and one context
 - [ ] T4: `429`/`509` → bounded retry that honors `Retry-After` and consumes budget

@@ -14,20 +14,24 @@ limits and the concurrency cap, and give `User-Agent` the contact URL R1.5 requi
 only — the limiter binds to it in T2.
 
 **Acceptance criteria:**
-- [ ] `wfm.limits.public` (2 req/s) and `wfm.limits.contract-search` (12 req/min) bind from
+- [x] `wfm.limits.public` (2 req/s) and `wfm.limits.contract-search` (12 req/min) bind from
       `application.yaml`, with the upstream ceilings (3 req/s, 20 req/min) recorded in a comment
       beside them (R1.2).
-- [ ] `wfm.limits.max-concurrency` (2) binds (R1.4).
-- [ ] `wfm.limits.max-retry-after` (60s) binds — the ceiling above which a `Retry-After` surfaces
+- [x] `wfm.limits.max-concurrency` (2) binds (R1.4).
+- [x] `wfm.limits.max-retry-after` (60s) binds — the ceiling above which a `Retry-After` surfaces
       immediately rather than parking a thread (Decision 4, consumed by T4).
-- [ ] `requests-per-second` is gone from the record *and* the yaml — no dead property survives.
-- [ ] `user-agent` names the project and the contact URL
+- [x] `requests-per-second` is gone from the record *and* the yaml — no dead property survives.
+- [x] `user-agent` names the project and the contact URL
       `https://github.com/j-ameswong/wf-market-watchdawg` (R1.5).
 
 **Verification:**
-- [ ] `mtest --tests '*WfmPropertiesTest'`
-- [ ] `mbuild` green (includes `spotlessCheck`)
-- [ ] `grep -rn 'requests-per-second\|requestsPerSecond' market/src` returns nothing
+- [x] `mtest --tests '*WfmPropertiesTest'`
+- [x] `mbuild` green (includes `spotlessCheck`)
+- [x] `grep -rn 'requests-per-second\|requestsPerSecond' market/src` returns nothing
+
+**Notes:** limits bind as a nested `WfmProperties.Rate(permits, per)`, so the yaml states each
+bucket in the units the upstream rules use rather than as a pre-divided `Double`. The ceilings are
+also asserted in `WfmPropertiesTest`, not only commented — §9 makes exceeding them a hard boundary.
 
 **Dependencies:** None
 **Files likely touched:** `market/src/main/kotlin/com/watchdawg/market/wfm/WfmConfig.kt`,

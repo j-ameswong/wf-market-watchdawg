@@ -67,7 +67,7 @@ T4 retry/429/509   T5 error bodies  T6 crossplay one-setting
 ## Task List
 
 ### Phase 1 — A governed transport
-- [ ] T1: Bucket-aware `WfmProperties`
+- [x] T1: Bucket-aware `WfmProperties`
 - [ ] T2: `WfmRateLimiter` with two independent buckets
 - [ ] T3: Route every v2 call through the limiter at the transport layer
 

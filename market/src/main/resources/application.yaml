@@ -8,10 +8,18 @@ spring:
 wfm:
   base-url: https://api.warframe.market/v2
   base-url-legacy: https://api.warframe.market/v1
-  user-agent: wf-market-watchdawg/0.1
-  requests-per-second: 3
+  user-agent: "wf-market-watchdawg/0.1 (+https://github.com/j-ameswong/wf-market-watchdawg)"
   platform: pc
   crossplay: true
+  limits:
+    public:
+      permits: 2 # upstream ceiling: 3 req/s
+      per: 1s
+    contract-search:
+      permits: 12 # upstream ceiling: 20 req/min
+      per: 1m
+    max-concurrency: 2
+    max-retry-after: 60s
   sync:
     interval: 1h
     initial-delay: 30s

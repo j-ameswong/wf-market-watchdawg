@@ -5,16 +5,26 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.client.RestClient
+import java.time.Duration
 
 @ConfigurationProperties(prefix = "wfm")
 data class WfmProperties(
     val baseUrl: String,
     val baseUrlLegacy: String,
     val userAgent: String,
+    val limits: Limits,
     val platform: String = "pc",
     val crossplay: Boolean = false,
-    val requestsPerSecond: Int = 3,
-)
+) {
+    /**
+     * The outbound budget. Two buckets keyed by route class rather than API version (R1.2), one
+     * global concurrency cap because `509` is a connection-level signal (R1.4).
+     */
+    data class Limits(val public: Rate, val contractSearch: Rate, val maxConcurrency: Int, val maxRetryAfter: Duration)
+
+    /** [permits] requests per [per] — the units the upstream rules state their limits in. */
+    data class Rate(val permits: Int, val per: Duration)
+}
 
 @Configuration
 @EnableConfigurationProperties(WfmProperties::class)

@@ -1,11 +1,15 @@
 package com.watchdawg.market.wfm
 
 import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatusCode
+import org.springframework.http.MediaType
+import org.springframework.http.client.ClientHttpResponse
 import java.time.Clock
 import java.time.Duration
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
+import kotlin.text.Charsets.UTF_8
 
 /**
  * Every failure the warframe.market transport raises. One base type so a caller can catch the
@@ -37,6 +41,41 @@ class ConcurrencyLimitedException(retryAfter: Duration?) :
         retryAfter,
         "warframe.market refused a concurrent connection (509), retry after ${retryAfter ?: "<unstated>"}",
     )
+
+/**
+ * An error status whose body is not a v2 envelope, and often not JSON at all: v1
+ * `/items/{slug}/orders` answers `403` as plain text and an upstream `502` arrives as Cloudflare's
+ * HTML (R1.7). Handled at the transport so that body never reaches Jackson, where it would surface
+ * as a deserialization crash naming a field rather than as the HTTP failure it is.
+ *
+ * [excerpt] is capped at [EXCERPT_LIMIT] characters. SPEC 9 forbids accumulating what the service
+ * does not need, and a couple of lines is enough to tell a Cloudflare block from a route that moved.
+ */
+class WfmHttpException(val status: HttpStatusCode, val contentType: MediaType?, val excerpt: String) :
+    WfmException(describe(status, contentType, excerpt)) {
+
+    companion object {
+        const val EXCERPT_LIMIT = 200
+
+        /** Reads at most a few hundred bytes of [response]; the rest of the body is dropped unread. */
+        fun of(response: ClientHttpResponse): WfmHttpException {
+            val contentType = response.headers.contentType
+            val charset = contentType?.charset ?: UTF_8
+            // 4 bytes per character is UTF-8's worst case, so this always covers the cap.
+            val head = runCatching { response.body.readNBytes(EXCERPT_LIMIT * 4) }.getOrDefault(ByteArray(0))
+            val excerpt = head.toString(charset).replace(WHITESPACE, " ").trim().take(EXCERPT_LIMIT)
+            return WfmHttpException(response.statusCode, contentType, excerpt)
+        }
+    }
+}
+
+/** Newlines in an HTML error page would otherwise spread one failure over 40 log lines. */
+private val WHITESPACE = Regex("\\s+")
+
+private fun describe(status: HttpStatusCode, contentType: MediaType?, excerpt: String): String {
+    val route = "warframe.market answered $status" + (contentType?.let { " ($it)" } ?: "")
+    return if (excerpt.isEmpty()) "$route with an empty body" else "$route: $excerpt"
+}
 
 /**
  * `RFC 9110 §10.2.3` allows `Retry-After` in two forms — delta-seconds or an HTTP-date — and the

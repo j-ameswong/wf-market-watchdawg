@@ -174,17 +174,28 @@ acceptance criterion was mutation-checked: no-op the cooloff sleep, `ATTEMPTS = 
 deserialization crash (R1.7).
 
 **Acceptance criteria:**
-- [ ] A `403` with a `text/plain` body surfaces a typed error, not a Jackson exception — the spec's
+- [x] A `403` with a `text/plain` body surfaces a typed error, not a Jackson exception — the spec's
       third acceptance bullet.
-- [ ] A `502` with an HTML body does the same.
-- [ ] The error carries the status and an excerpt capped at 200 characters; the full body is not
+- [x] A `502` with an HTML body does the same.
+- [x] The error carries the status and an excerpt capped at 200 characters; the full body is not
       logged (§9 — no PII accumulation).
-- [ ] A well-formed v2 envelope with `error` populated and `data` null still throws the existing
+- [x] A well-formed v2 envelope with `error` populated and `data` null still throws the existing
       envelope error, unchanged.
 
 **Verification:**
-- [ ] `mtest --tests '*WfmErrorBodyTest'`
-- [ ] `mbuild` green
+- [x] `mtest --tests '*WfmErrorBodyTest'` — 5 tests
+- [x] `mbuild` green
+
+**Notes:** the status handler is installed by the same `RestClientCustomizer` as the limiter rather
+than on `wfmRestClient` directly, so T7's v1 bean — the one route that actually answers `403` in
+plain text — inherits it with no wiring step. The two customizer beans merged into one
+`wfmTransportCustomizer`: they make the same guarantee about the same seam, and splitting them
+invites a client that gets one and not the other. Only the first 800 bytes of the body are read
+(UTF-8's worst case for a 200-character cap) and whitespace is collapsed, so a Cloudflare HTML page
+is one log line rather than forty. Spring's own default already throws before Jackson sees an error
+body, but it throws `RestClientResponseException` with an untyped 512-character body — the work here
+is the *typed* boundary C6 can branch on plus the tighter cap. Mutation-checked: drop the cap, drop
+the whitespace collapse, drop the status handler.
 
 **Dependencies:** T3
 **Files likely touched:** `.../wfm/WfmConfig.kt`, `.../wfm/WfmErrors.kt`, `.../wfm/WfmClient.kt`,

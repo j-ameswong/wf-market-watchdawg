@@ -77,7 +77,7 @@ reach the live API; see `tasks/todo.md`.*
 
 ### Phase 2 — Failing correctly, and one context
 - [x] T4: `429`/`509` → bounded retry that honors `Retry-After` and consumes budget
-- [ ] T5: Non-JSON and 5xx bodies never reach Jackson
+- [x] T5: Non-JSON and 5xx bodies never reach Jackson
 - [ ] T6: Crossplay as one setting, structurally un-omittable
 
 **Checkpoint B** — every documented C1 failure mode surfaces as a typed error.

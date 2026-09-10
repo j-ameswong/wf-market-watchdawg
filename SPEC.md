@@ -352,7 +352,7 @@ Every outbound call goes through one compliant, paced, observable path.
 - **R1.2** Two independent buckets, selected by **route class, not API version**: `contract-search` for auction-search routes (configured 12 req/min, ceiling 20) and `public` for every other route regardless of version (configured 2 req/s, ceiling 3). v1 `statistics` therefore paces on `public`, as §2.1's arithmetic assumes. See [ADR-0005](docs/adr/0005-rate-buckets-keyed-by-route-class.md).
 - **R1.3** Retries consume budget. `429`/`509` produce a bounded retry honoring `Retry-After`, then surface a typed failure.
 - **R1.4** Outbound concurrency ≤ 2. `509` is a *concurrency* signal, distinct from `429`.
-- **R1.5** `User-Agent` identifies the project and a contact URL, per `rules/overview.md`. Currently a bare `wf-market-watchdawg/0.1`.
+- **R1.5** `User-Agent` identifies the project and a contact URL, per `rules/overview.md`.
 - **R1.6** Two envelope shapes: v2 `apiVersion`/`data`/`error` camelCase, v1 `payload`/`include` snake_case.
 - **R1.7** Non-JSON and 5xx error bodies must not produce a deserialization crash. v1 `/items/{slug}/orders` answers `403` as plain text.
 - **R1.8** **Crossplay is one global setting applied identically to every channel** — the REST `Crossplay` header *and* the WebSocket `subscribe/newOrders` payload. It is not a per-call option, no call site may omit it, and no channel may fall back to its upstream default: REST defaults to `false` (`docs/v2/api/overview.mdx`) and the socket to **`true`** (`docs/v2/websockets/subscriptions.mdx`). See §2.7 and [ADR-0002](docs/adr/0002-crossplay-single-global-setting.md).

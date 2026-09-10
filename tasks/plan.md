@@ -1,7 +1,8 @@
 # Implementation Plan: C1 — API access
 
 > Source: `SPEC.md` §4 "C1 — API access" (R1.1–R1.8), bounded by §2.1 (rate budget), §2.5 (two
-> upstream limits) and §2.7 (crossplay). Drafted 2026-09-09. **Not yet approved.**
+> upstream limits) and §2.7 (crossplay). Drafted 2026-09-09. **Approved and built through Phase 2**
+> (T1–T6); Checkpoint B's review is the open gate before Phase 3.
 
 ## Overview
 
@@ -9,9 +10,11 @@ C1 makes every outbound call to warframe.market pass through one compliant, pace
 path. It has no dependencies and sits at the head of the spine (`C1 → C2 → C3 → C4 → C5 → C9a →
 C10`), so it is the first thing built and everything else inherits its correctness.
 
-Today `market/src/main/kotlin/com/watchdawg/market/wfm/` has a single unpaced `RestClient`, a
-declared-but-unused `wfm.requests-per-second`, a bare `User-Agent`, no v1 client, and a status
-handler that converts `429`/`509` straight into a throw with no retry. C1 replaces that.
+C1 started from a single unpaced `RestClient` with a declared-but-unused `wfm.requests-per-second`,
+a bare `User-Agent`, no v1 client, and a status handler that converted `429`/`509` straight into a
+throw with no retry. T1–T6 have replaced all of that: every call is paced on one of two route-keyed
+buckets, retried once on budget, typed on failure, and stamped with the one crossplay setting. What
+remains is the second channel (T7's v1 client) and the runtime proof (T8's metrics and live run).
 
 ## Assumptions
 
@@ -102,9 +105,9 @@ Full task bodies with acceptance criteria live in `tasks/todo.md`.
 |------|--------|------------|
 | Buckets keyed by client bean rather than route class — the v1 statistics sweep (3,800/day) lands in the 12 req/min contract bucket and starves, or `/auctions/search` lands in the 2 req/s bucket and breaches §2.5 | **High** — silently wrong pacing on both sides | Resolved: key by URI predicate (Decision 1); T7 asserts both directions |
 | Hand-rolled limiter subtly wrong under concurrency | **High** — a `429` is a bug in our pacing (§9, "Never") | Deterministic T2 tests via injected clock, then the T8 live run proves it against the real server |
-| `Retry-After` may be an HTTP-date, not seconds. Current code does `toLongOrNull()`, which silently yields `null` | Med | T4 parses both forms and tests both |
+| `Retry-After` may be an HTTP-date, not seconds. The original code did `toLongOrNull()`, which silently yields `null` | Med | Closed in T4: `retryAfterOf` parses both forms, and `WfmRetryTest` asserts both plus the unparseable case |
 | Wall-clock pacing tests make the suite slow or flaky | Med | Injected sleeper for the logic tests; one real-time test at an inflated rate so it costs ~200ms |
-| No test now asserts REST and socket agree on crossplay (Decision 7), so §2.7's fabricated-`vanished` failure has no direct guard | Med | T6 removes the Kotlin defaults so *no* channel can take an upstream default, and makes `WfmContext` the single read point; R5.2 carries the obligation on the socket side |
+| No test asserts REST and socket agree on crossplay (Decision 7), so §2.7's fabricated-`vanished` failure has no direct guard | Med | Mitigated in T6, **not closed** — the Kotlin defaults are gone so no channel can take an upstream default, `WfmContext` is the single read point, and `RateLimitWiringTest` guards the REST side. The socket half stays an obligation on R5.2 until C5 exists |
 | Actuator dependency in T8 forces `nix/deps.json` regeneration | Low | Approved (Decision 6); regenerate with the documented `updateScript` in the same commit, and T8 verifies `nix build .#market` |
 
 ## Resolved Decisions
@@ -160,10 +163,9 @@ Full task bodies with acceptance criteria live in `tasks/todo.md`.
 
 **None outstanding.** All eight are recorded above as Resolved Decisions.
 
-One carries forward as an obligation rather than a question:
-
-- `SPEC.md` R1.2's wording still contradicts §2.1's arithmetic. Decision 1 settles the behavior;
-  the spec text should be corrected in the next spec pass.
+Decision 1's carried-forward obligation is **discharged**: `SPEC.md` R1.2 now states the buckets as
+route classes and cites [ADR-0005](docs/adr/0005-rate-buckets-keyed-by-route-class.md), so its
+wording no longer contradicts §2.1's arithmetic.
 
 ## Results
 

@@ -66,9 +66,6 @@ class WfmRateLimiter(
         }
     }
 
-    /** Turns handed out on [bucket] since startup — the evidence that a retry spent budget (R1.3). */
-    fun turnsTaken(bucket: Bucket): Long = metrics.requestsIssued(bucket)
-
     /** The connection slots still on offer. Only [narrowConcurrency] moves it. */
     val maxConcurrency: Int get() = concurrencyLock.withLock { concurrency }
 

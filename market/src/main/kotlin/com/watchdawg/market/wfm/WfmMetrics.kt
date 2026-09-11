@@ -23,11 +23,6 @@ class WfmMetrics(private val registry: MeterRegistry) {
     /** Time a caller spent held at the turnstile. Rising means the budget is the binding constraint. */
     private val waits = byBucket { Timer.builder(WAIT).tag(BUCKET, it).register(registry) }
 
-    fun requestIssued(bucket: Bucket, waited: Duration) {
-        requests.getValue(bucket).increment()
-        waits.getValue(bucket).record(waited)
-    }
-
     /**
      * A refusal we answered with a second attempt. Tagged by status because the two mean different
      * things: `429` says our pacing is wrong, `509` says our concurrency is (R1.3, R1.4).
@@ -42,6 +37,11 @@ class WfmMetrics(private val registry: MeterRegistry) {
                 Counter.builder(RETRIES).tag(BUCKET, bucket.tag).tag(STATUS, status.toString()).register(registry)
         }
     }.toMap()
+
+    fun requestIssued(bucket: Bucket, waited: Duration) {
+        requests.getValue(bucket).increment()
+        waits.getValue(bucket).record(waited)
+    }
 
     fun retryIssued(bucket: Bucket, status: Int) = retries.getValue(bucket to status).increment()
 

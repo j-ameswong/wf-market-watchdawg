@@ -4,6 +4,7 @@ import org.springframework.data.jdbc.repository.query.Modifying
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
+import java.time.Instant
 
 @Repository
 interface CollectionVersionRepository : CrudRepository<CollectionVersionRecord, String> {
@@ -17,7 +18,7 @@ interface CollectionVersionRepository : CrudRepository<CollectionVersionRecord, 
             updated_at = excluded.updated_at
         """,
     )
-    fun upsert(name: String, hash: String, updatedAt: java.time.Instant)
+    fun upsert(name: String, hash: String, updatedAt: Instant)
 }
 
 fun CollectionVersionRepository.upsert(record: CollectionVersionRecord) =
@@ -51,7 +52,7 @@ interface ItemRepository : CrudRepository<ItemRecord, String> {
         maxRank: Int?,
         vaulted: Boolean,
         tags: Array<String>,
-        updatedAt: java.time.Instant,
+        updatedAt: Instant,
     )
 }
 

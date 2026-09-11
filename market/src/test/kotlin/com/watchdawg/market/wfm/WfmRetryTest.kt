@@ -86,10 +86,10 @@ class WfmRetryTest {
         server.expect(requestTo(VERSIONS)).andRespond(withTooManyRequests())
         server.expect(requestTo(VERSIONS)).andRespond(withSuccess(VERSIONS_JSON, APPLICATION_JSON))
 
-        val before = limiter.turnsTaken(Bucket.PUBLIC)
+        val before = metrics.requestsIssued(Bucket.PUBLIC)
         client.getVersions()
 
-        assertEquals(2, limiter.turnsTaken(Bucket.PUBLIC) - before, "the retry reissued without taking a turn")
+        assertEquals(2, metrics.requestsIssued(Bucket.PUBLIC) - before, "the retry reissued without taking a turn")
         server.verify()
     }
 

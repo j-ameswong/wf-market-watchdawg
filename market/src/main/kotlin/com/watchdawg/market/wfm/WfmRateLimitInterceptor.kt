@@ -9,14 +9,16 @@ import java.time.Clock
 import java.time.Duration
 
 /**
- * The seam R1.1 asks for: pacing sits between the client and the connection, so a call site cannot
- * issue an unpaced request even by mistake. Registered on every `RestClient.Builder` in the context
- * (see `WfmConfig`), which is what makes "no code path may bypass it" a property of the wiring
- * rather than a rule people have to remember.
+ * Applies the rate limiter between the client and the connection, so no call site can issue an
+ * unpaced request even by mistake (R1.1).
  *
- * It is also where the `429`/`509` retry lives (R1.3). A retry has to *spend* budget rather than
- * skip it, and this is the only place that can re-acquire a turn before reissuing — a status
- * handler runs above the transport, with the limiter already behind it.
+ * `WfmConfig` registers this on every `RestClient.Builder` in the context. That is what makes
+ * "nothing bypasses the limiter" a fact about the wiring rather than a rule people have to
+ * remember.
+ *
+ * The `429`/`509` retry lives here too (R1.3). A retry has to *spend* budget rather than skip it,
+ * and this is the only place that can take a fresh turn before reissuing. A status handler would
+ * be too late: by the time one runs, the limiter is already behind us.
  */
 class WfmRateLimitInterceptor(
     private val limiter: WfmRateLimiter,
@@ -58,15 +60,17 @@ class WfmRateLimitInterceptor(
 
     companion object {
         /**
-         * One initial call and exactly one retry (R1.3, plan Decision 4). The spec's own acceptance
-         * bullet names the bound, and a second refusal means the server is not merely busy.
+         * One call plus at most one retry (R1.3, plan Decision 4). The spec's acceptance bullet
+         * fixes this number. If the server refuses us twice, it is saying more than "busy".
          */
         private const val ATTEMPTS = 2
 
         /**
-         * Route class, not API version (ADR-0005). v1 `statistics` paces on [Bucket.PUBLIC]
-         * alongside every v2 route, as SPEC 2.1's arithmetic assumes; only auction search draws on
-         * the separate contract-search budget of SPEC 2.5.
+         * Picks the bucket from the route, not from the API version (ADR-0005).
+         *
+         * Auction search is the only thing that draws on the contract-search budget (SPEC 2.5).
+         * Everything else shares [Bucket.PUBLIC], v1 `statistics` included, which is what
+         * SPEC 2.1's arithmetic assumes.
          */
         fun bucketFor(uri: URI): Bucket =
             if (uri.path.orEmpty().contains("/auctions/search")) Bucket.CONTRACT_SEARCH else Bucket.PUBLIC

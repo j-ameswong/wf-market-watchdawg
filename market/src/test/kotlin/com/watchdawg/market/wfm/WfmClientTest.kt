@@ -21,9 +21,11 @@ import kotlin.test.assertFails
 import kotlin.test.assertTrue
 
 /**
- * Binds a mock server to the real `wfmRestClient` bean via [RestClient.mutate], so only the request
- * factory is replaced: the base URL, headers and the limiter interceptor under test are the
- * production ones. No test reaches the live API (R2.6).
+ * Binds a mock server to the real `wfmRestClient` bean with [RestClient.mutate], so only the
+ * request factory is replaced. The base URL, the headers and the limiter interceptor under test
+ * are all the production ones.
+ *
+ * No test here reaches the live API (R2.6).
  */
 @SpringBootTest
 @Import(TestcontainersConfiguration::class)

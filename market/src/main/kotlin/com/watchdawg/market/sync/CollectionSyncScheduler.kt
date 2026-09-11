@@ -10,9 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.springframework.transaction.support.TransactionTemplate
 
-/**
- * Polls GET /v2/versions once per tick and refreshes the collections whose hash moved.
- */
+/** Polls `GET /v2/versions` once per tick and refreshes the collections whose hash has changed. */
 @Service
 class CollectionSyncScheduler(
     private val wfm: WfmClient,

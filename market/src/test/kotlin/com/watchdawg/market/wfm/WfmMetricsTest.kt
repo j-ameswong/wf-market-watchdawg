@@ -23,13 +23,16 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 /**
- * R12.1: the rate-limit boundary is proven at runtime, not assumed. ADR-0004 makes a `429` a bug
- * in our own pacing, so "are we under the limit" has to be answerable from a meter — which means
- * the meters have to exist, be tagged per bucket, and actually move.
+ * R12.1: the rate-limit boundary is proven at runtime rather than assumed.
  *
- * Every meter here is read from a registry this test owns rather than the context's, because the
- * context's is shared with every other class in the suite and a count would then depend on run
- * order (R2.7).
+ * ADR-0004 treats a `429` as a bug in our own pacing, so "are we under the limit?" has to be
+ * answerable from a meter. That means the meters must exist, be tagged per bucket, and actually
+ * move.
+ *
+ * Most tests here read a registry the test owns rather than the context's. The context's registry
+ * is shared with every other class in the suite, so any count taken from it would depend on run
+ * order (R2.7). The last test is the exception: it checks the context's own registry, but only for
+ * which meters exist, never for their values.
  */
 @SpringBootTest
 @Import(TestcontainersConfiguration::class)

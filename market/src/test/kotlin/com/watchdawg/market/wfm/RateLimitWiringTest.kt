@@ -12,9 +12,10 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 /**
- * The standing no-bypass guard for R1.1 and R1.8. It enumerates `RestClient` beans rather than
- * naming them, so a client added later -- T7's v1 legacy client, say -- is covered without editing
- * this test.
+ * The standing no-bypass guard for R1.1 and R1.8.
+ *
+ * It enumerates the `RestClient` beans rather than naming them, so a client added later (T7's v1
+ * legacy client, for instance) is covered without anyone editing this test.
  */
 @SpringBootTest
 @Import(TestcontainersConfiguration::class)

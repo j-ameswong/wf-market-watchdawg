@@ -18,8 +18,8 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 /**
- * Plain JUnit -- no Spring context, no container. `WfmRateLimiter` touches neither, and booting a
- * Postgres to test a turnstile buys nothing (plan Decision 5).
+ * Plain JUnit: no Spring context, no container. `WfmRateLimiter` touches neither, and booting a
+ * Postgres just to test pacing buys nothing (plan Decision 5).
  */
 @Timeout(value = 10, unit = SECONDS, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
 class WfmRateLimiterTest {
@@ -171,7 +171,7 @@ class WfmRateLimiterTest {
     private companion object {
         val EPOCH: Instant = Instant.parse("2026-09-10T00:00:00Z")
 
-        /** Fast enough that pacing never explains a delay -- the concurrency tests want the semaphore. */
+        /** Fast enough that pacing never explains a delay; the concurrency tests want the semaphore. */
         val UNPACED = WfmProperties.Rate(1000, Duration.ofSeconds(1))
     }
 }

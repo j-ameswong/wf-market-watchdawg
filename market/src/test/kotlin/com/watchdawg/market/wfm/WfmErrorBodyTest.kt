@@ -24,9 +24,10 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 /**
- * R1.7: an error body is an HTTP failure, not a parse failure. Every case here would otherwise
- * reach Jackson and surface as a deserialization crash naming some missing field — which says
- * nothing about the `403` that actually happened.
+ * R1.7: an error body should surface as an HTTP failure, not a parse failure.
+ *
+ * Without that, every case below reaches Jackson and comes back as a deserialization crash naming
+ * some missing field, which tells you nothing about the `403` that actually happened.
  */
 @SpringBootTest
 @Import(TestcontainersConfiguration::class)

@@ -31,13 +31,15 @@ import kotlin.test.assertTrue
 
 /**
  * R1.3 and R1.4 at the transport: a refusal is retried once, on budget, and then surfaces as a
- * typed failure. Every response is a `MockRestServiceServer` fixture -- no test reaches the live
+ * typed failure. Every response is a `MockRestServiceServer` fixture, so no test reaches the live
  * API (R2.6).
  *
- * The limiter under test is built per test rather than autowired. Narrowing concurrency is
- * permanent by design and the context's limiter bean outlives this class, so sharing it would make
- * the suite order-dependent (R2.7). That the *production* client carries this interceptor at all is
- * `RateLimitWiringTest`'s job; this class tests what the interceptor then does.
+ * The limiter is built per test rather than autowired. Narrowing concurrency is permanent by
+ * design and the context's limiter bean outlives this class, so sharing it would make the suite
+ * order-dependent (R2.7).
+ *
+ * Whether the *production* client carries this interceptor at all is `RateLimitWiringTest`'s job.
+ * This class covers what the interceptor does once it is there.
  */
 @SpringBootTest
 @Import(TestcontainersConfiguration::class)

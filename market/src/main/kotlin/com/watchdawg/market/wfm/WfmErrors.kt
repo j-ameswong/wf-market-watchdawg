@@ -12,19 +12,23 @@ import java.time.format.DateTimeParseException
 import kotlin.text.Charsets.UTF_8
 
 /**
- * Every failure the warframe.market transport raises. One base type so a caller can catch the
- * boundary rather than enumerate its causes; the subtypes exist because C6's poll scheduler has to
- * tell "slow down" (R1.3) from "too many connections" (R1.4) from "the route answered badly" (R1.7).
+ * Base type for every failure the warframe.market transport raises, so a caller can catch the
+ * whole boundary in one place instead of listing its causes.
+ *
+ * The subtypes exist because C6's poll scheduler needs to tell three cases apart: "slow down"
+ * (R1.3), "too many connections" (R1.4), and "the route answered badly" (R1.7).
  */
 sealed class WfmException(message: String) : RuntimeException(message)
 
 /**
- * The server refused this call for spending too much budget. Carries the cooloff it asked for, when
- * it named one — a `429` frequently omits `Retry-After` entirely.
+ * The server refused the call because we asked for too much.
+ *
+ * [retryAfter] is the cooloff the server asked for, or null when it did not name one. A `429`
+ * often omits `Retry-After` altogether.
  */
 sealed class ThrottledException(val retryAfter: Duration?, message: String) : WfmException(message)
 
-/** `429` — the pacing itself was too fast. SPEC 9 treats one of these as a bug in our limiter. */
+/** `429`: we were calling too fast. SPEC 9 treats one of these as a bug in our own limiter. */
 class RateLimitedException(retryAfter: Duration?) :
     ThrottledException(
         retryAfter,
@@ -32,9 +36,10 @@ class RateLimitedException(retryAfter: Duration?) :
     )
 
 /**
- * `509` — too many connections open at once, which Cloudflare signals separately from `429`
- * (R1.4). Distinct from [RateLimitedException] because the remedy is fewer concurrent calls, not
- * slower ones.
+ * `509`: too many connections open at once. Cloudflare signals this separately from `429` (R1.4).
+ *
+ * It is a distinct type from [RateLimitedException] because the remedy is different. We need
+ * fewer calls at once, not slower ones.
  */
 class ConcurrencyLimitedException(retryAfter: Duration?) :
     ThrottledException(
@@ -43,13 +48,12 @@ class ConcurrencyLimitedException(retryAfter: Duration?) :
     )
 
 /**
- * The two refusals the transport answers with a retry, and the only ones — every other status
- * surfaces on the first attempt.
+ * The only two statuses we retry. Everything else fails on the first attempt.
  *
- * Declared once because two places need the pair and they must not drift: [WfmRateLimitInterceptor]
- * decides whether a response is a refusal at all, and [WfmMetrics] pre-registers a counter per
- * bucket and status at startup. A status added to one but not the other is either an unmetered
- * retry or a meter that can never move.
+ * Two places need this pair and they must not disagree. [WfmRateLimitInterceptor] uses it to spot
+ * a refusal, and [WfmMetrics] uses it to register a counter per bucket and status at startup. Add
+ * a status to one and not the other and you get either an unmetered retry or a counter that can
+ * never move, so the pair is declared here once.
  */
 enum class Throttle(val status: Int, val refusal: (Duration?) -> ThrottledException) {
     RATE_LIMITED(429, ::RateLimitedException),
@@ -59,19 +63,22 @@ enum class Throttle(val status: Int, val refusal: (Duration?) -> ThrottledExcept
     companion object {
         private val byStatus = entries.associateBy(Throttle::status)
 
-        /** Null for a status the transport has no opinion on — that response belongs to the caller. */
+        /** Null for any other status. Those responses are the caller's business, not ours. */
         fun of(status: Int): Throttle? = byStatus[status]
     }
 }
 
 /**
- * An error status whose body is not a v2 envelope, and often not JSON at all: v1
- * `/items/{slug}/orders` answers `403` as plain text and an upstream `502` arrives as Cloudflare's
- * HTML (R1.7). Handled at the transport so that body never reaches Jackson, where it would surface
- * as a deserialization crash naming a field rather than as the HTTP failure it is.
+ * An error status whose body is not a v2 envelope, and often is not JSON at all. v1
+ * `/items/{slug}/orders` answers `403` in plain text, and an upstream `502` arrives as a
+ * Cloudflare HTML page (R1.7).
  *
- * [excerpt] is capped at [EXCERPT_LIMIT] characters. SPEC 9 forbids accumulating what the service
- * does not need, and a couple of lines is enough to tell a Cloudflare block from a route that moved.
+ * We handle these at the transport so the body never reaches Jackson. If it did, a `403` would
+ * surface as a deserialization crash naming some missing field, which says nothing about what
+ * actually went wrong.
+ *
+ * [excerpt] is capped at [EXCERPT_LIMIT] characters. SPEC 9 says not to keep what the service does
+ * not need, and a line or two is enough to tell a Cloudflare block from a route that has moved.
  */
 class WfmHttpException(val status: HttpStatusCode, val contentType: MediaType?, val excerpt: String) :
     WfmException(describe(status, contentType, excerpt)) {
@@ -79,7 +86,7 @@ class WfmHttpException(val status: HttpStatusCode, val contentType: MediaType?, 
     companion object {
         const val EXCERPT_LIMIT = 200
 
-        /** Reads at most a few hundred bytes of [response]; the rest of the body is dropped unread. */
+        /** Reads at most 800 bytes of [response]. The rest of the body is discarded unread. */
         fun of(response: ClientHttpResponse): WfmHttpException {
             val contentType = response.headers.contentType
             val charset = contentType?.charset ?: UTF_8
@@ -91,7 +98,7 @@ class WfmHttpException(val status: HttpStatusCode, val contentType: MediaType?, 
     }
 }
 
-/** Newlines in an HTML error page would otherwise spread one failure over 40 log lines. */
+/** Without this, the newlines in an HTML error page spread one failure over 40 log lines. */
 private val WHITESPACE = Regex("\\s+")
 
 private fun describe(status: HttpStatusCode, contentType: MediaType?, excerpt: String): String {
@@ -100,12 +107,12 @@ private fun describe(status: HttpStatusCode, contentType: MediaType?, excerpt: S
 }
 
 /**
- * `RFC 9110 §10.2.3` allows `Retry-After` in two forms — delta-seconds or an HTTP-date — and the
- * upstream sends both. Reading only the first silently yields `null` for the second, which is how a
- * stated cooloff turns into an immediate retry.
+ * Parses `Retry-After`, which RFC 9110 §10.2.3 allows in two forms: delta-seconds, or an HTTP-date.
+ * The upstream sends both, so we handle both. Handling only delta-seconds would return `null` for
+ * every date-form header, turning a cooloff the server asked for into an immediate retry.
  *
- * Returns `null` when the header is absent or unparseable, and never a negative duration: a date
- * already in the past means "now".
+ * Returns `null` when the header is missing or unparseable. Never returns a negative duration; a
+ * date already in the past counts as "now".
  */
 fun retryAfterOf(headers: HttpHeaders, clock: Clock): Duration? {
     val raw = headers.getFirst(HttpHeaders.RETRY_AFTER)?.trim().orEmpty()

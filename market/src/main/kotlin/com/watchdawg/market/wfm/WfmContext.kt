@@ -7,16 +7,17 @@ import org.springframework.http.client.ClientHttpRequestInterceptor
 import org.springframework.http.client.ClientHttpResponse
 
 /**
- * The observer's context: the platform this service watches the market *as*, and whether crossplay
- * orders are in scope. One value, bound from `wfm.platform` and `wfm.crossplay`, applied identically
- * to every channel (R1.8, `docs/adr/0002-crossplay-single-global-setting.md`).
+ * Who this service watches the market as: which platform, and whether crossplay orders count.
+ *
+ * Bound once from `wfm.platform` and `wfm.crossplay`, and applied the same way on every channel
+ * (R1.8, `docs/adr/0002-crossplay-single-global-setting.md`).
  *
  * **C5's socket client must read [crossplay] from here** and put it in the `subscribe/newOrders`
- * payload explicitly (R5.2). The two channels take opposite upstream defaults — REST `false`, the
- * socket `true` — so a channel that omits the value does not fail. It quietly observes a different
- * population than the other one, and the diff classifier then fabricates a `vanished` on ~7% of
- * ingested orders: on exactly the event SPEC 2.2 treats as evidence of a sale. Nothing but this
- * obligation prevents that.
+ * payload explicitly (R5.2). The two channels default the opposite way upstream: REST assumes
+ * `false`, the socket assumes `true`. So a channel that leaves the value out does not fail. It
+ * just watches a different set of orders than the other channel, and the diff classifier then
+ * invents a `vanished` for about 7% of ingested orders, which is exactly the event SPEC 2.2 reads
+ * as evidence of a sale. Nothing but this note prevents that.
  *
  * TODO(C5): assert it. There is no cross-channel test today because there is no socket to test
  * against — when the socket client lands, pin that both channels quote the same [crossplay].
@@ -24,12 +25,14 @@ import org.springframework.http.client.ClientHttpResponse
 data class WfmContext(val platform: String, val crossplay: Boolean)
 
 /**
- * Stamps [context] onto every outbound request, overwriting whatever the call site asked for.
+ * Puts [context] on every outbound request, overwriting whatever the call site asked for.
  *
- * A `defaultHeader` on the client would be the obvious home for these and was where they lived, but
- * a default header is exactly what a call site *can* override, and R1.8 says none may. So they sit
- * in the same un-skippable seam as the limiter. `User-Agent` rides along for the same reason: R1.5
- * makes it the project's identity to the upstream, not a per-call choice.
+ * These started out as `defaultHeader`s on the client, which is the obvious home for them. The
+ * problem is that a default header is precisely the kind a call site *can* override, and R1.8 says
+ * none of them may be. So they live here instead, in the same un-skippable place as the limiter.
+ *
+ * `User-Agent` rides along for the same reason: R1.5 makes it the project's identity to the
+ * upstream, not something an individual call gets to choose.
  */
 class WfmContextInterceptor(private val context: WfmContext, private val userAgent: String) :
     ClientHttpRequestInterceptor {

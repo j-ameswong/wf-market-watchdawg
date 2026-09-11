@@ -19,10 +19,12 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
 /**
- * R1.8: crossplay is one setting, and no call site may omit it, override it, or let a channel fall
- * back to its upstream default. The failure it guards against is silent — a mixed population
- * fabricates a `vanished` on ~7% of ingested orders (SPEC 2.7, ADR-0002) — so the guard has to be
- * structural rather than a convention.
+ * R1.8: crossplay is one setting. No call site may omit it, override it, or let a channel fall
+ * back to its upstream default.
+ *
+ * The failure this guards against is silent: a mixed population invents a `vanished` for about 7%
+ * of ingested orders (SPEC 2.7, ADR-0002). That is why the guard is structural rather than a
+ * convention people are asked to remember.
  */
 @SpringBootTest
 @Import(TestcontainersConfiguration::class)
@@ -90,7 +92,7 @@ class CrossplayHeaderTest {
         assertFalse("platform" in optional, "wfm.platform would bind to a Kotlin default")
     }
 
-    /** [MockRestRequestMatchers.header] tolerates extra values; appending is the failure to catch. */
+    /** [MockRestRequestMatchers.header] tolerates extra values, and appending is the failure to catch. */
     private fun onlyHeader(name: String, value: String) = RequestMatcher {
         assertEquals(listOf(value), it.headers[name], "header $name")
     }

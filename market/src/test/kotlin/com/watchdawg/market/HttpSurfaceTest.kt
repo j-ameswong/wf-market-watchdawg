@@ -12,11 +12,13 @@ import kotlin.test.assertTrue
 
 /**
  * R12.5: actuator is the service's **only** HTTP surface, and no data endpoint is ever added.
- * Postgres is the read surface for the warehouse ([ADR-0011](docs/adr/0011-no-query-api-postgres-is-the-read-surface.md)),
- * so a controller appearing here is a design decision that was never taken, not an oversight.
  *
- * A standing guard rather than a one-off check: it enumerates the context, so it fails on a
- * controller added later without anyone editing this file.
+ * Postgres is the read surface for the warehouse
+ * ([ADR-0011](docs/adr/0011-no-query-api-postgres-is-the-read-surface.md)). So a controller
+ * turning up here is a design decision that was never taken, not an oversight.
+ *
+ * This is a standing guard rather than a one-off check. It enumerates the context, so it fails on
+ * a controller added later without anyone editing this file.
  */
 @SpringBootTest
 @Import(TestcontainersConfiguration::class)

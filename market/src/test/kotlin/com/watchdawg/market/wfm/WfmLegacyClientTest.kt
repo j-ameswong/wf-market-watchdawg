@@ -24,14 +24,16 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 /**
- * R1.6's second envelope. The fixture is a live capture of
- * `GET /v1/items/serration/statistics` (2026-09-11), trimmed to a few rows per window and
- * otherwise untouched — serration is the slug that exercises every shape at once: `mod_rank` on
- * every row, `moving_avg` present on some and absent on others, and prices arriving as both JSON
- * ints and floats. The shape it records is `docs/v1-statistics.md`.
+ * R1.6's second envelope.
  *
- * Nothing in C1 calls a v1 route, so this is where the channel is proven. No test reaches the live
- * API (R2.6).
+ * The fixture is a live capture of `GET /v1/items/serration/statistics` (2026-09-11), trimmed to a
+ * few rows per window and otherwise untouched. Serration is the useful slug here because it
+ * exercises every shape at once: `mod_rank` on every row, `moving_avg` present on some rows and
+ * absent on others, and prices arriving as both JSON ints and floats. `docs/v1-statistics.md`
+ * records the shape.
+ *
+ * Nothing in C1 calls a v1 route, so this is where the channel gets proven. No test reaches the
+ * live API (R2.6).
  */
 @SpringBootTest
 @Import(TestcontainersConfiguration::class)
@@ -174,7 +176,7 @@ class WfmLegacyClientTest {
              "gameRef":"/Lotus/Upgrades/Mods","updatedAt":"2026-09-10T00:00:00Z"}]}
         """.trimIndent()
 
-        /** The same body a global snake_case strategy would make bind. It must not. */
+        /** The body a global snake_case strategy would make bind. It must not bind here. */
         val V2_ITEMS_SNAKE_JSON = """
             {"apiVersion":"2.0","data":[{"id":"54a73e65e779893a797fff9d","slug":"serration",
              "game_ref":"/Lotus/Upgrades/Mods","updated_at":"2026-09-10T00:00:00Z"}]}

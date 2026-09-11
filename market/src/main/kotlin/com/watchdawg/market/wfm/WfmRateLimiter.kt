@@ -8,8 +8,10 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 /**
- * The two independent budgets of R1.2, keyed by route class rather than API version: v1
- * `statistics` paces on [PUBLIC] alongside every v2 route, and only auction search is separate.
+ * The two rate budgets, which are independent of each other (R1.2).
+ *
+ * Which one applies is decided by the route, not by the API version. Auction search is the only
+ * thing on [CONTRACT_SEARCH]; everything else shares [PUBLIC], the v1 `statistics` route included.
  */
 enum class Bucket {
     PUBLIC,
@@ -19,14 +21,17 @@ enum class Bucket {
 /**
  * Paces every outbound call to warframe.market.
  *
- * Each [Bucket] hands out evenly spaced turns with no burst allowance. Spending a minute's worth
- * of contract-search budget at once would satisfy "12 req/min" arithmetically, but the upstream
- * rules describe a rate rather than a window we may fill, and a `429` is a bug in our pacing
- * (SPEC 9). A single global [Semaphore] caps in-flight calls on top of that, because `509` is a
- * connection-level signal from Cloudflare rather than a per-route one (R1.4).
+ * Each [Bucket] hands out turns at a fixed spacing, with no bursting. Firing off a whole minute of
+ * contract-search budget at once would still add up to "12 req/min", but the upstream rules
+ * describe a rate, not a window we are free to fill however we like. We treat a `429` as our own
+ * bug (SPEC 9).
  *
- * A turn is taken *before* the permit and never while holding one, so a caller waiting out its
- * pacing delay does not occupy one of the scarce connection slots.
+ * On top of the pacing, one shared [Semaphore] limits how many calls are in flight at once. That
+ * is a separate concern: a `509` from Cloudflare is about open connections, not about any one
+ * route (R1.4).
+ *
+ * A caller takes its turn *before* it takes a permit, never while holding one. Otherwise a thread
+ * waiting out its pacing delay would be sitting on a connection slot it is not using.
  */
 class WfmRateLimiter(
     limits: WfmProperties.Limits,
@@ -34,7 +39,7 @@ class WfmRateLimiter(
     private val clock: Clock = Clock.systemUTC(),
     private val sleeper: Sleeper = Sleeper { Thread.sleep(it) },
 ) {
-    /** Injected alongside the clock so pacing is deterministic under test. */
+    /** Injectable, like the clock, so tests can assert pacing without really sleeping. */
     fun interface Sleeper {
         fun sleep(duration: Duration)
     }
@@ -53,8 +58,10 @@ class WfmRateLimiter(
     }
 
     /**
-     * Runs [call] once this thread's turn on [bucket] has come and a connection slot is free.
-     * The slot is returned even when [call] throws, so a failed request cannot leak concurrency.
+     * Waits for this thread's turn on [bucket] and for a free connection slot, then runs [call].
+     *
+     * The slot is always released, including when [call] throws, so a failing request cannot leak
+     * concurrency.
      */
     fun <T> acquire(bucket: Bucket, call: () -> T): T {
         metrics.requestIssued(bucket, awaitTurn(gates.getValue(bucket)))
@@ -66,17 +73,18 @@ class WfmRateLimiter(
         }
     }
 
-    /** The connection slots still on offer. Only [narrowConcurrency] moves it. */
+    /** How many connection slots are currently allowed. Only [narrowConcurrency] changes it. */
     val maxConcurrency: Int get() = concurrencyLock.withLock { concurrency }
 
     /**
-     * Answers a `509` by permanently giving up one connection slot, down to a floor of one (R1.4).
-     * Waiting alone would only defer the same collision; the server told us our concurrency, not
-     * our rate, was the problem, so the cap has to move.
+     * Gives up one connection slot in answer to a `509`, down to a minimum of one (R1.4).
      *
-     * The cap never widens again — a restart is the only way back up. Under ADR-0004 a `509` is a
-     * bug in our own budgeting, and creeping back toward a limit the server has already refused is
-     * exactly the traffic pattern the upstream rules police.
+     * Waiting alone would only put off the same collision. The server told us we had too many
+     * connections open, not that we were going too fast, so the cap itself has to come down.
+     *
+     * It never goes back up; only a restart resets it. ADR-0004 treats a `509` as a bug in our own
+     * budgeting, and creeping back toward a limit the server has already refused is exactly the
+     * traffic pattern the upstream rules exist to stop.
      */
     fun narrowConcurrency(): Int = concurrencyLock.withLock {
         if (concurrency <= 1) return@withLock concurrency
@@ -84,7 +92,7 @@ class WfmRateLimiter(
         --concurrency
     }
 
-    /** Returns how long the caller was held, which is [WfmMetrics]'s view of budget pressure. */
+    /** Returns how long the caller waited. [WfmMetrics] records it as a measure of budget pressure. */
     private fun awaitTurn(gate: Gate): Duration {
         val now = clock.instant()
         val wait = Duration.between(now, gate.reserve(now))
@@ -93,12 +101,12 @@ class WfmRateLimiter(
         return wait
     }
 
-    /** [Semaphore.reducePermits] is protected, and shrinking the cap is R1.4's answer to a `509`. */
+    /** Subclassed only because [Semaphore.reducePermits] is protected, and R1.4 needs to call it. */
     private class Permits(permits: Int) : Semaphore(permits, true) {
         fun reduce(n: Int) = reducePermits(n)
     }
 
-    /** One bucket's turnstile: hands out instants spaced by the rate's interval. */
+    /** One bucket's queue. Hands out call times spaced one interval apart. */
     private class Gate(rate: WfmProperties.Rate) {
         init {
             require(rate.permits > 0) { "a rate must allow at least one permit, was $rate" }

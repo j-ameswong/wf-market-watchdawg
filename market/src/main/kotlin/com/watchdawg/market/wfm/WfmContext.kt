@@ -16,8 +16,10 @@ import org.springframework.http.client.ClientHttpResponse
  * socket `true` — so a channel that omits the value does not fail. It quietly observes a different
  * population than the other one, and the diff classifier then fabricates a `vanished` on ~7% of
  * ingested orders: on exactly the event SPEC 2.2 treats as evidence of a sale. Nothing but this
- * obligation prevents that. There is no cross-channel test to catch it, because there is no socket
- * until C5.
+ * obligation prevents that.
+ *
+ * TODO(C5): assert it. There is no cross-channel test today because there is no socket to test
+ * against — when the socket client lands, pin that both channels quote the same [crossplay].
  */
 data class WfmContext(val platform: String, val crossplay: Boolean)
 

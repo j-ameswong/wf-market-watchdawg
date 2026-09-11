@@ -60,6 +60,8 @@ Failures are typed, in `WfmErrors.kt`, all under one sealed `WfmException`: `Rat
 
 `baseUrl` is v2. `baseUrlLegacy` (v1) exists because three v1 routes have no v2 equivalent — auctions, `/items/{slug}/statistics` (price history), and `/items/{slug}/dropsources`. Everything else in `docs/v1.yml` is dead; `bruno/README.md` has the verified route-by-route table.
 
+`WfmLegacyClient` is that second channel, on `wfmLegacyRestClient`. Both beans come from the same customized builder, so the two differ only in base URL and envelope: v1 is `payload`/`include` in snake_case (`WfmLegacyModels.kt`), v2 is `apiVersion`/`data`/`error` in camelCase. The snake_case naming strategy is scoped to the v1 bean's own JSON converter — **never set one globally**, it would stop `updatedAt` and `gameRef` binding. Two `RestClient` beans also make injection by type ambiguous, so a client names its channel with `@Qualifier(WfmConfig.V2_CLIENT)` or `@Qualifier(WfmConfig.LEGACY_CLIENT)`. Bind every v1 price as `BigDecimal`: the upstream sends `150` and `80.0` for the same field, and an `Int` binding truncates silently rather than failing.
+
 ### The transport stack
 
 `WfmConfig.wfmTransportCustomizer` is one `RestClientCustomizer` applied to **every** `RestClient.Builder` the context hands out, so a new client bean is governed the moment it is built rather than when someone remembers to wire it. It installs, in order:

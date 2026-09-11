@@ -274,7 +274,7 @@ only if a `FailureAnalyzer` is ever worth its keep.
         `WfmRetryTest`
       - "a plain-text `403` surfaces a typed error, not a Jackson exception" — `WfmErrorBodyTest`
       - the 1h live run is T8's
-- [ ] Review with human before Phase 3
+- [x] Review with human before Phase 3
 
 **Open for review:** the startup message for an unset `wfm.crossplay` is Spring's primitive-binding
 NPE rather than a named property — see the caveat under T6. Startup still fails; only the diagnosis
@@ -291,17 +291,48 @@ with snake_case binding and the v1 `payload`/`include` envelope (R1.6). Unblocks
 in C1 calls a v1 route yet, so this task proves the shape against a recorded fixture.
 
 **Acceptance criteria:**
-- [ ] A recorded `/v1/items/{slug}/statistics` fixture (captured per `docs/v1-statistics.md`)
+- [x] A recorded `/v1/items/{slug}/statistics` fixture (captured per `docs/v1-statistics.md`)
       deserializes through the v1 envelope with snake_case fields.
-- [ ] v2 camelCase binding is unaffected — no global Jackson naming strategy is introduced (§7).
-- [ ] An `/auctions/search` URI draws from the `contract-search` bucket while
+- [x] v2 camelCase binding is unaffected — no global Jackson naming strategy is introduced (§7).
+- [x] An `/auctions/search` URI draws from the `contract-search` bucket while
       `/items/{slug}/statistics` draws from `public`, asserted in both directions (Decision 1,
       §2.5).
-- [ ] The T3 no-bypass test covers the new bean without being modified.
+- [x] The T3 no-bypass test covers the new bean without being modified.
 
 **Verification:**
-- [ ] `mtest --tests '*WfmLegacyClientTest' --tests '*RateLimitWiringTest'`
-- [ ] `mbuild` green
+- [x] `mtest --tests '*WfmLegacyClientTest' --tests '*RateLimitWiringTest'` — 8 tests
+- [x] `mbuild` green — 43 tests
+
+**Notes:** snake_case is scoped to the v1 client's own JSON converter rather than to the DTOs.
+`@JsonNaming` per class would leave every future v1 DTO one forgotten annotation away from binding
+nothing; the converter makes it a property of the channel. The mapper is
+`JsonMapper.rebuild()`-ed from the context's own, so Boot's Kotlin module, `java.time` handling and
+deserialization defaults carry over and only the naming changes.
+
+A second `RestClient` bean makes injection by type ambiguous, so both clients now name their channel
+with `@Qualifier` against bean-name constants on `WfmConfig`. Marking the v2 bean `@Primary` would
+have been one line less and would silently hand a third client the wrong channel.
+
+The bucket criterion was already discharged by T3's `RateLimitWiringTest`, which asserts `bucketFor`
+in both directions and was *not* edited here — which is also how the fourth criterion is verified.
+What that test cannot say is whether the wired v1 bean behaves that way, so
+`WfmLegacyClientTest` times two real statistics calls: ≥500ms apart (paced) and <3s (not paced on
+contract-search).
+
+`include` binds as a raw `JsonNode`. It is populated only by `?include=item`, no route we call asks
+for it, and the item manifest it carries duplicates what C3 takes from `/v2/items` — typing it now
+would model a shape nothing reads.
+
+**Correction to `docs/v1-statistics.md`:** its "Type caution" said an integer binding "will fail on
+the first fractional value". It does not. Mutation-checking the price types showed Jackson
+**silently truncates** — `min_price: 32.0` bound as `32` into an `Int` field and the test passed.
+That is strictly worse than a failure: `wa_price` 45.417 would land as 45 with nothing downstream
+reporting a problem. The doc and the `ClosedStat` KDoc now say so, and the fractional `wa_price`
+assertion is what actually pins the decimal type.
+
+Mutation-checked: drop the v1 converter (5 of 6 fail), leak the naming strategy onto the v2 client
+(that test plus all of `WfmClientTest` fail), key buckets by `/v1` instead of route class (the
+pacing test plus `RateLimitWiringTest` fail), and make `moving_avg` non-null (its own test fails).
 
 **Dependencies:** T3, T5
 **Files likely touched:** `.../wfm/WfmConfig.kt`, `.../wfm/WfmLegacyClient.kt`,
@@ -312,9 +343,13 @@ in C1 calls a v1 route yet, so this task proves the shape against a recorded fix
 ---
 
 ## Checkpoint C — both channels
-- [ ] `mbuild` green
-- [ ] Both API versions run through one limiter on the correct buckets
-- [ ] `bruno-run` re-verifies the live v1 contract after the DTO addition (§8, manual, never CI)
+- [x] `mbuild` green — 43 tests, also green as a `wfm`-only subset and with `WfmLegacyClientTest`
+      run in isolation (R2.7)
+- [x] Both API versions run through one limiter on the correct buckets — `RateLimitWiringTest`
+      enumerates both beans and was not edited to see the new one; `WfmLegacyClientTest.a v1 call is
+      paced on the public bucket` proves the wired bean, not just the predicate
+- [x] `bruno-run` re-verifies the live v1 contract after the DTO addition (§8, manual, never CI) —
+      37/37 requests, 37/37 assertions, 2026-09-11
 - [ ] Review with human before Phase 4
 
 ---

@@ -5,7 +5,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.restclient.RestClientCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter
 import org.springframework.web.client.RestClient
+import tools.jackson.databind.PropertyNamingStrategies
+import tools.jackson.databind.json.JsonMapper
 import java.time.Duration
 
 @ConfigurationProperties(prefix = "wfm")
@@ -68,7 +71,32 @@ class WfmConfig {
     }
 
     /** Headers are absent on purpose — the customizer above stamps them where no call site can. */
-    @Bean
+    @Bean(V2_CLIENT)
     fun wfmRestClient(builder: RestClient.Builder, props: WfmProperties): RestClient =
         builder.baseUrl(props.baseUrl).build()
+
+    /**
+     * The v1 channel (R1.6). Same builder, so it inherits the whole transport stack above without
+     * a wiring step — only the base URL and the property casing differ.
+     *
+     * The snake_case strategy is scoped to this client's own JSON converter rather than set on the
+     * context's mapper: v2 is camelCase, and a global strategy would silently stop `updatedAt` and
+     * `gameRef` binding (SPEC 7). [JsonMapper.rebuild] starts from the mapper Boot configured, so
+     * the Kotlin module, the `java.time` handling and the deserialization defaults all carry over
+     * and only the naming changes.
+     */
+    @Bean(LEGACY_CLIENT)
+    fun wfmLegacyRestClient(builder: RestClient.Builder, props: WfmProperties, mapper: JsonMapper): RestClient {
+        val snakeCase = mapper.rebuild().propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE).build()
+        return builder
+            .baseUrl(props.baseUrlLegacy)
+            .configureMessageConverters { it.withJsonConverter(JacksonJsonHttpMessageConverter(snakeCase)) }
+            .build()
+    }
+
+    companion object {
+        /** Bean names, so a client picks its channel by constant rather than by a repeated string. */
+        const val V2_CLIENT = "wfmRestClient"
+        const val LEGACY_CLIENT = "wfmLegacyRestClient"
+    }
 }

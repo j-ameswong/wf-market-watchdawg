@@ -1,8 +1,8 @@
 # Implementation Plan: C1 — API access
 
 > Source: `SPEC.md` §4 "C1 — API access" (R1.1–R1.8), bounded by §2.1 (rate budget), §2.5 (two
-> upstream limits) and §2.7 (crossplay). Drafted 2026-09-09. **Approved and built through Phase 2**
-> (T1–T6); Checkpoint B's review is the open gate before Phase 3.
+> upstream limits) and §2.7 (crossplay). Drafted 2026-09-09. **Approved and built through Phase 3**
+> (T1–T7); Checkpoint C's review is the open gate before Phase 4.
 
 ## Overview
 
@@ -13,8 +13,9 @@ C10`), so it is the first thing built and everything else inherits its correctne
 C1 started from a single unpaced `RestClient` with a declared-but-unused `wfm.requests-per-second`,
 a bare `User-Agent`, no v1 client, and a status handler that converted `429`/`509` straight into a
 throw with no retry. T1–T6 have replaced all of that: every call is paced on one of two route-keyed
-buckets, retried once on budget, typed on failure, and stamped with the one crossplay setting. What
-remains is the second channel (T7's v1 client) and the runtime proof (T8's metrics and live run).
+buckets, retried once on budget, typed on failure, and stamped with the one crossplay setting. T7 has since
+added the second channel, so both API versions now pace on one limiter keyed by route. What remains
+is the runtime proof (T8's metrics and live run).
 
 ## Assumptions
 
@@ -83,14 +84,17 @@ reach the live API; see `tasks/todo.md`.*
 - [x] T5: Non-JSON and 5xx bodies never reach Jackson
 - [x] T6: Crossplay as one setting, structurally un-omittable
 
-**Checkpoint B** — every documented C1 failure mode surfaces as a typed error. *Met; awaiting human
-review. One caveat carried forward — an unset `wfm.crossplay` fails startup with Spring's
-primitive-binding NPE rather than a named property; see `tasks/todo.md`.*
+**Checkpoint B** — every documented C1 failure mode surfaces as a typed error. *Met and reviewed.
+One caveat carried forward — an unset `wfm.crossplay` fails startup with Spring's primitive-binding
+NPE rather than a named property; see `tasks/todo.md`.*
 
 ### Phase 3 — The second channel
-- [ ] T7: v1 legacy client and the `payload`/`include` envelope
+- [x] T7: v1 legacy client and the `payload`/`include` envelope
 
-**Checkpoint C** — both API versions run through one limiter, on the right buckets.
+**Checkpoint C** — both API versions run through one limiter, on the right buckets. *Met; awaiting
+human review. One correction landed with it — `docs/v1-statistics.md` claimed an integer price
+binding would fail on a fractional value; Jackson truncates silently instead, which is worse. See
+`tasks/todo.md` under T7.*
 
 ### Phase 4 — Proof at runtime
 - [ ] T8: Per-bucket req/s metrics and the 1h live run

@@ -117,4 +117,6 @@ whereas `id` stability across refetches is assumed rather than confirmed.
 
 `donch_top`, `donch_bot`, `median`, `min_price` and `max_price` arrive as **either** JSON int or
 float depending on the value (`"donch_top": 150` vs `80.0`). Bind every price field as a decimal
-type; an integer binding will fail on the first fractional value. `volume` is always an int.
+type. An integer binding does **not** fail on a fractional value — Jackson truncates it silently,
+so `wa_price` 45.417 binds as 45 and nothing downstream reports a problem (verified 2026-09-11
+against the configured mapper). `volume` is always an int.

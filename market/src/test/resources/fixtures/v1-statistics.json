@@ -1,0 +1,154 @@
+{
+  "payload": {
+    "statistics_closed": {
+      "48hours": [
+        {
+          "datetime": "2026-09-09T16:00:00.000+00:00",
+          "volume": 1,
+          "min_price": 30.0,
+          "max_price": 30.0,
+          "open_price": 30.0,
+          "closed_price": 30.0,
+          "avg_price": 30.0,
+          "wa_price": 30.0,
+          "median": 30.0,
+          "donch_top": 30.0,
+          "donch_bot": 30.0,
+          "id": "6aa19181659ec80010a5d920",
+          "mod_rank": 10
+        },
+        {
+          "datetime": "2026-09-10T22:00:00.000+00:00",
+          "volume": 1,
+          "min_price": 29.0,
+          "max_price": 29.0,
+          "open_price": 29.0,
+          "closed_price": 29.0,
+          "avg_price": 29.0,
+          "wa_price": 29.0,
+          "median": 29.0,
+          "moving_avg": 34.3,
+          "donch_top": 45.0,
+          "donch_bot": 29.0,
+          "id": "6aa33745659ec80010ac8709",
+          "mod_rank": 10
+        }
+      ],
+      "90days": [
+        {
+          "datetime": "2026-06-14T00:00:00.000+00:00",
+          "volume": 12,
+          "min_price": 32.0,
+          "max_price": 55.0,
+          "open_price": 32.0,
+          "closed_price": 45.0,
+          "avg_price": 43.5,
+          "wa_price": 45.417,
+          "median": 46.5,
+          "moving_avg": 44.6,
+          "donch_top": 55.0,
+          "donch_bot": 32.0,
+          "id": "6a2f415915830c00134c94a2",
+          "mod_rank": 10
+        },
+        {
+          "datetime": "2026-06-14T00:00:00.000+00:00",
+          "volume": 2,
+          "min_price": 3.0,
+          "max_price": 3.0,
+          "open_price": 3.0,
+          "closed_price": 3.0,
+          "avg_price": 3.0,
+          "wa_price": 3.0,
+          "median": 3.0,
+          "donch_top": 3.0,
+          "donch_bot": 2.0,
+          "id": "6a2f415915830c00134c949f",
+          "mod_rank": 0
+        },
+        {
+          "datetime": "2026-06-19T00:00:00.000+00:00",
+          "volume": 2,
+          "min_price": 2.0,
+          "max_price": 2.0,
+          "open_price": 2.0,
+          "closed_price": 2.0,
+          "avg_price": 2.0,
+          "wa_price": 2.0,
+          "median": 2.0,
+          "moving_avg": 2.6,
+          "donch_top": 3.0,
+          "donch_bot": 2.0,
+          "id": "6a35d91a15830c00135b11f4",
+          "mod_rank": 0
+        }
+      ]
+    },
+    "statistics_live": {
+      "48hours": [
+        {
+          "datetime": "2026-09-09T16:00:00.000+00:00",
+          "volume": 786,
+          "min_price": 20,
+          "max_price": 120,
+          "avg_price": 70.0,
+          "wa_price": 71.475,
+          "median": 60,
+          "order_type": "sell",
+          "id": "6aa19181659ec80010a5d927",
+          "mod_rank": 10
+        },
+        {
+          "datetime": "2026-09-09T16:00:00.000+00:00",
+          "volume": 341,
+          "min_price": 2,
+          "max_price": 5,
+          "avg_price": 3.5,
+          "wa_price": 3.15,
+          "median": 2,
+          "order_type": "sell",
+          "id": "6aa19181659ec80010a5d922",
+          "mod_rank": 0
+        },
+        {
+          "datetime": "2026-09-09T16:00:00.000+00:00",
+          "volume": 1003,
+          "min_price": 15,
+          "max_price": 16,
+          "avg_price": 15.5,
+          "wa_price": 15.006,
+          "median": 15.5,
+          "order_type": "buy",
+          "id": "6aa19181659ec80010a5d928",
+          "mod_rank": 10
+        }
+      ],
+      "90days": [
+        {
+          "datetime": "2026-06-14T00:00:00.000+00:00",
+          "volume": 977,
+          "min_price": 35,
+          "max_price": 80,
+          "avg_price": 57.5,
+          "wa_price": 61.122,
+          "median": 50.0,
+          "order_type": "sell",
+          "id": "6a2f415915830c00134c94ad",
+          "mod_rank": 10
+        },
+        {
+          "datetime": "2026-07-18T00:00:00.000+00:00",
+          "volume": 854,
+          "min_price": 2.0,
+          "max_price": 5,
+          "avg_price": 3.5,
+          "wa_price": 3.459,
+          "median": 3,
+          "order_type": "sell",
+          "id": "6a5c14fabaa08c001123633a",
+          "mod_rank": 0
+        }
+      ]
+    }
+  }
+}

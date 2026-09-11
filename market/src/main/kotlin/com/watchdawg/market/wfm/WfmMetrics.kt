@@ -32,9 +32,11 @@ class WfmMetrics(private val registry: MeterRegistry) {
      * boundary is holding, "no data" and "no retries" must not look alike.
      */
     private val retries = Bucket.entries.flatMap { bucket ->
-        THROTTLED.map { status ->
-            (bucket to status) to
-                Counter.builder(RETRIES).tag(BUCKET, bucket.tag).tag(STATUS, status.toString()).register(registry)
+        Throttle.entries.map { throttle ->
+            (bucket to throttle) to Counter.builder(RETRIES)
+                .tag(BUCKET, bucket.tag)
+                .tag(STATUS, throttle.status.toString())
+                .register(registry)
         }
     }.toMap()
 
@@ -43,7 +45,7 @@ class WfmMetrics(private val registry: MeterRegistry) {
         waits.getValue(bucket).record(waited)
     }
 
-    fun retryIssued(bucket: Bucket, status: Int) = retries.getValue(bucket to status).increment()
+    fun retryIssued(bucket: Bucket, throttle: Throttle) = retries.getValue(bucket to throttle).increment()
 
     /** Turns handed out on [bucket] — the evidence that a retry spent budget rather than skipping it. */
     fun requestsIssued(bucket: Bucket): Long = requests.getValue(bucket).count().toLong()
@@ -71,9 +73,6 @@ class WfmMetrics(private val registry: MeterRegistry) {
         const val CONCURRENCY = "wfm.concurrency.limit"
         const val BUCKET = "bucket"
         const val STATUS = "status"
-
-        /** The only statuses the interceptor retries; every other failure surfaces immediately. */
-        val THROTTLED = listOf(429, 509)
     }
 }
 

@@ -41,28 +41,18 @@ class WfmRateLimitInterceptor(
             // acquire is sequential rather than nested -- re-acquiring while still holding a
             // connection slot would deadlock against max-concurrency.
             val response = limiter.acquire(bucket) { execution.execute(request, body) }
-            val refusal = refusalOf(response) ?: return response
-            val status = response.statusCode.value()
+            val throttle = Throttle.of(response.statusCode.value()) ?: return response
+            val refusal = throttle.refusal(retryAfterOf(response.headers, clock))
             response.close()
 
-            if (refusal is ConcurrencyLimitedException) limiter.narrowConcurrency()
+            if (throttle == Throttle.CONCURRENCY_LIMITED) limiter.narrowConcurrency()
 
             val wait = refusal.retryAfter
             // A cooloff longer than the ceiling is not worth parking a worker thread for; the poll
             // scheduler (C6) decides what to do with a long one, not an interceptor.
             if (--attemptsLeft == 0 || (wait != null && wait > maxRetryAfter)) throw refusal
-            metrics.retryIssued(bucket, status)
+            metrics.retryIssued(bucket, throttle)
             cooloff = wait
-        }
-    }
-
-    /** Null for anything the transport has no opinion on — that response belongs to the caller. */
-    private fun refusalOf(response: ClientHttpResponse): ThrottledException? {
-        val retryAfter = retryAfterOf(response.headers, clock)
-        return when (response.statusCode.value()) {
-            429 -> RateLimitedException(retryAfter)
-            509 -> ConcurrencyLimitedException(retryAfter)
-            else -> null
         }
     }
 

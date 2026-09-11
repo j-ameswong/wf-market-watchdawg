@@ -43,6 +43,28 @@ class ConcurrencyLimitedException(retryAfter: Duration?) :
     )
 
 /**
+ * The two refusals the transport answers with a retry, and the only ones — every other status
+ * surfaces on the first attempt.
+ *
+ * Declared once because two places need the pair and they must not drift: [WfmRateLimitInterceptor]
+ * decides whether a response is a refusal at all, and [WfmMetrics] pre-registers a counter per
+ * bucket and status at startup. A status added to one but not the other is either an unmetered
+ * retry or a meter that can never move.
+ */
+enum class Throttle(val status: Int, val refusal: (Duration?) -> ThrottledException) {
+    RATE_LIMITED(429, ::RateLimitedException),
+    CONCURRENCY_LIMITED(509, ::ConcurrencyLimitedException),
+    ;
+
+    companion object {
+        private val byStatus = entries.associateBy(Throttle::status)
+
+        /** Null for a status the transport has no opinion on — that response belongs to the caller. */
+        fun of(status: Int): Throttle? = byStatus[status]
+    }
+}
+
+/**
  * An error status whose body is not a v2 envelope, and often not JSON at all: v1
  * `/items/{slug}/orders` answers `403` as plain text and an upstream `502` arrives as Cloudflare's
  * HTML (R1.7). Handled at the transport so that body never reaches Jackson, where it would surface

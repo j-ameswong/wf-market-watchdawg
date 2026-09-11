@@ -90,7 +90,7 @@ class WfmMetricsTest {
         WfmClient(builder.build()).getVersions()
 
         assertEquals(1.0, registry.find("wfm.retries").tag("bucket", "public").tag("status", "429").counter()?.count())
-        // Two attempts, so two turns -- the retry spent budget rather than bypassing it (R1.3).
+        // Two attempts means two turns, so the retry spent budget rather than bypassing it (R1.3).
         assertEquals(2.0, registry.requests("public"))
         server.verify()
     }
@@ -110,9 +110,9 @@ class WfmMetricsTest {
 
     @Test
     fun `the context's own registry carries every bucket and status from startup`() {
-        // A meter that only appears after the first call is no use to an alert on a quiet service:
-        // "no data" and "under the limit" would look the same, and so would "no data" and "no
-        // retries" -- which is the one an ADR-0004 alert would actually watch.
+        // A meter that only appears after the first call is useless to an alert on a quiet
+        // service. "No data" would look identical to "under the limit", and also identical to
+        // "no retries", which is the one an ADR-0004 alert actually watches.
         listOf("public", "contract-search").forEach { bucket ->
             assertNotNull(
                 contextRegistry.find("wfm.requests").tag("bucket", bucket).counter(),

@@ -84,8 +84,9 @@ class CrossplayHeaderTest {
 
     @Test
     fun `platform and crossplay have no Kotlin defaults, so an unset value fails startup`() {
-        // A Kotlin default is how the old client came to send `false` while application.yaml said
-        // `true`. Optional here means a missing property binds silently to whatever code guessed.
+        // A Kotlin default is how the old client came to send `false` while application.yaml
+        // said `true`. If a parameter is optional here, a missing property binds silently to
+        // whatever the code guessed.
         val optional = WfmProperties::class.primaryConstructor!!.parameters.filter { it.isOptional }.map { it.name }
 
         assertFalse("crossplay" in optional, "wfm.crossplay would bind to a Kotlin default")

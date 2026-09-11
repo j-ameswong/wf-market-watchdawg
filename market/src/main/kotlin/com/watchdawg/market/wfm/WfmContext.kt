@@ -43,7 +43,7 @@ class WfmContextInterceptor(private val context: WfmContext, private val userAge
         execution: ClientHttpRequestExecution,
     ): ClientHttpResponse {
         request.headers.apply {
-            // set, not add: a call site that named its own value is replaced, not appended to.
+            // set, not add: this replaces a value the call site chose rather than appending to it.
             set(PLATFORM, context.platform)
             set(CROSSPLAY, context.crossplay.toString())
             set(HttpHeaders.USER_AGENT, userAgent)

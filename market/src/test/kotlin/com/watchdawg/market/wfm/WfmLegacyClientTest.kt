@@ -51,8 +51,8 @@ class WfmLegacyClientTest {
 
         val statistics = client.getStatistics("serration")
 
-        // statistics_closed / statistics_live, then 48hours / 90days: every name here is one the
-        // v2 camelCase binding would have missed.
+        // statistics_closed, statistics_live, 48hours, 90days: the v2 camelCase binding would
+        // have missed every one of these names.
         val closed = statistics.statisticsClosed.daily.first()
         assertEquals(Instant.parse("2026-06-14T00:00:00Z"), closed.datetime)
         assertEquals(12, closed.volume)
@@ -79,9 +79,9 @@ class WfmLegacyClientTest {
 
         val statistics = client.getStatistics("serration")
 
-        // The upstream sends `20` and `32.0` for the same field depending on the value. An Int
-        // binding survives both of these -- Jackson truncates rather than failing -- so what
-        // actually pins the decimal type is the fractional `wa_price` 45.417 asserted by
+        // The upstream sends `20` for one value and `32.0` for another in the same field. Note
+        // that an Int binding would survive both, because Jackson truncates instead of failing.
+        // What actually pins the decimal type is the fractional `wa_price` 45.417, asserted in
         // `the v1 payload envelope binds with snake_case fields`.
         assertEquals(BigDecimal("20"), statistics.statisticsLive.hourly.first().minPrice)
         assertEquals(BigDecimal("32.0"), statistics.statisticsClosed.daily.first().minPrice)
@@ -102,14 +102,14 @@ class WfmLegacyClientTest {
 
     @Test
     fun `the include block binds when a route asks for one`() {
-        // `?include=item` is the only thing that populates it, and no C1 route asks. The envelope
-        // still has to carry the slot (R1.6), so this is the shape rather than a recorded capture.
+        // Only `?include=item` populates this, and no C1 route asks for it. The envelope still
+        // has to carry the slot (R1.6), so the body below is written by hand, not captured.
         val builder = wfmLegacyRestClient.mutate()
         val server = MockRestServiceServer.bindTo(builder).build()
         server.expect(requestTo(STATISTICS)).andRespond(withSuccess(INCLUDE_JSON, APPLICATION_JSON))
 
-        // Read as an envelope rather than through WfmLegacyClient: the client unwraps to `payload`,
-        // which is the right shape for every caller and would hide the slot under test.
+        // Read as an envelope rather than through WfmLegacyClient. The client unwraps to
+        // `payload`, which is right for every caller but would hide the slot under test.
         val envelope = builder.build().get()
             .uri("/items/{slug}/statistics", "serration")
             .retrieve()
@@ -121,8 +121,9 @@ class WfmLegacyClientTest {
 
     @Test
     fun `v2 camelCase binding is unaffected by the v1 naming strategy`() {
-        // The regression this guards is a *global* naming strategy (SPEC 7): under one, `gameRef`
-        // would bind from `game_ref` and stop binding from `gameRef`. Both halves are asserted.
+        // The regression this guards against is a *global* naming strategy (SPEC 7). Under one,
+        // `gameRef` would start binding from `game_ref` and stop binding from `gameRef`. Both
+        // halves are asserted below.
         val builder = wfmRestClient.mutate()
         val server = MockRestServiceServer.bindTo(builder).build()
         val client = WfmClient(builder.build())
@@ -136,8 +137,8 @@ class WfmLegacyClientTest {
 
     @Test
     fun `a v1 call is paced on the public bucket, like every v2 call`() {
-        // ADR-0005: the route decides the bucket, not the API version. `RateLimitWiringTest` proves
-        // `bucketFor` says so; this proves the wired v1 bean actually behaves that way.
+        // The route decides the bucket, not the API version (ADR-0005). `RateLimitWiringTest`
+        // checks that `bucketFor` says so; this checks the wired v1 bean behaves that way.
         val (server, client) = legacyClient()
         server.expect(times(2), requestTo(STATISTICS)).andRespond(withSuccess(FIXTURE, APPLICATION_JSON))
 

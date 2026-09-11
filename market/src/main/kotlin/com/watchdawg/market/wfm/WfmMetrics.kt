@@ -64,8 +64,8 @@ class WfmMetrics(private val registry: MeterRegistry) {
      * show it.
      */
     fun trackConcurrency(currentLimit: () -> Int) {
-        // Micrometer keeps only a weak reference to a gauge's source, so a lambda the caller does
-        // not hold itself would be collected and the gauge would start reporting NaN.
+        // Micrometer only holds a weak reference to a gauge's source. Keep a strong one here, or
+        // the lambda gets collected and the gauge starts reporting NaN.
         concurrencySource = currentLimit
         registry.gauge(CONCURRENCY, currentLimit) { it().toDouble() }
     }

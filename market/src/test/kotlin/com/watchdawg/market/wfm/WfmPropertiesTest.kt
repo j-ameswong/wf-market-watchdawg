@@ -29,8 +29,9 @@ class WfmPropertiesTest {
 
     @Test
     fun `configured rates stay under the documented upstream ceilings`() {
-        // docs/v2/rules/overview.md: 3 req/s in general, contract search 10-20 req/min.
-        // SPEC 9 makes exceeding either a hard boundary, so it is checked, not just commented.
+        // Upstream ceilings, from docs/v2/rules/overview.md: 3 req/s in general, and 10-20
+        // req/min for contract search. SPEC 9 makes exceeding either a hard boundary, so this is
+        // checked rather than just written down.
         assertTrue(props.limits.public.perSecond <= 3.0, "public: ${props.limits.public}")
         assertTrue(
             props.limits.contractSearch.perSecond <= 20.0 / 60,

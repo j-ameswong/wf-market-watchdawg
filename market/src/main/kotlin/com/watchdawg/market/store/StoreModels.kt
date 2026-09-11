@@ -6,7 +6,7 @@ import org.springframework.data.domain.Persistable
 import org.springframework.data.relational.core.mapping.Table
 import java.time.Instant
 
-// Refetch GET /v2/versions only when the hash changes
+// One row per collection, holding the hash last seen, so a tick only refetches what changed.
 @Table("collection_version")
 data class CollectionVersionRecord(
     @Id val name: String,

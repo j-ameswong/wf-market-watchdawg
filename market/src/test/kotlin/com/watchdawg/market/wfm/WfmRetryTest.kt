@@ -113,7 +113,7 @@ class WfmRetryTest {
 
         val thrown = assertFailsWith<ThrottledException> { client.getVersions() }
 
-        // R1.4: 509 is a concurrency signal, so the remedy is fewer connections, not a longer wait.
+        // A 509 is a concurrency signal, so the remedy is fewer connections, not a longer wait (R1.4).
         assertIs<ConcurrencyLimitedException>(thrown)
         assertEquals(1, limiter.maxConcurrency, "a 509 only waited; the connection cap did not move")
         server.verify()
@@ -129,7 +129,7 @@ class WfmRetryTest {
 
         assertEquals(Duration.ofSeconds(120), thrown.retryAfter)
         assertTrue(elapsed < Duration.ofSeconds(5), "waited $elapsed on a cooloff over ${props.limits.maxRetryAfter}")
-        server.verify() // one request only -- the ceiling means no retry at all
+        server.verify() // one request only: past the ceiling there is no retry at all
     }
 
     @Test

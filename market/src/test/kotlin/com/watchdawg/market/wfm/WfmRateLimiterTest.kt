@@ -31,7 +31,7 @@ class WfmRateLimiterTest {
 
         repeat(5) { limiter.acquire(Bucket.PUBLIC) {} }
 
-        // public is 2 req/s, so N=5 acquires cost (N-1)/L = 2s -- the first turn is free.
+        // public is 2 req/s and the first turn is free, so 5 acquires cost 4 * 500ms = 2s.
         assertEquals(Duration.ofSeconds(2), Duration.between(EPOCH, clock.instant()))
     }
 
@@ -126,7 +126,7 @@ class WfmRateLimiterTest {
 
     @Test
     fun `each turn is counted against its own bucket`() {
-        // T4's retry proves it spent budget by this counter, so the counter has to be per bucket.
+        // T4's retry test proves it spent budget by reading this counter, so it must be per bucket.
         val metrics = freshMetrics()
         val limiter = WfmRateLimiter(limits(public = UNPACED, contractSearch = UNPACED), metrics)
 

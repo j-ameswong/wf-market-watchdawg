@@ -42,8 +42,9 @@ class RateLimitWiringTest {
 
     @Test
     fun `the bucket is chosen by route class, not by API version`() {
-        // ADR-0005: SPEC 2.1's arithmetic puts v1 statistics inside the v2 bucket total and lists
-        // only auction search separately, so the route decides -- not which client bean called.
+        // SPEC 2.1's arithmetic counts v1 statistics inside the v2 bucket total and lists only
+        // auction search separately. So the route decides the bucket, not the calling bean
+        // (ADR-0005).
         assertEquals(Bucket.PUBLIC, bucketOf("https://api.warframe.market/v2/orders/item/frost_prime_set"))
         assertEquals(Bucket.PUBLIC, bucketOf("https://api.warframe.market/v1/items/frost_prime_set/statistics"))
         assertEquals(Bucket.CONTRACT_SEARCH, bucketOf("https://api.warframe.market/v1/auctions/search?type=riven"))

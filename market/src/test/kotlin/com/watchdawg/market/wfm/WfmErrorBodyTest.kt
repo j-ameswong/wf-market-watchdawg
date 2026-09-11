@@ -47,7 +47,7 @@ class WfmErrorBodyTest {
 
     @Test
     fun `a plain-text 403 surfaces a typed error, not a Jackson exception`() {
-        // Exactly what v1 /items/{slug}/orders answers -- the route C7 will be reaching for.
+        // Exactly what v1 /items/{slug}/orders answers, and that is the route C7 will want.
         server.expect(requestTo(VERSIONS))
             .andRespond(withStatus(FORBIDDEN).body(V1_FORBIDDEN).contentType(TEXT_PLAIN))
 
@@ -100,8 +100,8 @@ class WfmErrorBodyTest {
 
     @Test
     fun `a well-formed envelope carrying an error still throws the envelope error, unchanged`() {
-        // 200 with error/data-null is a different failure from a bad HTTP status, and T5 must not
-        // have swallowed it into the transport's type.
+        // A 200 carrying error/data-null is a different failure from a bad HTTP status. T5 must
+        // not have folded it into the transport's own type.
         server.expect(requestTo(VERSIONS)).andRespond(withSuccess(ERROR_JSON, APPLICATION_JSON))
 
         val thrown = assertFails { client.getVersions() }

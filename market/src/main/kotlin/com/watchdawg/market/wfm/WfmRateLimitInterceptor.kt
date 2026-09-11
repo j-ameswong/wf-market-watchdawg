@@ -39,9 +39,9 @@ class WfmRateLimitInterceptor(
         while (true) {
             cooloff?.let { Thread.sleep(it) }
 
-            // Each attempt takes its own turn: the retry is paced like any other call, and the
-            // acquire is sequential rather than nested -- re-acquiring while still holding a
-            // connection slot would deadlock against max-concurrency.
+            // Every attempt takes its own turn, so a retry is paced like any other call.
+            // Acquire sequentially, never nested: re-acquiring while still holding a connection
+            // slot would deadlock against max-concurrency.
             val response = limiter.acquire(bucket) { execution.execute(request, body) }
             val throttle = Throttle.of(response.statusCode.value()) ?: return response
             val refusal = throttle.refusal(retryAfterOf(response.headers, clock))
@@ -50,8 +50,8 @@ class WfmRateLimitInterceptor(
             if (throttle == Throttle.CONCURRENCY_LIMITED) limiter.narrowConcurrency()
 
             val wait = refusal.retryAfter
-            // A cooloff longer than the ceiling is not worth parking a worker thread for; the poll
-            // scheduler (C6) decides what to do with a long one, not an interceptor.
+            // Not worth parking a worker thread on a cooloff longer than the ceiling. Deciding
+            // what to do with a long one is the poll scheduler's job (C6), not an interceptor's.
             if (--attemptsLeft == 0 || (wait != null && wait > maxRetryAfter)) throw refusal
             metrics.retryIssued(bucket, throttle)
             cooloff = wait

@@ -21,9 +21,9 @@ class MarketApplicationTests {
 
     @Test
     fun `the sync scheduler cannot fire during a test run`() {
-        // @EnableScheduling is active in @SpringBootTest, so a tick inside the test JVM would call
-        // the live API -- which R2.6 and SPEC 9 forbid outright. The delay is pushed out of reach
-        // by a system property on the test task; this fails if that ever goes away.
+        // @EnableScheduling is active under @SpringBootTest, so a tick inside the test JVM would
+        // call the live API, which R2.6 and SPEC 9 forbid outright. The test task pushes the delay
+        // out of reach with a system property. This test fails if that ever goes away.
         val delay = assertNotNull(env.getProperty("wfm.sync.initial-delay", Duration::class.java))
 
         assertTrue(delay >= Duration.ofDays(1), "sync would tick $delay into a test run")

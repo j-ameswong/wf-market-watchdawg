@@ -1,5 +1,6 @@
 package com.watchdawg.market.wfm
 
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Timeout
 import java.time.Clock
@@ -26,7 +27,7 @@ class WfmRateLimiterTest {
     @Test
     fun `sequential acquires on a bucket are spaced by that bucket's rate`() {
         val clock = MutableClock(EPOCH)
-        val limiter = WfmRateLimiter(limits(), clock, AdvancingSleeper(clock))
+        val limiter = WfmRateLimiter(limits(), metrics(), clock, AdvancingSleeper(clock))
 
         repeat(5) { limiter.acquire(Bucket.PUBLIC) {} }
 
@@ -38,7 +39,7 @@ class WfmRateLimiterTest {
     fun `exhausting one bucket does not delay the other`() {
         val clock = MutableClock(EPOCH)
         val sleeper = AdvancingSleeper(clock)
-        val limiter = WfmRateLimiter(limits(), clock, sleeper)
+        val limiter = WfmRateLimiter(limits(), metrics(), clock, sleeper)
 
         repeat(5) { limiter.acquire(Bucket.CONTRACT_SEARCH) {} }
         assertEquals(List(4) { Duration.ofSeconds(5) }, sleeper.slept, "contract-search is 12/min")
@@ -52,7 +53,7 @@ class WfmRateLimiterTest {
     @Test
     fun `pacing holds in real time, not only on the injected clock`() {
         // Inflated to 20 req/s so the test costs ~200ms rather than the 2s the configured rate would.
-        val limiter = WfmRateLimiter(limits(public = WfmProperties.Rate(20, Duration.ofSeconds(1))))
+        val limiter = WfmRateLimiter(limits(public = WfmProperties.Rate(20, Duration.ofSeconds(1))), metrics())
 
         val startedAt = System.nanoTime()
         repeat(5) { limiter.acquire(Bucket.PUBLIC) {} }
@@ -63,7 +64,7 @@ class WfmRateLimiterTest {
 
     @Test
     fun `a third concurrent acquire waits for a permit`() {
-        val limiter = WfmRateLimiter(limits(public = UNPACED, maxConcurrency = 2))
+        val limiter = WfmRateLimiter(limits(public = UNPACED, maxConcurrency = 2), metrics())
         val holding = CountDownLatch(2)
         val release = CountDownLatch(1)
         repeat(2) {
@@ -87,7 +88,7 @@ class WfmRateLimiterTest {
     @Test
     fun `a permit is released even when the call throws`() {
         // One permit, so a leak on the throwing path parks every later acquire forever.
-        val limiter = WfmRateLimiter(limits(public = UNPACED, maxConcurrency = 1))
+        val limiter = WfmRateLimiter(limits(public = UNPACED, maxConcurrency = 1), metrics())
 
         repeat(2) {
             assertFailsWith<IllegalStateException> { limiter.acquire(Bucket.PUBLIC) { error("boom") } }
@@ -100,7 +101,7 @@ class WfmRateLimiterTest {
 
     @Test
     fun `narrowing concurrency gives up a slot, down to a floor of one`() {
-        val limiter = WfmRateLimiter(limits(public = UNPACED, maxConcurrency = 2))
+        val limiter = WfmRateLimiter(limits(public = UNPACED, maxConcurrency = 2), metrics())
 
         assertEquals(1, limiter.narrowConcurrency())
         assertEquals(1, limiter.narrowConcurrency(), "the cap fell below one connection")
@@ -126,7 +127,7 @@ class WfmRateLimiterTest {
     @Test
     fun `each turn is counted against its own bucket`() {
         // T4's retry proves it spent budget by this counter, so the counter has to be per bucket.
-        val limiter = WfmRateLimiter(limits(public = UNPACED, contractSearch = UNPACED))
+        val limiter = WfmRateLimiter(limits(public = UNPACED, contractSearch = UNPACED), metrics())
 
         repeat(3) { limiter.acquire(Bucket.PUBLIC) {} }
         limiter.acquire(Bucket.CONTRACT_SEARCH) {}
@@ -134,6 +135,9 @@ class WfmRateLimiterTest {
         assertEquals(3L, limiter.turnsTaken(Bucket.PUBLIC))
         assertEquals(1L, limiter.turnsTaken(Bucket.CONTRACT_SEARCH))
     }
+
+    /** A fresh registry per limiter, so one test's turns are never another's (R2.7). */
+    private fun metrics() = WfmMetrics(SimpleMeterRegistry())
 
     private fun limits(
         public: WfmProperties.Rate = WfmProperties.Rate(2, Duration.ofSeconds(1)),

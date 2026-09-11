@@ -1,7 +1,9 @@
 # SPEC — wf-market-watchdawg
 
 > **Status: under review.** **No code is written against a capability until it is broken into
-> tasks.** C1 is the only one that has been — see `tasks/plan.md` and `tasks/todo.md`.
+> tasks.** C1 is the only one that has been — see `tasks/plan.md` and `tasks/todo.md` — and it is
+> now **built**: R1.1–R1.8 each map to a named passing test, and R12.1's per-bucket meters ship
+> with it. C2 and C3 are next and neither has been broken into tasks yet.
 >
 > Grounded in `docs/v2/` (API `v0.25.0`, WebSocket `v0.13.0`), `docs/v1.yml`, and the live-verified
 > route table in `bruno/README.md`. This document describes the system to be built; the reasoning

@@ -1,5 +1,6 @@
 package com.watchdawg.market.wfm
 
+import io.micrometer.core.instrument.MeterRegistry
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.restclient.RestClientCustomizer
@@ -39,8 +40,13 @@ data class WfmProperties(
 @EnableConfigurationProperties(WfmProperties::class)
 class WfmConfig {
 
+    /** R12.1's read-out on the rate-limit boundary; see [WfmMetrics] for why it is per bucket. */
     @Bean
-    fun wfmRateLimiter(props: WfmProperties): WfmRateLimiter = WfmRateLimiter(props.limits)
+    fun wfmMetrics(registry: MeterRegistry): WfmMetrics = WfmMetrics(registry)
+
+    @Bean
+    fun wfmRateLimiter(props: WfmProperties, metrics: WfmMetrics): WfmRateLimiter =
+        WfmRateLimiter(props.limits, metrics)
 
     /** The one read point for crossplay, which C5's socket client is obliged to quote (R5.2). */
     @Bean
@@ -61,11 +67,12 @@ class WfmConfig {
     @Bean
     fun wfmTransportCustomizer(
         limiter: WfmRateLimiter,
+        metrics: WfmMetrics,
         context: WfmContext,
         props: WfmProperties,
     ): RestClientCustomizer = RestClientCustomizer { builder ->
         builder
-            .requestInterceptor(WfmRateLimitInterceptor(limiter, props.limits.maxRetryAfter))
+            .requestInterceptor(WfmRateLimitInterceptor(limiter, metrics, props.limits.maxRetryAfter))
             .requestInterceptor(WfmContextInterceptor(context, props.userAgent))
             .defaultStatusHandler({ it.isError }) { _, response -> throw WfmHttpException.of(response) }
     }

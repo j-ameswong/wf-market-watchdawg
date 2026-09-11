@@ -633,6 +633,14 @@
    "jar": "sha256-8s7m7wRucu7IEoR0x/WMYhcXO0WuNzww3gKJ8qVqsP0=",
    "pom": "sha256-++n4NSiyd5vp2xofs35BaE3iSDWvZViq8l1zcj1B2l8="
   },
+  "io/micrometer#micrometer-core/1.17.1": {
+   "jar": "sha256-nKR9+oMUCbQCU8jcmMF7nT4FDrveTRVDxVIdyiuVrVY=",
+   "pom": "sha256-9NnZUAOCAixW8/fvlHDrTt8qW5DgaiEhIRXkmk22Aq8="
+  },
+  "io/micrometer#micrometer-jakarta9/1.17.1": {
+   "jar": "sha256-N/uwqYupLhha5+vggE/mwTlL9/unVzsgT6b8OZjC4kY=",
+   "pom": "sha256-Rh8mw9tw54JOFAnoVEZvKT0hOpQx40LWJLu1QvDarik="
+  },
   "io/micrometer#micrometer-observation/1.17.1": {
    "jar": "sha256-6zTwzYSoeTk65cIRYPwGOFzNx082pNHjGxmfWaz9r3E=",
    "pom": "sha256-r2Fn66088cLu9ZCl5WfVNCJFuKorDe2TygT//EZiJcw="
@@ -1363,6 +1371,16 @@
   "org/springframework/batch#spring-batch-bom/6.0.5": {
    "pom": "sha256-ESHvlu1GBX0SU/tC6KATO4lLApE2HI7Fr0kj0WGOlJ4="
   },
+  "org/springframework/boot#spring-boot-actuator-autoconfigure/4.1.1": {
+   "jar": "sha256-vtvUKCoPDGoIvVNC05QLUNigE0INilNmla7bFCG14PU=",
+   "module": "sha256-OIm9jW45nCDnE64AwILqxeTXmIpdIQ2eYKLgA5eMySo=",
+   "pom": "sha256-59rDTRpCeRpQlZKt9PYODEHB8Oz35vIDKjPk4ifQyIQ="
+  },
+  "org/springframework/boot#spring-boot-actuator/4.1.1": {
+   "jar": "sha256-K7s4QXryXPxvV6mwGoXbm2zNytueXUD2sbL1Sgj4t5g=",
+   "module": "sha256-OJN0qPm8l0IQjSMAXnI1Kg/sMy4yepXPu47Wx74SgHY=",
+   "pom": "sha256-N91b7ZA/HEGt5OWP1uYAQ2bUpL/MCKYfQIq5dnht6+g="
+  },
   "org/springframework/boot#spring-boot-autoconfigure/4.1.1": {
    "jar": "sha256-WSKHVt3XbOoFD5XYbe/zNHibxTtmiL6qZzsa8rl5RZI=",
    "module": "sha256-/DfOz4tyt7gMfMnXjcJR1s16U+r4yxt7E8DyzQmm7Ok=",
@@ -1401,6 +1419,11 @@
    "module": "sha256-NAwadfsryW7W1Mi+MW7hVdPyWXQaLVZUvS+4UrYXsEs=",
    "pom": "sha256-Zj/9seuMdNqAyMLCYUgqODV7upUhkpq0J9/xnvrYgVE="
   },
+  "org/springframework/boot#spring-boot-health/4.1.1": {
+   "jar": "sha256-9gFR4fAUtAdh0GRL4csE+C33/D6be/bpRoSFR+7Dmec=",
+   "module": "sha256-BxklQ8jBPDs/jkiKFXCgi+zWBQFJehEkWU82ecFmyW4=",
+   "pom": "sha256-cSjthFad9PXszPvabAPaM6pPfccvhY1OvZkgvk7LcPM="
+  },
   "org/springframework/boot#spring-boot-http-client/4.1.1": {
    "jar": "sha256-p7rpDD056zGP7nZNihjfpACdYqmw1oQ8POmH9MCtYG4=",
    "module": "sha256-x+85moujgDjvXYdEGZGvgEL41szWlGiAawvce1gzaMY=",
@@ -1431,6 +1454,16 @@
    "module": "sha256-388J6oKS3R584wgG9d/wVsa+pYgQuMRnTJBMSpN7wzE=",
    "pom": "sha256-8Dz4VqB3Yzi8wF0L1nXZ98BX53iEr91SDnE6ELiJJLw="
   },
+  "org/springframework/boot#spring-boot-micrometer-metrics/4.1.1": {
+   "jar": "sha256-cN2R3MMZ0AmYzl5BCwO4QeaCqi9g5LqxWceP8OzbfQ8=",
+   "module": "sha256-4LmxMwUP5sBP6Pf81vy+dsZnZoFc6ID02Xota7iDJtg=",
+   "pom": "sha256-C7jqqqyHPqhRg+gRXvQYgfXpXBBW6B+xhsxmE3FfgXc="
+  },
+  "org/springframework/boot#spring-boot-micrometer-observation/4.1.1": {
+   "jar": "sha256-CevZ/33iHRCx8Rxwyg6odmqKcnr/0ZZCWEvuWjFOoRo=",
+   "module": "sha256-lbO5+8BzoFpmU/Npj7NtwVeRCh/hmcOcWgnbVIW0nUw=",
+   "pom": "sha256-eWU4CBwS/JobqGrCziAWCLT4gx1YvO//6UCpv61peXo="
+  },
   "org/springframework/boot#spring-boot-persistence/4.1.1": {
    "jar": "sha256-D3jSVWrD7XX56vMTSh+6lK0ew0FLUqonnB9pAhfnHjw=",
    "module": "sha256-imSne/7ZnVOykRgLBUTN3OGCA9vOXHKkhvswivaGLhU=",
@@ -1455,6 +1488,11 @@
    "jar": "sha256-+k9t3e0bs7vElol2hjNthDPjTx8i2qiGhyviqhhN7yM=",
    "module": "sha256-WiPgr+geZID9rp/PsnGi8VFWPk8OJ804cu0P6VhhSmg=",
    "pom": "sha256-X7UcYeLG2/u8W/Y0eU7vAGGBLUmcSK5n65tak2zsd1A="
+  },
+  "org/springframework/boot#spring-boot-starter-actuator/4.1.1": {
+   "jar": "sha256-0mu4RhzMQXyXqGn70unwBnzopWqatgWAkwl8oW5MwSg=",
+   "module": "sha256-DQH1b5jsdAac8XbivJ9PwVxd2tsqEoHLMnYO5QWBRuI=",
+   "pom": "sha256-wLvGJZlPYCk9eco0wE6pT7J37i7RNnc5EX03q3XLVkY="
   },
   "org/springframework/boot#spring-boot-starter-data-jdbc-test/4.1.1": {
    "jar": "sha256-ZDpgFwF4TsUcRbAyFOYN7jny9hx9XThaflqAKM9CFOY=",
@@ -1505,6 +1543,11 @@
    "jar": "sha256-jsp9cshDT1w7k1OFxlbNUzf0c0NL28tJE7Ozo0iX0Xg=",
    "module": "sha256-9K45bHLNyug1o7P5/4XaPl0jSS4me/rXKCJVvlnJScI=",
    "pom": "sha256-wFhVfkNinO13yo4hUgLZuIiejFo8HCtj7zr8NYRWo2A="
+  },
+  "org/springframework/boot#spring-boot-starter-micrometer-metrics/4.1.1": {
+   "jar": "sha256-rTTONTWoKzkg7+p/nF1jIt5ISWnzq1+m2gUDDt18FNQ=",
+   "module": "sha256-xJurzu3gUUHh8yIJgaO6T6jd/dZSQWVZPJqmbco3HRQ=",
+   "pom": "sha256-ie8nA0RmMWOttMyJpF+++x36I/e903LWVqsL9Kd9ojI="
   },
   "org/springframework/boot#spring-boot-starter-restclient/4.1.1": {
    "jar": "sha256-RTUC87NXuYJX04Ig8aiXaOdaFX0wVJmxQlsGIJVucuE=",

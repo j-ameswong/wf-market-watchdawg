@@ -20,6 +20,7 @@ import java.time.Duration
  */
 class WfmRateLimitInterceptor(
     private val limiter: WfmRateLimiter,
+    private val metrics: WfmMetrics,
     private val maxRetryAfter: Duration,
     private val clock: Clock = Clock.systemUTC(),
 ) : ClientHttpRequestInterceptor {
@@ -41,6 +42,7 @@ class WfmRateLimitInterceptor(
             // connection slot would deadlock against max-concurrency.
             val response = limiter.acquire(bucket) { execution.execute(request, body) }
             val refusal = refusalOf(response) ?: return response
+            val status = response.statusCode.value()
             response.close()
 
             if (refusal is ConcurrencyLimitedException) limiter.narrowConcurrency()
@@ -49,6 +51,7 @@ class WfmRateLimitInterceptor(
             // A cooloff longer than the ceiling is not worth parking a worker thread for; the poll
             // scheduler (C6) decides what to do with a long one, not an interceptor.
             if (--attemptsLeft == 0 || (wait != null && wait > maxRetryAfter)) throw refusal
+            metrics.retryIssued(bucket, status)
             cooloff = wait
         }
     }

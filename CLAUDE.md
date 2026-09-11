@@ -82,6 +82,12 @@ Call it as `limiter.acquire(bucket) { … }`. The block form is what guarantees 
 
 One initial call and **exactly one** retry, issued from `WfmRateLimitInterceptor`. It takes its own turn before reissuing, so a retry spends budget rather than bypassing it. `Retry-After` is parsed in both RFC 9110 forms (delta-seconds and HTTP-date); a value above `wfm.limits.max-retry-after` surfaces immediately instead of parking a worker thread, and one that is absent gets no extra cooloff at all, because the retry's own turn already spaces it. A `509` additionally narrows the connection cap by one, floored at one and never widened again within a run.
 
+### Metrics
+
+`spring-boot-starter-actuator` is on the classpath for one reason: R12.1 wants the rate-limit boundary proven at runtime rather than assumed. `WfmMetrics` defines every meter name in one place — `wfm.requests`, `wfm.request.wait`, `wfm.retries` and the `wfm.concurrency.limit` gauge — because a dashboard or alert watching one is a contract a rename breaks silently. All of them are tagged by `bucket` (and retries by `status`), and **all are registered at startup rather than on first use**, so a quiet service reads as a flat zero instead of a missing series.
+
+`management.endpoints.web.exposure.include` is `health,metrics` and nothing else. R12.5 makes actuator the service's *only* HTTP surface — Postgres is the read surface for the warehouse ([ADR-0011](docs/adr/0011-no-query-api-postgres-is-the-read-surface.md)) — and `HttpSurfaceTest` fails if a controller appears in `com.watchdawg` or if that exposure list grows.
+
 ### Persistence
 
 Spring Data JDBC, not JPA — no dirty checking, no lazy loading, and `save()` on an entity with an assigned id issues an `UPDATE`. Two consequences that shape `store/`:

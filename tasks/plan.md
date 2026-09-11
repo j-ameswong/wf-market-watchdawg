@@ -1,8 +1,8 @@
 # Implementation Plan: C1 — API access
 
 > Source: `SPEC.md` §4 "C1 — API access" (R1.1–R1.8), bounded by §2.1 (rate budget), §2.5 (two
-> upstream limits) and §2.7 (crossplay). Drafted 2026-09-09. **Approved and built through Phase 3**
-> (T1–T7); Checkpoint C's review is the open gate before Phase 4.
+> upstream limits) and §2.7 (crossplay). Drafted 2026-09-09. **Approved and built in full**
+> (T1–T8); Checkpoints C and D are the open review gates.
 
 ## Overview
 
@@ -14,8 +14,8 @@ C1 started from a single unpaced `RestClient` with a declared-but-unused `wfm.re
 a bare `User-Agent`, no v1 client, and a status handler that converted `429`/`509` straight into a
 throw with no retry. T1–T6 have replaced all of that: every call is paced on one of two route-keyed
 buckets, retried once on budget, typed on failure, and stamped with the one crossplay setting. T7 has since
-added the second channel, so both API versions now pace on one limiter keyed by route. What remains
-is the runtime proof (T8's metrics and live run).
+added the second channel, so both API versions pace on one limiter keyed by route, and T8 has made
+the boundary observable and run it for an hour against the live API. C1 is built.
 
 ## Assumptions
 
@@ -97,9 +97,10 @@ binding would fail on a fractional value; Jackson truncates silently instead, wh
 `tasks/todo.md` under T7.*
 
 ### Phase 4 — Proof at runtime
-- [ ] T8: Per-bucket req/s metrics and the 1h live run
+- [x] T8: Per-bucket req/s metrics and the 1h live run
 
-**Checkpoint D** — C1 acceptance met; C3 may begin.
+**Checkpoint D** — C1 acceptance met; C3 may begin. *Met; awaiting human review. See the caveat in
+Results on what the live run does and does not prove.*
 
 Full task bodies with acceptance criteria live in `tasks/todo.md`.
 
@@ -173,4 +174,30 @@ wording no longer contradicts §2.1's arithmetic.
 
 ## Results
 
-_(T8 records the 1h live-run numbers here: sustained req/s per bucket, `429`/`509` counts.)_
+**1h live run — 2026-09-11, 18:08:25 → 19:09:05 BST (60m40s).** `bootRun` against the live API,
+with `wfm.sync.interval=5m` / `initial-delay=10s` passed on the command line rather than changed in
+`application.yaml`. The shipped 1h interval would have ticked twice in the window; 5m exercises the
+loop thirteen times instead, which is still a rounding error against the budget.
+
+Read from `/actuator/metrics` at the end of the window, not from logs — which is C12's own
+acceptance bullet:
+
+| Metric | `public` | `contract-search` |
+| --- | --- | --- |
+| `wfm.requests` | 13 | 0 |
+| `wfm.request.wait` total | 0.0s (max 0.0s) | 0.0s |
+| `wfm.retries{status=429}` | 0 | 0 |
+| `wfm.retries{status=509}` | 0 | 0 |
+| `wfm.concurrency.limit` | 2 (never narrowed) | — |
+
+Sustained **0.0036 req/s** against a configured 2 req/s, and **zero** `429`/`509`. Zero `ERROR` or
+`WARN` lines in the run. The spec's fourth C1 acceptance bullet is met.
+
+**What this run does not prove.** `wfm.request.wait` totalling 0.0s says the limiter never had to
+hold anyone: at one call per five minutes nothing ever queued, so the pacing path was not exercised
+under pressure. C1 has no high-volume consumer until C6's poll scheduler exists, so an hour of
+honest traffic cannot produce one. The run proves the governed path is stable across an hour, that
+the meters answer R12.1's question without reading logs, and that we drew zero refusals. Evidence
+that pacing actually *holds* under load stays with `WfmRateLimiterTest`, `WfmClientTest` and
+`WfmLegacyClientTest`; **R6.5 is where §2.1's arithmetic gets tested for real**, and this run should
+be repeated once C6 is putting the catalogue sweep through the same path.

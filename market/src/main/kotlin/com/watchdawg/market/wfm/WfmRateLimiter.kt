@@ -4,7 +4,6 @@ import java.time.Clock
 import java.time.Duration
 import java.time.Instant
 import java.util.concurrent.Semaphore
-import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -31,6 +30,7 @@ enum class Bucket {
  */
 class WfmRateLimiter(
     limits: WfmProperties.Limits,
+    private val metrics: WfmMetrics,
     private val clock: Clock = Clock.systemUTC(),
     private val sleeper: Sleeper = Sleeper { Thread.sleep(it) },
 ) {
@@ -44,22 +44,20 @@ class WfmRateLimiter(
         Bucket.CONTRACT_SEARCH to Gate(limits.contractSearch),
     )
 
-    private val turns = mapOf(
-        Bucket.PUBLIC to AtomicLong(),
-        Bucket.CONTRACT_SEARCH to AtomicLong(),
-    )
-
     private val inFlight = Permits(limits.maxConcurrency)
     private val concurrencyLock = ReentrantLock()
     private var concurrency = limits.maxConcurrency
+
+    init {
+        metrics.trackConcurrency(::maxConcurrency)
+    }
 
     /**
      * Runs [call] once this thread's turn on [bucket] has come and a connection slot is free.
      * The slot is returned even when [call] throws, so a failed request cannot leak concurrency.
      */
     fun <T> acquire(bucket: Bucket, call: () -> T): T {
-        awaitTurn(gates.getValue(bucket))
-        turns.getValue(bucket).incrementAndGet()
+        metrics.requestIssued(bucket, awaitTurn(gates.getValue(bucket)))
         inFlight.acquire()
         try {
             return call()
@@ -69,7 +67,7 @@ class WfmRateLimiter(
     }
 
     /** Turns handed out on [bucket] since startup — the evidence that a retry spent budget (R1.3). */
-    fun turnsTaken(bucket: Bucket): Long = turns.getValue(bucket).get()
+    fun turnsTaken(bucket: Bucket): Long = metrics.requestsIssued(bucket)
 
     /** The connection slots still on offer. Only [narrowConcurrency] moves it. */
     val maxConcurrency: Int get() = concurrencyLock.withLock { concurrency }
@@ -89,10 +87,13 @@ class WfmRateLimiter(
         --concurrency
     }
 
-    private fun awaitTurn(gate: Gate) {
+    /** Returns how long the caller was held, which is [WfmMetrics]'s view of budget pressure. */
+    private fun awaitTurn(gate: Gate): Duration {
         val now = clock.instant()
         val wait = Duration.between(now, gate.reserve(now))
-        if (wait > Duration.ZERO) sleeper.sleep(wait)
+        if (wait <= Duration.ZERO) return Duration.ZERO
+        sleeper.sleep(wait)
+        return wait
     }
 
     /** [Semaphore.reducePermits] is protected, and shrinking the cap is R1.4's answer to a `509`. */

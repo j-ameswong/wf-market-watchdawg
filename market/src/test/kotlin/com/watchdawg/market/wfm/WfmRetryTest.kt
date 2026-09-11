@@ -1,6 +1,7 @@
 package com.watchdawg.market.wfm
 
 import com.watchdawg.market.TestcontainersConfiguration
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Timeout
@@ -48,12 +49,14 @@ class WfmRetryTest {
     @Autowired lateinit var props: WfmProperties
 
     private lateinit var limiter: WfmRateLimiter
+    private lateinit var metrics: WfmMetrics
     private lateinit var server: MockRestServiceServer
     private lateinit var client: WfmClient
 
     @BeforeEach
     fun bindMockServer() {
-        limiter = WfmRateLimiter(props.limits)
+        metrics = WfmMetrics(SimpleMeterRegistry())
+        limiter = WfmRateLimiter(props.limits, metrics)
         val builder = wfmRestClient.mutate().requestInterceptors { chain ->
             chain.replaceAll { if (it is WfmRateLimitInterceptor) freshLimiterInterceptor() else it }
         }
@@ -61,7 +64,7 @@ class WfmRetryTest {
         client = WfmClient(builder.build())
     }
 
-    private fun freshLimiterInterceptor() = WfmRateLimitInterceptor(limiter, props.limits.maxRetryAfter)
+    private fun freshLimiterInterceptor() = WfmRateLimitInterceptor(limiter, metrics, props.limits.maxRetryAfter)
 
     @Test
     fun `a 429 carrying Retry-After is retried once, no sooner than it asked, then succeeds`() {

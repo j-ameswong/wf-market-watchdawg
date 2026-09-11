@@ -114,7 +114,7 @@ revisit.
       run in isolation and as a `wfm`-only subset
 - [x] A paced v2 call works end to end and demonstrably cannot be bypassed — removing the
       customizer fails both `RateLimitWiringTest` and the pacing assertion (0.0016s vs ≥0.5s)
-- [ ] Review with human before Phase 2
+- [x] Review with human before Phase 2
 
 **Resolved during this checkpoint:** `@EnableScheduling` is active in `@SpringBootTest` and
 `wfm.sync.initial-delay` was 30s, so once the suite outgrew that window the scheduler would have
@@ -363,19 +363,54 @@ satisfy C1's live acceptance bullet. `spring-boot-starter-actuator` is approved 
 `nix/deps.json` regeneration lands in the same commit.
 
 **Acceptance criteria:**
-- [ ] Per bucket: requests issued, retries, and time spent waiting for a token are exposed as
+- [x] Per bucket: requests issued, retries, and time spent waiting for a token are exposed as
       metrics (R12.1).
-- [ ] Actuator is the only HTTP surface added; no data endpoints (R12.5).
-- [ ] A 1h live run records sustained req/s ≤ configured and **zero** `429`/`509` — the spec's
+- [x] Actuator is the only HTTP surface added; no data endpoints (R12.5).
+- [x] A 1h live run records sustained req/s ≤ configured and **zero** `429`/`509` — the spec's
       fourth acceptance bullet — with the numbers written into the Results section of
       `tasks/plan.md`.
-- [ ] `nix build .#market` succeeds after the lock regeneration.
+- [x] `nix build .#market` succeeds after the lock regeneration.
 
 **Verification:**
-- [ ] `mbuild` green
-- [ ] `mrun`, then read `/actuator/metrics/...` for each bucket
-- [ ] `$(nix build --no-link --print-out-paths .#market.mitmCache.updateScript)` from the repo root,
-      then `nix build .#market`
+- [x] `mbuild` green — 49 tests
+- [x] `mrun`, then read `/actuator/metrics/...` for each bucket — see `tasks/plan.md` Results
+- [x] `$(nix build --no-link --print-out-paths .#market.mitmCache.updateScript)` from the repo root,
+      then `nix build .#market` — 9 new entries in `nix/deps.json` (actuator, micrometer-core,
+      micrometer-jakarta9 and the Boot modules behind them)
+
+**Notes:** meter names live in `WfmMetrics` and nowhere else. A dashboard or alert watching one is a
+contract, and a rename scattered across two classes breaks it silently. The class is also what keeps
+`MeterRegistry` out of both the limiter and the interceptor.
+
+Every meter is **registered at startup, not on first use**. Lazily-registered meters would make a
+healthy service indistinguishable from a broken exporter: on `wfm.retries` — the one an ADR-0004
+alert would actually watch — "no data" and "no refusals" would look identical. That cost a
+four-series pre-registration (2 buckets × `429`/`509`) and is asserted by `the context's own
+registry carries every bucket and status from startup`. The smoke run caught this: `wfm.retries`
+answered `404` until something was refused, while `wfm.requests` was already present.
+
+`wfm.concurrency.limit` is a gauge rather than a counter, because a `509` narrowing the cap from 2
+to 1 is permanent (Decision 8) and no request counter can show it. Micrometer holds only a **weak**
+reference to a gauge's source, so `WfmMetrics` keeps a strong one — otherwise the lambda is
+collected and the gauge starts reporting `NaN`.
+
+`WfmRateLimiter.turnsTaken` now reads the counter instead of a parallel `AtomicLong`, so T4's "the
+retry spends budget" assertion and the shipped metric are the same number rather than two that can
+drift.
+
+`HttpSurfaceTest` is the standing guard for R12.5, in the shape of `RateLimitWiringTest`: it
+enumerates the context for `@Controller`/`@RestController` beans under `com.watchdawg` and pins the
+exposure list, so it fails on a data endpoint added later without being edited.
+
+Mutation-checked: record a zero wait instead of the real one, register meters lazily, and widen
+`exposure.include` to `*` — each fails exactly the test that claims it. The first attempt at the
+lazy-registration mutation was a no-op (it left the eager fields in place and so proved nothing);
+redone properly, the startup test does discriminate.
+
+**Caveat on the live run:** 13 requests in an hour is 0.0036 req/s against a 2 req/s budget, and
+`wfm.request.wait` totalled 0.0s — the limiter never had to hold anyone, so pacing was never
+exercised under pressure. That is not fixable inside C1: nothing here generates load until C6's poll
+scheduler exists. See `tasks/plan.md` Results for what the run does and does not establish.
 
 **Dependencies:** T4, T7
 **Files likely touched:** `market/build.gradle.kts`, `nix/deps.json`,
@@ -385,8 +420,34 @@ satisfy C1's live acceptance bullet. `spring-boot-starter-actuator` is approved 
 ---
 
 ## Checkpoint D — C1 complete
-- [ ] All four of the spec's C1 acceptance bullets pass
-- [ ] R1.1–R1.8 each map to a named passing test or a recorded live measurement
-- [ ] `mbuild` green, tests order-independent, `nix build .#market` succeeds
-- [ ] `SPEC.md` status note updated — C1 is broken into tasks and built
+- [x] All four of the spec's C1 acceptance bullets pass
+      - "N sequential calls at limit L take ≥ (N−1)/L" — `WfmRateLimiterTest`, `WfmClientTest`,
+        `WfmLegacyClientTest`
+      - "a `429` with `Retry-After: 2` yields exactly one retry, after ≥2s, then success" —
+        `WfmRetryTest`
+      - "a plain-text `403` surfaces a typed error, not a Jackson exception" — `WfmErrorBodyTest`
+      - "over a 1h live run: sustained req/s ≤ configured, zero `429`/`509`" — `tasks/plan.md`
+        Results, 2026-09-11, **with the caveat recorded under T8**
+- [x] R1.1–R1.8 each map to a named passing test or a recorded live measurement
+      - R1.1 → `RateLimitWiringTest.every RestClient bean carries the transport interceptors`
+      - R1.2 → `RateLimitWiringTest.the bucket is chosen by route class, not by API version`,
+        `WfmRateLimiterTest.each turn is counted against its own bucket`,
+        `WfmLegacyClientTest.a v1 call is paced on the public bucket, like every v2 call`
+      - R1.3 → `WfmRetryTest` (the retry pair), `WfmMetricsTest.a retry is metered against its
+        bucket and its status`
+      - R1.4 → `WfmRetryTest.a 509 is a type distinct from 429…`,
+        `WfmRateLimiterTest.narrowing concurrency gives up a slot, down to a floor of one`,
+        `WfmMetricsTest.the concurrency cap is a gauge…`
+      - R1.5 → `WfmPropertiesTest.user agent names the project and a contact url`, plus
+        `CrossplayHeaderTest.a request carries the configured context even when the call site sets
+        its own`, which asserts `User-Agent`'''s whole value list alongside the context headers
+      - R1.6 → `WfmLegacyClientTest` (all six)
+      - R1.7 → `WfmErrorBodyTest` (all five)
+      - R1.8 → `CrossplayHeaderTest.a request carries the configured context even when the call site
+        sets its own`, plus `RateLimitWiringTest`
+      - R12.1 → `WfmMetricsTest` (all four) and the live run
+      - R12.5 → `HttpSurfaceTest` (both)
+- [x] `mbuild` green, tests order-independent, `nix build .#market` succeeds — 49 tests
+- [x] `SPEC.md` status note updated — C1 is broken into tasks and built
+- [ ] Review with human
 - [ ] C3 may begin (C2 is parallel and independent)

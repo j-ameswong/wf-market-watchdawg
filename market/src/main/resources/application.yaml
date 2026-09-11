@@ -5,6 +5,15 @@ spring:
     compose:
       lifecycle-management: start_and_stop
 
+# R12.5: actuator is the service's only HTTP surface, and only the endpoints named here. Postgres
+# is the read surface for the warehouse itself (ADR-0011) -- there is no data API and no plan for
+# one. Guarded by HttpSurfaceTest.
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics
+
 wfm:
   base-url: https://api.warframe.market/v2
   base-url-legacy: https://api.warframe.market/v1

@@ -110,18 +110,37 @@ id, creating the row the first time (R3.3, R3.4, and R4.6 for C4's use). The pla
 observer's context, stamped by the resolver (ADR-0003, Decision 5).
 
 **Acceptance criteria:**
-- [ ] `market` has a unique constraint over the tuple with `nulls not distinct` (R3.4).
-- [ ] Resolving one tuple twice returns one id — including a tuple with every dimension null.
-- [ ] Two concurrent resolutions of a new tuple create one row and return the same id — the
+- [x] `market` has a unique constraint over the tuple with `nulls not distinct` (R3.4).
+- [x] Resolving one tuple twice returns one id — including a tuple with every dimension null.
+- [x] Two concurrent resolutions of a new tuple create one row and return the same id — the
       spec's second acceptance bullet — both as a thread race and with one transaction holding the
       uncommitted row while the other waits.
-- [ ] Rank 0 and rank 10 on `serration` resolve to two distinct markets — the spec's third bullet.
-- [ ] A tuple for an item the catalog lacks throws `UnknownItemException` and creates nothing.
-- [ ] A market resolved inside a transaction that then rolls back still exists (Decision 4).
+- [x] Rank 0 and rank 10 on `serration` resolve to two distinct markets — the spec's third bullet.
+- [x] A tuple for an item the catalog lacks throws `UnknownItemException` and creates nothing.
+- [x] A market resolved inside a transaction that then rolls back still exists (Decision 4).
 
 **Verification:**
-- [ ] `mtest --tests '*MarketResolverTest'`
-- [ ] `mbuild` green
+- [x] `mtest --tests '*MarketResolverTest'`
+- [x] `mbuild` green
+
+**Notes:** the lookup uses `is not distinct from` with casts, because Postgres cannot type a
+null parameter in that position on its own. `explain` shows the lookup still uses the
+`market_tuple` index. A foreign-key violation is recognised by SQLSTATE 23503 and becomes
+`UnknownItemException`; any other integrity error propagates unchanged.
+
+The deterministic concurrency test holds the tuple in an uncommitted transaction on a raw
+connection, checks that the resolution is still blocked after 500 ms, then commits and expects
+the other transaction's id. The race test starts eight threads on one latch.
+
+Mutation-checked:
+- drop `nulls not distinct` → the all-null test fails, plus both concurrency tests. On the first
+  run only the concurrency tests failed, because the resolver's null-aware lookup found the
+  existing row before inserting. The all-null test now also shows the table itself refuses a
+  second all-null market;
+- drop the `on conflict` clause → both concurrency tests fail;
+- insert in the caller's transaction → the rollback test fails;
+- drop the second lookup → both concurrency tests fail;
+- rethrow the foreign-key violation untranslated → the unknown-item test fails.
 
 **Dependencies:** T1
 **Files likely touched:** `.../db/migration/V6__market.sql`, `.../store/MarketResolver.kt`,

@@ -101,6 +101,12 @@ Schema lives in `market/src/main/resources/db/migration` (Flyway, `V<n>__desc.sq
 
 Every migration runs in a transaction, so a failed one leaves nothing half-applied. TimescaleDB's hypertables, compression settings and policies all run inside one, and so does a continuous aggregate created `WITH NO DATA` — create them that way. A migration that genuinely cannot (a `WITH DATA` aggregate, `refresh_continuous_aggregate`, `create index concurrently`) gets a sibling `V<n>__desc.sql.conf` containing `executeInTransaction=false`. Both paths honour it; `src/test/resources/db/non-transactional/` is the worked example.
 
+### Market dimension
+
+A `market` row is one order book: `(item, platform, subtype, rank, charges, amberStars, cyanStars)` (SPEC §2.3). `platform` is the **observer's** context, never the seller's ([ADR-0003](docs/adr/0003-market-is-a-mutually-tradable-pool.md)), which is why `MarketKey` has no platform field and `MarketResolver` stamps `WfmContext.platform` itself. A dimension an item lacks is null. The unique constraint is `nulls not distinct`, so an all-null tuple is still one market (R3.4), and rank 0 is a different market from no rank.
+
+Get a market id through `MarketResolver.resolve(key)`, never by inserting into `market` directly. It does a lookup, then an insert-if-absent committed in its **own** transaction, then the lookup again. A market therefore outlives an ingest that rolls back, and two ingests meeting the same new tuple never wait on each other's locks. The second lookup relies on read committed, so do not call it from a repeatable-read transaction. An item the catalog lacks throws `UnknownItemException`. There is deliberately no cache: test resets restart the id sequence.
+
 ### Time series
 
 TimescaleDB holds the fact tables ([ADR-0007](docs/adr/0007-timescaledb-with-indefinite-event-log.md)). Each is a hypertable partitioned on `observed_at`, so every unique index must include that column — TimescaleDB refuses one that does not, and `FactTablesTest` lists the fact tables and checks every hypertable's indexes.

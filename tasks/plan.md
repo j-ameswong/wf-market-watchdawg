@@ -70,7 +70,7 @@ T4 fact tables reference markets
 fetches nothing. *Met: 80 tests.*
 
 ### Phase 2 — The market dimension
-- [ ] T3: Markets resolve idempotently and safely under concurrency
+- [x] T3: Markets resolve idempotently and safely under concurrency
 - [ ] T4: The fact tables reference markets
 
 **Checkpoint B** — C3 acceptance met, apart from the live catalog run; C4 may begin once that run is

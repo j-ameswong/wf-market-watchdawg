@@ -1,6 +1,8 @@
 package com.watchdawg.market.store
 
 import org.springframework.jdbc.core.JdbcTemplate
+import java.sql.Timestamp
+import java.time.Instant
 
 /**
  * Reads and runs TimescaleDB policy jobs. The test container has no background workers, so a
@@ -17,6 +19,24 @@ class Policies(private val jdbc: JdbcTemplate) {
         String::class.java,
         relation,
     ).filterNotNull()
+
+    /**
+     * An instant whose whole chunk is older than the age one of [relation]'s policies acts on, such
+     * as `compress_after` or `drop_after`. Read from the policy and the chunk interval rather than
+     * hardcoded, so tests follow `R__storage_policies.sql`.
+     */
+    fun beyondAge(proc: String, relation: String, age: String): Instant = jdbc.queryForObject(
+        """
+        select now() - (j.config ->> ?)::interval - d.time_interval - interval '1 hour'
+        from timescaledb_information.jobs j
+        join timescaledb_information.dimensions d on d.hypertable_name = j.hypertable_name
+        where j.proc_name = ? and j.hypertable_name = ?
+        """,
+        Timestamp::class.java,
+        age,
+        proc,
+        relation,
+    )!!.toInstant()
 
     fun run(proc: String, relation: String) {
         val job = jdbc.queryForObject(

@@ -109,7 +109,7 @@ Get a market id through `MarketResolver.resolve(key)`, never by inserting into `
 
 ### Time series
 
-TimescaleDB holds the fact tables ([ADR-0007](docs/adr/0007-timescaledb-with-indefinite-event-log.md)). Each is a hypertable partitioned on `observed_at`, so every unique index must include that column — TimescaleDB refuses one that does not, and `FactTablesTest` lists the fact tables and checks every hypertable's indexes.
+TimescaleDB holds the fact tables ([ADR-0007](docs/adr/0007-timescaledb-with-indefinite-event-log.md)). Each references `market` and is a hypertable partitioned on `observed_at`, so every unique index must include that column — TimescaleDB refuses one that does not, and `FactTablesTest` lists the fact tables and checks every hypertable's indexes.
 
 | Relation | Kept | Policy |
 | --- | --- | --- |
@@ -129,7 +129,8 @@ In tests there are no TimescaleDB background workers: a policy runs only when th
 
 - `watchdawg.scheduling.enabled` is `false`, so `SchedulingConfig` (the only `@EnableScheduling`) stays off. A test's own `@SpringBootTest(properties = …)` still outranks that.
 - Every `RestClient` built from the context sends through `LiveApiGuard`, a request factory that records and refuses. `LiveApiGuardListener` fails any test that reached it, even when the code under test swallowed the refusal. To exercise HTTP, bind `MockRestServiceServer` to `bean.mutate()`: that swaps the guard out.
-- `DatabaseResetListener` truncates every table in `public` except `flyway_schema_history`, and every continuous aggregate, before each test method (R2.7). It finds them in the catalog, so a new table needs no edit. Do not write a test that relies on rows another test left.
+- `DatabaseResetListener` truncates every table in `public` except `flyway_schema_history`, and every continuous aggregate, before each test method (R2.7). It finds them in the catalog, so a new table needs no edit. It names the hypertables explicitly: `truncate market cascade` does **not** empty compressed rows in `order_event`. Do not write a test that relies on rows another test left.
+- A test that writes fact rows needs a real market, since the fact tables reference one: `resolver.marketFor(items)` (`store/TestMarkets.kt`) creates the item and resolves it.
 
 Classes and methods also run in **random order** (`src/test/resources/junit-platform.properties`), so an order dependence fails a run rather than hiding. The test task prints its seed; replay an order with `./gradlew test -PtestSeed=<seed>`.
 

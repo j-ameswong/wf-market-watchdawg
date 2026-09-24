@@ -155,15 +155,29 @@ Mutation-checked:
 (Decision 7), and move the storage tests onto real markets.
 
 **Acceptance criteria:**
-- [ ] An event or quote for a market that does not exist is rejected, including an insert into a
+- [x] An event or quote for a market that does not exist is rejected, including an insert into a
       compressed chunk.
-- [ ] The storage tests create their market through the resolver rather than assuming id 1.
-- [ ] The test reset still empties every fact table, compressed chunks included, even though
+- [x] The storage tests create their market through the resolver rather than assuming id 1.
+- [x] The test reset still empties every fact table, compressed chunks included, even though
       `truncate … cascade` from `market` would not.
 
 **Verification:**
-- [ ] `mtest --tests '*FactTablesTest' --tests '*EventLogStorageTest' --tests '*QuoteStorageTest' --tests '*DatabaseResetTest'`
-- [ ] `mbuild` green
+- [x] `mtest --tests '*FactTablesTest' --tests '*EventLogStorageTest' --tests '*QuoteStorageTest' --tests '*DatabaseResetTest'`
+- [x] `mbuild` green
+
+**Notes:** `store/TestMarkets.kt` gives tests `resolver.marketFor(items)`, which creates the item
+and resolves a market for it. The storage tests had written facts for a market id of 1 that
+never existed. The "whole chunk past a policy's age" query was duplicated in two tests and moved
+into `Policies.beyondAge`.
+
+`DatabaseResetTest` now also leaves a compressed event-log chunk behind. That pins the probe's
+finding: `truncate market cascade` does not empty compressed rows, so the reset has to name the
+hypertables, which it does.
+
+Mutation-checked:
+- drop both foreign keys → both refusal tests fail;
+- make the reset skip hypertables and rely on the cascade from `market` → `DatabaseResetTest`
+  fails in both orders, with a compressed event row left behind (expected 0, was 1).
 
 **Dependencies:** T3
 **Files likely touched:** `.../db/migration/V7__fact_market_keys.sql`,
@@ -173,7 +187,16 @@ Mutation-checked:
 ---
 
 ## Checkpoint B — C3 complete
-- [ ] Three of the spec's four C3 acceptance bullets pass in the suite
+- [x] Three of the spec's four C3 acceptance bullets pass in the suite — 90 tests
+      - "resolving one tuple twice returns one id; two concurrent resolutions of a new tuple create
+        one row" — `MarketResolverTest.resolving one tuple twice returns one id`,
+        `…concurrent resolutions of a new tuple create one market`, `…a resolution waits for an
+        uncommitted insert of its tuple and returns that row`
+      - "rank-0 and rank-10 orders on `serration` resolve to two distinct markets" —
+        `MarketResolverTest.rank 0 and rank 10 of serration are two markets`
+      - "no row has `synced_at` = epoch" — `CatalogUpgradeTest.an epoch timestamp is not carried
+        over as a sync time`, and `ItemSyncTest` for rows a refresh writes
+      - "the real `/v2/items` payload yields ~3.8k rows…" — needs the live run below
 - [ ] Live catalog run on a machine that can reach the API: `mrun`, wait for the first sync, then
       `mpsql -c "select count(*), count(*) filter (where cardinality(subtypes) > 0),
       count(*) filter (where synced_at = 'epoch') from item"` — ~3.8k rows, relics with subtypes,

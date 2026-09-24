@@ -1,5 +1,9 @@
 # Implementation Plan: C1 — API access
 
+> **Archived.** C1 is built. This file was `tasks/plan.md` while C1 was in progress, so
+> references below to `tasks/plan.md` and `tasks/todo.md` mean `tasks/archive/c1-plan.md` and
+> `tasks/archive/c1-todo.md`.
+
 > Source: `SPEC.md` §4 "C1 — API access" (R1.1–R1.8), bounded by §2.1 (rate budget), §2.5 (two
 > upstream limits) and §2.7 (crossplay). Drafted 2026-09-09. **Approved and built in full**
 > (T1–T8); Checkpoints C and D are the open review gates.

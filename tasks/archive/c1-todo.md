@@ -1,5 +1,9 @@
 # Tasks: C1 — API access
 
+> **Archived.** C1 is built. This file was `tasks/todo.md` while C1 was in progress, so
+> references below to `tasks/plan.md` and `tasks/todo.md` mean `tasks/archive/c1-plan.md` and
+> `tasks/archive/c1-todo.md`.
+
 Plan: `tasks/plan.md`. Requirement ids refer to `SPEC.md` §4 C1.
 Paths are relative to the repo root; the Gradle root is `market/`.
 

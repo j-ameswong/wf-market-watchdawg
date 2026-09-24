@@ -26,9 +26,10 @@ are the original decision dates, not the dates the records were written.
 | [0016](0016-ntfy-high-entropy-topic-as-credential.md) | ntfy.sh with a high-entropy topic treated as a bearer credential | accepted | 2026-09-09 |
 | [0017](0017-tests-never-reach-the-live-api.md) | Tests never reach the live API | accepted | 2026-09-09 |
 | [0018](0018-contracts-sequenced-after-the-item-spine.md) | Contracts and auctions are sequenced after the item spine | accepted | 2026-09-09 |
+| [0019](0019-long-retry-after-surfaces-to-the-caller.md) | One retry, and a long `Retry-After` surfaces to the caller | accepted | 2026-09-09 |
 
-Decisions scoped to a single capability's implementation are recorded in that capability's plan —
-see `tasks/plan.md` for C1. A decision graduates to an ADR here when it constrains the design
-beyond the capability that raised it.
+Decisions scoped to a single capability's implementation are recorded in that capability's plan:
+`tasks/plan.md` for the capability in progress, `tasks/archive/` for finished ones. A decision
+graduates to an ADR here when it constrains the design beyond the capability that raised it.
 
 `template.md` is a blank record for manual use.

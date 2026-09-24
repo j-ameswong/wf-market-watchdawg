@@ -109,9 +109,13 @@ otherwise.
 `(section, granularity, datetime, mod_rank, subtype, amber_stars, cyan_stars)` — plus `order_type`
 for `statistics_live` — was **unique with zero duplicates** across all 3,386 sampled rows.
 
-Each row also carries its own `id` (an ObjectId), unique within every window. Prefer the logical
-key as the upsert target and store `id` alongside; the logical key is verifiable from the payload,
-whereas `id` stability across refetches is assumed rather than confirmed.
+Each row also carries its own `id` (an ObjectId), unique within every window. It is stable across
+refetches at an unchanged `Crossplay` setting, but flipping the header changes every row's `id`,
+including on historical buckets whose values did not move (SPEC R7.3). Use the logical key as the
+upsert target and store `id` alongside.
+
+`Crossplay` changes which population the rows describe — not a superset, as it is for
+`/v2/orders/*` — so the header value belongs in the row's identity (SPEC R7.11).
 
 ## Type caution
 

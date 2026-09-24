@@ -57,7 +57,7 @@ class WfmMetrics(private val registry: MeterRegistry) {
     fun requestsIssued(bucket: Bucket): Long = requests.getValue(bucket).count().toLong()
 
     /**
-     * Tracks the connection cap, which only ever narrows (ADR-0004, plan Decision 8).
+     * Tracks the connection cap, which only ever narrows (ADR-0004).
      *
      * A gauge rather than a counter, because the question it answers is "what is the cap right
      * now". A drop from 2 to 1 is the only visible trace of a `509`, and no request counter can

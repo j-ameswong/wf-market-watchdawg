@@ -22,8 +22,8 @@ data class WfmProperties(
      * These two have no default, on purpose. If the property is missing, startup should fail
      * rather than quietly fall back to a population nobody chose (R1.8).
      *
-     * A default here can also drift out of step with `application.yaml`. That has already happened
-     * once: the code said `crossplay = false` while the config said `true`.
+     * A default here could also drift out of step with `application.yaml` without anything
+     * noticing.
      */
     val platform: String,
     val crossplay: Boolean,

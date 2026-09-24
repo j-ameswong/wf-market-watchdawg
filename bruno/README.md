@@ -1,7 +1,7 @@
 # warframe.market — Bruno collection
 
-Every request here was run against the live API on **2026-08-31** and returned
-`200` with a well-formed body. 37 requests, 37 assertions passing:
+Every request here returns `200` with a well-formed body from the live API — 37
+requests, 37 assertions passing, last verified **2026-09-11**:
 
 ```
 npx @usebruno/cli run --env production --delay 400 -r

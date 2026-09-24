@@ -27,9 +27,9 @@ data class WfmContext(val platform: String, val crossplay: Boolean)
 /**
  * Puts [context] on every outbound request, overwriting whatever the call site asked for.
  *
- * These started out as `defaultHeader`s on the client, which is the obvious home for them. The
- * problem is that a default header is precisely the kind a call site *can* override, and R1.8 says
- * none of them may be. So they live here instead, in the same un-skippable place as the limiter.
+ * A `defaultHeader` on the client would be the obvious home for them, but a default header is
+ * precisely the kind a call site *can* override, and R1.8 says none of them may be. So they live
+ * here, in the same un-skippable place as the limiter.
  *
  * `User-Agent` rides along for the same reason: R1.5 makes it the project's identity to the
  * upstream, not something an individual call gets to choose.

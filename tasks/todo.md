@@ -63,16 +63,27 @@ mocked `/v2/versions` and `/v2/items` responses to prove the refresh is gated on
 one transaction (R3.5), without editing `CollectionSync` or the scheduler.
 
 **Acceptance criteria:**
-- [ ] A first tick fetches `/v2/items`, upserts the catalog and stores the hash.
-- [ ] A second tick with the same hash fetches `/v2/versions` only.
-- [ ] A changed hash refetches, and every row the new payload carries gets a later `synced_at`.
-- [ ] A refresh that fails part-way leaves no rows and the old hash, so the next tick retries.
-- [ ] `CollectionSync.kt` and `CollectionSyncScheduler.kt` are unchanged by C3.
+- [x] A first tick fetches `/v2/items`, upserts the catalog and stores the hash.
+- [x] A second tick with the same hash fetches `/v2/versions` only.
+- [x] A changed hash refetches, and every row the new payload carries gets a later `synced_at`.
+- [x] A refresh that fails part-way leaves no rows and the old hash, so the next tick retries.
+- [x] `CollectionSync.kt` and `CollectionSyncScheduler.kt` are unchanged by C3.
 
 **Verification:**
-- [ ] `mtest --tests '*CatalogRefreshTest'`
-- [ ] `git diff main -- market/src/main/kotlin/com/watchdawg/market/sync/CollectionSync*.kt` is empty
-- [ ] `mbuild` green
+- [x] `mtest --tests '*CatalogRefreshTest'`
+- [x] `git diff main -- market/src/main/kotlin/com/watchdawg/market/sync/CollectionSync*.kt` is empty
+- [x] `mbuild` green
+
+**Notes:** the test builds the real scheduler and the real `ItemSync` on one mutated v2 client,
+with every expected request declared up front and in order. A `/v2/items` call the hash should
+have prevented therefore fails the test outright, rather than being counted afterwards. The
+part-way failure comes from two items sharing a slug: the first upsert succeeds, the second
+violates `item_slug_key`, and the whole refresh has to roll back.
+
+Mutation-checked against the scheduler, then reverted, since R3.5 keeps it unchanged:
+- ignore the hash → the unchanged-hash test fails;
+- store the hash before the refresh → the part-way failure test fails;
+- refresh outside the transaction → the part-way failure test fails.
 
 **Dependencies:** T1
 **Files likely touched:** `market/src/test/kotlin/.../sync/CatalogRefreshTest.kt`
@@ -81,8 +92,12 @@ one transaction (R3.5), without editing `CollectionSync` or the scheduler.
 ---
 
 ## Checkpoint A — the catalog
-- [ ] `mbuild` green, under several seeds
-- [ ] R3.1, R3.2, R3.5 each have a named passing test
+- [x] `mbuild` green, under several seeds — 80 tests
+- [x] R3.1, R3.2, R3.5 each have a named passing test
+      - R3.1 → `ItemSyncTest` (fills every column, absent means null)
+      - R3.2 → `ItemSyncTest.every row one refresh writes carries that refresh's time`,
+        `CatalogUpgradeTest` (both)
+      - R3.5 → `CatalogRefreshTest` (all three)
 
 ---
 

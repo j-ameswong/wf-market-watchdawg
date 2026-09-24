@@ -64,10 +64,10 @@ T4 fact tables reference markets
 
 ### Phase 1 — The catalog
 - [x] T1: The catalog carries what downstream needs
-- [ ] T2: Catalog refresh stays hash-gated, end to end
+- [x] T2: Catalog refresh stays hash-gated, end to end
 
 **Checkpoint A** — a refresh fills every R3.1 column and stamps `synced_at`; an unchanged hash
-fetches nothing.
+fetches nothing. *Met: 80 tests.*
 
 ### Phase 2 — The market dimension
 - [ ] T3: Markets resolve idempotently and safely under concurrency

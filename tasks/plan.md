@@ -58,6 +58,8 @@ T2 hash-gated refresh, end to end (R3.5)
 T3 market dimension + resolver (R3.3, R3.4)
      │
 T4 fact tables reference markets
+
+T5 detail fields from /v2/item/{slug} (R3.1)   ◄── added after the live run; needs only T1
 ```
 
 ## Task List
@@ -75,6 +77,12 @@ fetches nothing. *Met: 80 tests.*
 
 **Checkpoint B** — C3 acceptance met, apart from the live catalog run; C4 may begin once that run is
 recorded. *Met in the suite: 90 tests. The live run and human review are open.*
+
+### Phase 3 — What the list leaves out
+- [ ] T5: Fill `tradable`, `rarity` and `max_charges` from `/v2/item/{slug}`
+
+**Checkpoint C** — the detail sweep fills every catalog item within its budget and never undoes a
+list refresh.
 
 Full task bodies with acceptance criteria live in `tasks/todo.md`.
 
@@ -116,6 +124,15 @@ All delegated and decided 2026-09-24 while planning; each is open to review at C
 7. **The fact tables get their foreign keys now.** Verified on 2.30.1: they can be added after
    compression is enabled, alongside the rollups, and they are enforced on inserts into
    compressed chunks.
+8. **The detail fields come from `/v2/item/{slug}`, one item at a time.** *Approved by the project
+   author, 2026-09-24 (Open Question 4, option 3):* the API is changing quickly, so the explicit
+   fields are wanted rather than inferring rarity from `tags`, which could stop carrying it. A
+   separate scheduled sweep fetches a batch per interval (30 a minute by default, 0.5 req/s, a
+   full catalog in about two hours). It works through never-fetched items first, then any whose
+   details are older than their last catalog refresh, so a catalog change triggers one re-sweep
+   and nothing more. It does not run inside the catalog refresh, which would hold that transaction
+   open for over half an hour. The list sync stops writing the three columns, so a refresh cannot
+   undo the sweep.
 
 ## Open Questions
 
@@ -129,8 +146,12 @@ All delegated and decided 2026-09-24 while planning; each is open to review at C
 2. ~~Replace the fixture with a capture.~~ **Resolved:** the fixture is now eight entries trimmed
    unchanged from the author's capture.
 3. **Nix verification** remains outstanding from C2.
-4. **`tradable`, `rarity` and `max_charges` are never populated.** Options: keep them null;
-   drop them from R3.1, since membership in `/v2/items` already means tradable and rarity is in
-   `tags`; or fill them from `/v2/item/{slug}`, which would take ~3.8k calls (about 32 minutes of
-   `public` budget) and is ask-first under §9. `max_charges` matters for R7.5 and is better settled
-   against a v2 order for a requiem mod in C4.
+4. ~~`tradable`, `rarity` and `max_charges` are never populated.~~ **Resolved:** filled from
+   `/v2/item/{slug}` (Decision 8, T5). The option to drop `tradable` rested on the route summary
+   "Get all tradable items" in `docs/v2/api/manifests.mdx`, which is documentation, not evidence.
+   The `Item` model carrying a `tradable` flag at all suggests some items are not tradable. After
+   the sweep, `count(*) filter (where tradable is false)` answers it.
+5. **What does `/v2/item/{slug}` actually return?** T5 binds the documented `Item` model, and its
+   test data is written from the docs, not captured: the live list turned out to differ from the
+   docs, so this may too. A Bruno Get Item capture for `khra`, `serration` and `frost_prime_set`
+   should replace it.

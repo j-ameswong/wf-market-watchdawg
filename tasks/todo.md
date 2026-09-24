@@ -194,6 +194,50 @@ Mutation-checked:
 
 ---
 
+## Phase 3 — What the list leaves out
+
+### Task 5: Fill `tradable`, `rarity` and `max_charges` from `/v2/item/{slug}`
+
+**Description:** The live run showed `/v2/items` never carries these three R3.1 fields. The project
+author chose to fetch them item by item from `/v2/item/{slug}` (plan Decision 8). A scheduled
+sweep drains the items whose details are missing or stale, in paced batches, and the list sync
+stops owning the three columns.
+
+**Acceptance criteria:**
+- [ ] A sweep writes each item's `tradable`, `rarity` and `max_charges` and stamps
+      `detail_synced_at`.
+- [ ] It fetches never-fetched items first, then items whose details are older than their last
+      catalog refresh, and nothing else.
+- [ ] One sweep fetches at most `wfm.sync.item-details.batch-size` items; the defaults keep it at
+      0.5 req/s.
+- [ ] A catalog refresh leaves the three detail columns as the sweep wrote them.
+- [ ] An item the API answers `404` for is marked checked, keeping its old values, and the sweep
+      moves on. A throttle or any other failure ends the sweep and leaves the rest for the next
+      one, without spending more budget.
+- [ ] The sweep is a scheduled component, so the test harness keeps it off; `SPEC.md` §2.1 counts
+      it against the budget.
+
+**Verification:**
+- [ ] `mtest --tests '*ItemDetailSyncTest' --tests '*ItemSyncTest'`
+- [ ] `mbuild` green
+
+**Dependencies:** T1
+**Files likely touched:** `.../db/migration/V8__item_detail.sql`, `.../store/Repositories.kt`,
+`.../store/StoreModels.kt`, `.../wfm/WfmClient.kt`, `.../sync/ItemDetailSync.kt`,
+`market/src/main/resources/application.yaml`, `market/src/test/kotlin/.../sync/ItemDetailSyncTest.kt`
+**Estimated scope:** M
+
+---
+
+## Checkpoint C — detail fields
+- [ ] `mbuild` green, under several seeds
+- [ ] A capture of `/v2/item/{slug}` replaces T5's documentation-shaped test data (plan Open
+      Question 5)
+- [ ] After a live run, `count(tradable)`, `count(rarity)` and `count(max_charges)` are non-zero,
+      and `count(*) filter (where tradable is false)` is recorded
+
+---
+
 ## Checkpoint B — C3 complete
 - [x] Three of the spec's four C3 acceptance bullets pass in the suite — 90 tests
       - "resolving one tuple twice returns one id; two concurrent resolutions of a new tuple create

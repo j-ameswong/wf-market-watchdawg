@@ -7,7 +7,7 @@
 > | Capability | State |
 > | --- | --- |
 > | C1 | **Built.** R1.1–R1.8 each map to a named passing test; R12.1's per-bucket meters ship with it. |
-> | C2 | **Built.** R2.1–R2.7 each map to a named passing test or a recorded manual check (`tasks/todo.md`). Awaiting review. |
+> | C2 | **Built and reviewed.** R2.1–R2.7 each map to a named passing test or a recorded manual check. |
 > | C3 | Next. Not yet broken into tasks. |
 >
 > Grounded in `docs/v2/` (API `v0.25.0`, WebSocket `v0.13.0`), `docs/v1.yml`, and the live-verified

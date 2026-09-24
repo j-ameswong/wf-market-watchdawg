@@ -1,5 +1,9 @@
 # Tasks: C2 — Time-series storage & test harness
 
+> **Archived.** C2 is built and reviewed. This file was `tasks/todo.md` while C2 was in
+> progress, so references below to `tasks/plan.md` and `tasks/todo.md` mean
+> `tasks/archive/c2-plan.md` and `tasks/archive/c2-todo.md`.
+
 Plan: `tasks/plan.md`. Requirement ids refer to `SPEC.md` §4 C2.
 Paths are relative to the repo root; the Gradle root is `market/`.
 
@@ -61,7 +65,7 @@ Both runs pushed `wfm.sync.initial-delay` out of reach, so neither called the li
 
 **Description:** Make scheduling a property and switch it off in every Spring test context, then
 make any real outbound HTTP from a test context fail loudly and be recorded (R2.6,
-[ADR-0017](../docs/adr/0017-tests-never-reach-the-live-api.md)). Both are wired from
+[ADR-0017](../../docs/adr/0017-tests-never-reach-the-live-api.md)). Both are wired from
 `META-INF/spring.factories`, so no test class can forget them (Decisions 6, 7).
 
 **Acceptance criteria:**
@@ -167,7 +171,7 @@ The printed seeds are full 64-bit values and do not have this problem.
 
 **Description:** Create `order_event` as a hypertable on `observed_at`, compressed beyond an age
 declared in `R__storage_policies.sql`, with no retention policy (R2.2, R2.3,
-[ADR-0007](../docs/adr/0007-timescaledb-with-indefinite-event-log.md)).
+[ADR-0007](../../docs/adr/0007-timescaledb-with-indefinite-event-log.md)).
 
 **Acceptance criteria:**
 - [x] `order_event` is a hypertable partitioned on `observed_at`; its primary key includes it.
@@ -336,7 +340,7 @@ Both `bootRun`s ran with `watchdawg.scheduling.enabled=false`, so neither called
         `TestHarnessTest`
       - R2.7 → `DatabaseResetTest`, and the suite running in random order
 - [x] `SPEC.md` status note and open question 3 updated; `CHANGELOG.md` updated
-- [ ] Review with human — in particular the policy numbers (plan Decision 4) and
-      [ADR-0020](../docs/adr/0020-storage-policies-in-one-repeatable-migration.md), which is
-      `proposed`
-- [ ] C3 may begin
+- [x] Review with human — approved on PR #1, 2026-09-24, including the policy numbers (plan
+      Decision 4) and [ADR-0020](../../docs/adr/0020-storage-policies-in-one-repeatable-migration.md),
+      now accepted
+- [x] C3 may begin

@@ -1,8 +1,12 @@
 # Implementation Plan: C2 — Time-series storage & test harness
 
+> **Archived.** C2 is built and reviewed. This file was `tasks/plan.md` while C2 was in
+> progress, so references below to `tasks/plan.md` and `tasks/todo.md` mean
+> `tasks/archive/c2-plan.md` and `tasks/archive/c2-todo.md`.
+
 > Source: `SPEC.md` §4 "C2 — Time-series storage & test harness" (R2.1–R2.7), with §3.2 (data
-> model), §8 (testing strategy) and [ADR-0007](../docs/adr/0007-timescaledb-with-indefinite-event-log.md)
-> / [ADR-0017](../docs/adr/0017-tests-never-reach-the-live-api.md). Drafted 2026-09-24.
+> model), §8 (testing strategy) and [ADR-0007](../../docs/adr/0007-timescaledb-with-indefinite-event-log.md)
+> / [ADR-0017](../../docs/adr/0017-tests-never-reach-the-live-api.md). Drafted 2026-09-24.
 
 ## Overview
 
@@ -86,7 +90,7 @@ off and no outbound HTTP. *Met: 59 tests under three seeds.*
 - [x] T6: Migrations apply identically via Gradle and the Flyway CLI
 
 **Checkpoint C** — C2 acceptance met; C3 may begin. *Met: 72 tests, and the Flyway CLI verified in
-both orders. Awaiting human review.*
+both orders. Reviewed and merged on PR #1, 2026-09-24.*
 
 Full task bodies with acceptance criteria live in `tasks/todo.md`.
 
@@ -103,7 +107,7 @@ Full task bodies with acceptance criteria live in `tasks/todo.md`.
 
 ## Resolved Decisions
 
-All delegated and decided 2026-09-24 while planning; each is open to review at Checkpoint C.
+All delegated and decided 2026-09-24 while planning, and approved with the rest of C2 on PR #1.
 
 1. **C2 owns the fact tables' storage shape; C4 owns their remaining columns.** `order_event`
    carries the ERD's columns plus the previous *and* new price and quantity, which R4.2's "carrying
@@ -118,7 +122,7 @@ All delegated and decided 2026-09-24 while planning; each is open to review at C
    `executeInTransaction=false` — is exercised by a fixture migration in T6, through both a
    classpath and a filesystem location.
 3. **Policy values are declared once, in `R__storage_policies.sql`.** Graduated to
-   [ADR-0020](../docs/adr/0020-storage-policies-in-one-repeatable-migration.md), since every later
+   [ADR-0020](../../docs/adr/0020-storage-policies-in-one-repeatable-migration.md), since every later
    fact table follows it. The alternative was Flyway placeholders, which would have to be supplied
    identically by `application.yaml` and by the `mflyway` shell function — two sources that can
    drift, on the one surface R2.5 says must agree. A repeatable migration is re-applied whenever its
@@ -153,8 +157,7 @@ All delegated and decided 2026-09-24 while planning; each is open to review at C
 
 ## Open Questions
 
-1. **Are Decision 4's numbers right?** Every one of them is a single edit to
-   `R__storage_policies.sql`, but §9 wants a human to say so.
+1. ~~Are Decision 4's numbers right?~~ **Resolved:** approved on PR #1, 2026-09-24.
 2. **Nix verification.** `nix build .#market` and `mflyway` were not run: Nix is not available in
    the environment C2 was built in. No dependency changed, so `nix/deps.json` is unaffected, and T6
    verifies the Flyway CLI's own entry point instead. Worth one `mflyway info` on a dev machine.

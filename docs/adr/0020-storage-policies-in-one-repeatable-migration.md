@@ -1,9 +1,9 @@
 # ADR-0020: Storage policies are declared in one repeatable migration
 
 **Date**: 2026-09-24
-**Status**: proposed
+**Status**: accepted
 **Deciders**: delegated to the implementer during C2 task planning (Decision 3 in
-`tasks/plan.md`); awaiting review at C2's final checkpoint
+`tasks/archive/c2-plan.md`); accepted by the project author on PR #1, 2026-09-24
 
 ## Context
 

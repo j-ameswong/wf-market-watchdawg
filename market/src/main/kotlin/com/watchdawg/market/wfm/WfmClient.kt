@@ -12,6 +12,9 @@ class WfmClient(@Qualifier(WfmConfig.V2_CLIENT) private val client: RestClient) 
 
     fun getItems(): List<Item> = get("/items")
 
+    /** One item in full. It carries fields the list leaves out, such as `tradable` and `rarity`. */
+    fun getItem(slug: String): Item = get("/item/{slug}", slug)
+
     private inline fun <reified T : Any> get(uri: String, vararg vars: Any): T {
         val envelope = client.get()
             .uri(uri, *vars)

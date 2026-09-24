@@ -204,22 +204,41 @@ sweep drains the items whose details are missing or stale, in paced batches, and
 stops owning the three columns.
 
 **Acceptance criteria:**
-- [ ] A sweep writes each item's `tradable`, `rarity` and `max_charges` and stamps
+- [x] A sweep writes each item's `tradable`, `rarity` and `max_charges` and stamps
       `detail_synced_at`.
-- [ ] It fetches never-fetched items first, then items whose details are older than their last
+- [x] It fetches never-fetched items first, then items whose details are older than their last
       catalog refresh, and nothing else.
-- [ ] One sweep fetches at most `wfm.sync.item-details.batch-size` items; the defaults keep it at
+- [x] One sweep fetches at most `wfm.sync.item-details.batch-size` items; the defaults keep it at
       0.5 req/s.
-- [ ] A catalog refresh leaves the three detail columns as the sweep wrote them.
-- [ ] An item the API answers `404` for is marked checked, keeping its old values, and the sweep
+- [x] A catalog refresh leaves the three detail columns as the sweep wrote them.
+- [x] An item the API answers `404` for is marked checked, keeping its old values, and the sweep
       moves on. A throttle or any other failure ends the sweep and leaves the rest for the next
       one, without spending more budget.
-- [ ] The sweep is a scheduled component, so the test harness keeps it off; `SPEC.md` §2.1 counts
+- [x] The sweep is a scheduled component, so the test harness keeps it off; `SPEC.md` §2.1 counts
       it against the budget.
 
 **Verification:**
-- [ ] `mtest --tests '*ItemDetailSyncTest' --tests '*ItemSyncTest'`
-- [ ] `mbuild` green
+- [x] `mtest --tests '*ItemDetailSyncTest' --tests '*ItemSyncTest'`
+- [x] `mbuild` green
+
+**Notes:** the list upsert no longer names `tradable`, `rarity` or `max_charges` at all, so a
+catalog refresh cannot write them; `recordDetail` is the only writer. `needingDetail` orders by
+`detail_synced_at nulls first, slug`. A 404 calls `markDetailChecked`, which stamps the time
+without touching values, so an item that disappears upstream keeps what was last known.
+
+The test data is synthetic (`item_a`, `c_never`, …) and says so. It tests the sweep's behaviour,
+not the upstream shape, which still needs a capture (Checkpoint C).
+
+Mutation-checked:
+- the list upsert blanks `tradable` → the refresh-keeps-details test fails;
+- staleness ignored → three tests fail;
+- never-fetched priority dropped → the ordering test and the 404 test fail. On the first run only
+  the 404 test failed, because the ordering test's slugs sorted the same way alphabetically; they
+  were renamed so the two orders disagree;
+- a 404 stops the sweep, or blanks the old details → the 404 test fails;
+- the batch limit ignored → the batch test fails;
+- a failure carries on instead of stopping → the throttle test (catch-all branch) or the 503 test
+  (HTTP-error branch) fails.
 
 **Dependencies:** T1
 **Files likely touched:** `.../db/migration/V8__item_detail.sql`, `.../store/Repositories.kt`,
@@ -230,7 +249,7 @@ stops owning the three columns.
 ---
 
 ## Checkpoint C — detail fields
-- [ ] `mbuild` green, under several seeds
+- [x] `mbuild` green, under several seeds — 97 tests
 - [ ] A capture of `/v2/item/{slug}` replaces T5's documentation-shaped test data (plan Open
       Question 5)
 - [ ] After a live run, `count(tradable)`, `count(rarity)` and `count(max_charges)` are non-zero,

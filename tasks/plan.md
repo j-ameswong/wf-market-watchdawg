@@ -79,7 +79,7 @@ fetches nothing. *Met: 80 tests.*
 recorded. *Met in the suite: 90 tests. The live run and human review are open.*
 
 ### Phase 3 — What the list leaves out
-- [ ] T5: Fill `tradable`, `rarity` and `max_charges` from `/v2/item/{slug}`
+- [x] T5: Fill `tradable`, `rarity` and `max_charges` from `/v2/item/{slug}`
 
 **Checkpoint C** — the detail sweep fills every catalog item within its budget and never undoes a
 list refresh.

@@ -8,7 +8,7 @@
 > | --- | --- |
 > | C1 | **Built.** R1.1–R1.8 each map to a named passing test; R12.1's per-bucket meters ship with it. |
 > | C2 | **Built and reviewed.** R2.1–R2.7 each map to a named passing test or a recorded manual check. |
-> | C3 | **Built.** Three acceptance bullets map to named tests; the live `/v2/items` run is recorded in `tasks/todo.md`. Awaiting review. |
+> | C3 | **Built.** Three acceptance bullets map to named tests; the live `/v2/items` run is recorded in `tasks/todo.md`. T5's detail sweep needs a `/v2/item/{slug}` capture and a live run. Awaiting review. |
 >
 > Grounded in `docs/v2/` (API `v0.25.0`, WebSocket `v0.13.0`), `docs/v1.yml`, and the live-verified
 > route table in `bruno/README.md`. This document describes the system to be built; the reasoning
@@ -55,12 +55,13 @@ Whole-market new-order coverage therefore costs one socket plus ~1,440 req/day, 
 | WS `newOrders` | push | 0 | 0 |
 | `/v2/orders/recent` | 60s | 1,440 | 0.017/s |
 | `/v2/versions` + `/v2/items` | 1h, hash-gated | ~30 | ~0 |
+| `/v2/item/{slug}` detail sweep | once per catalog change, 30/min | ~3,900 per change | 0.5/s for ~2h, then 0 |
 | Order books — 200 hot @5m, 800 warm @30m, 2800 cold @6h | tiered | 107,200 | 1.24/s |
 | v1 `statistics` | daily per item | 3,800 | 0.044/s |
 | **v2 bucket total** | | **~112,500** | **~1.3/s** |
 | v1 `/auctions/search` (~220 weapon slugs) | 2h sweep | 2,640 | separate bucket |
 
-**~1.3 req/s against a 3 req/s ceiling.** No capability in this spec requires more.
+**~1.3 req/s against a 3 req/s ceiling.** No capability in this spec requires more. The detail sweep adds 0.5 req/s for about two hours after each catalog change, so the peak is ~1.8 req/s against the 2 req/s configured `public` budget. The poll scheduler (C6) has to leave room for it.
 
 ### 2.2 Trade data exists, but only aggregated
 
@@ -389,7 +390,7 @@ Every outbound call goes through one compliant, paced, observable path.
 
 ### C3 — Catalog & market dimension
 
-- **R3.1** `item` carries everything downstream needs: `subtypes`, `maxRank`, `maxCharges`, `maxAmberStars`, `maxCyanStars`, `bulkTradable`, `tradable`, `rarity`, `vaulted`, plus display `name` and `icon` from `i18n.en` (notifications need a human-readable title).
+- **R3.1** `item` carries everything downstream needs (`tradable`, `rarity` and `maxCharges` come from `/v2/item/{slug}`, since `/v2/items` omits them): `subtypes`, `maxRank`, `maxCharges`, `maxAmberStars`, `maxCyanStars`, `bulkTradable`, `tradable`, `rarity`, `vaulted`, plus display `name` and `icon` from `i18n.en` (notifications need a human-readable title).
 - **R3.2** `Item` has **no `updatedAt`** in the v2 spec. The existing column is `Instant.EPOCH` on every row — it becomes a local `synced_at`.
 - **R3.3** Market resolution (§2.3 tuple → id) is idempotent and safe under concurrency.
 - **R3.4** NULL subtype dimensions must compare **equal** for uniqueness. Postgres treats NULLs as distinct by default, which would silently defeat upserts for the common no-subtype case.
@@ -622,7 +623,7 @@ Gradle root is `market/`, not the repo root.
 | --- | --- |
 | `wfm` | *existing.* Rate limiter, v2 client, v1 legacy client |
 | `wfm/ws` | Socket client, envelope models, reconnect supervisor |
-| `sync` | *existing, untouched.* `CollectionSync` SPI |
+| `sync` | `CollectionSync` SPI (unchanged), `ItemSync`, and the `/v2/item/{slug}` detail sweep |
 | `ingest` | Book diffing, order state, event log, quotes |
 | `poll` | Tiered adaptive target queue |
 | `watch` | Config loading, rule registry, signal outbox |

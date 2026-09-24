@@ -30,12 +30,9 @@ private fun Item.toRecord() = ItemRecord(
     tags = tags,
     subtypes = subtypes,
     maxRank = maxRank,
-    maxCharges = maxCharges,
     maxAmberStars = maxAmberStars,
     maxCyanStars = maxCyanStars,
     ducats = ducats,
     vaulted = vaulted,
     bulkTradable = bulkTradable,
-    tradable = tradable,
-    rarity = rarity,
 )

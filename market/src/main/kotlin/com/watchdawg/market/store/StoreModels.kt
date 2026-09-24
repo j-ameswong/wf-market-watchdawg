@@ -29,6 +29,7 @@ data class ItemRecord(
     val tags: List<String> = emptyList(),
     val subtypes: List<String> = emptyList(),
     val maxRank: Int? = null,
+    /** Written only by the detail sweep, like [tradable] and [rarity]; the list refresh ignores it. */
     val maxCharges: Int? = null,
     val maxAmberStars: Int? = null,
     val maxCyanStars: Int? = null,
@@ -42,4 +43,6 @@ data class ItemRecord(
      * ignores whatever is set here. Null for a row no refresh has written since migration V5.
      */
     val syncedAt: Instant? = null,
+    /** When the detail sweep last fetched this item from `/v2/item/{slug}`. Null means never. */
+    val detailSyncedAt: Instant? = null,
 )

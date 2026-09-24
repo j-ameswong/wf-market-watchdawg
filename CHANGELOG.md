@@ -15,6 +15,8 @@ design rationale in [`docs/adr/`](docs/adr/README.md).
   - `MarketResolver`, which maps a tuple to its market and creates it the first time, safely
     under concurrency.
   - `order_event` and `market_quote` reference `market`.
+  - A paced background sweep fills `tradable`, `rarity` and `max_charges` from
+    `/v2/item/{slug}`, because `/v2/items` omits them. It runs 30 items a minute by default.
 - **C2 — Time-series storage and test harness.**
   - TimescaleDB 2.30.1 on Postgres 18 in dev (`compose.yaml`), in tests (Testcontainers) and as a
     requirement of the packaged jar.

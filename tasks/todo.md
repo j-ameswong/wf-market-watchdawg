@@ -116,16 +116,32 @@ Mutation-checked:
 in random class and method order with a printed, replayable seed (R2.7, Decisions 8, 9).
 
 **Acceptance criteria:**
-- [ ] Every table in `public` except `flyway_schema_history`, and every continuous aggregate, is
+- [x] Every table in `public` except `flyway_schema_history`, and every continuous aggregate, is
       emptied before each test, discovered from the catalog rather than listed.
-- [ ] `ItemRepositoryTest` passes alone *and* in any order alongside others — the spec's second
+- [x] `ItemRepositoryTest` passes alone *and* in any order alongside others — the spec's second
       acceptance bullet — including after another test has written items.
-- [ ] Classes and methods run in random order; the seed is printed and `-PtestSeed=` replays it.
+- [x] Classes and methods run in random order; the seed is printed and `-PtestSeed=` replays it.
 
 **Verification:**
-- [ ] `mtest --tests '*ItemRepositoryTest'` alone, then `mtest` under three different seeds
-- [ ] `mbuild` green
-- [ ] Mutation: drop the reset listener → `DatabaseResetTest` fails under both orders
+- [x] `mtest --tests '*ItemRepositoryTest'` alone, then `mtest` under three different seeds
+- [x] `mbuild` green
+- [x] Mutation: drop the reset listener → `DatabaseResetTest` fails under both orders
+
+**Notes:** the reset runs in a `TestExecutionListener` registered from `spring.factories`
+alongside the T2 harness, so it applies to every Spring test with no annotation. It truncates
+aggregates separately: an aggregate keeps its materialized rows when its source hypertable is
+truncated. T5 verifies that half once aggregates exist.
+
+The seed is drawn inside `doFirst`, so it is not a task input and never makes `test` out of date;
+an explicit `-PtestSeed` *is* an input, so passing one reruns the tests. Checked: seeds 1 and 2
+give different method orders on `WfmRetryTest`, and seed 1 twice gives the same order.
+
+Suite green under three random seeds — 59 tests each.
+
+Mutation-checked: unregister the listener, and `DatabaseResetTest` fails on whichever of its two
+methods runs second, in both orders. Caveat for replays: `java.util.Random` gives nearly the same
+first output for small consecutive seeds, so seeds 1–7 all order a two-method class the same way.
+The printed seeds are full 64-bit values and do not have this problem.
 
 **Dependencies:** T1
 **Files likely touched:** `market/src/test/kotlin/.../harness/DatabaseResetListener.kt`,
@@ -135,8 +151,13 @@ in random class and method order with a printed, replayable seed (R2.7, Decision
 ---
 
 ## Checkpoint A — a Timescale-backed harness
-- [ ] `mbuild` green on TimescaleDB, under several seeds
-- [ ] R2.1, R2.6, R2.7 each have a named passing test
+- [x] `mbuild` green on TimescaleDB, under several seeds — 59 tests, three seeds
+- [x] R2.1, R2.6, R2.7 each have a named passing test
+      - R2.1 → `TimescaleTest` (both), plus the manual dev-volume and packaged-jar runs under T1
+      - R2.6 → `MarketApplicationTests.the context starts with scheduling off and has made no
+        outbound HTTP`, `LiveApiGuardTest` (both), `SchedulingConfigTest` (both), `TestHarnessTest`
+        (both)
+      - R2.7 → `DatabaseResetTest` (both), and every run in random order
 
 ---
 

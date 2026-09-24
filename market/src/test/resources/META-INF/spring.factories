@@ -4,4 +4,5 @@ org.springframework.test.context.ContextCustomizerFactory=\
 com.watchdawg.market.harness.TestHarnessContextCustomizerFactory
 
 org.springframework.test.context.TestExecutionListener=\
-com.watchdawg.market.harness.LiveApiGuardListener
+com.watchdawg.market.harness.LiveApiGuardListener,\
+com.watchdawg.market.harness.DatabaseResetListener

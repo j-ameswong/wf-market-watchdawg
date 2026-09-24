@@ -1,3 +1,5 @@
+import kotlin.random.Random
+
 plugins {
     kotlin("jvm") version "2.3.21"
     kotlin("plugin.spring") version "2.3.21"
@@ -50,6 +52,17 @@ kotlin {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+
+    // R2.7: junit-platform.properties runs tests in random order. The seed is drawn only when the
+    // tests actually run, so it never makes the task out of date, and it is printed so a failing
+    // order can be replayed with -PtestSeed=<seed>.
+    val pinnedSeed = providers.gradleProperty("testSeed")
+    inputs.property("testSeed", pinnedSeed).optional(true)
+    doFirst {
+        val seed = pinnedSeed.getOrElse(Random.nextLong().toString())
+        systemProperty("junit.jupiter.execution.order.random.seed", seed)
+        logger.lifecycle("$name: random order seed $seed (replay with -PtestSeed=$seed)")
+    }
 }
 
 // Style is defined in market/.editorconfig, which Spotless discovers from this directory.

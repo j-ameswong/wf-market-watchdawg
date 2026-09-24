@@ -382,7 +382,7 @@ Every outbound call goes through one compliant, paced, observable path.
 
 **Acceptance**
 - `mflyway info` clean from scratch; `mbuild` green.
-- `ItemRepositoryTest` passes alone *and* in any order alongside others (it currently asserts `count() == 1` and is order-dependent).
+- `ItemRepositoryTest` passes alone *and* in any order alongside others, although it asserts `count() == 1`.
 - A test asserts the context starts with scheduling off and records zero outbound HTTP.
 - A row older than the compression threshold yields a compressed chunk after the policy runs.
 
@@ -641,7 +641,7 @@ Gradle root is `market/`, not the repo root.
 
 ## 8. Testing strategy
 
-- Any test touching Spring, HTTP or storage is a `@SpringBootTest` with a Testcontainers Postgres. Identical annotation sets share one context **and one container**, so **order-independence is mandatory** (R2.7). Classes with no Spring or JDBC dependency are plain JUnit — booting a container to test token arithmetic buys nothing.
+- Any test touching Spring, HTTP or storage is a `@SpringBootTest` with a Testcontainers Postgres. Identical annotation sets share one context **and one container**, so **order-independence is mandatory** (R2.7): the database is truncated before every test method, and classes and methods run in random order with a printed, replayable seed. Classes with no Spring or JDBC dependency are plain JUnit — booting a container to test token arithmetic buys nothing.
 - `MockRestServiceServer` bound to `RestClient.Builder` for HTTP — already available via `spring-boot-starter-webmvc-test`, no new dependency. **No test reaches the live API** (R2.6). Every Spring test context starts with scheduling off and with a request factory that refuses and records outbound HTTP, registered from `src/test/resources/META-INF/spring.factories` so no test class can opt out; `MarketApplicationTests` asserts both. The defaults come from a context customizer because a `src/test/resources/application.yaml` would shadow the main file by classpath name rather than layer on it.
 - Fixtures are captured from the `bruno` collection so they match reality.
 - `WfmClient.get()` is `private inline` and cannot be stubbed — test through the HTTP layer, not by mocking the client.

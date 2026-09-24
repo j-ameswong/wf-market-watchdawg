@@ -103,6 +103,9 @@ Schema lives in `market/src/main/resources/db/migration` (Flyway, `V<n>__desc.sq
 
 - `watchdawg.scheduling.enabled` is `false`, so `SchedulingConfig` (the only `@EnableScheduling`) stays off. A test's own `@SpringBootTest(properties = …)` still outranks that.
 - Every `RestClient` built from the context sends through `LiveApiGuard`, a request factory that records and refuses. `LiveApiGuardListener` fails any test that reached it, even when the code under test swallowed the refusal. To exercise HTTP, bind `MockRestServiceServer` to `bean.mutate()`: that swaps the guard out.
+- `DatabaseResetListener` truncates every table in `public` except `flyway_schema_history`, and every continuous aggregate, before each test method (R2.7). It finds them in the catalog, so a new table needs no edit. Do not write a test that relies on rows another test left.
+
+Classes and methods also run in **random order** (`src/test/resources/junit-platform.properties`), so an order dependence fails a run rather than hiding. The test task prints its seed; replay an order with `./gradlew test -PtestSeed=<seed>`.
 
 The defaults come from a context customizer because a `src/test/resources/application.yaml` would shadow the main file by classpath name rather than layer on it.
 

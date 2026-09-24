@@ -71,7 +71,7 @@ T2 scheduling off +        T3 reset between tests +
 ### Phase 1 — A Timescale-backed harness
 - [x] T1: TimescaleDB in dev, test and packaged deployment
 - [x] T2: Scheduling off and outbound HTTP refused under test
-- [ ] T3: Order-independent tests
+- [x] T3: Order-independent tests
 
 **Checkpoint A** — the existing suite runs green on TimescaleDB, in random order, with scheduling
 off and no outbound HTTP.

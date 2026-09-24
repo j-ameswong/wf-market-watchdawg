@@ -151,7 +151,10 @@ All delegated and decided 2026-09-24 while planning; each is open to review at C
    "Get all tradable items" in `docs/v2/api/manifests.mdx`, which is documentation, not evidence.
    The `Item` model carrying a `tradable` flag at all suggests some items are not tradable. After
    the sweep, `count(*) filter (where tradable is false)` answers it.
-5. **What does `/v2/item/{slug}` actually return?** T5 binds the documented `Item` model, and its
-   test data is written from the docs, not captured: the live list turned out to differ from the
-   docs, so this may too. A Bruno Get Item capture for `khra`, `serration` and `frost_prime_set`
-   should replace it.
+5. ~~What does `/v2/item/{slug}` actually return?~~ **Resolved** by the author's captures of
+   `khra`, `serration` and `frost_prime_set` (2026-09-24), now in `fixtures/v2-item/`. All three
+   carry `tradable: true`. The two mods carry `rarity`; the set does not. **None carries
+   `maxCharges`**: `khra`'s item page gives `maxRank: 3`, as the list does. The item page also
+   carries fields R3.1 never asked for: `tradingTax`, `setRoot`/`setParts`, `reqMasteryRank`, and
+   an English `description` and `wikiLink`. They are not stored; adding any is a small follow-up
+   if wanted.

@@ -1,0 +1,32 @@
+{
+  "apiVersion": "0.25.0",
+  "data": {
+    "id": "54a74454e779892d5e515596",
+    "slug": "serration",
+    "gameRef": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+    "tags": [
+      "mod",
+      "uncommon",
+      "rifle",
+      "primary"
+    ],
+    "rarity": "uncommon",
+    "subtypes": [
+      "regular",
+      "atragraph"
+    ],
+    "maxRank": 10,
+    "tradingTax": 4000,
+    "tradable": true,
+    "i18n": {
+      "en": {
+        "name": "Serration",
+        "description": "+165% Damage",
+        "wikiLink": "https://wiki.warframe.com/w/Serration",
+        "icon": "items/images/en/serration.711b19665b2acbac445c68c9e8f8b550.png",
+        "thumb": "items/images/en/thumbs/serration.711b19665b2acbac445c68c9e8f8b550.128x128.png"
+      }
+    }
+  },
+  "error": null
+}

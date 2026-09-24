@@ -250,8 +250,9 @@ Mutation-checked:
 
 ## Checkpoint C — detail fields
 - [x] `mbuild` green, under several seeds — 97 tests
-- [ ] A capture of `/v2/item/{slug}` replaces T5's documentation-shaped test data (plan Open
-      Question 5)
+- [x] A capture of `/v2/item/{slug}` replaces T5's documentation-shaped test data (plan Open
+      Question 5) — the author's captures of `khra`, `serration` and `frost_prime_set` drive
+      `ItemDetailSyncTest`'s first test
 - [ ] After a live run, `count(tradable)`, `count(rarity)` and `count(max_charges)` are non-zero,
       and `count(*) filter (where tradable is false)` is recorded
 

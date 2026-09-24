@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
+import org.springframework.core.io.ClassPathResource
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.http.MediaType.TEXT_PLAIN
@@ -27,8 +28,8 @@ import kotlin.test.assertNull
  * R3.1: the detail sweep fills what `/v2/items` leaves out, from `/v2/item/{slug}`, at a bounded
  * pace and without being undone by the next catalog refresh.
  *
- * The slugs and values here are synthetic. They test the sweep, not the upstream shape, which a
- * capture of `/v2/item/{slug}` has yet to confirm (plan Open Question 5).
+ * The first test reads `fixtures/v2-item/`, which holds live captures (2026-09-24). The rest test
+ * the sweep's behaviour with synthetic slugs and values, and say so by their names.
  */
 @SpringBootTest
 @Import(TestcontainersConfiguration::class)
@@ -47,22 +48,21 @@ class ItemDetailSyncTest {
 
     @Test
     fun `a sweep writes the detail fields, null where the item page leaves one out`() {
-        catalog("item_a", "item_b")
-        expectDetail("item_a", """"tradable":true,"rarity":"rare","maxCharges":3""")
-        expectDetail("item_b", """"tradable":false""")
+        catalog("frost_prime_set", "khra", "serration")
+        listOf("frost_prime_set", "khra", "serration").forEach(::expectCapturedDetail)
 
         sweeper().sweep()
 
         server.verify()
-        val a = items.findBySlug("item_a")!!
-        assertEquals(true, a.tradable)
-        assertEquals("rare", a.rarity)
-        assertEquals(3, a.maxCharges)
-        assertNotNull(a.detailSyncedAt)
-        val b = items.findBySlug("item_b")!!
-        assertEquals(false, b.tradable)
-        assertNull(b.rarity)
-        assertNull(b.maxCharges)
+        val khra = items.findBySlug("khra")!!
+        assertEquals(true, khra.tradable)
+        assertEquals("rare", khra.rarity)
+        assertNull(khra.maxCharges, "the item page for a requiem mod carries maxRank, not maxCharges")
+        assertNotNull(khra.detailSyncedAt)
+        assertEquals("uncommon", items.findBySlug("serration")!!.rarity)
+        val frost = items.findBySlug("frost_prime_set")!!
+        assertEquals(true, frost.tradable)
+        assertNull(frost.rarity, "a set has no rarity")
     }
 
     @Test
@@ -159,6 +159,11 @@ class ItemDetailSyncTest {
     }
 
     private fun catalog(vararg slugs: String) = slugs.forEach { items.upsert(ItemRecord(id = "id_$it", slug = it)) }
+
+    private fun expectCapturedDetail(slug: String) {
+        server.expect(requestTo("$ITEM/$slug"))
+            .andRespond(withSuccess(ClassPathResource("fixtures/v2-item/$slug.json"), APPLICATION_JSON))
+    }
 
     private fun expectDetail(slug: String, fields: String) {
         server.expect(requestTo("$ITEM/$slug")).andRespond(

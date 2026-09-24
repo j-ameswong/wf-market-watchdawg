@@ -102,8 +102,8 @@ otherwise.
 > **Mapping hazard.** No `charges` field appeared on any sampled item, and the requiem mods report
 > **`mod_rank: 3`** here. The v2 `Item` model has a `maxCharges` field, so `mod_rank` might carry
 > charges for them. The live v2 catalog (`/v2/items`, 2026-09-24) lists `khra` and `vome` with
-> `maxRank: 3` and carries `maxCharges` on no item at all, which makes `mod_rank` → `rank`
-> consistent at catalog level. What a v2 order for a requiem mod carries is still unconfirmed
+> `maxRank: 3` and carries `maxCharges` on no item at all, and `khra`'s item page
+> (`/v2/item/khra`) agrees. That makes `mod_rank` → `rank` consistent at catalog level. What a v2 order for a requiem mod carries is still unconfirmed
 > (SPEC §10, question 1). Until it is, do not map `mod_rank` → `rank` without checking the item.
 
 ## Natural key

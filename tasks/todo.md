@@ -273,18 +273,39 @@ from the filesystem, into one `flyway_schema_history` (R2.5). Prove the two agre
 non-transactional marker works for the day a migration needs it (Decision 2).
 
 **Acceptance criteria:**
-- [ ] A database migrated through the filesystem location validates with nothing pending through
+- [x] A database migrated through the filesystem location validates with nothing pending through
       the classpath location, and the reverse.
-- [ ] A fixture migration that cannot run in a transaction fails unmarked and applies once it has
+- [x] A fixture migration that cannot run in a transaction fails unmarked and applies once it has
       a sibling `.sql.conf` with `executeInTransaction=false`, through both locations.
-- [ ] `mflyway info` is clean from scratch — run through the Flyway CLI's own entry point.
-- [ ] CLAUDE.md documents the marker and where the policy values live.
+- [x] `mflyway info` is clean from scratch — run through the Flyway CLI's own entry point.
+- [x] CLAUDE.md documents the marker and where the policy values live.
 
 **Verification:**
-- [ ] `mtest --tests '*MigrationPathsTest'`
-- [ ] `mbuild` green
-- [ ] Manual: Flyway CLI `migrate` then `info` against a fresh container, then the app starts on
+- [x] `mtest --tests '*MigrationPathsTest'`
+- [x] `mbuild` green
+- [x] Manual: Flyway CLI `migrate` then `info` against a fresh container, then the app starts on
       it with nothing to apply; and the reverse
+
+**Notes:** `MigrationPathsTest` migrates a scratch database per test inside the shared
+container. The "app" side is built from the context's own `Flyway` bean configuration, so Boot's
+defaults are what gets compared. The "CLI" side is given exactly what `mflyway` passes: a URL,
+credentials and a filesystem location. The fixture that cannot run in a transaction is a
+continuous aggregate created `WITH DATA`: unmarked it fails with "cannot run inside a transaction
+block", and marked it applies from both a classpath and a filesystem location.
+
+Mutation-checked: give the app its own history table (`spring.flyway.table`) → both direction
+tests fail; delete the fixture's `.sql.conf` → the marked-migration test fails.
+
+Manual runs, 2026-09-24, with the Flyway CLI's own entry point (`org.flywaydb.commandline.Main`,
+`flyway-commandline` 12.4.0, built in a scratch project because the environment has no Nix) and the
+exact arguments `flake.nix`'s `mflyway` passes, against the dev `compose.yaml`:
+- **CLI first.** On a fresh volume, `info` listed V1–V4 and `R__storage_policies` as pending;
+  `migrate` applied all five; `info` showed five successes. `bootRun` then logged
+  `Schema "public" is up to date. No migration necessary.`
+- **App first.** On a fresh volume, `bootRun` applied all five; `info` then showed five successes
+  and nothing pending, and `validate` passed.
+
+Both `bootRun`s ran with `watchdawg.scheduling.enabled=false`, so neither called the live API.
 
 **Dependencies:** T5
 **Files likely touched:** `market/src/test/kotlin/.../store/MigrationPathsTest.kt`,

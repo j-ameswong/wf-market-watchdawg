@@ -83,7 +83,7 @@ off and no outbound HTTP.
 **Checkpoint B** — R2.2–R2.4 each have a named passing test.
 
 ### Phase 3 — One history, two paths
-- [ ] T6: Migrations apply identically via Gradle and the Flyway CLI
+- [x] T6: Migrations apply identically via Gradle and the Flyway CLI
 
 **Checkpoint C** — C2 acceptance met; C3 may begin.
 

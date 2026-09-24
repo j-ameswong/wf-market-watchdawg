@@ -95,7 +95,9 @@ Spring Data JDBC, not JPA — no dirty checking, no lazy loading, and `save()` o
 - Upserts are hand-written `@Modifying @Query` methods with `on conflict … do update`, each paired with a record-taking extension function (`ItemRepository.upsert(item)`) so call sites stay readable. Add a new column in three places: the migration, the record, and both the SQL and the parameter list of the upsert.
 - `CollectionVersionRecord` has a natural id (`name`), so it implements `Persistable` with a `@Transient val new` flag to tell Spring Data whether to insert or update. Prefer the `upsert` extension over `save()` for it.
 
-Schema lives in `market/src/main/resources/db/migration` (Flyway, `V<n>__desc.sql`). The `mflyway` CLI and the app share one `flyway_schema_history` table on purpose — a migration applied by either is seen as applied by the other.
+Schema lives in `market/src/main/resources/db/migration` (Flyway, `V<n>__desc.sql`, plus the repeatable `R__storage_policies.sql`). The `mflyway` CLI reads those files from the filesystem and the app from the classpath, into one shared `flyway_schema_history` table — a migration applied by either is seen as applied by the other, and `MigrationPathsTest` checks both directions. So a migration must not depend on Flyway placeholders or on anything else that only one of the two paths supplies.
+
+Every migration runs in a transaction, so a failed one leaves nothing half-applied. TimescaleDB's hypertables, compression settings and policies all run inside one, and so does a continuous aggregate created `WITH NO DATA` — create them that way. A migration that genuinely cannot (a `WITH DATA` aggregate, `refresh_continuous_aggregate`, `create index concurrently`) gets a sibling `V<n>__desc.sql.conf` containing `executeInTransaction=false`. Both paths honour it; `src/test/resources/db/non-transactional/` is the worked example.
 
 ### Time series
 

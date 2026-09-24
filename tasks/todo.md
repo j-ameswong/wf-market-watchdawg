@@ -170,17 +170,34 @@ declared in `R__storage_policies.sql`, with no retention policy (R2.2, R2.3,
 [ADR-0007](../docs/adr/0007-timescaledb-with-indefinite-event-log.md)).
 
 **Acceptance criteria:**
-- [ ] `order_event` is a hypertable partitioned on `observed_at`; its primary key includes it.
-- [ ] `event` and `source` are constrained to the values in §3.2 and R4.2.
-- [ ] A row older than the compression threshold yields a compressed chunk after the policy runs,
+- [x] `order_event` is a hypertable partitioned on `observed_at`; its primary key includes it.
+- [x] `event` and `source` are constrained to the values in §3.2 and R4.2.
+- [x] A row older than the compression threshold yields a compressed chunk after the policy runs,
       and a recent row's chunk does not — the spec's fourth acceptance bullet.
-- [ ] The event log has no retention policy.
-- [ ] A standing test fails if any hypertable carries a unique index without its partition column,
+- [x] The event log has no retention policy.
+- [x] A standing test fails if any hypertable carries a unique index without its partition column,
       covering hypertables added later without being edited.
 
 **Verification:**
-- [ ] `mtest --tests '*EventLogStorageTest' --tests '*FactTablesTest'`
-- [ ] `mbuild` green
+- [x] `mtest --tests '*EventLogStorageTest' --tests '*FactTablesTest'`
+- [x] `mbuild` green
+
+**Notes:** the primary key is `(order_id, event, observed_at)`: the §3.2 key, with `order_id`
+first so an order's whole lifetime is one index range (C9b's vanish-fast rule reads exactly that).
+A separate `(market_id, observed_at desc)` index serves per-market reads. Compressed chunks are
+segmented by `market_id`. Segmenting by order would leave a handful of rows per segment and
+compress badly. `orderby` names every key column, which silences TimescaleDB's warning about
+checking uniqueness on compressed data.
+
+The compression test reads the age from the policy's own config and the chunk interval from the
+catalog, so it follows `R__storage_policies.sql` rather than restating 7 days.
+
+`FactTablesTest` enumerates every hypertable, so later fact tables are covered by adding one map
+entry. Its third test shows why the index check can be a standing guard: TimescaleDB refuses to
+create a unique index without the partition column at all.
+
+Mutation-checked: remove the compression policy (both policy tests fail); add a five-year
+retention policy (the "nothing that drops rows" test fails).
 
 **Dependencies:** T2, T3
 **Files likely touched:** `.../db/migration/V3__order_event.sql`,

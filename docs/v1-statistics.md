@@ -99,10 +99,12 @@ than merely to an item. Names are snake_case and one differs from v2:
 A dimension field is present only when the item has that dimension; it is absent, not null,
 otherwise.
 
-> **Mapping hazard.** No `charges` field appeared on any sampled item. Requiem mods, which v2
-> models with `maxCharges`, report **`mod_rank: 3`** here. So v1 `mod_rank` appears to carry what
-> v2 calls `charges` for those items. Confirm before mapping `mod_rank` → `rank` unconditionally,
-> or dimension-mismatched rows will collapse onto the wrong market.
+> **Mapping hazard.** No `charges` field appeared on any sampled item, and the requiem mods report
+> **`mod_rank: 3`** here. The v2 `Item` model has a `maxCharges` field, so `mod_rank` might carry
+> charges for them. The live v2 catalog (`/v2/items`, 2026-09-24) lists `khra` and `vome` with
+> `maxRank: 3` and carries `maxCharges` on no item at all, which makes `mod_rank` → `rank`
+> consistent at catalog level. What a v2 order for a requiem mod carries is still unconfirmed
+> (SPEC §10, question 1). Until it is, do not map `mod_rank` → `rank` without checking the item.
 
 ## Natural key
 

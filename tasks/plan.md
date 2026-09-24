@@ -83,7 +83,7 @@ Full task bodies with acceptance criteria live in `tasks/todo.md`.
 | Risk | Impact | Mitigation |
 |------|--------|------------|
 | The real `/v2/items` omits some R3.1 fields (`tradable`, `rarity`, the star maxima) | Med — the columns stay null for every row | They bind as nullable, so nothing fails; the live run reports which are populated. Filling gaps from `/v2/item/{slug}` would be ~3.8k calls, which §9 makes ask-first (Open Question 1) |
-| The hand-built fixture drifts from the real payload | Med | It uses only documented field names and types; replacing it with a Bruno capture is Open Question 2 |
+| The hand-built fixture drifts from the real payload | Med | *Happened, then closed:* the capture showed `serration` has subtypes, `khra` has `maxRank` rather than `maxCharges`, and nothing carries `tradable` or `rarity`. The fixture is now a trimmed capture |
 | Existing rows keep empty new columns because the items hash has not changed upstream | **High** — silent, and invisible until C10 renders a nameless notification | The migration deletes the stored hash; a migration test asserts it |
 | `NULL` dimensions compare distinct and every no-subtype order creates a new market | **High** — R3.4's whole point | The unique constraint is `nulls not distinct`; tested with an all-null tuple resolved twice |
 | An order arrives for an item the catalog does not have yet | Med | The foreign key rejects it with a typed exception; C4 decides whether to skip or trigger a resync |
@@ -93,7 +93,8 @@ Full task bodies with acceptance criteria live in `tasks/todo.md`.
 
 All delegated and decided 2026-09-24 while planning; each is open to review at Checkpoint B.
 
-1. **The fixture is documentation-shaped, and the live acceptance is manual.** The environment
+1. **The fixture is documentation-shaped, and the live acceptance is manual.** *Superseded
+   2026-09-24: the author ran the live check and supplied a capture, which replaced the fixture.* The environment
    that built C3 cannot reach the API. `v2-items.json` exercises every dimension with values
    consistent with `docs/v1-statistics.md` (serration ranks 0–10, requiem mods with charges,
    relics with refinements, ayatan stars). Its test KDoc says it is not a capture.
@@ -118,9 +119,18 @@ All delegated and decided 2026-09-24 while planning; each is open to review at C
 
 ## Open Questions
 
-1. **Which R3.1 fields does the live `/v2/items` carry?** The live run answers it. If `tradable`
-   or `rarity` is never present, the options are to accept nulls or to sweep `/v2/item/{slug}`.
-   The sweep is ~3.8k calls, about 32 minutes of `public` budget, and §9 makes it ask-first.
-2. **Replace the fixture with a capture.** `bruno/v2/manifests/list-items.bru` fetches exactly
-   this payload. Trimming a capture to the fixture's slugs would make the tests describe reality.
+1. **Which R3.1 fields does the live `/v2/items` carry?** *Answered by the live run,
+   2026-09-24: 3,888 items.* Every item carries `id`, `slug`, `gameRef`, `tags` and `i18n` (English
+   only). Some also carry `maxRank` (1,521), `bulkTradable` (1,017, always `true`), `subtypes` (884),
+   `vaulted` (799, both values), `ducats` (757) and the star maxima (10–11). **`tradable`, `rarity`
+   and `maxCharges` never appear**, so those three columns are null on every row. Rarity is carried
+   as a tag instead (`uncommon`, `rare`, `legendary`, …). What to do with the three columns is open
+   question 4.
+2. ~~Replace the fixture with a capture.~~ **Resolved:** the fixture is now eight entries trimmed
+   unchanged from the author's capture.
 3. **Nix verification** remains outstanding from C2.
+4. **`tradable`, `rarity` and `max_charges` are never populated.** Options: keep them null;
+   drop them from R3.1, since membership in `/v2/items` already means tradable and rarity is in
+   `tags`; or fill them from `/v2/item/{slug}`, which would take ~3.8k calls (about 32 minutes of
+   `public` budget) and is ask-first under §9. `max_charges` matters for R7.5 and is better settled
+   against a v2 order for a requiem mod in C4.

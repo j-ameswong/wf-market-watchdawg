@@ -48,6 +48,14 @@ Mutation-checked:
 - stamp `clock_timestamp()` per row instead of `now()` → the one-refresh-one-time test fails;
 - map an absent `maxRank` to 0 → the absent-means-null test fails.
 
+**Addendum, after the live capture:** the hand-built fixture was wrong in the ways that
+mattered. `serration` has subtypes (`regular`, `atragraph`). `khra` has `maxRank: 3`, and no item
+carries `maxCharges`. `frost_prime_set` has no `vaulted` field. No item carries `tradable` or
+`rarity`. The fixture is now eight entries copied unchanged from the capture, including
+`axi_a2_relic` for an explicit `vaulted: false` and `ayatan_ayr_sculpture` for cyan stars without
+amber. `ItemSyncTest` asserts the real values. The code needed no change: absent fields already
+bound as null.
+
 **Dependencies:** None
 **Files likely touched:** `.../db/migration/V5__catalog.sql`, `.../wfm/WfmModels.kt`,
 `.../store/StoreModels.kt`, `.../store/Repositories.kt`, `.../sync/ItemSync.kt`,
@@ -197,10 +205,11 @@ Mutation-checked:
       - "no row has `synced_at` = epoch" — `CatalogUpgradeTest.an epoch timestamp is not carried
         over as a sync time`, and `ItemSyncTest` for rows a refresh writes
       - "the real `/v2/items` payload yields ~3.8k rows…" — needs the live run below
-- [ ] Live catalog run on a machine that can reach the API: `mrun`, wait for the first sync, then
-      `mpsql -c "select count(*), count(*) filter (where cardinality(subtypes) > 0),
-      count(*) filter (where synced_at = 'epoch') from item"` — ~3.8k rows, relics with subtypes,
-      zero epoch rows. Note which R3.1 columns are never populated (Open Question 1).
+- [x] Live catalog run on a machine that can reach the API — run by the project author,
+      2026-09-24: `mrun` upserted **3,888** items; **884** have subtypes; **0** epoch rows; all
+      3,888 named. `tradable` and `rarity` are populated on 0 rows, `bulk_tradable` on 1,017, the
+      star maxima on 10. The capture behind it shows `/v2/items` never carries `tradable`, `rarity`
+      or `maxCharges` (plan Open Questions 1 and 4).
 - [x] `SPEC.md` status note and `CHANGELOG.md` updated
 - [ ] Review with human
 - [ ] C4 may begin

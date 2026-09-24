@@ -61,7 +61,7 @@ class CatalogRefreshTest {
         scheduler.tick()
 
         server.verify()
-        assertEquals(6, items.count())
+        assertEquals(FIXTURE_ITEMS, items.count())
         assertEquals("h1", storedHash())
         assertEquals(firstSync, syncedAt("serration"), "an unchanged hash must not rewrite the catalog")
     }
@@ -102,7 +102,7 @@ class CatalogRefreshTest {
 
         scheduler.tick()
         server.verify()
-        assertEquals(6, items.count())
+        assertEquals(FIXTURE_ITEMS, items.count())
         assertEquals("h1", storedHash())
     }
 
@@ -133,5 +133,6 @@ class CatalogRefreshTest {
 
     private companion object {
         val FIXTURE = ClassPathResource("fixtures/v2-items.json")
+        const val FIXTURE_ITEMS = 8L
     }
 }

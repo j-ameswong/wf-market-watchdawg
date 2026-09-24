@@ -18,15 +18,16 @@ import org.springframework.web.client.RestClient
 import java.sql.Timestamp
 import java.time.Instant
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 /**
  * R3.1, R3.2: a refresh fills the catalog columns later capabilities read, and stamps when it did.
  *
- * `fixtures/v2-items.json` is shaped from the `Item` model in `docs/v2/data-models.mdx`, not
- * captured: the environment C3 was written in could not reach the API (plan Decision 1). Its ids
- * are placeholders, and its dimension values follow the observations in `docs/v1-statistics.md`.
+ * `fixtures/v2-items.json` is eight entries copied unchanged from a live capture of `GET /v2/items`
+ * (2026-09-24). They were chosen to cover each dimension: relics with refinements, a mod with
+ * variants, ayatan stars, a parazon mod, and an explicit `vaulted: false` beside an absent one.
  */
 @SpringBootTest
 @Import(TestcontainersConfiguration::class)
@@ -45,22 +46,24 @@ class ItemSyncTest {
         refresh()
 
         val serration = items.findBySlug("serration")!!
-        assertEquals("Serration", serration.name, "the name comes from i18n.en, not another language")
-        assertEquals("items/images/en/serration.png", serration.icon)
+        assertEquals("Serration", serration.name)
+        assertEquals("items/images/en/serration.711b19665b2acbac445c68c9e8f8b550.png", serration.icon)
         assertEquals(10, serration.maxRank)
-        assertEquals("rare", serration.rarity)
-        assertEquals(true, serration.tradable)
+        assertEquals(listOf("regular", "atragraph"), serration.subtypes)
 
         val relic = items.findBySlug("axi_a1_relic")!!
         assertEquals(listOf("intact", "exceptional", "flawless", "radiant"), relic.subtypes)
         assertTrue(relic.vaulted)
+        assertEquals(true, relic.bulkTradable)
+        assertFalse(items.findBySlug("axi_a2_relic")!!.vaulted)
 
-        val ayatan = items.findBySlug("ayatan_anasa_sculpture")!!
-        assertEquals(2, ayatan.maxAmberStars)
-        assertEquals(2, ayatan.maxCyanStars)
+        val anasa = items.findBySlug("ayatan_anasa_sculpture")!!
+        assertEquals(2, anasa.maxAmberStars)
+        assertEquals(2, anasa.maxCyanStars)
 
-        assertEquals(3, items.findBySlug("khra")!!.maxCharges)
-        assertEquals(true, items.findBySlug("arcane_energize")!!.bulkTradable)
+        assertEquals(3, items.findBySlug("khra")!!.maxRank)
+        assertEquals(5, items.findBySlug("arcane_energize")!!.maxRank)
+        assertEquals(175, items.findBySlug("frost_prime_set")!!.ducats)
     }
 
     @Test
@@ -69,13 +72,24 @@ class ItemSyncTest {
 
         val frost = items.findBySlug("frost_prime_set")!!
         assertNull(frost.maxRank, "rank 0 is a real market; an unranked item must not look like one (R7.8)")
-        assertNull(frost.maxCharges)
         assertNull(frost.maxAmberStars)
         assertNull(frost.maxCyanStars)
         assertNull(frost.bulkTradable)
-        assertNull(frost.rarity)
         assertEquals(emptyList(), frost.subtypes)
-        assertNull(items.findBySlug("ayatan_anasa_sculpture")!!.tradable)
+        assertFalse(frost.vaulted, "vaulted keeps its false default when absent")
+
+        // Cyan stars without amber: the absent one stays null, not zero.
+        val ayr = items.findBySlug("ayatan_ayr_sculpture")!!
+        assertEquals(3, ayr.maxCyanStars)
+        assertNull(ayr.maxAmberStars)
+
+        // /v2/items never carries these three, so every row leaves them null.
+        assertEquals(
+            listOf(0, 0, 0),
+            jdbc.queryForObject("select array[count(max_charges), count(tradable), count(rarity)] from item") { rs, _ ->
+                (rs.getArray(1).array as Array<*>).map { (it as Number).toInt() }
+            },
+        )
     }
 
     @Test

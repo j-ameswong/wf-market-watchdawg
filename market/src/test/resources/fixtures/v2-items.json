@@ -2,96 +2,168 @@
   "apiVersion": "0.25.0",
   "data": [
     {
-      "id": "000000000000000000000001",
+      "id": "56783f24cbfa8f0432dd899c",
       "slug": "frost_prime_set",
-      "gameRef": "/Lotus/Types/Recipes/WarframeRecipes/FrostPrimeSet",
-      "tags": ["prime", "set", "warframe"],
+      "gameRef": "/Lotus/Powersuits/Frost/FrostPrime",
+      "tags": [
+        "set",
+        "prime",
+        "warframe"
+      ],
+      "ducats": 175,
       "i18n": {
         "en": {
           "name": "Frost Prime Set",
-          "icon": "items/images/en/frost_prime_set.png",
-          "thumb": "items/images/en/thumbs/frost_prime_set.128x128.png"
+          "icon": "items/images/en/frost_prime_set.4f8ff8605be1afaab9a0e5cc3c67cb21.png",
+          "thumb": "items/images/en/thumbs/frost_prime_set.4f8ff8605be1afaab9a0e5cc3c67cb21.128x128.png"
         }
-      },
-      "vaulted": true,
-      "tradable": true
+      }
     },
     {
-      "id": "000000000000000000000002",
+      "id": "54a74454e779892d5e515596",
       "slug": "serration",
       "gameRef": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
-      "tags": ["mod", "rifle"],
+      "tags": [
+        "mod",
+        "uncommon",
+        "rifle",
+        "primary"
+      ],
+      "subtypes": [
+        "regular",
+        "atragraph"
+      ],
+      "maxRank": 10,
       "i18n": {
         "en": {
           "name": "Serration",
-          "icon": "items/images/en/serration.png",
-          "thumb": "items/images/en/thumbs/serration.128x128.png"
-        },
-        "de": { "name": "Zacken", "icon": "items/images/de/serration.png" }
-      },
-      "maxRank": 10,
-      "rarity": "rare",
-      "tradable": true
+          "icon": "items/images/en/serration.711b19665b2acbac445c68c9e8f8b550.png",
+          "thumb": "items/images/en/thumbs/serration.711b19665b2acbac445c68c9e8f8b550.128x128.png"
+        }
+      }
     },
     {
-      "id": "000000000000000000000003",
+      "id": "6054dd685221e30057500f63",
       "slug": "axi_a1_relic",
-      "gameRef": "/Lotus/Types/Game/Projections/T4VoidProjectionA",
-      "tags": ["relic", "axi"],
+      "gameRef": "/Lotus/Types/Game/Projections/T4VoidProjectionE",
+      "tags": [
+        "relic",
+        "axi"
+      ],
+      "bulkTradable": true,
+      "subtypes": [
+        "intact",
+        "exceptional",
+        "flawless",
+        "radiant"
+      ],
+      "vaulted": true,
       "i18n": {
         "en": {
           "name": "Axi A1 Relic",
-          "icon": "items/images/en/axi_a1_relic.png",
-          "thumb": "items/images/en/thumbs/axi_a1_relic.128x128.png"
+          "icon": "items/images/en/axi_a1_relic.a74c06f0cae21bdb8933685c867385f8.png",
+          "thumb": "items/images/en/thumbs/axi_a1_relic.a74c06f0cae21bdb8933685c867385f8.128x128.png"
         }
-      },
-      "subtypes": ["intact", "exceptional", "flawless", "radiant"],
-      "vaulted": true
+      }
     },
     {
-      "id": "000000000000000000000004",
+      "id": "6054dd2e5221e30057500f32",
+      "slug": "axi_a2_relic",
+      "gameRef": "/Lotus/Types/Game/Projections/T4VoidProjectionP",
+      "tags": [
+        "relic",
+        "axi"
+      ],
+      "bulkTradable": true,
+      "subtypes": [
+        "intact",
+        "exceptional",
+        "flawless",
+        "radiant"
+      ],
+      "vaulted": false,
+      "i18n": {
+        "en": {
+          "name": "Axi A2 Relic",
+          "icon": "items/images/en/axi_a2_relic.a74c06f0cae21bdb8933685c867385f8.png",
+          "thumb": "items/images/en/thumbs/axi_a2_relic.a74c06f0cae21bdb8933685c867385f8.128x128.png"
+        }
+      }
+    },
+    {
+      "id": "588a789c3cf52c408a2f88dd",
       "slug": "ayatan_anasa_sculpture",
-      "gameRef": "/Lotus/Types/Items/FusionTreasures/OroFusexOrnamentB",
-      "tags": ["ayatan_sculpture"],
+      "gameRef": "/Lotus/Types/Items/FusionTreasures/OroFusexF",
+      "tags": [
+        "ayatan_sculpture"
+      ],
+      "bulkTradable": true,
+      "maxAmberStars": 2,
+      "maxCyanStars": 2,
+      "baseEndo": 2000,
+      "endoMultiplier": 0.5,
       "i18n": {
         "en": {
           "name": "Ayatan Anasa Sculpture",
-          "icon": "items/images/en/ayatan_anasa_sculpture.png",
-          "thumb": "items/images/en/thumbs/ayatan_anasa_sculpture.128x128.png"
+          "icon": "items/images/en/ayatan_anasa_sculpture.4b0f22f5432ea4a4f196806a7b90ccb0.png",
+          "thumb": "items/images/en/thumbs/ayatan_anasa_sculpture.4b0f22f5432ea4a4f196806a7b90ccb0.128x128.png"
         }
-      },
-      "maxAmberStars": 2,
-      "maxCyanStars": 2
+      }
     },
     {
-      "id": "000000000000000000000005",
+      "id": "57e91e65c76eb74c087f492e",
+      "slug": "ayatan_ayr_sculpture",
+      "gameRef": "/Lotus/Types/Items/FusionTreasures/OroFusexB",
+      "tags": [
+        "ayatan_sculpture"
+      ],
+      "bulkTradable": true,
+      "maxCyanStars": 3,
+      "baseEndo": 325,
+      "endoMultiplier": 2,
+      "i18n": {
+        "en": {
+          "name": "Ayatan Ayr Sculpture",
+          "icon": "items/images/en/ayatan_ayr_sculpture.d5a5347b24a6ec864ce17552ba108ad7.png",
+          "thumb": "items/images/en/thumbs/ayatan_ayr_sculpture.d5a5347b24a6ec864ce17552ba108ad7.128x128.png"
+        }
+      }
+    },
+    {
+      "id": "5dbe9b097ea27b0ffe3ca26c",
       "slug": "khra",
-      "gameRef": "/Lotus/Upgrades/Mods/Immortal/KuvaLichRequiemModB",
-      "tags": ["mod", "requiem"],
+      "gameRef": "/Lotus/Upgrades/Mods/Immortal/ImmortalEightMod",
+      "tags": [
+        "mod",
+        "rare",
+        "parazon"
+      ],
+      "maxRank": 3,
       "i18n": {
         "en": {
           "name": "Khra",
-          "icon": "items/images/en/khra.png",
-          "thumb": "items/images/en/thumbs/khra.128x128.png"
+          "icon": "items/images/en/khra.2f42b1bf4bfc2a124df7bc1275432795.png",
+          "thumb": "items/images/en/thumbs/khra.2f42b1bf4bfc2a124df7bc1275432795.128x128.png"
         }
-      },
-      "maxCharges": 3
+      }
     },
     {
-      "id": "000000000000000000000006",
+      "id": "566751295dcbc186f0536bd1",
       "slug": "arcane_energize",
-      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/EnergyOnEnergyPickup",
-      "tags": ["arcane_enhancement"],
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/GolemArcaneRadialEnergyOnEnergyPickup",
+      "tags": [
+        "legendary",
+        "arcane_enhancement"
+      ],
+      "bulkTradable": true,
+      "maxRank": 5,
       "i18n": {
         "en": {
           "name": "Arcane Energize",
-          "icon": "items/images/en/arcane_energize.png",
-          "thumb": "items/images/en/thumbs/arcane_energize.128x128.png"
+          "icon": "items/images/en/arcane_energize.e5f85590ceb29db89c6753dfdf823485.png",
+          "thumb": "items/images/en/thumbs/arcane_energize.e5f85590ceb29db89c6753dfdf823485.128x128.png"
         }
-      },
-      "maxRank": 5,
-      "bulkTradable": true,
-      "rarity": "legendary"
+      }
     }
   ],
   "error": null

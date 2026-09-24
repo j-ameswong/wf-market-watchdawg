@@ -1,0 +1,98 @@
+{
+  "apiVersion": "0.25.0",
+  "data": [
+    {
+      "id": "000000000000000000000001",
+      "slug": "frost_prime_set",
+      "gameRef": "/Lotus/Types/Recipes/WarframeRecipes/FrostPrimeSet",
+      "tags": ["prime", "set", "warframe"],
+      "i18n": {
+        "en": {
+          "name": "Frost Prime Set",
+          "icon": "items/images/en/frost_prime_set.png",
+          "thumb": "items/images/en/thumbs/frost_prime_set.128x128.png"
+        }
+      },
+      "vaulted": true,
+      "tradable": true
+    },
+    {
+      "id": "000000000000000000000002",
+      "slug": "serration",
+      "gameRef": "/Lotus/Upgrades/Mods/Rifle/WeaponDamageAmountMod",
+      "tags": ["mod", "rifle"],
+      "i18n": {
+        "en": {
+          "name": "Serration",
+          "icon": "items/images/en/serration.png",
+          "thumb": "items/images/en/thumbs/serration.128x128.png"
+        },
+        "de": { "name": "Zacken", "icon": "items/images/de/serration.png" }
+      },
+      "maxRank": 10,
+      "rarity": "rare",
+      "tradable": true
+    },
+    {
+      "id": "000000000000000000000003",
+      "slug": "axi_a1_relic",
+      "gameRef": "/Lotus/Types/Game/Projections/T4VoidProjectionA",
+      "tags": ["relic", "axi"],
+      "i18n": {
+        "en": {
+          "name": "Axi A1 Relic",
+          "icon": "items/images/en/axi_a1_relic.png",
+          "thumb": "items/images/en/thumbs/axi_a1_relic.128x128.png"
+        }
+      },
+      "subtypes": ["intact", "exceptional", "flawless", "radiant"],
+      "vaulted": true
+    },
+    {
+      "id": "000000000000000000000004",
+      "slug": "ayatan_anasa_sculpture",
+      "gameRef": "/Lotus/Types/Items/FusionTreasures/OroFusexOrnamentB",
+      "tags": ["ayatan_sculpture"],
+      "i18n": {
+        "en": {
+          "name": "Ayatan Anasa Sculpture",
+          "icon": "items/images/en/ayatan_anasa_sculpture.png",
+          "thumb": "items/images/en/thumbs/ayatan_anasa_sculpture.128x128.png"
+        }
+      },
+      "maxAmberStars": 2,
+      "maxCyanStars": 2
+    },
+    {
+      "id": "000000000000000000000005",
+      "slug": "khra",
+      "gameRef": "/Lotus/Upgrades/Mods/Immortal/KuvaLichRequiemModB",
+      "tags": ["mod", "requiem"],
+      "i18n": {
+        "en": {
+          "name": "Khra",
+          "icon": "items/images/en/khra.png",
+          "thumb": "items/images/en/thumbs/khra.128x128.png"
+        }
+      },
+      "maxCharges": 3
+    },
+    {
+      "id": "000000000000000000000006",
+      "slug": "arcane_energize",
+      "gameRef": "/Lotus/Upgrades/CosmeticEnhancers/Utility/EnergyOnEnergyPickup",
+      "tags": ["arcane_enhancement"],
+      "i18n": {
+        "en": {
+          "name": "Arcane Energize",
+          "icon": "items/images/en/arcane_energize.png",
+          "thumb": "items/images/en/thumbs/arcane_energize.128x128.png"
+        }
+      },
+      "maxRank": 5,
+      "bulkTradable": true,
+      "rarity": "legendary"
+    }
+  ],
+  "error": null
+}

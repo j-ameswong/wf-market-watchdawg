@@ -1,6 +1,5 @@
 package com.watchdawg.market.wfm
 
-import com.watchdawg.market.store.ItemRecord
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
@@ -11,7 +10,7 @@ import org.springframework.web.client.body
 class WfmClient(@Qualifier(WfmConfig.V2_CLIENT) private val client: RestClient) {
     fun getVersions(): Versions = get("/versions")
 
-    fun getItems(): List<Items> = get("/items")
+    fun getItems(): List<Item> = get("/items")
 
     private inline fun <reified T : Any> get(uri: String, vararg vars: Any): T {
         val envelope = client.get()

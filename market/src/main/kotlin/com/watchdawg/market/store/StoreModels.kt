@@ -22,10 +22,24 @@ data class CollectionVersionRecord(
 data class ItemRecord(
     @Id val id: String,
     val slug: String,
+    /** English display name and icon path, for notifications. */
+    val name: String? = null,
+    val icon: String? = null,
     val gameRef: String? = null,
-    val ducats: Int? = null,
-    val maxRank: Int? = null,
-    val vaulted: Boolean = false,
     val tags: List<String> = emptyList(),
-    val updatedAt: Instant = Instant.EPOCH,
+    val subtypes: List<String> = emptyList(),
+    val maxRank: Int? = null,
+    val maxCharges: Int? = null,
+    val maxAmberStars: Int? = null,
+    val maxCyanStars: Int? = null,
+    val ducats: Int? = null,
+    val vaulted: Boolean = false,
+    val bulkTradable: Boolean? = null,
+    val tradable: Boolean? = null,
+    val rarity: String? = null,
+    /**
+     * When a refresh last wrote this row. The database stamps it, so [ItemRepository.upsert]
+     * ignores whatever is set here. Null for a row no refresh has written since migration V5.
+     */
+    val syncedAt: Instant? = null,
 )

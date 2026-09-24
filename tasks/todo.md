@@ -15,19 +15,38 @@ Paths are relative to the repo root; the Gradle root is `market/`.
 refresh, so existing rows get the new columns filled (Decision 3).
 
 **Acceptance criteria:**
-- [ ] `item` gains `name` and `icon` (from `i18n.en`), `subtypes`, `max_charges`,
+- [x] `item` gains `name` and `icon` (from `i18n.en`), `subtypes`, `max_charges`,
       `max_amber_stars`, `max_cyan_stars`, `bulk_tradable`, `tradable` and `rarity`, alongside the
       existing `max_rank` and `vaulted`.
-- [ ] A field absent from the payload stores null, not zero or false (Decision 2, R7.8).
-- [ ] `updated_at` becomes `synced_at`, written by the upsert as the refresh transaction's time;
+- [x] A field absent from the payload stores null, not zero or false (Decision 2, R7.8).
+- [x] `updated_at` becomes `synced_at`, written by the upsert as the refresh transaction's time;
       nothing reads an upstream `updatedAt` any more.
-- [ ] Migrating a database with epoch rows and a stored `items` hash leaves no epoch `synced_at`
+- [x] Migrating a database with epoch rows and a stored `items` hash leaves no epoch `synced_at`
       and no stored `items` hash.
-- [ ] Multi-subtype items keep their subtypes, in order.
+- [x] Multi-subtype items keep their subtypes, in order.
 
 **Verification:**
-- [ ] `mtest --tests '*ItemSyncTest' --tests '*ItemRepositoryTest' --tests '*CatalogUpgradeTest'`
-- [ ] `mbuild` green
+- [x] `mtest --tests '*ItemSyncTest' --tests '*ItemRepositoryTest' --tests '*CatalogUpgradeTest'`
+- [x] `mbuild` green
+
+**Notes:** `Items` became `Item`, with an `english` accessor over `i18n`. `ItemI18n.name` is
+nullable too, so one item without an English entry cannot fail the whole payload and leave the
+hash stale forever.
+
+The fixture is documentation-shaped (plan Decision 1): placeholder ids, and dimension values
+consistent with `docs/v1-statistics.md`. Serration also carries a `de` entry, so the test shows
+the name comes from `en` specifically.
+
+`CatalogUpgradeTest` migrates a scratch database to V4, writes the pre-C3 state (an epoch row, a
+dated row, stored `items` and `rivens` hashes), then migrates to the latest version. The
+scratch-database helper moved out of `MigrationPathsTest` into `store/ScratchDatabases.kt`, which
+both now use.
+
+Mutation-checked:
+- drop V5's hash deletion → the refetch test fails;
+- drop V5's epoch-to-null update → the epoch test fails;
+- stamp `clock_timestamp()` per row instead of `now()` → the one-refresh-one-time test fails;
+- map an absent `maxRank` to 0 → the absent-means-null test fails.
 
 **Dependencies:** None
 **Files likely touched:** `.../db/migration/V5__catalog.sql`, `.../wfm/WfmModels.kt`,

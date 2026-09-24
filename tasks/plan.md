@@ -63,7 +63,7 @@ T4 fact tables reference markets
 ## Task List
 
 ### Phase 1 — The catalog
-- [ ] T1: The catalog carries what downstream needs
+- [x] T1: The catalog carries what downstream needs
 - [ ] T2: Catalog refresh stays hash-gated, end to end
 
 **Checkpoint A** — a refresh fills every R3.1 column and stamps `synced_at`; an unchanged hash

@@ -46,7 +46,9 @@ That jar excludes the `developmentOnly` deps, so it will not start its own Postg
 2. For each `CollectionSync` bean, compare its hash against the `collection_version` row.
 3. On a change, run `sync.refresh()` **and** the version upsert inside one `TransactionTemplate` block.
 
-The transaction boundary is the important invariant: if a refresh throws, the stored hash stays stale and the next tick retries. `CollectionSync` implementations only fetch and upsert — they never touch `collection_version` or open transactions. A `RateLimitedException` on `/versions` is logged and skipped, not retried in-tick.
+The transaction boundary is the important invariant: if a refresh throws, the stored hash stays stale and the next tick retries. A migration that adds catalog columns has to delete that collection's stored hash (as V5 does for `items`), or existing rows keep the new columns empty until upstream happens to change. `CollectionSync` implementations only fetch and upsert — they never touch `collection_version` or open transactions. A `RateLimitedException` on `/versions` is logged and skipped, not retried in-tick.
+
+`ItemSync` binds `/v2/items` into `item`. Every field the v2 model marks optional binds as null when absent, never as a zero or `false` that looks like data — rank 0 is a real market (R7.8). `synced_at` is not an upstream timestamp (v2 items have none): the upsert stamps `now()`, the refresh transaction's time, so one refresh marks every row it wrote alike and a row missing from the latest refresh shows an older value.
 
 **Adding a collection:** implement `CollectionSync` as a `@Component` with `collection` set to a key of `VersionCollections.asMap()` (add the field and the `asMap()` entry if the collection isn't modelled yet). The scheduler picks it up by list injection; nothing else needs editing.
 

@@ -9,11 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.jdbc.datasource.DriverManagerDataSource
 import org.testcontainers.postgresql.PostgreSQLContainer
 import java.io.File
 import java.nio.file.Path
-import java.util.UUID
+import javax.sql.DataSource
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -37,15 +36,17 @@ class MigrationPathsTest {
 
     @Autowired lateinit var jdbc: JdbcTemplate
 
+    private val scratch by lazy { ScratchDatabases(container, jdbc) }
+
     @Test
-    fun `a database the CLI migrated has nothing left for the app to apply`() = withScratchDatabase { db ->
+    fun `a database the CLI migrated has nothing left for the app to apply`() = scratch.use { db ->
         cli(db).migrate()
 
         assertUpToDate(app(db))
     }
 
     @Test
-    fun `a database the app migrated has nothing left for the CLI to apply`() = withScratchDatabase { db ->
+    fun `a database the app migrated has nothing left for the CLI to apply`() = scratch.use { db ->
         app(db).migrate()
 
         assertUpToDate(cli(db))
@@ -56,7 +57,7 @@ class MigrationPathsTest {
         File(NON_TRANSACTIONAL_DIR).copyRecursively(dir.toFile())
         dir.resolve("V1__rollup_with_data.sql.conf").toFile().delete()
 
-        withScratchDatabase { db ->
+        scratch.use { db ->
             val failure = assertFailsWith<FlywayException> { fixture(db, "filesystem:$dir").migrate() }
             assertContains(failure.message.orEmpty(), "cannot run inside a transaction block")
         }
@@ -65,31 +66,31 @@ class MigrationPathsTest {
     @Test
     fun `a marked migration applies from the classpath and from the filesystem alike`() {
         listOf("classpath:db/non-transactional", "filesystem:$NON_TRANSACTIONAL_DIR").forEach { location ->
-            withScratchDatabase { db ->
+            scratch.use { db ->
                 fixture(db, location).migrate()
 
                 assertEquals(
                     1,
-                    JdbcTemplate(dataSource(db)).queryForObject("select count(*) from reading_hourly", Int::class.java),
+                    JdbcTemplate(db).queryForObject("select count(*) from reading_hourly", Int::class.java),
                 )
             }
         }
     }
 
     /** The app's own Flyway settings, exactly as Boot configured them, pointed at [db]. */
-    private fun app(db: String): Flyway = Flyway.configure()
+    private fun app(db: DataSource): Flyway = Flyway.configure()
         .configuration(appFlyway.configuration)
-        .dataSource(dataSource(db))
+        .dataSource(db)
         .load()
 
-    /** What `mflyway` passes, and nothing else: a URL, credentials and a filesystem location. */
-    private fun cli(db: String): Flyway = Flyway.configure()
-        .dataSource(url(db), container.username, container.password)
+    /** What `mflyway` passes, and nothing else: a connection and a filesystem location. */
+    private fun cli(db: DataSource): Flyway = Flyway.configure()
+        .dataSource(db)
         .locations("filesystem:src/main/resources/db/migration")
         .load()
 
-    private fun fixture(db: String, location: String): Flyway = Flyway.configure()
-        .dataSource(dataSource(db))
+    private fun fixture(db: DataSource, location: String): Flyway = Flyway.configure()
+        .dataSource(db)
         .locations(location)
         .load()
 
@@ -100,21 +101,6 @@ class MigrationPathsTest {
         // Not vacuous: every versioned migration and the repeatable one are there to compare.
         assertTrue(flyway.info().applied().any { it.version == null }, "the repeatable migration was never applied")
     }
-
-    private fun withScratchDatabase(test: (String) -> Unit) {
-        val db = "scratch_" + UUID.randomUUID().toString().replace("-", "").take(12)
-        jdbc.execute("create database $db")
-        try {
-            test(db)
-        } finally {
-            jdbc.execute("drop database $db with (force)")
-        }
-    }
-
-    private fun url(db: String) =
-        "jdbc:postgresql://${container.host}:${container.getMappedPort(PostgreSQLContainer.POSTGRESQL_PORT)}/$db"
-
-    private fun dataSource(db: String) = DriverManagerDataSource(url(db), container.username, container.password)
 
     private companion object {
         /** Gradle runs tests from the project directory, which is also where `mflyway` runs. */

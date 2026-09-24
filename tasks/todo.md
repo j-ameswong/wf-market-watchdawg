@@ -15,21 +15,39 @@ every environment that migrates has it (R2.1). No table uses it yet; this task p
 existing suite still passes on the new image.
 
 **Acceptance criteria:**
-- [ ] `compose.yaml` and `TestcontainersConfiguration` pin the same image tag.
-- [ ] `V2__timescaledb.sql` creates the extension `if not exists`, so a database where an
+- [x] `compose.yaml` and `TestcontainersConfiguration` pin the same image tag.
+- [x] `V2__timescaledb.sql` creates the extension `if not exists`, so a database where an
       administrator already created it migrates as an unprivileged user.
-- [ ] `shared_preload_libraries` and telemetry are set on the server command line, not left to
+- [x] `shared_preload_libraries` and telemetry are set on the server command line, not left to
       the image's first-boot scripts, so a data directory initialised by plain Postgres still works
       (Decision 5).
-- [ ] A test asserts the migrated test database has TimescaleDB installed.
-- [ ] The packaged jar's database requirement is written down where the jar is built.
+- [x] A test asserts the migrated test database has TimescaleDB installed.
+- [x] The packaged jar's database requirement is written down where the jar is built.
 
 **Verification:**
-- [ ] `mtest --tests '*TimescaleTest'`
-- [ ] `mbuild` green — the existing 49 tests unchanged
-- [ ] Manual: `bootRun` starts on a dev volume initialised by `postgres:18-alpine`
-- [ ] Manual: `bootJar`, then `java -jar` against a Timescale container migrates; against plain
+- [x] `mtest --tests '*TimescaleTest'`
+- [x] `mbuild` green — the existing 49 tests unchanged
+- [x] Manual: `bootRun` starts on a dev volume initialised by `postgres:18-alpine`
+- [x] Manual: `bootJar`, then `java -jar` against a Timescale container migrates; against plain
       Postgres it fails at startup naming the extension
+
+**Notes:** `spring-boot-docker-compose` recognises Postgres by image *name*, so `compose.yaml`
+carries the `org.springframework.boot.service-connection: postgres` label; without it `bootRun`
+connects to nothing. Testcontainers needs the equivalent `asCompatibleSubstituteFor("postgres")`.
+
+`TimescaleTest` pins two things at once: that the test and dev images are the same tag, and that
+the extension migrations install is the version that tag names. Mutation-checked by pointing the
+test container at `latest-pg18`: both tests fail.
+
+Manual runs, 2026-09-24:
+- **Dev volume upgrade.** A volume initialised by `postgres:18-alpine` with V1 applied by the app,
+  then `bootRun` on the new `compose.yaml`: V2 applied, `timescaledb 2.30.1` installed, and the
+  row written before the upgrade still there. No `mdb-reset`.
+- **Packaged jar.** `bootJar`, then `java -jar` with `SPRING_DATASOURCE_*`: against a Timescale
+  container it applies V1 and V2 and starts; against `postgres:18-alpine` it fails at startup with
+  `extension "timescaledb" is not available`.
+
+Both runs pushed `wfm.sync.initial-delay` out of reach, so neither called the live API.
 
 **Dependencies:** None
 **Files likely touched:** `market/compose.yaml`,

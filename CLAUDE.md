@@ -26,7 +26,7 @@ The Gradle root is `market/`, **not** the repo root. `nix/` packages the jar; `b
 | Flyway without Gradle | `mflyway info` | see `flake.nix` for the full invocation |
 | Replay the API collection | `bruno-run` | `cd bruno && npx @usebruno/cli run --env production --delay 400 -r` |
 
-**Docker must be running.** `bootRun` starts the Postgres in `market/compose.yaml` via `spring-boot-docker-compose` (lifecycle `start_and_stop`), and any test touching Spring, HTTP or storage is a `@SpringBootTest` that boots a Testcontainers Postgres. Classes with no Spring or JDBC dependency (`WfmRateLimiterTest`) are plain JUnit and need neither. The test task pins `wfm.sync.initial-delay` out of reach so `@EnableScheduling` cannot tick mid-run and call the live API — `MarketApplicationTests` fails if that override is removed.
+**Docker must be running.** `bootRun` starts the TimescaleDB (Postgres 18) in `market/compose.yaml` via `spring-boot-docker-compose` (lifecycle `start_and_stop`), and any test touching Spring, HTTP or storage is a `@SpringBootTest` that boots the same image through Testcontainers. `TimescaleTest` fails if `compose.yaml` and `TestcontainersConfiguration.IMAGE` name different tags. The image is not named `postgres`, so `compose.yaml` carries the `org.springframework.boot.service-connection: postgres` label; without it `bootRun` gets no datasource. Classes with no Spring or JDBC dependency (`WfmRateLimiterTest`) are plain JUnit and need neither. The test task pins `wfm.sync.initial-delay` out of reach so `@EnableScheduling` cannot tick mid-run and call the live API — `MarketApplicationTests` fails if that override is removed.
 
 Hermetic jar: `nix build .#market`. It builds with nixpkgs' `gradle_9` rather than `./gradlew` (the wrapper can't download inside the sandbox) and runs `bootJar` with `doCheck = false`, since tests need a Docker daemon. **After any dependency change in `build.gradle.kts`, regenerate the lock from the repo root:**
 
@@ -34,7 +34,7 @@ Hermetic jar: `nix build .#market`. It builds with nixpkgs' `gradle_9` rather th
 $(nix build --no-link --print-out-paths .#market.mitmCache.updateScript)
 ```
 
-That jar excludes the `developmentOnly` deps, so it will not start its own Postgres — pass `SPRING_DATASOURCE_URL` / `_USERNAME` / `_PASSWORD`.
+That jar excludes the `developmentOnly` deps, so it will not start its own Postgres — pass `SPRING_DATASOURCE_URL` / `_USERNAME` / `_PASSWORD`. The database must preload TimescaleDB (`shared_preload_libraries = 'timescaledb'`); migration V2 creates the extension if the role may, and startup fails otherwise.
 
 ## Architecture
 

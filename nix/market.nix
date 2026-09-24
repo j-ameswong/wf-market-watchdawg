@@ -42,6 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
   # The developmentOnly deps (devtools, docker-compose) are excluded from
   # bootJar, so this jar will NOT start its own Postgres. Supply the datasource
   # via the environment, e.g. SPRING_DATASOURCE_URL / _USERNAME / _PASSWORD.
+  #
+  # That database must be Postgres 18 with TimescaleDB 2.x preloaded
+  # (shared_preload_libraries = 'timescaledb'). Migration V2 creates the
+  # extension, so either the app's role may create it or an administrator
+  # creates it first. Without it, startup fails with
+  # `extension "timescaledb" is not available`.
   installPhase = ''
     runHook preInstall
 

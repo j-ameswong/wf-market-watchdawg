@@ -201,6 +201,6 @@ Mutation-checked:
       `mpsql -c "select count(*), count(*) filter (where cardinality(subtypes) > 0),
       count(*) filter (where synced_at = 'epoch') from item"` — ~3.8k rows, relics with subtypes,
       zero epoch rows. Note which R3.1 columns are never populated (Open Question 1).
-- [ ] `SPEC.md` status note and `CHANGELOG.md` updated
+- [x] `SPEC.md` status note and `CHANGELOG.md` updated
 - [ ] Review with human
 - [ ] C4 may begin

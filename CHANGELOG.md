@@ -7,6 +7,14 @@ design rationale in [`docs/adr/`](docs/adr/README.md).
 
 ### Added
 
+- **C3 — Catalog and market dimension.**
+  - `item` carries the English name and icon, subtypes, the rank, charge and star maxima,
+    `bulk_tradable`, `tradable` and `rarity`. A field the catalog omits is stored as null.
+  - `market`, one row per order book, keyed by item, observer platform and every subtype
+    dimension, with missing dimensions counted as equal.
+  - `MarketResolver`, which maps a tuple to its market and creates it the first time, safely
+    under concurrency.
+  - `order_event` and `market_quote` reference `market`.
 - **C2 — Time-series storage and test harness.**
   - TimescaleDB 2.30.1 on Postgres 18 in dev (`compose.yaml`), in tests (Testcontainers) and as a
     requirement of the packaged jar.
@@ -34,6 +42,8 @@ design rationale in [`docs/adr/`](docs/adr/README.md).
 
 ### Changed
 
+- `item.updated_at` is replaced by `synced_at`, stamped by each refresh. Upgrading clears the
+  epoch values the old column held and forces one catalog refetch.
 - The dev database image is `timescale/timescaledb:2.30.1-pg18`. An existing `postgres:18-alpine`
   volume is reused as is.
 - `wfm.requests-per-second` is replaced by `wfm.limits.*`.

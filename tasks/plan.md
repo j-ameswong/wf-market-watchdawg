@@ -74,7 +74,7 @@ fetches nothing. *Met: 80 tests.*
 - [x] T4: The fact tables reference markets
 
 **Checkpoint B** — C3 acceptance met, apart from the live catalog run; C4 may begin once that run is
-recorded.
+recorded. *Met in the suite: 90 tests. The live run and human review are open.*
 
 Full task bodies with acceptance criteria live in `tasks/todo.md`.
 

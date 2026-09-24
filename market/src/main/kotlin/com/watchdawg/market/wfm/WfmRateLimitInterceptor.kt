@@ -60,7 +60,7 @@ class WfmRateLimitInterceptor(
 
     companion object {
         /**
-         * One call plus at most one retry (R1.3, plan Decision 4). The spec's acceptance bullet
+         * One call plus at most one retry (R1.3, ADR-0019). The spec's acceptance bullet
          * fixes this number. If the server refuses us twice, it is saying more than "busy".
          */
         private const val ATTEMPTS = 2

@@ -14,6 +14,12 @@ management:
       exposure:
         include: health,metrics
 
+# Runs every @Scheduled component. The test harness sets it false in every Spring test context,
+# so no timer can call out of a test (R2.6).
+watchdawg:
+  scheduling:
+    enabled: true
+
 wfm:
   base-url: https://api.warframe.market/v2
   base-url-legacy: https://api.warframe.market/v1

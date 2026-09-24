@@ -4,11 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A Spring Boot 4 / Kotlin service that mirrors warframe.market data into Postgres. It syncs the item catalog today; `SPEC.md` specifies the intended growth into a price watcher and warehouse over `/v2/orders/*`, and `docs/adr/` records the decisions behind that design.
+A Spring Boot 4 / Kotlin service that mirrors warframe.market data into Postgres. It syncs the item catalog; `SPEC.md` specifies the intended growth into a price watcher and warehouse over `/v2/orders/*`, and `docs/adr/` records the decisions behind that design.
 
 ## Layout
 
-The Gradle root is `market/`, **not** the repo root. `nix/` packages the jar; `bruno/` (API collection) and `docs/` (upstream API reference, plus `docs/adr/` for this project's decision records) are tracked in the repo.
+The Gradle root is `market/`, **not** the repo root. `nix/` packages the jar; `bruno/` (API collection) and `docs/` (upstream API reference, plus `docs/adr/` for this project's decision records) are tracked in the repo. `tasks/plan.md` and `tasks/todo.md` plan the capability in progress; finished ones move to `tasks/archive/`. `CHANGELOG.md` records project-level changes.
 
 ## Commands
 
@@ -26,7 +26,7 @@ The Gradle root is `market/`, **not** the repo root. `nix/` packages the jar; `b
 | Flyway without Gradle | `mflyway info` | see `flake.nix` for the full invocation |
 | Replay the API collection | `bruno-run` | `cd bruno && npx @usebruno/cli run --env production --delay 400 -r` |
 
-**Docker must be running.** `bootRun` starts the Postgres in `market/compose.yaml` via `spring-boot-docker-compose` (lifecycle `start_and_stop`), and any test touching Spring, HTTP or storage is a `@SpringBootTest` that boots a Testcontainers Postgres. Classes with no Spring or JDBC dependency (`WfmRateLimiterTest`) are plain JUnit and need neither. The test task pins `wfm.sync.initial-delay` out of reach so `@EnableScheduling` cannot tick mid-run and call the live API — `MarketApplicationTests` fails if that override is removed.
+**Docker must be running.** `bootRun` starts the TimescaleDB (Postgres 18) in `market/compose.yaml` via `spring-boot-docker-compose` (lifecycle `start_and_stop`), and any test touching Spring, HTTP or storage is a `@SpringBootTest` that boots the same image through Testcontainers. `TimescaleTest` fails if `compose.yaml` and `TestcontainersConfiguration.IMAGE` name different tags. The image is not named `postgres`, so `compose.yaml` carries the `org.springframework.boot.service-connection: postgres` label; without it `bootRun` gets no datasource. Classes with no Spring or JDBC dependency (`WfmRateLimiterTest`) are plain JUnit and need neither. No test can reach the live API; see *Test harness* below.
 
 Hermetic jar: `nix build .#market`. It builds with nixpkgs' `gradle_9` rather than `./gradlew` (the wrapper can't download inside the sandbox) and runs `bootJar` with `doCheck = false`, since tests need a Docker daemon. **After any dependency change in `build.gradle.kts`, regenerate the lock from the repo root:**
 
@@ -34,7 +34,7 @@ Hermetic jar: `nix build .#market`. It builds with nixpkgs' `gradle_9` rather th
 $(nix build --no-link --print-out-paths .#market.mitmCache.updateScript)
 ```
 
-That jar excludes the `developmentOnly` deps, so it will not start its own Postgres — pass `SPRING_DATASOURCE_URL` / `_USERNAME` / `_PASSWORD`.
+That jar excludes the `developmentOnly` deps, so it will not start its own Postgres — pass `SPRING_DATASOURCE_URL` / `_USERNAME` / `_PASSWORD`. The database must preload TimescaleDB (`shared_preload_libraries = 'timescaledb'`); migration V2 creates the extension if the role may, and startup fails otherwise.
 
 ## Architecture
 
@@ -67,7 +67,7 @@ Failures are typed, in `WfmErrors.kt`, all under one sealed `WfmException`: `Rat
 `WfmConfig.wfmTransportCustomizer` is one `RestClientCustomizer` applied to **every** `RestClient.Builder` the context hands out, so a new client bean is governed the moment it is built rather than when someone remembers to wire it. It installs, in order:
 
 1. `WfmRateLimitInterceptor` — pacing, plus the `429`/`509` retry.
-2. `WfmContextInterceptor` — `Platform`, `Crossplay` and `User-Agent`, `set` rather than added, so a call site that names its own value is overridden ([ADR-0002](docs/adr/0002-crossplay-single-global-setting.md), R1.5). These were `defaultHeader`s, which is precisely what a call site *can* override.
+2. `WfmContextInterceptor` — `Platform`, `Crossplay` and `User-Agent`, `set` rather than added, so a call site that names its own value is overridden ([ADR-0002](docs/adr/0002-crossplay-single-global-setting.md), R1.5). Do not move them back to `defaultHeader`s: a call site *can* override those.
 3. The `defaultStatusHandler` for `4xx`/`5xx` other than `429`/`509`, which the interceptor above has already converted.
 
 `RateLimitWiringTest` enumerates `RestClient` beans and fails if one lacks either interceptor, so it is the standing no-bypass guard for both R1.1 and R1.8 and covers clients added later without being edited.
@@ -80,7 +80,7 @@ Call it as `limiter.acquire(bucket) { … }`. The block form is what guarantees 
 
 ### Retries
 
-One initial call and **exactly one** retry, issued from `WfmRateLimitInterceptor`. It takes its own turn before reissuing, so a retry spends budget rather than bypassing it. `Retry-After` is parsed in both RFC 9110 forms (delta-seconds and HTTP-date); a value above `wfm.limits.max-retry-after` surfaces immediately instead of parking a worker thread, and one that is absent gets no extra cooloff at all, because the retry's own turn already spaces it. A `509` additionally narrows the connection cap by one, floored at one and never widened again within a run.
+One initial call and **exactly one** retry, issued from `WfmRateLimitInterceptor`. It takes its own turn before reissuing, so a retry spends budget rather than bypassing it. `Retry-After` is parsed in both RFC 9110 forms (delta-seconds and HTTP-date); a value above `wfm.limits.max-retry-after` surfaces immediately instead of parking a worker thread ([ADR-0019](docs/adr/0019-long-retry-after-surfaces-to-the-caller.md)), and one that is absent gets no extra cooloff at all, because the retry's own turn already spaces it. A `509` additionally narrows the connection cap by one, floored at one and never widened again within a run.
 
 ### Metrics
 
@@ -95,7 +95,37 @@ Spring Data JDBC, not JPA — no dirty checking, no lazy loading, and `save()` o
 - Upserts are hand-written `@Modifying @Query` methods with `on conflict … do update`, each paired with a record-taking extension function (`ItemRepository.upsert(item)`) so call sites stay readable. Add a new column in three places: the migration, the record, and both the SQL and the parameter list of the upsert.
 - `CollectionVersionRecord` has a natural id (`name`), so it implements `Persistable` with a `@Transient val new` flag to tell Spring Data whether to insert or update. Prefer the `upsert` extension over `save()` for it.
 
-Schema lives in `market/src/main/resources/db/migration` (Flyway, `V<n>__desc.sql`). The `mflyway` CLI and the app share one `flyway_schema_history` table on purpose — a migration applied by either is seen as applied by the other.
+Schema lives in `market/src/main/resources/db/migration` (Flyway, `V<n>__desc.sql`, plus the repeatable `R__storage_policies.sql`). The `mflyway` CLI reads those files from the filesystem and the app from the classpath, into one shared `flyway_schema_history` table — a migration applied by either is seen as applied by the other, and `MigrationPathsTest` checks both directions. So a migration must not depend on Flyway placeholders or on anything else that only one of the two paths supplies.
+
+Every migration runs in a transaction, so a failed one leaves nothing half-applied. TimescaleDB's hypertables, compression settings and policies all run inside one, and so does a continuous aggregate created `WITH NO DATA` — create them that way. A migration that genuinely cannot (a `WITH DATA` aggregate, `refresh_continuous_aggregate`, `create index concurrently`) gets a sibling `V<n>__desc.sql.conf` containing `executeInTransaction=false`. Both paths honour it; `src/test/resources/db/non-transactional/` is the worked example.
+
+### Time series
+
+TimescaleDB holds the fact tables ([ADR-0007](docs/adr/0007-timescaledb-with-indefinite-event-log.md)). Each is a hypertable partitioned on `observed_at`, so every unique index must include that column — TimescaleDB refuses one that does not, and `FactTablesTest` lists the fact tables and checks every hypertable's indexes.
+
+| Relation | Kept | Policy |
+| --- | --- | --- |
+| `order_event` | forever | compressed after 7 days, segmented by `market_id` |
+| `market_quote` | 90 days raw | dropped by retention |
+| `market_quote_hourly`, `market_quote_daily` | forever | continuous aggregates of `market_quote`, refreshed over the last 2 / 4 days |
+
+Every policy value lives in `db/migration/R__storage_policies.sql`, a repeatable migration that Flyway re-applies whenever the file changes. Changing one is an ask-first change (SPEC §9).
+
+**Refreshing a rollup over a range whose raw chunks are gone deletes the rollup's rows for that range.** So a refresh window must start inside raw retention (`QuoteStorageTest` fails otherwise), and never run `refresh_continuous_aggregate(…, null, null)` by hand on a database old enough to have dropped raw quotes. A rollup's shape cannot be altered, only dropped and recreated, which loses everything older than the raw window. Once history has accrued, add a new rollup alongside instead.
+
+In tests there are no TimescaleDB background workers: a policy runs only when the test calls `run_job` (see `store/Policies.kt`).
+
+### Test harness
+
+`market/src/test/kotlin/com/watchdawg/market/harness/` applies to **every** Spring test context, registered from `src/test/resources/META-INF/spring.factories` rather than imported, so no test class can opt out by forgetting an annotation (R2.6):
+
+- `watchdawg.scheduling.enabled` is `false`, so `SchedulingConfig` (the only `@EnableScheduling`) stays off. A test's own `@SpringBootTest(properties = …)` still outranks that.
+- Every `RestClient` built from the context sends through `LiveApiGuard`, a request factory that records and refuses. `LiveApiGuardListener` fails any test that reached it, even when the code under test swallowed the refusal. To exercise HTTP, bind `MockRestServiceServer` to `bean.mutate()`: that swaps the guard out.
+- `DatabaseResetListener` truncates every table in `public` except `flyway_schema_history`, and every continuous aggregate, before each test method (R2.7). It finds them in the catalog, so a new table needs no edit. Do not write a test that relies on rows another test left.
+
+Classes and methods also run in **random order** (`src/test/resources/junit-platform.properties`), so an order dependence fails a run rather than hiding. The test task prints its seed; replay an order with `./gradlew test -PtestSeed=<seed>`.
+
+The defaults come from a context customizer because a `src/test/resources/application.yaml` would shadow the main file by classpath name rather than layer on it.
 
 ### Conventions
 

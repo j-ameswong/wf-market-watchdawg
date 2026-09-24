@@ -1,0 +1,8 @@
+# The test harness, applied to every Spring test context so no test class can opt out by
+# forgetting an annotation. See com.watchdawg.market.harness.
+org.springframework.test.context.ContextCustomizerFactory=\
+com.watchdawg.market.harness.TestHarnessContextCustomizerFactory
+
+org.springframework.test.context.TestExecutionListener=\
+com.watchdawg.market.harness.LiveApiGuardListener,\
+com.watchdawg.market.harness.DatabaseResetListener

@@ -1,9 +1,14 @@
 # SPEC — wf-market-watchdawg
 
 > **Status: under review.** **No code is written against a capability until it is broken into
-> tasks.** C1 is the only one that has been — see `tasks/plan.md` and `tasks/todo.md` — and it is
-> now **built**: R1.1–R1.8 each map to a named passing test, and R12.1's per-bucket meters ship
-> with it. C2 and C3 are next and neither has been broken into tasks yet.
+> tasks.** The capability in progress is planned in `tasks/plan.md` and `tasks/todo.md`; finished
+> ones are archived under `tasks/archive/`.
+>
+> | Capability | State |
+> | --- | --- |
+> | C1 | **Built.** R1.1–R1.8 each map to a named passing test; R12.1's per-bucket meters ship with it. |
+> | C2 | **Built.** R2.1–R2.7 each map to a named passing test or a recorded manual check (`tasks/todo.md`). Awaiting review. |
+> | C3 | Next. Not yet broken into tasks. |
 >
 > Grounded in `docs/v2/` (API `v0.25.0`, WebSocket `v0.13.0`), `docs/v1.yml`, and the live-verified
 > route table in `bruno/README.md`. This document describes the system to be built; the reasoning
@@ -204,6 +209,7 @@ erDiagram
   market ||--o{ order_event : "observations (hypertable)"
   market ||--o{ market_quote : "per-poll snapshot (hypertable)"
   market_quote ||--o{ market_quote_hourly : "continuous aggregate"
+  market_quote ||--o{ market_quote_daily : "continuous aggregate"
   market ||--o{ item_stat : "v1 closed + live series"
   wfm_order ||--o{ order_event : "observed as"
   watch ||--o{ signal : "fires"
@@ -377,7 +383,7 @@ Every outbound call goes through one compliant, paced, observable path.
 
 **Acceptance**
 - `mflyway info` clean from scratch; `mbuild` green.
-- `ItemRepositoryTest` passes alone *and* in any order alongside others (it currently asserts `count() == 1` and is order-dependent).
+- `ItemRepositoryTest` passes alone *and* in any order alongside others, although it asserts `count() == 1`.
 - A test asserts the context starts with scheduling off and records zero outbound HTTP.
 - A row older than the compression threshold yields a compressed chunk after the policy runs.
 
@@ -636,8 +642,8 @@ Gradle root is `market/`, not the repo root.
 
 ## 8. Testing strategy
 
-- Any test touching Spring, HTTP or storage is a `@SpringBootTest` with a Testcontainers Postgres. Identical annotation sets share one context **and one container**, so **order-independence is mandatory** (R2.7). Classes with no Spring or JDBC dependency are plain JUnit — booting a container to test token arithmetic buys nothing.
-- `MockRestServiceServer` bound to `RestClient.Builder` for HTTP — already available via `spring-boot-starter-webmvc-test`, no new dependency. **No test reaches the live API** (R2.6). The Gradle test task pins `wfm.sync.initial-delay` out of reach so `@EnableScheduling` cannot tick mid-run; `MarketApplicationTests` asserts it. A `src/test/resources/application.yaml` would *not* work here — it shadows the main file by classpath name rather than layering on it.
+- Any test touching Spring, HTTP or storage is a `@SpringBootTest` with a Testcontainers Postgres. Identical annotation sets share one context **and one container**, so **order-independence is mandatory** (R2.7): the database is truncated before every test method, and classes and methods run in random order with a printed, replayable seed. Classes with no Spring or JDBC dependency are plain JUnit — booting a container to test token arithmetic buys nothing.
+- `MockRestServiceServer` bound to `RestClient.Builder` for HTTP — already available via `spring-boot-starter-webmvc-test`, no new dependency. **No test reaches the live API** (R2.6). Every Spring test context starts with scheduling off and with a request factory that refuses and records outbound HTTP, registered from `src/test/resources/META-INF/spring.factories` so no test class can opt out; `MarketApplicationTests` asserts both. The defaults come from a context customizer because a `src/test/resources/application.yaml` would shadow the main file by classpath name rather than layer on it.
 - Fixtures are captured from the `bruno` collection so they match reality.
 - `WfmClient.get()` is `private inline` and cannot be stubbed — test through the HTTP layer, not by mocking the client.
 - **C4's diff logic gets the densest coverage.** It is where correctness actually lives; everything downstream trusts its output.
@@ -671,8 +677,7 @@ Gradle root is `market/`, not the repo root.
 
 1. **Does v1 `mod_rank` carry v2 `charges` for requiem items?** (R7.5.) Getting it wrong silently merges requiem-mod charge levels into rank buckets, and the corruption stays invisible until someone queries those items specifically. This is the one unresolved *correctness* question. Resolvable from the C3 catalog's `maxRank`/`maxCharges` rather than from more captures.
 2. **What does `Crossplay` mean to v1 `/items/{slug}/statistics`?** The header appears nowhere in `docs/v1.yml`, yet it deterministically rewrites 76/88 historical rows and *lowers* `volume` (§2.7, R7.11). Best reading: trades where **both** sides are crossplay-enabled, which would exclude the PC-crossplay-off cohort — 6 such users appeared in the sampled book. That is an inference from one slug and the direction of one number. Resolvable by sampling more slugs, worth doing before C7 ingests at scale, but R7.11 is written so the answer is **not** load-bearing.
-3. **Timescale + Postgres version.** `compose.yaml` pins `postgres:18-alpine`. Confirm whether a TimescaleDB pg18 image exists; if not, C2 pins pg17 and the dev volume must be reset (`mdb-reset`) since the data directory is incompatible.
-4. **C9b thresholds are deliberately unspecified** — they cannot be chosen honestly before history exists (R9b.3).
+3. **C9b thresholds are deliberately unspecified** — they cannot be chosen honestly before history exists (R9b.3).
 
 ---
 
@@ -686,4 +691,5 @@ Decisions, their rejected alternatives and their trade-offs are recorded in
 - **§2.2** caps what any analysis built on this warehouse can honestly claim. Worth confirming that limitation is understood *before* building on it, not after.
 - **R9a.8's 10–50/day budget** is the only number constraining signal quality. If the ceiling is wrong, most of C9a and all of C9b get retuned.
 - **C9b's volume-spike rule** has 90 days of real traded volume per market as its baseline. Whether 90 days is enough history to call a spike is unanswerable until the thing runs.
+- **R2.4's rollups are the only permanent quote record, and their shape freezes once they hold history older than the raw window.** An aggregate cannot be altered, only dropped and recreated, and recreating it then loses everything the raw table no longer has. C4 has to settle the quote measures before history accrues; after that, a changed rollup means a new one alongside the old.
 - **Crossplay widens what the warehouse means.** Every order-book series describes a PC+crossplay pool, not a PC pool, and `statistics` describes a third population again. `seller_platform` and `item_stat.crossplay` keep them separable — but only for a query author who knows to use them.

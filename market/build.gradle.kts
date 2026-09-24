@@ -1,3 +1,5 @@
+import kotlin.random.Random
+
 plugins {
     kotlin("jvm") version "2.3.21"
     kotlin("plugin.spring") version "2.3.21"
@@ -51,11 +53,16 @@ kotlin {
 tasks.withType<Test> {
     useJUnitPlatform()
 
-    // @EnableScheduling is active in every @SpringBootTest, so CollectionSyncScheduler would tick
-    // 30s into the test JVM and call the live warframe.market API -- forbidden by R2.6 and SPEC 9.
-    // A system property outranks application.yaml and applies to every test without a per-class
-    // annotation anyone can forget. Asserted by MarketApplicationTests.
-    systemProperty("wfm.sync.initial-delay", "3650d")
+    // R2.7: junit-platform.properties runs tests in random order. The seed is drawn only when the
+    // tests actually run, so it never makes the task out of date, and it is printed so a failing
+    // order can be replayed with -PtestSeed=<seed>.
+    val pinnedSeed = providers.gradleProperty("testSeed")
+    inputs.property("testSeed", pinnedSeed).optional(true)
+    doFirst {
+        val seed = pinnedSeed.getOrElse(Random.nextLong().toString())
+        systemProperty("junit.jupiter.execution.order.random.seed", seed)
+        logger.lifecycle("$name: random order seed $seed (replay with -PtestSeed=$seed)")
+    }
 }
 
 // Style is defined in market/.editorconfig, which Spotless discovers from this directory.

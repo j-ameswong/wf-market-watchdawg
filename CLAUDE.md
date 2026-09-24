@@ -26,7 +26,7 @@ The Gradle root is `market/`, **not** the repo root. `nix/` packages the jar; `b
 | Flyway without Gradle | `mflyway info` | see `flake.nix` for the full invocation |
 | Replay the API collection | `bruno-run` | `cd bruno && npx @usebruno/cli run --env production --delay 400 -r` |
 
-**Docker must be running.** `bootRun` starts the TimescaleDB (Postgres 18) in `market/compose.yaml` via `spring-boot-docker-compose` (lifecycle `start_and_stop`), and any test touching Spring, HTTP or storage is a `@SpringBootTest` that boots the same image through Testcontainers. `TimescaleTest` fails if `compose.yaml` and `TestcontainersConfiguration.IMAGE` name different tags. The image is not named `postgres`, so `compose.yaml` carries the `org.springframework.boot.service-connection: postgres` label; without it `bootRun` gets no datasource. Classes with no Spring or JDBC dependency (`WfmRateLimiterTest`) are plain JUnit and need neither. The test task pins `wfm.sync.initial-delay` out of reach so `@EnableScheduling` cannot tick mid-run and call the live API — `MarketApplicationTests` fails if that override is removed.
+**Docker must be running.** `bootRun` starts the TimescaleDB (Postgres 18) in `market/compose.yaml` via `spring-boot-docker-compose` (lifecycle `start_and_stop`), and any test touching Spring, HTTP or storage is a `@SpringBootTest` that boots the same image through Testcontainers. `TimescaleTest` fails if `compose.yaml` and `TestcontainersConfiguration.IMAGE` name different tags. The image is not named `postgres`, so `compose.yaml` carries the `org.springframework.boot.service-connection: postgres` label; without it `bootRun` gets no datasource. Classes with no Spring or JDBC dependency (`WfmRateLimiterTest`) are plain JUnit and need neither. No test can reach the live API; see *Test harness* below.
 
 Hermetic jar: `nix build .#market`. It builds with nixpkgs' `gradle_9` rather than `./gradlew` (the wrapper can't download inside the sandbox) and runs `bootJar` with `doCheck = false`, since tests need a Docker daemon. **After any dependency change in `build.gradle.kts`, regenerate the lock from the repo root:**
 
@@ -96,6 +96,15 @@ Spring Data JDBC, not JPA — no dirty checking, no lazy loading, and `save()` o
 - `CollectionVersionRecord` has a natural id (`name`), so it implements `Persistable` with a `@Transient val new` flag to tell Spring Data whether to insert or update. Prefer the `upsert` extension over `save()` for it.
 
 Schema lives in `market/src/main/resources/db/migration` (Flyway, `V<n>__desc.sql`). The `mflyway` CLI and the app share one `flyway_schema_history` table on purpose — a migration applied by either is seen as applied by the other.
+
+### Test harness
+
+`market/src/test/kotlin/com/watchdawg/market/harness/` applies to **every** Spring test context, registered from `src/test/resources/META-INF/spring.factories` rather than imported, so no test class can opt out by forgetting an annotation (R2.6):
+
+- `watchdawg.scheduling.enabled` is `false`, so `SchedulingConfig` (the only `@EnableScheduling`) stays off. A test's own `@SpringBootTest(properties = …)` still outranks that.
+- Every `RestClient` built from the context sends through `LiveApiGuard`, a request factory that records and refuses. `LiveApiGuardListener` fails any test that reached it, even when the code under test swallowed the refusal. To exercise HTTP, bind `MockRestServiceServer` to `bean.mutate()`: that swaps the guard out.
+
+The defaults come from a context customizer because a `src/test/resources/application.yaml` would shadow the main file by classpath name rather than layer on it.
 
 ### Conventions
 

@@ -65,21 +65,42 @@ make any real outbound HTTP from a test context fail loudly and be recorded (R2.
 `META-INF/spring.factories`, so no test class can forget them (Decisions 6, 7).
 
 **Acceptance criteria:**
-- [ ] `@EnableScheduling` lives on a configuration conditional on `watchdawg.scheduling.enabled`,
+- [x] `@EnableScheduling` lives on a configuration conditional on `watchdawg.scheduling.enabled`,
       matching when the property is missing.
-- [ ] Every Spring test context starts with the property `false`, and a
+- [x] Every Spring test context starts with the property `false`, and a
       `@SpringBootTest(properties = …)` value still overrides it.
-- [ ] A test asserts the context starts with scheduling off and records zero outbound HTTP — the
+- [x] A test asserts the context starts with scheduling off and records zero outbound HTTP — the
       spec's third acceptance bullet.
-- [ ] An unmocked call through a real `RestClient` bean is refused and recorded, never sent.
-- [ ] A test that reaches the guard fails even if the code under test swallows the exception.
-- [ ] The Gradle `wfm.sync.initial-delay` pin is gone, replaced rather than duplicated.
+- [x] An unmocked call through a real `RestClient` bean is refused and recorded, never sent.
+- [x] A test that reaches the guard fails even if the code under test swallows the exception.
+- [x] The Gradle `wfm.sync.initial-delay` pin is gone, replaced rather than duplicated.
 
 **Verification:**
-- [ ] `mtest --tests '*MarketApplicationTests' --tests '*SchedulingConfigTest' --tests '*LiveApiGuardTest'`
-- [ ] `mbuild` green
-- [ ] Mutation: drop the customizer's property → the scheduling test fails; drop the guard → the
+- [x] `mtest --tests '*MarketApplicationTests' --tests '*SchedulingConfigTest' --tests '*LiveApiGuardTest' --tests '*TestHarnessTest'`
+- [x] `mbuild` green
+- [x] Mutation: drop the customizer's property → the scheduling test fails; drop the guard → the
       outbound test fails
+
+**Notes:** `@EnableScheduling` moved off `MarketApplication` onto `SchedulingConfig`, which is
+conditional on the property. The harness supplies `false` from a property source ranked directly
+below a test's inlined properties, so it beats `application.yaml`, system properties and the
+environment, and still loses to `@SpringBootTest(properties = …)`. `TestHarnessTest` pins both
+halves of that without booting a context.
+
+The guard replaces Boot's `ClientHttpRequestFactoryBuilder` bean, which the auto-configuration
+backs off from, so every `RestClient.Builder` the context hands out builds on it. The refusal is an
+unchecked exception rather than an `IOException`, so `RestClient` does not wrap it into a
+`ResourceAccessException` that reads like a network fault.
+
+`MarketApplicationTests`' check that nothing is scheduled is only meaningful if the probe can see a
+scheduled method at all. `SchedulingConfigTest` shows it can, on a bare context with one
+`@Scheduled` bean.
+
+Mutation-checked:
+- drop the harness's property → `MarketApplicationTests`' scheduling test fails;
+- drop the guard's builder, with `wfm.base-url` pointed at a dead localhost port so the mutant
+  cannot reach the real API → both `LiveApiGuardTest` tests fail;
+- always rank the harness first → `TestHarnessTest`'s inlined-override test fails.
 
 **Dependencies:** T1
 **Files likely touched:** `.../MarketApplication.kt`, `.../SchedulingConfig.kt`,

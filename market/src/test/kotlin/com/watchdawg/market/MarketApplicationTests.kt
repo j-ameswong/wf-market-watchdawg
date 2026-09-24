@@ -1,31 +1,35 @@
 package com.watchdawg.market
 
+import com.watchdawg.market.harness.LiveApiGuard
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Import
-import org.springframework.core.env.Environment
-import java.time.Duration
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
+import org.springframework.scheduling.config.ScheduledTaskHolder
+import kotlin.test.assertEquals
 
 @SpringBootTest
 @Import(TestcontainersConfiguration::class)
 class MarketApplicationTests {
 
-    @Autowired lateinit var env: Environment
+    @Autowired lateinit var context: ApplicationContext
+
+    @Autowired lateinit var guard: LiveApiGuard
 
     @Test
     fun contextLoads() {
     }
 
+    /**
+     * R2.6. Nothing in a test context runs on a timer, and nothing has tried to reach the network.
+     * `SchedulingConfigTest` shows the task probe does see a scheduled method when one is active.
+     */
     @Test
-    fun `the sync scheduler cannot fire during a test run`() {
-        // @EnableScheduling is active under @SpringBootTest, so a tick inside the test JVM would
-        // call the live API, which R2.6 and SPEC 9 forbid outright. The test task pushes the delay
-        // out of reach with a system property. This test fails if that ever goes away.
-        val delay = assertNotNull(env.getProperty("wfm.sync.initial-delay", Duration::class.java))
+    fun `the context starts with scheduling off and has made no outbound HTTP`() {
+        val scheduled = context.getBeansOfType(ScheduledTaskHolder::class.java).values.flatMap { it.scheduledTasks }
 
-        assertTrue(delay >= Duration.ofDays(1), "sync would tick $delay into a test run")
+        assertEquals(emptyList(), scheduled.map { it.task.toString() })
+        assertEquals(emptyList(), guard.refused)
     }
 }

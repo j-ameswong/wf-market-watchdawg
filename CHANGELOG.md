@@ -7,6 +7,17 @@ design rationale in [`docs/adr/`](docs/adr/README.md).
 
 ### Added
 
+- **C2 — Time-series storage and test harness.**
+  - TimescaleDB 2.30.1 on Postgres 18 in dev (`compose.yaml`), in tests (Testcontainers) and as a
+    requirement of the packaged jar.
+  - `order_event`, a hypertable compressed after 7 days and kept forever.
+  - `market_quote`, a hypertable kept raw for 90 days, rolled up into `market_quote_hourly` and
+    `market_quote_daily`, which are kept forever.
+  - Every storage policy is declared in the repeatable migration `R__storage_policies.sql`.
+  - `watchdawg.scheduling.enabled` switches all `@Scheduled` components on or off.
+  - A test harness applied to every Spring test context: scheduling off, outbound HTTP refused
+    and recorded, and the database emptied before each test. Tests run in random order with a
+    printed, replayable seed (`-PtestSeed`).
 - **C1 — API access.** Every outbound call to warframe.market goes through one paced,
   observable transport:
   - A two-bucket rate limiter keyed by route class (`public` 2 req/s, `contract-search`
@@ -23,6 +34,8 @@ design rationale in [`docs/adr/`](docs/adr/README.md).
 
 ### Changed
 
+- The dev database image is `timescale/timescaledb:2.30.1-pg18`. An existing `postgres:18-alpine`
+  volume is reused as is.
 - `wfm.requests-per-second` is replaced by `wfm.limits.*`.
 - `wfm.platform` and `wfm.crossplay` have no defaults; startup fails if either is unset.
 - Kotlin sources use 4-space indentation, enforced by Spotless + ktlint as part of `build`.

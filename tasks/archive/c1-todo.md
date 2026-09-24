@@ -354,7 +354,7 @@ pacing test plus `RateLimitWiringTest` fail), and make `moving_avg` non-null (it
       paced on the public bucket` proves the wired bean, not just the predicate
 - [x] `bruno-run` re-verifies the live v1 contract after the DTO addition (§8, manual, never CI) —
       37/37 requests, 37/37 assertions, 2026-09-11
-- [ ] Review with human before Phase 4
+- [x] Review with human before Phase 4 — approved on PR #1, 2026-09-24
 
 ---
 
@@ -453,5 +453,5 @@ scheduler exists. See `tasks/plan.md` Results for what the run does and does not
       - R12.5 → `HttpSurfaceTest` (both)
 - [x] `mbuild` green, tests order-independent, `nix build .#market` succeeds — 49 tests
 - [x] `SPEC.md` status note updated — C1 is broken into tasks and built
-- [ ] Review with human
-- [ ] C3 may begin (C2 is parallel and independent)
+- [x] Review with human — approved on PR #1, 2026-09-24
+- [x] C3 may begin (C2 is parallel and independent)

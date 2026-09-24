@@ -7,7 +7,7 @@
 > | Capability | State |
 > | --- | --- |
 > | C1 | **Built.** R1.1–R1.8 each map to a named passing test; R12.1's per-bucket meters ship with it. |
-> | C2 | **In progress.** Broken into tasks in `tasks/plan.md`. |
+> | C2 | **Built.** R2.1–R2.7 each map to a named passing test or a recorded manual check (`tasks/todo.md`). Awaiting review. |
 > | C3 | Next. Not yet broken into tasks. |
 >
 > Grounded in `docs/v2/` (API `v0.25.0`, WebSocket `v0.13.0`), `docs/v1.yml`, and the live-verified
@@ -209,6 +209,7 @@ erDiagram
   market ||--o{ order_event : "observations (hypertable)"
   market ||--o{ market_quote : "per-poll snapshot (hypertable)"
   market_quote ||--o{ market_quote_hourly : "continuous aggregate"
+  market_quote ||--o{ market_quote_daily : "continuous aggregate"
   market ||--o{ item_stat : "v1 closed + live series"
   wfm_order ||--o{ order_event : "observed as"
   watch ||--o{ signal : "fires"
@@ -676,8 +677,7 @@ Gradle root is `market/`, not the repo root.
 
 1. **Does v1 `mod_rank` carry v2 `charges` for requiem items?** (R7.5.) Getting it wrong silently merges requiem-mod charge levels into rank buckets, and the corruption stays invisible until someone queries those items specifically. This is the one unresolved *correctness* question. Resolvable from the C3 catalog's `maxRank`/`maxCharges` rather than from more captures.
 2. **What does `Crossplay` mean to v1 `/items/{slug}/statistics`?** The header appears nowhere in `docs/v1.yml`, yet it deterministically rewrites 76/88 historical rows and *lowers* `volume` (§2.7, R7.11). Best reading: trades where **both** sides are crossplay-enabled, which would exclude the PC-crossplay-off cohort — 6 such users appeared in the sampled book. That is an inference from one slug and the direction of one number. Resolvable by sampling more slugs, worth doing before C7 ingests at scale, but R7.11 is written so the answer is **not** load-bearing.
-3. **Timescale + Postgres version.** `compose.yaml` pins `postgres:18-alpine`. Confirm whether a TimescaleDB pg18 image exists; if not, C2 pins pg17 and the dev volume must be reset (`mdb-reset`) since the data directory is incompatible.
-4. **C9b thresholds are deliberately unspecified** — they cannot be chosen honestly before history exists (R9b.3).
+3. **C9b thresholds are deliberately unspecified** — they cannot be chosen honestly before history exists (R9b.3).
 
 ---
 
@@ -691,4 +691,5 @@ Decisions, their rejected alternatives and their trade-offs are recorded in
 - **§2.2** caps what any analysis built on this warehouse can honestly claim. Worth confirming that limitation is understood *before* building on it, not after.
 - **R9a.8's 10–50/day budget** is the only number constraining signal quality. If the ceiling is wrong, most of C9a and all of C9b get retuned.
 - **C9b's volume-spike rule** has 90 days of real traded volume per market as its baseline. Whether 90 days is enough history to call a spike is unanswerable until the thing runs.
+- **R2.4's rollups are the only permanent quote record, and their shape freezes once they hold history older than the raw window.** An aggregate cannot be altered, only dropped and recreated, and recreating it then loses everything the raw table no longer has. C4 has to settle the quote measures before history accrues; after that, a changed rollup means a new one alongside the old.
 - **Crossplay widens what the warehouse means.** Every order-book series describes a PC+crossplay pool, not a PC pool, and `statistics` describes a third population again. `seller_platform` and `item_stat.crossplay` keep them separable — but only for a query author who knows to use them.

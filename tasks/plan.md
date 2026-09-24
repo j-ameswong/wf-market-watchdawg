@@ -74,18 +74,19 @@ T2 scheduling off +        T3 reset between tests +
 - [x] T3: Order-independent tests
 
 **Checkpoint A** — the existing suite runs green on TimescaleDB, in random order, with scheduling
-off and no outbound HTTP.
+off and no outbound HTTP. *Met: 59 tests under three seeds.*
 
 ### Phase 2 — The fact tables
 - [x] T4: The order event log: a compressed hypertable, retained forever
 - [x] T5: Quote snapshots: raw for a bounded window, rolled up forever
 
-**Checkpoint B** — R2.2–R2.4 each have a named passing test.
+**Checkpoint B** — R2.2–R2.4 each have a named passing test. *Met: 68 tests.*
 
 ### Phase 3 — One history, two paths
 - [x] T6: Migrations apply identically via Gradle and the Flyway CLI
 
-**Checkpoint C** — C2 acceptance met; C3 may begin.
+**Checkpoint C** — C2 acceptance met; C3 may begin. *Met: 72 tests, and the Flyway CLI verified in
+both orders. Awaiting human review.*
 
 Full task bodies with acceptance criteria live in `tasks/todo.md`.
 
@@ -116,11 +117,13 @@ All delegated and decided 2026-09-24 while planning; each is open to review at C
    half-applied. The marker for the day one is needed — a sibling `V<n>__desc.sql.conf` holding
    `executeInTransaction=false` — is exercised by a fixture migration in T6, through both a
    classpath and a filesystem location.
-3. **Policy values are declared once, in `R__storage_policies.sql`.** The alternative was Flyway
-   placeholders, which would have to be supplied identically by `application.yaml` and by the
-   `mflyway` shell function — two sources that can drift, on the one surface R2.5 says must agree.
-   A repeatable migration is re-applied whenever its content changes, so "configurable" means
-   "edit one reviewed file", consistent with §9 making policy changes ask-first.
+3. **Policy values are declared once, in `R__storage_policies.sql`.** Graduated to
+   [ADR-0020](../docs/adr/0020-storage-policies-in-one-repeatable-migration.md), since every later
+   fact table follows it. The alternative was Flyway placeholders, which would have to be supplied
+   identically by `application.yaml` and by the `mflyway` shell function — two sources that can
+   drift, on the one surface R2.5 says must agree. A repeatable migration is re-applied whenever its
+   content changes, so "configurable" means "edit one reviewed file", consistent with §9 making
+   policy changes ask-first.
 4. **Initial values.** Event log compressed after **7 days**, no retention. Raw quotes dropped
    after **90 days**, matching the v1 statistics daily window. Hourly aggregate refreshed over the
    last 2 days, daily over the last 4, both every 30 minutes; neither aggregate has retention.

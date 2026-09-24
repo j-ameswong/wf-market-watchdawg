@@ -315,8 +315,28 @@ Both `bootRun`s ran with `watchdawg.scheduling.enabled=false`, so neither called
 ---
 
 ## Checkpoint C — C2 complete
-- [ ] All four of the spec's C2 acceptance bullets pass
-- [ ] R2.1–R2.7 each map to a named passing test or a recorded manual check
-- [ ] `SPEC.md` status note and open question 3 updated; `CHANGELOG.md` updated
-- [ ] Review with human
+- [x] All four of the spec's C2 acceptance bullets pass
+      - "`mflyway info` clean from scratch; `mbuild` green" — the manual CLI runs under T6, and
+        `mbuild` at 72 tests
+      - "`ItemRepositoryTest` passes alone *and* in any order" — T3: alone, and in every random
+        order since
+      - "a test asserts the context starts with scheduling off and records zero outbound HTTP" —
+        `MarketApplicationTests.the context starts with scheduling off and has made no outbound
+        HTTP`
+      - "a row older than the compression threshold yields a compressed chunk after the policy
+        runs" — `EventLogStorageTest.an event older than the compression age is compressed when the
+        policy runs`
+- [x] R2.1–R2.7 each map to a named passing test or a recorded manual check
+      - R2.1 → `TimescaleTest` (both), plus the dev-volume and packaged-jar runs under T1
+      - R2.2 → `FactTablesTest` (all three)
+      - R2.3 → `EventLogStorageTest` (all three)
+      - R2.4 → `QuoteStorageTest` (all three), `DatabaseResetTest` for the rollups' reset
+      - R2.5 → `MigrationPathsTest` (all four), plus the Flyway CLI runs under T6
+      - R2.6 → `MarketApplicationTests`, `LiveApiGuardTest`, `SchedulingConfigTest`,
+        `TestHarnessTest`
+      - R2.7 → `DatabaseResetTest`, and the suite running in random order
+- [x] `SPEC.md` status note and open question 3 updated; `CHANGELOG.md` updated
+- [ ] Review with human — in particular the policy numbers (plan Decision 4) and
+      [ADR-0020](../docs/adr/0020-storage-policies-in-one-repeatable-migration.md), which is
+      `proposed`
 - [ ] C3 may begin

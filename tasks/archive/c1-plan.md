@@ -79,9 +79,9 @@ T4 retry/429/509   T5 error bodies  T6 crossplay one-setting
 - [x] T2: `WfmRateLimiter` with two independent buckets
 - [x] T3: Route every v2 call through the limiter at the transport layer
 
-**Checkpoint A** — a paced v2 call works end to end and cannot be bypassed. *Met; awaiting human
-review. One blocker surfaced and was fixed during the checkpoint — the test-run scheduler could
-reach the live API; see `tasks/todo.md`.*
+**Checkpoint A** — a paced v2 call works end to end and cannot be bypassed. *Met and reviewed
+(approved on PR #1, 2026-09-24). One blocker surfaced and was fixed during the checkpoint — the
+test-run scheduler could reach the live API; see `tasks/todo.md`.*
 
 ### Phase 2 — Failing correctly, and one context
 - [x] T4: `429`/`509` → bounded retry that honors `Retry-After` and consumes budget
@@ -95,16 +95,16 @@ NPE rather than a named property; see `tasks/todo.md`.*
 ### Phase 3 — The second channel
 - [x] T7: v1 legacy client and the `payload`/`include` envelope
 
-**Checkpoint C** — both API versions run through one limiter, on the right buckets. *Met; awaiting
-human review. One correction landed with it — `docs/v1-statistics.md` claimed an integer price
-binding would fail on a fractional value; Jackson truncates silently instead, which is worse. See
-`tasks/todo.md` under T7.*
+**Checkpoint C** — both API versions run through one limiter, on the right buckets. *Met and
+reviewed (approved on PR #1, 2026-09-24). One correction landed with it — `docs/v1-statistics.md`
+claimed an integer price binding would fail on a fractional value; Jackson truncates silently
+instead, which is worse. See `tasks/todo.md` under T7.*
 
 ### Phase 4 — Proof at runtime
 - [x] T8: Per-bucket req/s metrics and the 1h live run
 
-**Checkpoint D** — C1 acceptance met; C3 may begin. *Met; awaiting human review. See the caveat in
-Results on what the live run does and does not prove.*
+**Checkpoint D** — C1 acceptance met; C3 may begin. *Met and reviewed (approved on PR #1,
+2026-09-24). See the caveat in Results on what the live run does and does not prove.*
 
 Full task bodies with acceptance criteria live in `tasks/todo.md`.
 

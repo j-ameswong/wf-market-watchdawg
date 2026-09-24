@@ -18,15 +18,6 @@ class Policies(private val jdbc: JdbcTemplate) {
         relation,
     ).filterNotNull()
 
-    /** One setting from a policy's config, e.g. `compress_after`. */
-    fun setting(proc: String, relation: String, key: String): String = jdbc.queryForObject(
-        "select config ->> ? from timescaledb_information.jobs where proc_name = ? and hypertable_name = ?",
-        String::class.java,
-        key,
-        proc,
-        relation,
-    )!!
-
     fun run(proc: String, relation: String) {
         val job = jdbc.queryForObject(
             "select job_id from timescaledb_information.jobs where proc_name = ? and hypertable_name = ?",

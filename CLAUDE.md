@@ -97,6 +97,22 @@ Spring Data JDBC, not JPA — no dirty checking, no lazy loading, and `save()` o
 
 Schema lives in `market/src/main/resources/db/migration` (Flyway, `V<n>__desc.sql`). The `mflyway` CLI and the app share one `flyway_schema_history` table on purpose — a migration applied by either is seen as applied by the other.
 
+### Time series
+
+TimescaleDB holds the fact tables ([ADR-0007](docs/adr/0007-timescaledb-with-indefinite-event-log.md)). Each is a hypertable partitioned on `observed_at`, so every unique index must include that column — TimescaleDB refuses one that does not, and `FactTablesTest` lists the fact tables and checks every hypertable's indexes.
+
+| Relation | Kept | Policy |
+| --- | --- | --- |
+| `order_event` | forever | compressed after 7 days, segmented by `market_id` |
+| `market_quote` | 90 days raw | dropped by retention |
+| `market_quote_hourly`, `market_quote_daily` | forever | continuous aggregates of `market_quote`, refreshed over the last 2 / 4 days |
+
+Every policy value lives in `db/migration/R__storage_policies.sql`, a repeatable migration that Flyway re-applies whenever the file changes. Changing one is an ask-first change (SPEC §9).
+
+**Refreshing a rollup over a range whose raw chunks are gone deletes the rollup's rows for that range.** So a refresh window must start inside raw retention (`QuoteStorageTest` fails otherwise), and never run `refresh_continuous_aggregate(…, null, null)` by hand on a database old enough to have dropped raw quotes. A rollup's shape cannot be altered, only dropped and recreated, which loses everything older than the raw window. Once history has accrued, add a new rollup alongside instead.
+
+In tests there are no TimescaleDB background workers: a policy runs only when the test calls `run_job` (see `store/Policies.kt`).
+
 ### Test harness
 
 `market/src/test/kotlin/com/watchdawg/market/harness/` applies to **every** Spring test context, registered from `src/test/resources/META-INF/spring.factories` rather than imported, so no test class can opt out by forgetting an annotation (R2.6):

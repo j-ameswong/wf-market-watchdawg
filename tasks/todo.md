@@ -213,18 +213,38 @@ continuous aggregates with no retention (R2.2, R2.4). The refresh windows must e
 retention, or dropping raw chunks would delete rolled-up history.
 
 **Acceptance criteria:**
-- [ ] `market_quote` is a hypertable on `observed_at`, keyed `(market_id, observed_at)`.
-- [ ] `market_quote_hourly` and `market_quote_daily` roll up best bid and ask (open, high, low,
+- [x] `market_quote` is a hypertable on `observed_at`, keyed `(market_id, observed_at)`.
+- [x] `market_quote_hourly` and `market_quote_daily` roll up best bid and ask (open, high, low,
       close, average) and order counts per market.
-- [ ] A raw row past the retention window is dropped by the policy while both aggregates keep its
+- [x] A raw row past the retention window is dropped by the policy while both aggregates keep its
       bucket, including after their own refresh policies run again.
-- [ ] Neither aggregate has a retention policy.
-- [ ] A test fails if any refresh window reaches past raw retention.
-- [ ] The T3 reset empties the aggregates, without being edited.
+- [x] Neither aggregate has a retention policy.
+- [x] A test fails if any refresh window reaches past raw retention.
+- [x] The T3 reset empties the aggregates, without being edited.
 
 **Verification:**
-- [ ] `mtest --tests '*QuoteStorageTest' --tests '*FactTablesTest'`
-- [ ] `mbuild` green
+- [x] `mtest --tests '*QuoteStorageTest' --tests '*FactTablesTest'`
+- [x] `mbuild` green
+
+**Notes:** the hazard this task guards against was confirmed on 2.30.1 before writing the
+policy. After retention dropped a raw chunk, a refresh covering that range deleted the rollup's
+bucket (2 rows became 1), while a policy refresh with a 2-day window left it alone.
+`QuoteStorageTest` replays that sequence: roll up a fresh poll, drop it by retention, re-run the
+refresh policies, and the bucket must still be there.
+
+Both rollups aggregate the raw table directly. Daily reading hourly would make its averages
+averages of averages, and `avg` skips nulls, so weighting by `polls` would still be wrong whenever
+one side of the book was empty.
+
+`DatabaseResetTest` now also writes a rollup row, which proves T3's reset empties aggregates
+without the listener being edited. Removing the listener's aggregate truncation fails it in both
+orders.
+
+Mutation-checked:
+- widen the hourly refresh window to 100 days → the window guard fails, *and* the survival test
+  fails with "market_quote_hourly lost the dropped poll's bucket" — the real failure, reproduced;
+- give the hourly rollup a retention policy → the policy test fails;
+- remove raw retention → all three tests fail.
 
 **Dependencies:** T4
 **Files likely touched:** `.../db/migration/V4__market_quote.sql`,
@@ -234,8 +254,13 @@ retention, or dropping raw chunks would delete rolled-up history.
 ---
 
 ## Checkpoint B — the fact tables
-- [ ] `mbuild` green, under several seeds
-- [ ] R2.2, R2.3, R2.4 each have a named passing test
+- [x] `mbuild` green, under several seeds — 68 tests
+- [x] R2.2, R2.3, R2.4 each have a named passing test
+      - R2.2 → `FactTablesTest` (all three)
+      - R2.3 → `EventLogStorageTest.an event older than the compression age is compressed when the
+        policy runs` — the spec's fourth acceptance bullet — and `…has a compression policy and
+        nothing that drops rows`
+      - R2.4 → `QuoteStorageTest` (all three)
 
 ---
 

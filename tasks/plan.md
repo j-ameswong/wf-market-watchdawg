@@ -78,7 +78,7 @@ off and no outbound HTTP.
 
 ### Phase 2 — The fact tables
 - [x] T4: The order event log: a compressed hypertable, retained forever
-- [ ] T5: Quote snapshots: raw for a bounded window, rolled up forever
+- [x] T5: Quote snapshots: raw for a bounded window, rolled up forever
 
 **Checkpoint B** — R2.2–R2.4 each have a named passing test.
 

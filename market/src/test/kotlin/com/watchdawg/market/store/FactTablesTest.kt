@@ -67,6 +67,6 @@ class FactTablesTest {
 
     private companion object {
         /** Every fact table, and the column it is partitioned on. */
-        val FACT_TABLES = mapOf("order_event" to "observed_at")
+        val FACT_TABLES = mapOf("order_event" to "observed_at", "market_quote" to "observed_at")
     }
 }

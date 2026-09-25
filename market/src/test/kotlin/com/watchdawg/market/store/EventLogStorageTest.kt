@@ -97,8 +97,8 @@ class EventLogStorageTest {
     ) {
         jdbc.update(
             """
-            insert into order_event (observed_at, market_id, order_id, event, source, platinum, quantity)
-            values (?, ?, ?, ?, ?, ?, 1)
+            insert into order_event (observed_at, market_id, order_id, event, source, type, platinum, quantity)
+            values (?, ?, ?, ?, ?, 'sell', ?, 1)
             """,
             Timestamp.from(observedAt),
             market,

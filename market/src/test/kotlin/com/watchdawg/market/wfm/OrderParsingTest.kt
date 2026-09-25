@@ -59,6 +59,7 @@ class OrderParsingTest {
         assertEquals(BigDecimal("15.0000"), lot.unitPrice)
         assertEquals(BigDecimal("4.1667"), lot.copy(platinum = 25).unitPrice)
         assertEquals(BigDecimal("7.0000"), lot.copy(platinum = 7, perTrade = null).unitPrice, "no lot size is one unit")
+        assertEquals(BigDecimal("7.0000"), lot.copy(platinum = 7, perTrade = 0).unitPrice, "nor is a lot of none")
     }
 
     @Test

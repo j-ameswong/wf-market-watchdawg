@@ -83,8 +83,9 @@ data class Order(
     val itemId: String? = null,
     val user: OrderOwner? = null,
 ) {
-    /** Platinum per unit, to four places. An order without a lot size sells one at a time. */
-    val unitPrice: BigDecimal get() = platinum.toBigDecimal().divide((perTrade ?: 1).toBigDecimal(), 4, HALF_EVEN)
+    /** Platinum per unit, to four places. An order without a usable lot size sells one at a time. */
+    val unitPrice: BigDecimal
+        get() = platinum.toBigDecimal().divide((perTrade?.takeIf { it > 0 } ?: 1).toBigDecimal(), 4, HALF_EVEN)
 
     /** `offline` covers invisible owners too; upstream does not tell them apart. */
     val ownerOnline: Boolean get() = user?.status in ONLINE_STATUSES
@@ -94,12 +95,17 @@ data class Order(
     }
 }
 
-enum class OrderType {
+enum class OrderType(val db: String) {
     @JsonProperty("buy")
-    BUY,
+    BUY("buy"),
 
     @JsonProperty("sell")
-    SELL,
+    SELL("sell"),
+    ;
+
+    companion object {
+        fun fromDb(value: String): OrderType = entries.first { it.db == value }
+    }
 }
 
 data class OrderOwner(val platform: String? = null, val status: String? = null)

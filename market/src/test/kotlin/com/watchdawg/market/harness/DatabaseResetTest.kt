@@ -51,15 +51,18 @@ class DatabaseResetTest {
         val market = resolver.marketFor(items)
         // A rollup keeps its rows when its source table is emptied, so it needs its own reset.
         jdbc.update(
-            "insert into market_quote (market_id, observed_at, buy_count, sell_count) values (?, now(), 0, 0)",
+            """
+            insert into market_quote (market_id, observed_at, buy_count, sell_count, buy_online_count, sell_online_count)
+            values (?, now(), 0, 0, 0, 0)
+            """,
             market,
         )
         jdbc.execute("call refresh_continuous_aggregate('market_quote_hourly', null, null)")
         val policies = Policies(jdbc)
         jdbc.update(
             """
-            insert into order_event (observed_at, market_id, order_id, event, source, platinum, quantity)
-            values (?, ?, 'o', 'appeared', 'book', 1, 1)
+            insert into order_event (observed_at, market_id, order_id, event, source, type, platinum, quantity)
+            values (?, ?, 'o', 'appeared', 'book', 'sell', 1, 1)
             """,
             Timestamp.from(policies.beyondAge(COMPRESSION, "order_event", "compress_after")),
             market,

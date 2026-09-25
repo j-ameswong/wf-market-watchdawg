@@ -23,16 +23,16 @@ checks and nothing else; how a check is met lives in the code and its tests.
 - [x] Setting it to `true` restores the sweep unchanged.
 
 ### T4: The spec matches what the service can observe
-- [ ] R4.2 says every detected state change appends, not every observation.
-- [ ] C4's rules for reappearance, stale books, socket events during a book fetch, empty books
+- [x] R4.2 says every detected state change appends, not every observation.
+- [x] C4's rules for reappearance, stale books, socket events during a book fetch, empty books
       and failed fetches are requirements, each with an acceptance check.
-- [ ] Quote acceptance counts rows per reconciled market, including markets that became empty.
-- [ ] R5.4 and §2.1 describe gap-fill as best effort: `/recent` holds at most 500 orders from
+- [x] Quote acceptance counts rows per reconciled market, including markets that became empty.
+- [x] R5.4 and §2.1 describe gap-fill as best effort: `/recent` holds at most 500 orders from
       online users, and the socket carries new orders only.
-- [ ] §8 no longer requires a Spring context for parsing and diff tests.
-- [ ] The build order is the review's sequence. C6 is one instance on a fixed cadence over
+- [x] §8 no longer requires a Spring context for parsing and diff tests.
+- [x] The build order is the review's sequence. C6 is one instance on a fixed cadence over
       watched items. ADR-0006 separates freshness (scheduler) from the ceiling (limiter).
-- [ ] §10 records the review's open questions for C9a and C10; §11 records the untested backup.
+- [x] §10 records the review's open questions for C9a and C10; §11 records the untested backup.
 
 ## C4 — order-book ingest
 

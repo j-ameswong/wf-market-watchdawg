@@ -1,7 +1,7 @@
 # ADR-0006: The poll scheduler owns rate-budget compliance
 
 **Date**: 2026-09-09
-**Status**: accepted
+**Status**: superseded by [ADR-0021](0021-limiter-owns-the-ceiling-poll-loop-owns-freshness.md)
 **Deciders**: project author (spec review)
 
 ## Context

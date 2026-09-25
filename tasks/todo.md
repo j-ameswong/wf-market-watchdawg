@@ -6,9 +6,9 @@ checks and nothing else; how a check is met lives in the code and its tests.
 ## Foundation
 
 ### T1: The limiter paces actual starts
-- [ ] Calls queued behind a slow one start a full turn apart once the slot frees.
-- [ ] A queued call is not counted in `wfm.requests` until it starts.
-- [ ] `WfmRateLimiterTest.calls queued behind a slow one…` fails against the old order (turn,
+- [x] Calls queued behind a slow one start a full turn apart once the slot frees.
+- [x] A queued call is not counted in `wfm.requests` until it starts.
+- [x] `WfmRateLimiterTest.calls queued behind a slow one…` fails against the old order (turn,
       then slot).
 
 ### T2: The WFM transport covers the WFM clients only

@@ -36,13 +36,17 @@ machine with Nix.
 ## Captures (2026-09-25)
 
 `/v2/orders/item/{serration,khra,ayatan_anasa_sculpture}` and `/v2/orders/recent`, crossplay on.
-They answered three questions before any field was committed to:
+They settled these before any field was committed to:
 
 - **Requiem mods trade by rank.** `khra` orders carry `rank` 0, 2 and 3 and never `charges`
   (SPEC §10 Q1).
 - **`perTrade` is a lot size.** Ayatan sells at `perTrade` 6 have a median of 60 against 10 at 1.
 - **Every order carries its dimensions explicitly.** Ayatan orders carry both star counts,
   including `0`, and serration orders carry `subtype` and `rank`.
+- **Real books cross unless offline owners are left out.** Per unit, the ayatan (2,2) market's
+  best bid is 7 against a best ask of 6; among online and in-game owners it is 7 against 7.
+  Offline owners' orders stay listed for up to 48h. Rules comparing bid and ask should read the
+  online pair (SPEC §11).
 
 The committed fixtures are those captures with trader identity replaced (SPEC §9); see
 `bruno/scrub-orders.mjs`.

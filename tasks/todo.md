@@ -59,7 +59,9 @@ checks and nothing else; how a check is met lives in the code and its tests.
 ### T7: A reconciled book writes one quote row per market
 - [ ] One row for every market of the item, including one that became empty (counts 0, prices
       null).
-- [ ] Best prices are per unit; the captured ayatan book is not crossed.
+- [ ] Best prices are per unit: the captured ayatan (2,2) market's best bid is 7 a unit, not the
+      42 a lot of six costs. Its full book still crosses (7 against 6), because offline owners'
+      orders linger; its online pair does not (7 against 7).
 - [ ] Online measures count only owners whose status is `online` or `ingame`.
 - [ ] Both rollups carry the new measures, and a database upgraded from V8 keeps every storage
       policy.

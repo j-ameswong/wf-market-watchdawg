@@ -8,7 +8,7 @@
 > | --- | --- |
 > | C1 | **Built.** R1.1–R1.8 each map to a named passing test; R12.1's per-bucket meters ship with it. |
 > | C2 | **Built and reviewed.** R2.1–R2.7 each map to a named passing test or a recorded manual check. |
-> | C3 | **Built and reviewed.** Three acceptance bullets map to named tests; the fourth, and the detail sweep, to live runs recorded in `tasks/archive/c3-todo.md`. The sweep is off by default until a rule or query reads its fields. |
+> | C3 | **Built and reviewed.** Three acceptance bullets map to named tests; the fourth, and the detail sweep, to live runs recorded in `tasks/archive/c3-todo.md`. |
 > | C4 | **In progress**, with corrections to C1 from the 2026-09-25 review. See `tasks/plan.md`. |
 >
 > Grounded in `docs/v2/` (API `v0.25.0`, WebSocket `v0.13.0`), `docs/v1.yml`, and the live-verified
@@ -682,7 +682,7 @@ Gradle root is `market/`, not the repo root.
 
 - Wiring and persistence are tested as `@SpringBootTest` with a Testcontainers Postgres; parsing and classification logic are plain JUnit, with neither. Identical annotation sets share one context **and one container**, so **order-independence is mandatory** (R2.7): the database is truncated before every test method, and classes and methods run in random order with a printed, replayable seed. Classes with no Spring or JDBC dependency are plain JUnit — booting a container to test token arithmetic buys nothing.
 - `MockRestServiceServer` bound to `RestClient.Builder` for HTTP — already available via `spring-boot-starter-webmvc-test`, no new dependency. **No test reaches the live API** (R2.6). Every Spring test context starts with scheduling off and with a request factory that refuses and records outbound HTTP, registered from `src/test/resources/META-INF/spring.factories` so no test class can opt out; `MarketApplicationTests` asserts both. The defaults come from a context customizer because a `src/test/resources/application.yaml` would shadow the main file by classpath name rather than layer on it.
-- Fixtures are captured from the `bruno` collection, and a representative capture comes **before** any field is committed to. Synthetic payloads test behaviour, never what upstream returns. Order captures have trader identity replaced before they are committed (`bruno/scrub-orders.mjs`, §9).
+- Fixtures are captured from the `bruno` collection, and a representative capture comes **before** any field is committed to. Synthetic payloads test behaviour, never what upstream returns. Order captures have trader identity replaced before they are committed (§9).
 - `WfmClient.get()` is `private inline` and cannot be stubbed — test through the HTTP layer, not by mocking the client.
 - **C4's diff logic gets the densest coverage.** It is where correctness actually lives; everything downstream trusts its output.
 - `bruno-run` re-verifies live contracts after any DTO change. Manual, never in CI.
@@ -729,6 +729,7 @@ Decisions, their rejected alternatives and their trade-offs are recorded in
 
 - **The limiter is the only thing between demand and the upstream ceiling** ([ADR-0021](docs/adr/0021-limiter-owns-the-ceiling-poll-loop-owns-freshness.md)). It is per process, so the service runs as one instance until a shared limiter exists.
 - **Indefinite retention is only a promise once a restore has been tested.** No backup or restore has been exercised yet.
+- **Real books cross unless offline owners are left out.** Offline owners' orders stay listed for up to 48h, so the best bid over all visible orders can exceed the best ask: 7 against 6 per unit on a captured `ayatan_anasa_sculpture` book (2026-09-25), 7 against 7 among online owners. Rules comparing bid and ask (R9a.3's crossing and spread families) should read the online pair.
 - **R4.5** costs real latency on arguably the most interesting signal: a cheap listing disappearing. The lag is accepted deliberately; the only lever is poll cadence.
 - **§2.2** caps what any analysis built on this warehouse can honestly claim. Worth confirming that limitation is understood *before* building on it, not after.
 - **R9a.8's 10–50/day budget** is the only number constraining signal quality. If the ceiling is wrong, most of C9a and all of C9b get retuned.

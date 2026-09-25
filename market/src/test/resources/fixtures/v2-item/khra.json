@@ -1,0 +1,27 @@
+{
+  "apiVersion": "0.25.0",
+  "data": {
+    "id": "5dbe9b097ea27b0ffe3ca26c",
+    "slug": "khra",
+    "gameRef": "/Lotus/Upgrades/Mods/Immortal/ImmortalEightMod",
+    "tags": [
+      "mod",
+      "rare",
+      "parazon"
+    ],
+    "rarity": "rare",
+    "maxRank": 3,
+    "tradingTax": 8000,
+    "tradable": true,
+    "i18n": {
+      "en": {
+        "name": "Khra",
+        "description": "To cosmic forms from tangent planes We end as we began",
+        "wikiLink": "https://wiki.warframe.com/w/Khra",
+        "icon": "items/images/en/khra.2f42b1bf4bfc2a124df7bc1275432795.png",
+        "thumb": "items/images/en/thumbs/khra.2f42b1bf4bfc2a124df7bc1275432795.128x128.png"
+      }
+    }
+  },
+  "error": null
+}

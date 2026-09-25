@@ -26,16 +26,35 @@ data class VersionCollections(
     val locations: String? = null,
 )
 
-data class Items(
+/**
+ * One entry of `GET /v2/items`.
+ *
+ * The v2 model marks every field after [slug] optional, so each binds as null or empty when absent
+ * rather than as a value that looks like data (R3.1, R7.8). There is no `updatedAt` on an item.
+ */
+data class Item(
     val id: String,
     val slug: String,
     val gameRef: String? = null,
-    val ducats: Int? = null,
-    val maxRank: Int? = null,
-    val vaulted: Boolean = false,
     val tags: List<String> = emptyList(),
-    val updatedAt: Instant = Instant.EPOCH,
-)
+    /** Keyed by language code. Notifications use [english]. */
+    val i18n: Map<String, ItemI18n> = emptyMap(),
+    /** Present only on items traded in variants, such as relic refinements. */
+    val subtypes: List<String> = emptyList(),
+    val maxRank: Int? = null,
+    val maxCharges: Int? = null,
+    val maxAmberStars: Int? = null,
+    val maxCyanStars: Int? = null,
+    val ducats: Int? = null,
+    val vaulted: Boolean = false,
+    val bulkTradable: Boolean? = null,
+    val tradable: Boolean? = null,
+    val rarity: String? = null,
+) {
+    val english: ItemI18n? get() = i18n["en"]
+}
+
+data class ItemI18n(val name: String? = null, val icon: String? = null)
 
 fun VersionCollections.asMap(): Map<String, String> = buildMap {
     items?.let { put("items", it) }

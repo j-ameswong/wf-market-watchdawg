@@ -40,13 +40,17 @@ That jar excludes the `developmentOnly` deps, so it will not start its own Postg
 
 ### The sync loop
 
-`CollectionSyncScheduler` is the only scheduled component. Each tick (`wfm.sync.interval`, default 1h):
+Two components are scheduled: `CollectionSyncScheduler`, below, and `ItemDetailSync`, which fills the fields `/v2/items` omits. `CollectionSyncScheduler` runs each tick (`wfm.sync.interval`, default 1h):
 
 1. `GET /v2/versions` returns a content hash per collection (`items`, `rivens`, `liches`, …).
 2. For each `CollectionSync` bean, compare its hash against the `collection_version` row.
 3. On a change, run `sync.refresh()` **and** the version upsert inside one `TransactionTemplate` block.
 
-The transaction boundary is the important invariant: if a refresh throws, the stored hash stays stale and the next tick retries. `CollectionSync` implementations only fetch and upsert — they never touch `collection_version` or open transactions. A `RateLimitedException` on `/versions` is logged and skipped, not retried in-tick.
+The transaction boundary is the important invariant: if a refresh throws, the stored hash stays stale and the next tick retries. A migration that adds catalog columns has to delete that collection's stored hash (as V5 does for `items`), or existing rows keep the new columns empty until upstream happens to change. `CollectionSync` implementations only fetch and upsert — they never touch `collection_version` or open transactions. A `RateLimitedException` on `/versions` is logged and skipped, not retried in-tick.
+
+`ItemSync` binds `/v2/items` into `item`. Every field the v2 model marks optional binds as null when absent, never as a zero or `false` that looks like data — rank 0 is a real market (R7.8). The live list carries no `tradable`, `rarity` or `maxCharges`. `ItemDetailSync` owns those three columns and fills them from `/v2/item/{slug}`, one item at a time. So the list upsert must never write them, or every catalog refresh would blank the sweep's work. `fixtures/v2-items.json` and `fixtures/v2-item/*.json` are live captures, so keep them that way: refresh them from Bruno's List Items and Get Item requests rather than editing values by hand. `synced_at` is not an upstream timestamp (v2 items have none): the upsert stamps `now()`, the refresh transaction's time, so one refresh marks every row it wrote alike and a row missing from the latest refresh shows an older value.
+
+`ItemDetailSync` fetches one batch per run (`wfm.sync.item-details.batch-size` per `interval`; the defaults, 30 a minute, are 0.5 req/s). It takes never-fetched items first (`detail_synced_at` null), then any whose details are older than their last catalog refresh, so a catalog change costs one re-sweep of the whole catalog, about two hours, and nothing more. A `404` marks the item checked and keeps its old details. A throttle or any other failure ends the run, and the rest waits for the next one. It never runs inside the catalog refresh: a whole sweep is far too long to hold that transaction open.
 
 **Adding a collection:** implement `CollectionSync` as a `@Component` with `collection` set to a key of `VersionCollections.asMap()` (add the field and the `asMap()` entry if the collection isn't modelled yet). The scheduler picks it up by list injection; nothing else needs editing.
 
@@ -99,9 +103,15 @@ Schema lives in `market/src/main/resources/db/migration` (Flyway, `V<n>__desc.sq
 
 Every migration runs in a transaction, so a failed one leaves nothing half-applied. TimescaleDB's hypertables, compression settings and policies all run inside one, and so does a continuous aggregate created `WITH NO DATA` — create them that way. A migration that genuinely cannot (a `WITH DATA` aggregate, `refresh_continuous_aggregate`, `create index concurrently`) gets a sibling `V<n>__desc.sql.conf` containing `executeInTransaction=false`. Both paths honour it; `src/test/resources/db/non-transactional/` is the worked example.
 
+### Market dimension
+
+A `market` row is one order book: `(item, platform, subtype, rank, charges, amberStars, cyanStars)` (SPEC §2.3). `platform` is the **observer's** context, never the seller's ([ADR-0003](docs/adr/0003-market-is-a-mutually-tradable-pool.md)), which is why `MarketKey` has no platform field and `MarketResolver` stamps `WfmContext.platform` itself. A dimension an item lacks is null. The unique constraint is `nulls not distinct`, so an all-null tuple is still one market (R3.4), and rank 0 is a different market from no rank.
+
+Get a market id through `MarketResolver.resolve(key)`, never by inserting into `market` directly. It does a lookup, then an insert-if-absent committed in its **own** transaction, then the lookup again. A market therefore outlives an ingest that rolls back, and two ingests meeting the same new tuple never wait on each other's locks. The second lookup relies on read committed, so do not call it from a repeatable-read transaction. An item the catalog lacks throws `UnknownItemException`. There is deliberately no cache: test resets restart the id sequence.
+
 ### Time series
 
-TimescaleDB holds the fact tables ([ADR-0007](docs/adr/0007-timescaledb-with-indefinite-event-log.md)). Each is a hypertable partitioned on `observed_at`, so every unique index must include that column — TimescaleDB refuses one that does not, and `FactTablesTest` lists the fact tables and checks every hypertable's indexes.
+TimescaleDB holds the fact tables ([ADR-0007](docs/adr/0007-timescaledb-with-indefinite-event-log.md)). Each references `market` and is a hypertable partitioned on `observed_at`, so every unique index must include that column — TimescaleDB refuses one that does not, and `FactTablesTest` lists the fact tables and checks every hypertable's indexes.
 
 | Relation | Kept | Policy |
 | --- | --- | --- |
@@ -121,7 +131,8 @@ In tests there are no TimescaleDB background workers: a policy runs only when th
 
 - `watchdawg.scheduling.enabled` is `false`, so `SchedulingConfig` (the only `@EnableScheduling`) stays off. A test's own `@SpringBootTest(properties = …)` still outranks that.
 - Every `RestClient` built from the context sends through `LiveApiGuard`, a request factory that records and refuses. `LiveApiGuardListener` fails any test that reached it, even when the code under test swallowed the refusal. To exercise HTTP, bind `MockRestServiceServer` to `bean.mutate()`: that swaps the guard out.
-- `DatabaseResetListener` truncates every table in `public` except `flyway_schema_history`, and every continuous aggregate, before each test method (R2.7). It finds them in the catalog, so a new table needs no edit. Do not write a test that relies on rows another test left.
+- `DatabaseResetListener` truncates every table in `public` except `flyway_schema_history`, and every continuous aggregate, before each test method (R2.7). It finds them in the catalog, so a new table needs no edit. It names the hypertables explicitly: `truncate market cascade` does **not** empty compressed rows in `order_event`. Do not write a test that relies on rows another test left.
+- A test that writes fact rows needs a real market, since the fact tables reference one: `resolver.marketFor(items)` (`store/TestMarkets.kt`) creates the item and resolves it.
 
 Classes and methods also run in **random order** (`src/test/resources/junit-platform.properties`), so an order dependence fails a run rather than hiding. The test task prints its seed; replay an order with `./gradlew test -PtestSeed=<seed>`.
 

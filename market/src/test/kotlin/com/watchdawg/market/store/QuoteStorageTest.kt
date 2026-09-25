@@ -3,16 +3,19 @@ package com.watchdawg.market.store
 import com.watchdawg.market.TestcontainersConfiguration
 import com.watchdawg.market.store.Policies.Companion.REFRESH
 import com.watchdawg.market.store.Policies.Companion.RETENTION
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.jdbc.core.JdbcTemplate
 import java.sql.Timestamp
 import java.time.Instant
 import java.time.temporal.ChronoUnit.HOURS
 import java.time.temporal.ChronoUnit.MICROS
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 /**
@@ -29,11 +32,22 @@ class QuoteStorageTest {
 
     @Autowired lateinit var jdbc: JdbcTemplate
 
+    @Autowired lateinit var resolver: MarketResolver
+
+    @Autowired lateinit var items: ItemRepository
+
     private val policies by lazy { Policies(jdbc) }
+
+    private var market = 0L
+
+    @BeforeEach
+    fun market() {
+        market = resolver.marketFor(items)
+    }
 
     @Test
     fun `a poll past the raw window is dropped but its rollups keep it`() {
-        val old = oldestDroppable()
+        val old = policies.beyondAge(RETENTION, QUOTES, "drop_after")
         // Truncated to what Postgres stores, so it compares equal when read back.
         val recent = Instant.now().truncatedTo(MICROS).minus(3, HOURS)
         insert(old, bestSell = 80)
@@ -48,6 +62,15 @@ class QuoteStorageTest {
 
         ROLLUPS.keys.forEach { policies.run(REFRESH, it) }
         ROLLUPS.keys.forEach { assertEquals(80, closingBestSell(it, old), "$it lost the dropped poll's bucket") }
+    }
+
+    @Test
+    fun `a quote for a market that does not exist is refused`() {
+        assertFailsWith<DataIntegrityViolationException> {
+            jdbc.update(
+                "insert into market_quote (market_id, observed_at, buy_count, sell_count) values (999999, now(), 0, 0)",
+            )
+        }
     }
 
     @Test
@@ -75,27 +98,15 @@ class QuoteStorageTest {
         assertEquals(emptyList(), windows.filterNot { it.second }.map { it.first })
     }
 
-    /** An instant whose whole chunk is past raw retention, read from the policy and the catalog. */
-    private fun oldestDroppable(): Instant = jdbc.queryForObject(
-        """
-        select now() - (j.config ->> 'drop_after')::interval - d.time_interval - interval '1 hour'
-        from timescaledb_information.jobs j
-        join timescaledb_information.dimensions d on d.hypertable_name = j.hypertable_name
-        where j.proc_name = ? and j.hypertable_name = ?
-        """,
-        Timestamp::class.java,
-        RETENTION,
-        QUOTES,
-    )!!.toInstant()
-
     private fun rawObservations(): List<Timestamp> =
         jdbc.queryForList("select observed_at from market_quote order by observed_at", Timestamp::class.java)
             .filterNotNull()
 
     /** The closing best ask of the [rollup] bucket that holds [at], or null if there is none. */
     private fun closingBestSell(rollup: String, at: Instant): Int? = jdbc.queryForList(
-        "select best_sell_close from $rollup where market_id = 1 and bucket = time_bucket(?::interval, ?::timestamptz)",
+        "select best_sell_close from $rollup where market_id = ? and bucket = time_bucket(?::interval, ?::timestamptz)",
         Int::class.java,
+        market,
         ROLLUPS.getValue(rollup),
         Timestamp.from(at),
     ).singleOrNull()
@@ -104,8 +115,9 @@ class QuoteStorageTest {
         jdbc.update(
             """
             insert into market_quote (market_id, observed_at, best_buy, best_sell, buy_count, sell_count)
-            values (1, ?, 70, ?, 3, 5)
+            values (?, ?, 70, ?, 3, 5)
             """,
+            market,
             Timestamp.from(observedAt),
             bestSell,
         )

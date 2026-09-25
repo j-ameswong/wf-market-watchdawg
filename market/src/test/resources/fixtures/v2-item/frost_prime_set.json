@@ -1,0 +1,35 @@
+{
+  "apiVersion": "0.25.0",
+  "data": {
+    "id": "56783f24cbfa8f0432dd899c",
+    "slug": "frost_prime_set",
+    "gameRef": "/Lotus/Powersuits/Frost/FrostPrime",
+    "tags": [
+      "set",
+      "prime",
+      "warframe"
+    ],
+    "setRoot": true,
+    "setParts": [
+      "54a73e65e779893a797fff80",
+      "54a73e65e779893a797fff7d",
+      "54a73e65e779893a797fff6c",
+      "56783f24cbfa8f0432dd899c",
+      "54a73e65e779893a797fff79"
+    ],
+    "ducats": 175,
+    "reqMasteryRank": 0,
+    "tradingTax": 8000,
+    "tradable": true,
+    "i18n": {
+      "en": {
+        "name": "Frost Prime Set",
+        "description": "Frost Prime has the same chilling abilities as Frost but provides unique mod polarities, allowing for greater customization.",
+        "wikiLink": "https://wiki.warframe.com/w/Frost_Prime",
+        "icon": "items/images/en/frost_prime_set.4f8ff8605be1afaab9a0e5cc3c67cb21.png",
+        "thumb": "items/images/en/thumbs/frost_prime_set.4f8ff8605be1afaab9a0e5cc3c67cb21.128x128.png"
+      }
+    }
+  },
+  "error": null
+}

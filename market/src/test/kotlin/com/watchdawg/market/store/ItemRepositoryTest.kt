@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Import
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @SpringBootTest
@@ -20,18 +21,21 @@ class ItemRepositoryTest {
 
     @Test
     fun `upsert inserts then updates the same row`() {
-        val now = Instant.now().truncatedTo(ChronoUnit.MILLIS)
         val mirage = ItemRecord(
             id = "54a73e65e779893a797fff9c",
             slug = "mirage_prime_set",
+            name = "Mirage Prime Set",
             ducats = 0,
             maxRank = 0,
             tags = listOf("set", "prime"),
-            updatedAt = now,
+            subtypes = listOf("a", "b"),
         )
 
         items.upsert(mirage)
-        assertEquals(mirage, items.findBySlug("mirage_prime_set"))
+        val inserted = items.findBySlug("mirage_prime_set")!!
+        // The database stamps synced_at, so it is the one field the record did not supply.
+        assertNotNull(inserted.syncedAt)
+        assertEquals(mirage, inserted.copy(syncedAt = null))
 
         items.upsert(mirage.copy(vaulted = true, ducats = 15))
         val reloaded = items.findById(mirage.id).orElseThrow()

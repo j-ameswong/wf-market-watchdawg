@@ -163,7 +163,7 @@ Full task bodies with acceptance criteria live in `tasks/todo.md`.
    2026-09-10 during T4.)* R1.4's acceptance asks that `509` "narrow effective concurrency rather
    than only wait", which leaves open whether the cap recovers. It does not: the limiter gives up
    one slot per `509`, floored at one, and only a restart resets it. Under
-   [ADR-0004](docs/adr/0004-rate-limit-discipline-is-a-hard-boundary.md) a `509` is a bug in our own
+   [ADR-0004](../../docs/adr/0004-rate-limit-discipline-is-a-hard-boundary.md) a `509` is a bug in our own
    budgeting, so creeping back toward a concurrency the server has already refused is precisely the
    "traffic pattern" the upstream rules police. The configured cap is 2, so the only move available
    is 2 → 1; a decaying cap would be machinery with one step to walk.
@@ -173,7 +173,7 @@ Full task bodies with acceptance criteria live in `tasks/todo.md`.
 **None outstanding.** All eight are recorded above as Resolved Decisions.
 
 Decision 1's carried-forward obligation is **discharged**: `SPEC.md` R1.2 now states the buckets as
-route classes and cites [ADR-0005](docs/adr/0005-rate-buckets-keyed-by-route-class.md), so its
+route classes and cites [ADR-0005](../../docs/adr/0005-rate-buckets-keyed-by-route-class.md), so its
 wording no longer contradicts §2.1's arithmetic.
 
 ## Results

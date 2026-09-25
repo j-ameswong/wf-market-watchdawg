@@ -7,8 +7,8 @@
 > | Capability | State |
 > | --- | --- |
 > | C1 | **Built.** R1.1–R1.8 each map to a named passing test; R12.1's per-bucket meters ship with it. |
-> | C2 | **Built.** R2.1–R2.7 each map to a named passing test or a recorded manual check (`tasks/todo.md`). Awaiting review. |
-> | C3 | Next. Not yet broken into tasks. |
+> | C2 | **Built and reviewed.** R2.1–R2.7 each map to a named passing test or a recorded manual check. |
+> | C3 | **Built and reviewed.** Three acceptance bullets map to named tests; the fourth, and the detail sweep, to live runs recorded in `tasks/todo.md`. |
 >
 > Grounded in `docs/v2/` (API `v0.25.0`, WebSocket `v0.13.0`), `docs/v1.yml`, and the live-verified
 > route table in `bruno/README.md`. This document describes the system to be built; the reasoning
@@ -55,12 +55,13 @@ Whole-market new-order coverage therefore costs one socket plus ~1,440 req/day, 
 | WS `newOrders` | push | 0 | 0 |
 | `/v2/orders/recent` | 60s | 1,440 | 0.017/s |
 | `/v2/versions` + `/v2/items` | 1h, hash-gated | ~30 | ~0 |
+| `/v2/item/{slug}` detail sweep | once per catalog change, 30/min | ~3,900 per change | 0.5/s for ~2h, then 0 |
 | Order books — 200 hot @5m, 800 warm @30m, 2800 cold @6h | tiered | 107,200 | 1.24/s |
 | v1 `statistics` | daily per item | 3,800 | 0.044/s |
 | **v2 bucket total** | | **~112,500** | **~1.3/s** |
 | v1 `/auctions/search` (~220 weapon slugs) | 2h sweep | 2,640 | separate bucket |
 
-**~1.3 req/s against a 3 req/s ceiling.** No capability in this spec requires more.
+**~1.3 req/s against a 3 req/s ceiling.** No capability in this spec requires more. The detail sweep adds 0.5 req/s for about two hours after each catalog change, so the peak is ~1.8 req/s against the 2 req/s configured `public` budget. The poll scheduler (C6) has to leave room for it.
 
 ### 2.2 Trade data exists, but only aggregated
 
@@ -389,7 +390,7 @@ Every outbound call goes through one compliant, paced, observable path.
 
 ### C3 — Catalog & market dimension
 
-- **R3.1** `item` carries everything downstream needs: `subtypes`, `maxRank`, `maxCharges`, `maxAmberStars`, `maxCyanStars`, `bulkTradable`, `tradable`, `rarity`, `vaulted`, plus display `name` and `icon` from `i18n.en` (notifications need a human-readable title).
+- **R3.1** `item` carries everything downstream needs (`tradable`, `rarity` and `maxCharges` come from `/v2/item/{slug}`, since `/v2/items` omits them): `subtypes`, `maxRank`, `maxCharges`, `maxAmberStars`, `maxCyanStars`, `bulkTradable`, `tradable`, `rarity`, `vaulted`, plus display `name` and `icon` from `i18n.en` (notifications need a human-readable title).
 - **R3.2** `Item` has **no `updatedAt`** in the v2 spec. The existing column is `Instant.EPOCH` on every row — it becomes a local `synced_at`.
 - **R3.3** Market resolution (§2.3 tuple → id) is idempotent and safe under concurrency.
 - **R3.4** NULL subtype dimensions must compare **equal** for uniqueness. Postgres treats NULLs as distinct by default, which would silently defeat upserts for the common no-subtype case.
@@ -622,7 +623,7 @@ Gradle root is `market/`, not the repo root.
 | --- | --- |
 | `wfm` | *existing.* Rate limiter, v2 client, v1 legacy client |
 | `wfm/ws` | Socket client, envelope models, reconnect supervisor |
-| `sync` | *existing, untouched.* `CollectionSync` SPI |
+| `sync` | `CollectionSync` SPI (unchanged), `ItemSync`, and the `/v2/item/{slug}` detail sweep |
 | `ingest` | Book diffing, order state, event log, quotes |
 | `poll` | Tiered adaptive target queue |
 | `watch` | Config loading, rule registry, signal outbox |
@@ -675,7 +676,7 @@ Gradle root is `market/`, not the repo root.
 
 ## 10. Open questions
 
-1. **Does v1 `mod_rank` carry v2 `charges` for requiem items?** (R7.5.) Getting it wrong silently merges requiem-mod charge levels into rank buckets, and the corruption stays invisible until someone queries those items specifically. This is the one unresolved *correctness* question. Resolvable from the C3 catalog's `maxRank`/`maxCharges` rather than from more captures.
+1. **Does v1 `mod_rank` carry v2 `charges` for requiem items?** (R7.5.) Getting it wrong silently merges requiem-mod charge levels into rank buckets, and the corruption stays invisible until someone queries those items specifically. This is the one unresolved *correctness* question. Resolvable from the C3 catalog's `maxRank`/`maxCharges` rather than from more captures. **Evidence from the C3 catalog (live `/v2/items`, 2026-09-24):** `khra` and `vome` are listed with `maxRank: 3`, and no item in the list carries `maxCharges`; `khra`'s own item page (`/v2/item/khra`) likewise gives `maxRank: 3` and no `maxCharges`, and a full sweep of all 3,888 item pages (2026-09-25) found `maxCharges` on none. At catalog level, `mod_rank` → `rank` is therefore consistent for them; what a v2 *order* for a requiem mod carries is still unconfirmed, and C4's first order capture settles it.
 2. **What does `Crossplay` mean to v1 `/items/{slug}/statistics`?** The header appears nowhere in `docs/v1.yml`, yet it deterministically rewrites 76/88 historical rows and *lowers* `volume` (§2.7, R7.11). Best reading: trades where **both** sides are crossplay-enabled, which would exclude the PC-crossplay-off cohort — 6 such users appeared in the sampled book. That is an inference from one slug and the direction of one number. Resolvable by sampling more slugs, worth doing before C7 ingests at scale, but R7.11 is written so the answer is **not** load-bearing.
 3. **C9b thresholds are deliberately unspecified** — they cannot be chosen honestly before history exists (R9b.3).
 

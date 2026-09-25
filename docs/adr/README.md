@@ -27,7 +27,7 @@ are the original decision dates, not the dates the records were written.
 | [0017](0017-tests-never-reach-the-live-api.md) | Tests never reach the live API | accepted | 2026-09-09 |
 | [0018](0018-contracts-sequenced-after-the-item-spine.md) | Contracts and auctions are sequenced after the item spine | accepted | 2026-09-09 |
 | [0019](0019-long-retry-after-surfaces-to-the-caller.md) | One retry, and a long `Retry-After` surfaces to the caller | accepted | 2026-09-09 |
-| [0020](0020-storage-policies-in-one-repeatable-migration.md) | Storage policies are declared in one repeatable migration | proposed | 2026-09-24 |
+| [0020](0020-storage-policies-in-one-repeatable-migration.md) | Storage policies are declared in one repeatable migration | accepted | 2026-09-24 |
 
 Decisions scoped to a single capability's implementation are recorded in that capability's plan:
 `tasks/plan.md` for the capability in progress, `tasks/archive/` for finished ones. A decision

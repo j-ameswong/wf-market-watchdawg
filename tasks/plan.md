@@ -90,7 +90,7 @@ Full task bodies with acceptance criteria live in `tasks/todo.md`.
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| The real `/v2/items` omits some R3.1 fields (`tradable`, `rarity`, the star maxima) | Med — the columns stay null for every row | They bind as nullable, so nothing fails; the live run reports which are populated. Filling gaps from `/v2/item/{slug}` would be ~3.8k calls, which §9 makes ask-first (Open Question 1) |
+| The real `/v2/items` omits some R3.1 fields (`tradable`, `rarity`, the star maxima) | Med — the columns stay null for every row | *Happened:* the list never carries `tradable`, `rarity` or `maxCharges`. With the author's approval, the detail sweep fills them from `/v2/item/{slug}` (Decision 8) |
 | The hand-built fixture drifts from the real payload | Med | *Happened, then closed:* the capture showed `serration` has subtypes, `khra` has `maxRank` rather than `maxCharges`, and nothing carries `tradable` or `rarity`. The fixture is now a trimmed capture |
 | Existing rows keep empty new columns because the items hash has not changed upstream | **High** — silent, and invisible until C10 renders a nameless notification | The migration deletes the stored hash; a migration test asserts it |
 | `NULL` dimensions compare distinct and every no-subtype order creates a new market | **High** — R3.4's whole point | The unique constraint is `nulls not distinct`; tested with an all-null tuple resolved twice |
@@ -149,8 +149,11 @@ All delegated and decided 2026-09-24 while planning; each is open to review at C
 4. ~~`tradable`, `rarity` and `max_charges` are never populated.~~ **Resolved:** filled from
    `/v2/item/{slug}` (Decision 8, T5). The option to drop `tradable` rested on the route summary
    "Get all tradable items" in `docs/v2/api/manifests.mdx`, which is documentation, not evidence.
-   The `Item` model carrying a `tradable` flag at all suggests some items are not tradable. After
-   the sweep, `count(*) filter (where tradable is false)` answers it.
+   The `Item` model carrying a `tradable` flag at all suggested some items might not be. The
+   author's full sweep (2026-09-25) found **0 of 3,888** listed items with `tradable: false`, so
+   every item the list carries today is tradable by its own page. The column stays: it is the
+   upstream's explicit statement, and it will show if the list ever starts carrying items that
+   are not.
 5. ~~What does `/v2/item/{slug}` actually return?~~ **Resolved** by the author's captures of
    `khra`, `serration` and `frost_prime_set` (2026-09-24), now in `fixtures/v2-item/`. All three
    carry `tradable: true`. The two mods carry `rarity`; the set does not. **None carries
@@ -158,3 +161,9 @@ All delegated and decided 2026-09-24 while planning; each is open to review at C
    carries fields R3.1 never asked for: `tradingTax`, `setRoot`/`setParts`, `reqMasteryRank`, and
    an English `description` and `wikiLink`. They are not stored; adding any is a small follow-up
    if wanted.
+6. **`max_charges` is null on every row.** The author's full sweep (2026-09-25) found no item page
+   carrying `maxCharges`, as the three captures had suggested. The recommendation is to keep the
+   column: it is nullable, so it costs nothing, and R7.5 names it as the input that separates a
+   requiem mod's charges from its rank. C4's first order capture for a requiem mod shows whether
+   v2 models charges at all; if it does not, a later migration can drop the column. Awaiting the
+   author's call at Checkpoint B.

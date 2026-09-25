@@ -8,7 +8,7 @@
 > | --- | --- |
 > | C1 | **Built.** R1.1–R1.8 each map to a named passing test; R12.1's per-bucket meters ship with it. |
 > | C2 | **Built and reviewed.** R2.1–R2.7 each map to a named passing test or a recorded manual check. |
-> | C3 | **Built.** Three acceptance bullets map to named tests; the live `/v2/items` run is recorded in `tasks/todo.md`. T5's detail sweep needs a `/v2/item/{slug}` capture and a live run. Awaiting review. |
+> | C3 | **Built.** Three acceptance bullets map to named tests; the live `/v2/items` run and the live detail sweep are recorded in `tasks/todo.md`. Awaiting review. |
 >
 > Grounded in `docs/v2/` (API `v0.25.0`, WebSocket `v0.13.0`), `docs/v1.yml`, and the live-verified
 > route table in `bruno/README.md`. This document describes the system to be built; the reasoning
@@ -676,7 +676,7 @@ Gradle root is `market/`, not the repo root.
 
 ## 10. Open questions
 
-1. **Does v1 `mod_rank` carry v2 `charges` for requiem items?** (R7.5.) Getting it wrong silently merges requiem-mod charge levels into rank buckets, and the corruption stays invisible until someone queries those items specifically. This is the one unresolved *correctness* question. Resolvable from the C3 catalog's `maxRank`/`maxCharges` rather than from more captures. **Evidence from the C3 catalog (live `/v2/items`, 2026-09-24):** `khra` and `vome` are listed with `maxRank: 3`, and no item in the list carries `maxCharges`; `khra`'s own item page (`/v2/item/khra`) likewise gives `maxRank: 3` and no `maxCharges`. At catalog level, `mod_rank` → `rank` is therefore consistent for them; what a v2 *order* for a requiem mod carries is still unconfirmed, and C4's first order capture settles it.
+1. **Does v1 `mod_rank` carry v2 `charges` for requiem items?** (R7.5.) Getting it wrong silently merges requiem-mod charge levels into rank buckets, and the corruption stays invisible until someone queries those items specifically. This is the one unresolved *correctness* question. Resolvable from the C3 catalog's `maxRank`/`maxCharges` rather than from more captures. **Evidence from the C3 catalog (live `/v2/items`, 2026-09-24):** `khra` and `vome` are listed with `maxRank: 3`, and no item in the list carries `maxCharges`; `khra`'s own item page (`/v2/item/khra`) likewise gives `maxRank: 3` and no `maxCharges`, and a full sweep of all 3,888 item pages (2026-09-25) found `maxCharges` on none. At catalog level, `mod_rank` → `rank` is therefore consistent for them; what a v2 *order* for a requiem mod carries is still unconfirmed, and C4's first order capture settles it.
 2. **What does `Crossplay` mean to v1 `/items/{slug}/statistics`?** The header appears nowhere in `docs/v1.yml`, yet it deterministically rewrites 76/88 historical rows and *lowers* `volume` (§2.7, R7.11). Best reading: trades where **both** sides are crossplay-enabled, which would exclude the PC-crossplay-off cohort — 6 such users appeared in the sampled book. That is an inference from one slug and the direction of one number. Resolvable by sampling more slugs, worth doing before C7 ingests at scale, but R7.11 is written so the answer is **not** load-bearing.
 3. **C9b thresholds are deliberately unspecified** — they cannot be chosen honestly before history exists (R9b.3).
 

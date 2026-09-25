@@ -253,8 +253,11 @@ Mutation-checked:
 - [x] A capture of `/v2/item/{slug}` replaces T5's documentation-shaped test data (plan Open
       Question 5) — the author's captures of `khra`, `serration` and `frost_prime_set` drive
       `ItemDetailSyncTest`'s first test
-- [ ] After a live run, `count(tradable)`, `count(rarity)` and `count(max_charges)` are non-zero,
-      and `count(*) filter (where tradable is false)` is recorded
+- [x] Live detail sweep on a machine that can reach the API — run by the project author,
+      2026-09-25, over all **3,888** items with **0** left unswept: `tradable` set on all 3,888,
+      **0** of them `false`; `rarity` on **1,558**; `max_charges` on **0**. The criterion expected
+      `max_charges` to be non-zero, and it is not: no item page carries `maxCharges` (plan Open
+      Question 6).
 
 ---
 

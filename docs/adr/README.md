@@ -13,7 +13,7 @@ are the original decision dates, not the dates the records were written.
 | [0003](0003-market-is-a-mutually-tradable-pool.md) | A market is a mutually-tradable pool, not a seller-platform partition | accepted | 2026-09-09 |
 | [0004](0004-rate-limit-discipline-is-a-hard-boundary.md) | Rate-limit compliance is a hard boundary | accepted | 2026-09-09 |
 | [0005](0005-rate-buckets-keyed-by-route-class.md) | Rate-limit buckets are keyed by route class, not API version | accepted | 2026-09-09 |
-| [0006](0006-poll-scheduler-owns-budget-compliance.md) | The poll scheduler owns rate-budget compliance | accepted | 2026-09-09 |
+| [0006](0006-poll-scheduler-owns-budget-compliance.md) | The poll scheduler owns rate-budget compliance | superseded by 0021 | 2026-09-09 |
 | [0007](0007-timescaledb-with-indefinite-event-log.md) | TimescaleDB with an indefinite event log and rollups | accepted | 2026-09-09 |
 | [0008](0008-vanished-only-from-full-book-polls.md) | `vanished` is inferred only from full book polls | accepted | 2026-09-09 |
 | [0009](0009-detection-on-order-book-events.md) | Move detection runs on order-book events, not the trade series | accepted | 2026-09-09 |
@@ -28,6 +28,7 @@ are the original decision dates, not the dates the records were written.
 | [0018](0018-contracts-sequenced-after-the-item-spine.md) | Contracts and auctions are sequenced after the item spine | accepted | 2026-09-09 |
 | [0019](0019-long-retry-after-surfaces-to-the-caller.md) | One retry, and a long `Retry-After` surfaces to the caller | accepted | 2026-09-09 |
 | [0020](0020-storage-policies-in-one-repeatable-migration.md) | Storage policies are declared in one repeatable migration | accepted | 2026-09-24 |
+| [0021](0021-limiter-owns-the-ceiling-poll-loop-owns-freshness.md) | The limiter owns the request ceiling; the poll loop owns freshness | accepted | 2026-09-25 |
 
 Decisions scoped to a single capability's implementation are recorded in that capability's plan:
 `tasks/plan.md` for the capability in progress, `tasks/archive/` for finished ones. A decision

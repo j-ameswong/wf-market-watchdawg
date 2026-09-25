@@ -47,11 +47,11 @@ markets are not.
 ### Positive
 - Zero rate-budget cost: a header on calls already being made, and a payload field on a socket
   that spends nothing. The §2.1 arithmetic is unchanged.
-- +7.4% of the new-order feed, losslessly reversible via `wfm_order.seller_platform`.
+- +7.4% of the new-order feed, losslessly reversible via `wfm_order.owner_platform`.
 
 ### Negative
 - Every order-book series in the warehouse describes a **PC+crossplay pool**, not a PC pool.
-  A query author who does not know to filter on `seller_platform` will silently get the wider
+  A query author who does not know to filter on `owner_platform` will silently get the wider
   population.
 
 ### Risks

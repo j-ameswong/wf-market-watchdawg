@@ -10,8 +10,9 @@
 ADR-0006 made the poll scheduler responsible for keeping demand inside the rate budget, and rejected
 fixed schedules partly because over-demand would surface as a `429`. That holds only if the limiter
 lets over-demand through. It does not: every request takes a paced turn, so demand above the budget
-waits instead. The review that prompted this record also found a hole in that pacing when calls
-queued behind a busy connection, and it is fixed in the same change.
+waits instead. The review that prompted this record also found a hole in that pacing, calls
+queued behind a busy connection starting together once it freed; the fix belongs in the limiter,
+not in whatever calls it.
 
 ADR-0006 also brought in database poll targets, tiers, adaptive back-off, socket-driven promotion
 and draining that is safe across instances. None of it has been needed yet. The last item is not

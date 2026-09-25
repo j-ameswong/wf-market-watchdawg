@@ -7,6 +7,18 @@ design rationale in [`docs/adr/`](docs/adr/README.md).
 
 ### Added
 
+- **C4 — Order-book ingest.**
+  - `wfm_order` holds every order's current state; `order_book` the latest book per item.
+  - Reconciling a full book records `appeared`, `price_changed`, `quantity_changed` and
+    `vanished`, with the order's side and lot size, and ignores a book older than the last one.
+  - Socket and `/recent` observations can only add orders never seen before.
+  - Each reconciled book writes a quote for every market of the item: per-unit best bid and ask
+    over all orders and over online owners only, with order counts and online counts. Both rollups
+    carry the new measures.
+  - The `/v2/orders/item/{slug}` and `/v2/orders/recent` client calls. Nothing calls them on a
+    schedule yet, so no request budget is spent.
+  - `bruno/scrub-orders.mjs`, which strips trader identity from order captures before they become
+    fixtures.
 - **C3 — Catalog and market dimension.**
   - `item` carries the English name and icon, subtypes, the rank, charge and star maxima,
     `bulk_tradable`, `tradable` and `rarity`. A field the catalog omits is stored as null.
@@ -44,6 +56,12 @@ design rationale in [`docs/adr/`](docs/adr/README.md).
 
 ### Changed
 
+- The WFM transport (pacing, context headers, error handling) applies to the v2 and v1 clients
+  only, not to every `RestClient.Builder`, so a client for another host does not inherit it.
+- The item detail sweep is off unless `wfm.sync.item-details.enabled` is true.
+- `market_quote.best_buy` and `best_sell` are per-unit `numeric`.
+- `SPEC.md` builds one alert end to end by polling before the WebSocket, and C6 starts as a single
+  instance on a fixed cadence ([ADR-0021](docs/adr/0021-limiter-owns-the-ceiling-poll-loop-owns-freshness.md)).
 - `item.updated_at` is replaced by `synced_at`, stamped by each refresh. Upgrading clears the
   epoch values the old column held and forces one catalog refetch.
 - The dev database image is `timescale/timescaledb:2.30.1-pg18`. An existing `postgres:18-alpine`
@@ -55,4 +73,6 @@ design rationale in [`docs/adr/`](docs/adr/README.md).
 
 ### Fixed
 
+- Calls queued behind a busy connection could start together once it freed, bypassing the pacing,
+  and were metered before they started. A call now takes its connection slot before its turn.
 - The sync scheduler could tick inside a test run and call the live API.

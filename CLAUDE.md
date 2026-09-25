@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A Spring Boot 4 / Kotlin service that mirrors warframe.market data into Postgres. It syncs the item catalog; `SPEC.md` specifies the intended growth into a price watcher and warehouse over `/v2/orders/*`, and `docs/adr/` records the decisions behind that design.
+A Spring Boot 4 / Kotlin service that mirrors warframe.market data into Postgres. It syncs the item catalog and can reconcile order books into order state, an event log and quotes, though nothing polls them yet; `SPEC.md` specifies the intended growth into a price watcher and warehouse over `/v2/orders/*`, and `docs/adr/` records the decisions behind that design.
 
 ## Layout
 
@@ -109,6 +109,16 @@ A `market` row is one order book: `(item, platform, subtype, rank, charges, ambe
 
 Get a market id through `MarketResolver.resolve(key)`, never by inserting into `market` directly. It does a lookup, then an insert-if-absent committed in its **own** transaction, then the lookup again. A market therefore outlives an ingest that rolls back, and two ingests meeting the same new tuple never wait on each other's locks. The second lookup relies on read committed, so do not call it from a repeatable-read transaction. An item the catalog lacks throws `UnknownItemException`. There is deliberately no cache: test resets restart the id sequence.
 
+### Order ingest
+
+`OrderIngest` has two entrypoints with different powers (SPEC §4 C4). `reconcileBook` takes one item's full book and may record any change; `ingestPartial` (socket, `/recent`) may only add orders never seen before, because those sources are partial and `/recent` is up to a minute stale. The classification is the pure function `reconcile()` in `Reconcile.kt`, tested without Spring; keep it that way.
+
+- A book is dated when it was **requested** (`OrderBookPoll`), so nothing the socket reports after that can be vanished by it (R4.10).
+- `order_book` holds the latest book per item. Claiming its row both rejects a book no newer than the last (R4.9) and locks the item, so two reconciliations of one item run in turn. The partial path is insert-only (`on conflict do nothing`) and needs no lock; a book that loses that race drops its own `appeared`.
+- Prices in `market_quote` are per unit (`platinum / perTrade`): `platinum` prices a whole lot. Every reconciled book writes a quote for **every** market of the item, empty ones included.
+- `wfm_order` rows are never deleted. `changed_at` is when the current state, gone or live, was observed.
+- Order fixtures are live captures scrubbed of trader identity by `bruno/scrub-orders.mjs`; refresh them that way, never by hand.
+
 ### Time series
 
 TimescaleDB holds the fact tables ([ADR-0007](docs/adr/0007-timescaledb-with-indefinite-event-log.md)). Each references `market` and is a hypertable partitioned on `observed_at`, so every unique index must include that column — TimescaleDB refuses one that does not, and `FactTablesTest` lists the fact tables and checks every hypertable's indexes.
@@ -119,7 +129,7 @@ TimescaleDB holds the fact tables ([ADR-0007](docs/adr/0007-timescaledb-with-ind
 | `market_quote` | 90 days raw | dropped by retention |
 | `market_quote_hourly`, `market_quote_daily` | forever | continuous aggregates of `market_quote`, refreshed over the last 2 / 4 days |
 
-Every policy value lives in `db/migration/R__storage_policies.sql`, a repeatable migration that Flyway re-applies whenever the file changes. Changing one is an ask-first change (SPEC §9).
+Every policy value lives in `db/migration/R__storage_policies.sql`, a repeatable migration that Flyway re-applies whenever the file changes. Changing one is an ask-first change (SPEC §9). Dropping a table or rollup drops its policy, so a versioned migration that recreates one must change that file in the same commit, or the policy is not re-added on upgrade (`StoragePolicyUpgradeTest`).
 
 **Refreshing a rollup over a range whose raw chunks are gone deletes the rollup's rows for that range.** So a refresh window must start inside raw retention (`QuoteStorageTest` fails otherwise), and never run `refresh_continuous_aggregate(…, null, null)` by hand on a database old enough to have dropped raw quotes. A rollup's shape cannot be altered, only dropped and recreated, which loses everything older than the raw window. Once history has accrued, add a new rollup alongside instead.
 

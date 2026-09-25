@@ -64,17 +64,17 @@ Failures are typed, in `WfmErrors.kt`, all under one sealed `WfmException`: `Rat
 
 `baseUrl` is v2. `baseUrlLegacy` (v1) exists because three v1 routes have no v2 equivalent — auctions, `/items/{slug}/statistics` (price history), and `/items/{slug}/dropsources`. Everything else in `docs/v1.yml` is dead; `bruno/README.md` has the verified route-by-route table.
 
-`WfmLegacyClient` is that second channel, on `wfmLegacyRestClient`. Both beans come from the same customized builder, so the two differ only in base URL and envelope: v1 is `payload`/`include` in snake_case (`WfmLegacyModels.kt`), v2 is `apiVersion`/`data`/`error` in camelCase. The snake_case naming strategy is scoped to the v1 bean's own JSON converter — **never set one globally**, it would stop `updatedAt` and `gameRef` binding. Two `RestClient` beans also make injection by type ambiguous, so a client names its channel with `@Qualifier(WfmConfig.V2_CLIENT)` or `@Qualifier(WfmConfig.LEGACY_CLIENT)`. Bind every v1 price as `BigDecimal`: the upstream sends `150` and `80.0` for the same field, and an `Int` binding truncates silently rather than failing.
+`WfmLegacyClient` is that second channel, on `wfmLegacyRestClient`. Both beans get the same transport, so the two differ only in base URL and envelope: v1 is `payload`/`include` in snake_case (`WfmLegacyModels.kt`), v2 is `apiVersion`/`data`/`error` in camelCase. The snake_case naming strategy is scoped to the v1 bean's own JSON converter — **never set one globally**, it would stop `updatedAt` and `gameRef` binding. Two `RestClient` beans also make injection by type ambiguous, so a client names its channel with `@Qualifier(WfmConfig.V2_CLIENT)` or `@Qualifier(WfmConfig.LEGACY_CLIENT)`. Bind every v1 price as `BigDecimal`: the upstream sends `150` and `80.0` for the same field, and an `Int` binding truncates silently rather than failing.
 
 ### The transport stack
 
-`WfmConfig.wfmTransportCustomizer` is one `RestClientCustomizer` applied to **every** `RestClient.Builder` the context hands out, so a new client bean is governed the moment it is built rather than when someone remembers to wire it. It installs, in order:
+`WfmTransport.applyTo(builder)` is applied to each client that talks to warframe.market, and to nothing else: a client for another host (C10's ntfy) must not inherit WFM pacing or headers. It installs, in order:
 
 1. `WfmRateLimitInterceptor` — pacing, plus the `429`/`509` retry.
 2. `WfmContextInterceptor` — `Platform`, `Crossplay` and `User-Agent`, `set` rather than added, so a call site that names its own value is overridden ([ADR-0002](docs/adr/0002-crossplay-single-global-setting.md), R1.5). Do not move them back to `defaultHeader`s: a call site *can* override those.
 3. The `defaultStatusHandler` for `4xx`/`5xx` other than `429`/`509`, which the interceptor above has already converted.
 
-`RateLimitWiringTest` enumerates `RestClient` beans and fails if one lacks either interceptor, so it is the standing no-bypass guard for both R1.1 and R1.8 and covers clients added later without being edited.
+`RateLimitWiringTest` enumerates `RestClient` beans: each must carry both interceptors or be named there as non-WFM, and a client from the context's plain builder must carry neither. It is the standing no-bypass guard for R1.1 and R1.8, and covers clients added later.
 
 `WfmContext` (`platform` + `crossplay`) is the single read point for the observer's context, and **C5's socket client is obliged to quote its `crossplay` explicitly** — the two channels take opposite upstream defaults, and mixing them fabricates a `vanished` on ~7% of ingested orders. `WfmProperties.platform` and `.crossplay` deliberately have no Kotlin defaults, so an unset value fails startup.
 

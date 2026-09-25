@@ -12,10 +12,11 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 /**
- * The standing no-bypass guard for R1.1 and R1.8.
+ * The standing no-bypass guard for R1.1 and R1.8, and the boundary that keeps the WFM transport
+ * off clients for other hosts.
  *
- * It enumerates the `RestClient` beans rather than naming them, so a client added later (T7's v1
- * legacy client, for instance) is covered without anyone editing this test.
+ * It enumerates the `RestClient` beans rather than naming them, so a client added later is covered
+ * without anyone editing this test: it either carries the transport or is named in [NON_WFM].
  */
 @SpringBootTest
 @Import(TestcontainersConfiguration::class)
@@ -23,12 +24,14 @@ class RateLimitWiringTest {
 
     @Autowired lateinit var clients: Map<String, RestClient>
 
-    @Test
-    fun `every RestClient bean carries the transport interceptors`() {
-        assertTrue(clients.isNotEmpty(), "no RestClient beans in the context -- this guard is vacuous")
+    @Autowired lateinit var builder: RestClient.Builder
 
-        clients.forEach { (name, client) ->
-            val interceptors = interceptorsOf(client)
+    @Test
+    fun `every WFM client carries the transport interceptors`() {
+        assertEquals(WFM, clients.keys - NON_WFM, "a RestClient bean is neither a WFM client nor named as non-WFM")
+
+        WFM.forEach { name ->
+            val interceptors = interceptorsOf(clients.getValue(name))
             assertTrue(
                 interceptors.any { it is WfmRateLimitInterceptor },
                 "bean '$name' can issue an unpaced request (R1.1)",
@@ -38,6 +41,13 @@ class RateLimitWiringTest {
                 "bean '$name' can issue a request with no crossplay context (R1.8)",
             )
         }
+    }
+
+    @Test
+    fun `a client for another host carries none of it`() {
+        val clean = interceptorsOf(builder.build()) + NON_WFM.flatMap { interceptorsOf(clients.getValue(it)) }
+
+        assertTrue(clean.none { it is WfmRateLimitInterceptor || it is WfmContextInterceptor }, "$clean")
     }
 
     @Test
@@ -51,6 +61,13 @@ class RateLimitWiringTest {
     }
 
     private fun bucketOf(uri: String) = WfmRateLimitInterceptor.bucketFor(URI(uri))
+
+    private companion object {
+        val WFM = setOf(WfmConfig.V2_CLIENT, WfmConfig.LEGACY_CLIENT)
+
+        /** `RestClient` beans for hosts other than warframe.market. None yet; C10 adds ntfy's. */
+        val NON_WFM = emptySet<String>()
+    }
 
     private fun interceptorsOf(client: RestClient): List<ClientHttpRequestInterceptor> {
         val found = mutableListOf<ClientHttpRequestInterceptor>()

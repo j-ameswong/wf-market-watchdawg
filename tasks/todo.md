@@ -12,10 +12,10 @@ checks and nothing else; how a check is met lives in the code and its tests.
       then slot).
 
 ### T2: The WFM transport covers the WFM clients only
-- [ ] The v2 and v1 clients carry the rate-limit and context interceptors and the WFM error
+- [x] The v2 and v1 clients carry the rate-limit and context interceptors and the WFM error
       handler.
-- [ ] A client built from the context's `RestClient.Builder` carries none of them.
-- [ ] Any other `RestClient` bean fails `RateLimitWiringTest` unless it is named there as
+- [x] A client built from the context's `RestClient.Builder` carries none of them.
+- [x] Any other `RestClient` bean fails `RateLimitWiringTest` unless it is named there as
       non-WFM, so a new WFM client still cannot bypass the limiter.
 
 ### T3: The detail sweep is off by default

@@ -40,7 +40,7 @@ That jar excludes the `developmentOnly` deps, so it will not start its own Postg
 
 ### The sync loop
 
-Two components are scheduled: `CollectionSyncScheduler`, below, and `ItemDetailSync`, which fills the fields `/v2/items` omits. `CollectionSyncScheduler` runs each tick (`wfm.sync.interval`, default 1h):
+Two components are scheduled: `CollectionSyncScheduler`, below, and `ItemDetailSync` (off by default), which fills the fields `/v2/items` omits. `CollectionSyncScheduler` runs each tick (`wfm.sync.interval`, default 1h):
 
 1. `GET /v2/versions` returns a content hash per collection (`items`, `rivens`, `liches`, …).
 2. For each `CollectionSync` bean, compare its hash against the `collection_version` row.
@@ -50,7 +50,7 @@ The transaction boundary is the important invariant: if a refresh throws, the st
 
 `ItemSync` binds `/v2/items` into `item`. Every field the v2 model marks optional binds as null when absent, never as a zero or `false` that looks like data — rank 0 is a real market (R7.8). The live list carries no `tradable`, `rarity` or `maxCharges`. `ItemDetailSync` owns those three columns and fills them from `/v2/item/{slug}`, one item at a time. So the list upsert must never write them, or every catalog refresh would blank the sweep's work. `fixtures/v2-items.json` and `fixtures/v2-item/*.json` are live captures, so keep them that way: refresh them from Bruno's List Items and Get Item requests rather than editing values by hand. `synced_at` is not an upstream timestamp (v2 items have none): the upsert stamps `now()`, the refresh transaction's time, so one refresh marks every row it wrote alike and a row missing from the latest refresh shows an older value.
 
-`ItemDetailSync` fetches one batch per run (`wfm.sync.item-details.batch-size` per `interval`; the defaults, 30 a minute, are 0.5 req/s). It takes never-fetched items first (`detail_synced_at` null), then any whose details are older than their last catalog refresh, so a catalog change costs one re-sweep of the whole catalog, about two hours, and nothing more. A `404` marks the item checked and keeps its old details. A throttle or any other failure ends the run, and the rest waits for the next one. It never runs inside the catalog refresh: a whole sweep is far too long to hold that transaction open.
+`ItemDetailSync` is **off unless `wfm.sync.item-details.enabled` is true**: nothing reads its fields yet. When on, it fetches one batch per run (`wfm.sync.item-details.batch-size` per `interval`; the defaults, 30 a minute, are 0.5 req/s). It takes never-fetched items first (`detail_synced_at` null), then any whose details are older than their last catalog refresh, so a catalog change costs one re-sweep of the whole catalog, about two hours, and nothing more. A `404` marks the item checked and keeps its old details. A throttle or any other failure ends the run, and the rest waits for the next one. It never runs inside the catalog refresh: a whole sweep is far too long to hold that transaction open.
 
 **Adding a collection:** implement `CollectionSync` as a `@Component` with `collection` set to a key of `VersionCollections.asMap()` (add the field and the `asMap()` entry if the collection isn't modelled yet). The scheduler picks it up by list injection; nothing else needs editing.
 

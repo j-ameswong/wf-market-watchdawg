@@ -19,8 +19,8 @@ checks and nothing else; how a check is met lives in the code and its tests.
       non-WFM, so a new WFM client still cannot bypass the limiter.
 
 ### T3: The detail sweep is off by default
-- [ ] With no `wfm.sync.item-details.enabled`, no `ItemDetailSync` bean exists.
-- [ ] Setting it to `true` restores the sweep unchanged.
+- [x] With no `wfm.sync.item-details.enabled`, no `ItemDetailSync` bean exists.
+- [x] Setting it to `true` restores the sweep unchanged.
 
 ### T4: The spec matches what the service can observe
 - [ ] R4.2 says every detected state change appends, not every observation.

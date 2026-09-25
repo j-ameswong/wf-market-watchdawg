@@ -37,11 +37,11 @@ checks and nothing else; how a check is met lives in the code and its tests.
 ## C4 — order-book ingest
 
 ### T5: Orders parse from the captures
-- [ ] `/v2/orders/item/{slug}` and `/v2/orders/recent` bind into one `Order` model, without
+- [x] `/v2/orders/item/{slug}` and `/v2/orders/recent` bind into one `Order` model, without
       Spring or a database.
-- [ ] A dimension absent from an order binds as null; `rank: 0` and `amberStars: 0` bind as 0.
-- [ ] The model binds nothing about the owner beyond platform and online status (SPEC §9).
-- [ ] The committed fixtures carry no trader names, slugs, ids or avatars.
+- [x] A dimension absent from an order binds as null; `rank: 0` and `amberStars: 0` bind as 0.
+- [x] The model binds nothing about the owner beyond platform and online status (SPEC §9).
+- [x] The committed fixtures carry no trader names, slugs, ids or avatars.
 
 ### T6: A full book is reconciled against stored state
 - [ ] Book A then A: no new events.

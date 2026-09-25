@@ -278,5 +278,7 @@ Mutation-checked:
       star maxima on 10. The capture behind it shows `/v2/items` never carries `tradable`, `rarity`
       or `maxCharges` (plan Open Questions 1 and 4).
 - [x] `SPEC.md` status note and `CHANGELOG.md` updated
-- [ ] Review with human
-- [ ] C4 may begin
+- [x] Review with human — approved by the project author, 2026-09-25, with the plan's Resolved
+      Decisions; `max_charges` kept and the extra item-page fields left out (plan Open Questions
+      5 and 6)
+- [x] C4 may begin

@@ -99,7 +99,7 @@ Full task bodies with acceptance criteria live in `tasks/todo.md`.
 
 ## Resolved Decisions
 
-All delegated and decided 2026-09-24 while planning; each is open to review at Checkpoint B.
+Decided 2026-09-24 while planning; all approved by the project author at Checkpoint B, 2026-09-25.
 
 1. **The fixture is documentation-shaped, and the live acceptance is manual.** *Superseded
    2026-09-24: the author ran the live check and supplied a capture, which replaced the fixture.* The environment
@@ -145,7 +145,11 @@ All delegated and decided 2026-09-24 while planning; each is open to review at C
    question 4.
 2. ~~Replace the fixture with a capture.~~ **Resolved:** the fixture is now eight entries trimmed
    unchanged from the author's capture.
-3. **Nix verification** remains outstanding from C2.
+3. **Nix verification.** *Partly answered, 2026-09-25:* the author ran `mflyway info` from the dev
+   shell. Its Flyway CLI is 13.2.0, the app's library 12.4.0; the CLI read all nine migrations
+   from the filesystem and reported every one applied by the app as `Success`, nothing pending,
+   and the repeatable not outdated. `nix build .#market` is still unrun. C3 adds no dependency, so
+   `nix/deps.json` is unaffected.
 4. ~~`tradable`, `rarity` and `max_charges` are never populated.~~ **Resolved:** filled from
    `/v2/item/{slug}` (Decision 8, T5). The option to drop `tradable` rested on the route summary
    "Get all tradable items" in `docs/v2/api/manifests.mdx`, which is documentation, not evidence.
@@ -159,11 +163,10 @@ All delegated and decided 2026-09-24 while planning; each is open to review at C
    carry `tradable: true`. The two mods carry `rarity`; the set does not. **None carries
    `maxCharges`**: `khra`'s item page gives `maxRank: 3`, as the list does. The item page also
    carries fields R3.1 never asked for: `tradingTax`, `setRoot`/`setParts`, `reqMasteryRank`, and
-   an English `description` and `wikiLink`. They are not stored; adding any is a small follow-up
-   if wanted.
-6. **`max_charges` is null on every row.** The author's full sweep (2026-09-25) found no item page
-   carrying `maxCharges`, as the three captures had suggested. The recommendation is to keep the
-   column: it is nullable, so it costs nothing, and R7.5 names it as the input that separates a
-   requiem mod's charges from its rank. C4's first order capture for a requiem mod shows whether
-   v2 models charges at all; if it does not, a later migration can drop the column. Awaiting the
-   author's call at Checkpoint B.
+   an English `description` and `wikiLink`. The author chose to leave them out for now
+   (2026-09-25).
+6. ~~`max_charges` is null on every row.~~ **Resolved: kept**, by the author's call at Checkpoint
+   B (2026-09-25). The full sweep found no item page carrying `maxCharges`, as the three captures
+   had suggested. The column is nullable, so it costs nothing, and R7.5 names it as the input that
+   separates a requiem mod's charges from its rank. C4's first order capture for a requiem mod
+   shows whether v2 models charges at all; if it does not, a later migration can drop the column.

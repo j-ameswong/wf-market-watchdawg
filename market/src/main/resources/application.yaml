@@ -1,6 +1,9 @@
 spring:
   application:
     name: market
+  # R9a.1: the watches. The test classpath carries an empty watches.yaml that shadows this one.
+  config:
+    import: ${WATCHDAWG_WATCHES:classpath:watches.yaml}
   docker:
     compose:
       lifecycle-management: start_and_stop

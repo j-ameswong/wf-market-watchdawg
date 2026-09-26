@@ -34,7 +34,8 @@ Packages under `com.watchdawg.market`:
 | `sync` | Catalog refresh (`CollectionSync`, `ItemSync`) and the item detail sweep |
 | `ingest` | Book reconciliation, partial ingest, quotes, one-book polling |
 | `store` | Repositories, `MarketResolver`, `OrderStore` |
-| planned | `wfm/ws` (socket), `poll` (C6), `watch` (C9a), `notify` (C10) |
+| `watch` | Watches from `watches.yaml`, checked against the catalog at startup |
+| planned | `wfm/ws` (socket), `poll` (C6), `notify` (C10) |
 
 ## Commands
 
@@ -151,6 +152,17 @@ The jar excludes `developmentOnly` deps, so it starts no Postgres: pass `SPRING_
   quote for every market of the item, empty ones included.
 - `wfm_order` rows are never deleted.
 
+### Watches
+
+- `watches.yaml` is imported by `spring.config.import` and bound as `watchdawg.watches`; there is no
+  YAML dependency. `WATCHDAWG_WATCHES=file:/path` replaces it.
+- Watches resolve against the catalog while the context starts, and a bad one fails startup. A
+  missing slug gets one hash-gated catalog refresh first, so a fresh database can start.
+- A watch names every dimension its item has, as a value or `any`, and none it lacks. Charges are
+  checked only once the detail sweep has fetched the item, since `/v2/items` never carries them.
+- A watch's `topic` is a logical name. The real ntfy topic is a credential and never goes in the
+  file.
+
 ### Time series
 
 | Relation | Kept | Policy |
@@ -183,6 +195,9 @@ The jar excludes `developmentOnly` deps, so it starts no Postgres: pass `SPRING_
   - `DatabaseResetListener` empties every table and continuous aggregate before each test. It
     names the hypertables, because `truncate market cascade` leaves compressed `order_event` rows.
 - The defaults come from a context customizer: a test `application.yaml` would shadow the main one.
+- `src/test/resources/watches.yaml` is empty and shadows the main one on purpose: a context
+  resolves its watches at startup, and the test catalog is empty. Build `Watches` by hand in a
+  test that needs one; `WatchesTest` checks the committed file.
 - Classes and methods run in random order; the test task prints its seed. Never rely on another
   test's rows. A test writing fact rows needs a real market: `resolver.marketFor(items)`.
 - Wiring and persistence are `@SpringBootTest`s. Parsing, classification and pacing are plain JUnit.

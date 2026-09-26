@@ -10,14 +10,14 @@ checks and nothing else; how a check is met lives in the code and its tests.
 ## C9a, first half — watches
 
 ### T1: Watches load from YAML and fail loudly
-- [ ] A watch names an item slug, optional dimensions, a per-unit threshold, a priority and a
+- [x] A watch names an item slug, optional dimensions, a per-unit threshold, a priority and a
       logical topic; `watches.yaml` binds into a typed list with no new dependency.
-- [ ] A watch naming a nonexistent slug fails startup with that slug in the message (R9a.2).
-- [ ] A missing slug triggers one catalog refresh before failing, so a fresh database starts.
-- [ ] A watch omitting a dimension its item has, or naming one it lacks, fails startup naming
+- [x] A watch naming a nonexistent slug fails startup with that slug in the message (R9a.2).
+- [x] A missing slug triggers one catalog refresh before failing, so a fresh database starts.
+- [x] A watch omitting a dimension its item has, or naming one it lacks, fails startup naming
       both the watch and the dimension; `any` is accepted (R9a.4).
-- [ ] Two watches with one name fail startup.
-- [ ] The committed `watches.yaml` holds no topic name, only logical ones (R10.6).
+- [x] Two watches with one name fail startup.
+- [x] The committed `watches.yaml` holds no topic name, only logical ones (R10.6).
 
 ## C6 — poll scheduler
 

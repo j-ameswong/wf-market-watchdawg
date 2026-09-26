@@ -7,6 +7,10 @@ design rationale in [`docs/adr/`](docs/adr/README.md).
 
 ### Added
 
+- **One alert end to end, by polling (C6, C9a, C10), in progress.**
+  - `watches.yaml` declares the watches: an item, each of its dimensions as a value or `any`, a
+    per-unit price threshold, an ntfy priority and a logical topic. A bad watch fails startup
+    naming it; a missing slug first gets one catalog refresh.
 - **C4 — Order-book ingest.**
   - `wfm_order` holds every order's current state; `order_book` the latest book per item.
   - Reconciling a full book records `appeared`, `price_changed`, `quantity_changed` and

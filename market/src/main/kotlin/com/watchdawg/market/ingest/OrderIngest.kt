@@ -66,8 +66,7 @@ class OrderIngest(
 
             val quotes = quotes(markets.marketsOf(itemId), book)
             store.insertQuotes(quotes, at)
-            val marketKeys = keys.entries.mapNotNull { (key, id) -> id?.let { it to key } }.toMap()
-            BookOutcome.Reconciled(events.size, quotes.size, alerts.evaluate(itemId, book, marketKeys, at))
+            BookOutcome.Reconciled(events.size, quotes.size, alerts.evaluate(itemId, book, keys.byMarket(), at))
         }
     }
 
@@ -76,12 +75,16 @@ class OrderIngest(
      * An order without an item id, or for an item the catalog lacks yet, is skipped: the first book
      * poll of that item will record it.
      *
+     * The orders that appeared, and only those, go to the rules of their item's watches, in the same
+     * transaction (R9a.7). A known order's changes still come from book polls (decision 3).
+     *
      * @return how many orders appeared.
      */
     fun ingestPartial(orders: List<Order>, source: Source, observedAt: Instant): Int {
         require(source != Source.BOOK) { "a full book goes through reconcileBook" }
         val at = observedAt.truncatedTo(MICROS)
-        val observed = observe(orders, skipUnknownItems = true, HashMap()) { it.itemId }
+        val keys = HashMap<MarketKey, Long?>()
+        val observed = observe(orders, skipUnknownItems = true, keys) { it.itemId }
 
         return transaction.execute {
             val added = observed.filter { store.insertIfAbsent(it, at) }
@@ -90,6 +93,9 @@ class OrderIngest(
                 source,
                 at,
             )
+            val marketKeys = keys.byMarket()
+            added.groupBy { marketKeys.getValue(it.marketId).itemId }
+                .forEach { (itemId, orders) -> alerts.evaluate(itemId, orders, marketKeys, at) }
             added.size
         }
     }
@@ -119,6 +125,10 @@ class OrderIngest(
             )
         }
     }
+
+    /** Each resolved market's dimensions, by its id. */
+    private fun Map<MarketKey, Long?>.byMarket(): Map<Long, MarketKey> =
+        entries.mapNotNull { (key, id) -> id?.let { it to key } }.toMap()
 
     private fun resolve(key: MarketKey, skipUnknownItems: Boolean): Long? = try {
         markets.resolve(key)

@@ -7,6 +7,11 @@ design rationale in [`docs/adr/`](docs/adr/README.md).
 
 ### Added
 
+- **C5 T3 — Socket orders reach the rule.** A new order the socket adds is evaluated by the
+  underpriced rule and admitted in the transaction that recorded it, seen when its message
+  arrived. A known order is not evaluated again, and the next book poll does not signal the same
+  listing at the same price. Admission now takes one database advisory lock, so a socket ingest
+  and a book poll committing at once cannot both pass a watch's cooldown or the daily ceiling.
 - **C5 T2 — The socket records new orders.** One connection to `wss://ws.warframe.market/socket`
   on the `wfm` subprotocol, with the project's `User-Agent`, subscribed to every new order with
   `platform` and `crossplay` sent explicitly from the one setting, which a test pins against the

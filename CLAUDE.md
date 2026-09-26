@@ -170,7 +170,14 @@ The jar excludes `developmentOnly` deps, so it starts no Postgres: pass `SPRING_
 - A watch's `topic` is a logical name. The real ntfy topic is a credential and never goes in the
   file, a URL, `signal.last_error` or a log line; `WATCHDAWG_NOTIFY_TOPICS_<NAME>` supplies it.
 - The rule reads the whole reconciled book, not its events: events say nothing about online status.
-  `Alerts` runs inside `reconcileBook`'s transaction, so a signal rolls back with its book (R9a.7).
+  A partial observation (socket, `/recent`) is evaluated over the orders it added, and nothing
+  else. `Alerts` runs inside the ingest transaction on both paths, so a signal rolls back with the
+  observation behind it (R9a.7).
+- Admission takes one transaction-scoped advisory lock, `SignalStore.ADMISSION_LOCK`, once the
+  rule has found candidates, and holds it to commit: the poll loop and the socket ingest on
+  different threads, and the daily ceiling counts across watches. Keep admission the last step of
+  an ingest transaction and write signals only under the lock, so its holder never waits on
+  anything another ingest holds.
 - `underpriced()` is pure; keep it free of Spring, like `reconcile()`.
 - Admission is dedup key (watch, order, unit price, whatever the state), then the watch's cooldown
   over its last **pending or sent** signal, then the daily ceiling over signals **seen** that UTC

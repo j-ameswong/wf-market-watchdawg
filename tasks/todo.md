@@ -41,15 +41,15 @@ checks and nothing else; how a check is met lives in the code and its tests.
 - [x] `wfm.socket.connected` and `wfm.socket.frames` (by outcome) are registered at startup (R12.2).
 
 ### T3: Socket orders reach the rule
-- [ ] A qualifying listing arriving on the socket for a watched market admits one signal, seen at
+- [x] A qualifying listing arriving on the socket for a watched market admits one signal, seen at
       the frame's arrival; an order that was already known admits nothing.
-- [ ] The next book poll holding the same listing at the same price admits nothing (dedup key).
-- [ ] Rolling back a partial ingest leaves neither its events nor its signal (R9a.7).
-- [ ] A socket ingest and a book reconcile each holding an equally priced candidate for one watch,
+- [x] The next book poll holding the same listing at the same price admits nothing (dedup key).
+- [x] Rolling back a partial ingest leaves neither its events nor its signal (R9a.7).
+- [x] A socket ingest and a book reconcile each holding an equally priced candidate for one watch,
       committing at once, admit exactly one signal within its cooldown.
-- [ ] Two ingests with candidates for different watches, competing for the last admission under
+- [x] Two ingests with candidates for different watches, competing for the last admission under
       the daily ceiling, admit one `pending` and write the other `suppressed`.
-- [ ] Orders for unwatched items are recorded and evaluate nothing.
+- [x] Orders for unwatched items are recorded and evaluate nothing.
 
 ### T4: The socket stays up and fills its gaps
 - [ ] A dropped connection reconnects with doubling, jittered backoff to the cap, and the backoff

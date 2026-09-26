@@ -63,7 +63,7 @@ class OrderIngest(
             val quotes = quotes(markets.marketsOf(itemId), book)
             store.insertQuotes(quotes, at)
             BookOutcome.Reconciled(events.size, quotes.size)
-        }!!
+        }
     }
 
     /**
@@ -86,7 +86,7 @@ class OrderIngest(
                 at,
             )
             added.size
-        }!!
+        }
     }
 
     /** Resolves each visible order's market, once per distinct tuple in this call. */

@@ -78,5 +78,5 @@ checks and nothing else; how a check is met lives in the code and its tests.
 
 ## Checkpoint
 - [x] `mbuild` green under several seeds — 139 tests
-- [ ] `SPEC.md` status and `CHANGELOG.md` updated
+- [x] `SPEC.md` status and `CHANGELOG.md` updated
 - [ ] Review with human

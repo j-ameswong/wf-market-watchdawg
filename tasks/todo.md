@@ -52,22 +52,22 @@ checks and nothing else; how a check is met lives in the code and its tests.
 - [x] Orders for unwatched items are recorded and evaluate nothing.
 
 ### T4: The socket stays up and fills its gaps
-- [ ] A dropped connection reconnects with doubling, jittered backoff to the cap, and the backoff
+- [x] A dropped connection reconnects with doubling, jittered backoff to the cap, and the backoff
       resets only after a connection has stayed subscribed for a minute (R5.3).
-- [ ] A server that accepts the connection but never completes the handshake is abandoned after
+- [x] A server that accepts the connection but never completes the handshake is abandoned after
       the 10-second connect deadline, and the socket reconnects.
-- [ ] A server that sends `reports/online` but withholds `:ok` is abandoned after the 10-second
+- [x] A server that sends `reports/online` but withholds `:ok` is abandoned after the 10-second
       subscription deadline, and the socket reconnects.
-- [ ] 90 seconds without a frame once subscribed closes the connection and reconnects.
-- [ ] Each confirmed subscription gap-fills once from `/v2/orders/recent` as `source=recent`,
+- [x] 90 seconds without a frame once subscribed closes the connection and reconnects.
+- [x] Each confirmed subscription gap-fills once from `/v2/orders/recent` as `source=recent`,
       unless the last gap-fill was under a minute ago; its orders reach the rule (R5.4).
-- [ ] Killing the connection and reconnecting records no duplicate events.
-- [ ] A gap-fill that fails or is throttled is logged and counted, and the socket stays up.
-- [ ] After a gap-fill throttled with `Retry-After: 300`, a reconnect 61 seconds later makes no
+- [x] Killing the connection and reconnecting records no duplicate events.
+- [x] A gap-fill that fails or is throttled is logged and counted, and the socket stays up.
+- [x] After a gap-fill throttled with `Retry-After: 300`, a reconnect 61 seconds later makes no
       `/recent` request, and the first reconnect after 300 seconds makes one.
-- [ ] `wfm.throttles` counts every `429` and `509` by bucket and status, including one that
+- [x] `wfm.throttles` counts every `429` and `509` by bucket and status, including one that
       surfaces without a retry, and is registered at startup.
-- [ ] `wfm.socket.reconnects` and `wfm.socket.gapfills` (by outcome) are registered at startup.
+- [x] `wfm.socket.reconnects` and `wfm.socket.gapfills` (by outcome) are registered at startup.
 
 ## Live checkpoints
 
@@ -91,6 +91,6 @@ checks and nothing else; how a check is met lives in the code and its tests.
       but its reconnects.
 
 ## Checkpoint
-- [ ] `mbuild` green under several seeds
-- [ ] `SPEC.md` status, `CLAUDE.md` and `CHANGELOG.md` updated; ADR-0022 records decision 2
+- [x] `mbuild` green under several seeds
+- [x] `SPEC.md` status, `CLAUDE.md` and `CHANGELOG.md` updated; ADR-0022 records decision 2
 - [ ] Review with human

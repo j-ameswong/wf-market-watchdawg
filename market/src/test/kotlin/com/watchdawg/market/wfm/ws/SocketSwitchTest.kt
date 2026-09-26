@@ -51,8 +51,12 @@ class SocketSwitchTest {
 
         @Test
         fun `the socket starts, and the harness refuses it the live host`() {
-            assertTrue(context.getBean(WfmSocket::class.java).isRunning)
-            assertEquals(listOf("WS wss://ws.warframe.market/socket"), guard.refused)
+            val socket = context.getBean(WfmSocket::class.java)
+            assertTrue(socket.isRunning)
+            eventually(what = "the refusal") { guard.refused.isNotEmpty() }
+            // It would go on reconnecting, and be refused each time, until stopped.
+            socket.stop()
+            assertEquals(setOf("WS wss://ws.warframe.market/socket"), guard.refused.toSet())
             // What LiveApiGuardListener runs after every test: it fails, and clears the record.
             assertFailsWith<AssertionError> { guard.assertUntouched() }
         }

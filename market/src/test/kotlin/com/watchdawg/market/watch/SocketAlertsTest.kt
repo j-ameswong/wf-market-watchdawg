@@ -15,11 +15,14 @@ import com.watchdawg.market.wfm.OrderType
 import com.watchdawg.market.wfm.WfmContext
 import com.watchdawg.market.wfm.WfmMetrics
 import com.watchdawg.market.wfm.ws.FakeSocketServer
+import com.watchdawg.market.wfm.ws.GapFill
 import com.watchdawg.market.wfm.ws.NEW_ORDER
+import com.watchdawg.market.wfm.ws.RecentOrders
 import com.watchdawg.market.wfm.ws.SocketConnector
 import com.watchdawg.market.wfm.ws.SocketFeed
 import com.watchdawg.market.wfm.ws.WfmSocket
 import com.watchdawg.market.wfm.ws.eventually
+import com.watchdawg.market.wfm.ws.socketProperties
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
@@ -29,6 +32,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.transaction.PlatformTransactionManager
 import org.springframework.transaction.support.TransactionTemplate
+import org.springframework.web.client.RestClient
 import tools.jackson.databind.json.JsonMapper
 import java.sql.Timestamp
 import java.time.Clock
@@ -77,6 +81,8 @@ class SocketAlertsTest {
 
     @Autowired lateinit var mapper: JsonMapper
 
+    @Autowired lateinit var wfmRestClient: RestClient
+
     private val executor = Executors.newFixedThreadPool(2)
 
     @AfterEach
@@ -90,8 +96,10 @@ class SocketAlertsTest {
         val metrics = WfmMetrics(SimpleMeterRegistry())
         val server = FakeSocketServer()
         val arrived = Clock.fixed(T1, UTC)
+        val gapFill = GapFill(RecentOrders(wfmRestClient).also { it.answer() }.client, ingest, metrics)
+        val feed = SocketFeed(ingest, mapper, metrics)
         val socket =
-            WfmSocket(connector, server.url, context, SocketFeed(ingest, mapper, metrics), metrics, mapper, arrived)
+            WfmSocket(connector, socketProperties(server.url), context, feed, gapFill, metrics, mapper, arrived)
         try {
             socket.start()
             server.nextSession().basicRemote.sendText(newOrder(khraOrder("cheap", platinum = 10)))

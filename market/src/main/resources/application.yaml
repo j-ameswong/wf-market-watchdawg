@@ -55,10 +55,17 @@ wfm:
     max-concurrency: 2
     max-retry-after: 60s
   # C5: one connection, subscribed to every new order on wfm.platform and wfm.crossplay. It spends
-  # no REST budget.
+  # no REST budget but one /v2/orders/recent per confirmed subscription, at most once a minute.
+  # A connection that misses a deadline is abandoned and a new one made after the reconnect delay:
+  # full jitter under a ceiling that doubles from initial to max.
   socket:
     url: wss://ws.warframe.market/socket
     connect-timeout: 10s
+    subscribe-timeout: 10s
+    silence-timeout: 90s
+    reconnect:
+      initial: 1s
+      max: 5m
   # C6: every watched item's book, once per interval. N items cost N / interval on the public
   # bucket: 20 items at 2m is 0.17 req/s of the 2 configured.
   poll:

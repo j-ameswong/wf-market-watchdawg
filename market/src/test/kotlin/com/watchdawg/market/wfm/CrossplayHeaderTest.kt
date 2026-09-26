@@ -1,10 +1,14 @@
 package com.watchdawg.market.wfm
 
 import com.watchdawg.market.TestcontainersConfiguration
+import com.watchdawg.market.ingest.OrderIngest
 import com.watchdawg.market.wfm.ws.FakeSocketServer
+import com.watchdawg.market.wfm.ws.GapFill
+import com.watchdawg.market.wfm.ws.RecentOrders
 import com.watchdawg.market.wfm.ws.SocketConnector
 import com.watchdawg.market.wfm.ws.SocketFeed
 import com.watchdawg.market.wfm.ws.WfmSocket
+import com.watchdawg.market.wfm.ws.socketProperties
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -47,6 +51,8 @@ class CrossplayHeaderTest {
     @Autowired lateinit var feed: SocketFeed
 
     @Autowired lateinit var mapper: JsonMapper
+
+    @Autowired lateinit var ingest: OrderIngest
 
     private lateinit var server: MockRestServiceServer
     private lateinit var client: RestClient
@@ -118,7 +124,10 @@ class CrossplayHeaderTest {
             server.verify()
 
             val socketServer = FakeSocketServer()
-            val socket = WfmSocket(connector, socketServer.url, quoted, feed, WfmMetrics(SimpleMeterRegistry()), mapper)
+            val metrics = WfmMetrics(SimpleMeterRegistry())
+            val gapFill = GapFill(RecentOrders(wfmRestClient).also { it.answer() }.client, ingest, metrics)
+            val socket =
+                WfmSocket(connector, socketProperties(socketServer.url), quoted, feed, gapFill, metrics, mapper)
             try {
                 socket.start()
                 assertEquals(crossplay, socketServer.nextSubscription()["crossplay"], "crossplay=$crossplay")

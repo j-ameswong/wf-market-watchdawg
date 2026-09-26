@@ -58,7 +58,9 @@ class OrderIngest(
 
             val changes = reconcile(store.knownOrders(itemId, book.map { it.id }), book, at)
             // An order a partial source added after the read above already has its appearance.
-            val addedMeanwhile = changes.appeared.filterNot { store.insertIfAbsent(it, at) }.mapTo(HashSet()) { it.id }
+            val addedMeanwhile = changes.appeared.sortedBy { it.id }
+                .filterNot { store.insertIfAbsent(it, at) }
+                .mapTo(HashSet()) { it.id }
             changes.changed.forEach { store.update(it, at) }
             store.markGone(changes.vanished.map { it.id }, at)
             val events = changes.events.filterNot { it.orderId in addedMeanwhile }
@@ -87,7 +89,9 @@ class OrderIngest(
         val observed = observe(orders, skipUnknownItems = true, keys) { it.itemId }
 
         return transaction.execute {
-            val added = observed.filter { store.insertIfAbsent(it, at) }
+            // In id order, like reconcileBook, so two ingests meeting the same new orders take their
+            // locks in the same order and cannot deadlock.
+            val added = observed.sortedBy { it.id }.filter { store.insertIfAbsent(it, at) }
             store.append(
                 added.map { reconcile(emptyList(), listOf(it), at).events.single() },
                 source,

@@ -198,15 +198,26 @@ The jar excludes `developmentOnly` deps, so it starts no Postgres: pass `SPRING_
   wraps that bean to refuse a non-local host.
 - A message is read only once its last part arrives, and the next one is requested after every
   callback, whatever this one held. Nothing in a message is fatal (R5.6).
+- Messages are read and ingested on the JDK client's threads. Everything else, connecting, the
+  connect, subscription and silence deadlines, reconnecting and the gap-fill, runs on the
+  socket's own single thread, so none of it takes a lock. The socket is not an `OwnThreadSchedule`:
+  its work is one-off delays, not a trigger.
+- A connection that misses a deadline is abandoned like one that drops; `Reconnects` picks the
+  delay. Heartbeats (`reports/online`) keep a subscribed connection alive but never confirm a
+  subscription.
+- `GapFill` calls `/v2/orders/recent` once per confirmed subscription, never within a minute of
+  the last call or before a throttle's `Retry-After` has passed. It moves no other clock: the poll
+  loop's cadence and hold-off are its own.
 - The socket records every item's new orders, watched or not
   ([ADR-0022](docs/adr/0022-socket-records-every-items-new-orders.md)); an unpolled item's
   `wfm_order` rows are history, not current state.
 
 ### Polling
 
-- The poll loop and anything else that needs its own thread run through `OwnThreadSchedule`, a
-  lifecycle bean declared only when `watchdawg.scheduling.enabled` allows. **Never declare a
-  `TaskScheduler` bean**: it would replace Boot's and take over every `@Scheduled` method.
+- The poll loop and anything else on a trigger that needs its own thread run through
+  `OwnThreadSchedule`, a lifecycle bean declared only when `watchdawg.scheduling.enabled` allows.
+  **Never declare a `TaskScheduler` bean**: it would replace Boot's and take over every
+  `@Scheduled` method.
 - `Cadence` keeps one round per interval: an overrun starts the next round when it ends, with no
   make-up burst, and a throttle's `Retry-After` holds off the next round (ADR-0019).
 

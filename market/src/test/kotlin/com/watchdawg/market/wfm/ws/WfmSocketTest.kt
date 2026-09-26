@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.core.io.ClassPathResource
 import org.springframework.jdbc.core.JdbcTemplate
+import org.springframework.web.client.RestClient
 import tools.jackson.databind.JsonNode
 import tools.jackson.databind.json.JsonMapper
 import kotlin.test.assertEquals
@@ -40,11 +41,23 @@ class WfmSocketTest {
 
     @Autowired lateinit var jdbc: JdbcTemplate
 
+    @Autowired lateinit var wfmRestClient: RestClient
+
     private val server = FakeSocketServer()
     private val registry = SimpleMeterRegistry()
     private val socket by lazy {
         val metrics = WfmMetrics(registry)
-        WfmSocket(connector, server.url, context, SocketFeed(ingest, mapper, metrics), metrics, mapper)
+        val recent = RecentOrders(wfmRestClient).also { it.answer() }
+        val gapFill = GapFill(recent.client, ingest, metrics)
+        WfmSocket(
+            connector,
+            socketProperties(server.url),
+            context,
+            SocketFeed(ingest, mapper, metrics),
+            gapFill,
+            metrics,
+            mapper,
+        )
     }
 
     @AfterEach
@@ -95,12 +108,13 @@ class WfmSocketTest {
     }
 
     @Test
-    fun `any other subscription error closes the connection`() {
+    fun `any other subscription error closes the connection, and the socket reconnects`() {
         server.subscribeReply = { """{"route":"$SUBSCRIBE_FAILED","payload":"app.errors.somethingElse","id":"$it"}""" }
         socket.start()
 
         val session = server.nextSession()
         eventually(what = "the close") { !session.isOpen }
+        server.nextSession()
         assertEquals(0.0, connected())
     }
 

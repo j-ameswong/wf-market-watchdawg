@@ -10,7 +10,7 @@
 > | C2 | **Built and reviewed.** |
 > | C3 | **Built and reviewed.** The item detail sweep is off until a rule or query reads its fields. |
 > | C4 | **Built and reviewed.** |
-> | C5 | **In progress** in `tasks/plan.md`. T1 (live capture), T2 (connect, subscribe, record new orders) and T3 (socket orders reach the rule) are done; T4–T6 remain. |
+> | C5 | **In progress** in `tasks/plan.md`. T1–T4 are done: the socket records every new order, feeds the rule, reconnects and gap-fills. T5 (live checkpoint) and T6 (72h budget run) remain, on the author's machine. |
 > | C6 | **Built and reviewed.** Watched items are polled on a fixed cadence, honouring a throttle's `Retry-After`. |
 > | C7, C8 | Not started. |
 > | C9a | **Built and reviewed** for the underpriced rule, with dedup, a per-watch cooldown and a daily ceiling. The 72h budget run is planned as the last task of C5; the spread and crossing rules are still to do. |

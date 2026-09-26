@@ -38,6 +38,11 @@ wfm:
       per: 1m
     max-concurrency: 2
     max-retry-after: 60s
+  # C6: every watched item's book, once per interval. N items cost N / interval on the public
+  # bucket: 20 items at 2m is 0.17 req/s of the 2 configured.
+  poll:
+    interval: 2m
+    initial-delay: 1m
   sync:
     interval: 1h
     initial-delay: 30s

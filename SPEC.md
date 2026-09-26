@@ -9,10 +9,12 @@
 > | C1 | **Built.** |
 > | C2 | **Built and reviewed.** |
 > | C3 | **Built and reviewed.** The item detail sweep is off until a rule or query reads its fields. |
-> | C4 | **Built and reviewed.** Nothing calls ingest on a schedule until C6. |
-> | C5–C8 | Not started. |
+> | C4 | **Built and reviewed.** |
+> | C5 | Not started. |
+> | C6 | **In progress.** Watched items are polled on a fixed cadence, honouring a throttle's `Retry-After`. |
+> | C7, C8 | Not started. |
 > | C9a | **In progress.** Watches load from `watches.yaml` and are checked at startup; no rule yet. |
-> | C9b–C12 | Not started. C6 and C10 are in progress with C9a: one alert end to end (§3.4). |
+> | C9b–C12 | Not started. C10 is next, with C9a's rule: one alert end to end (§3.4). |
 >
 > Grounded in `docs/v2/` (API `v0.25.0`, WebSocket `v0.13.0`), `docs/v1.yml`, and the live-verified
 > route table in `bruno/README.md`. This document describes the system to be built; the reasoning

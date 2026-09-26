@@ -6,8 +6,8 @@ the rules and traps that the code alone does not make obvious.
 ## What this is
 
 A Spring Boot 4 / Kotlin service that mirrors warframe.market into Postgres + TimescaleDB. It syncs
-the item catalog and can reconcile order books into order state, an event log and quotes; nothing
-polls books on a schedule yet.
+the item catalog, and polls the books of the items `watches.yaml` names on a fixed cadence,
+reconciling each into order state, an event log and quotes.
 
 Where things are written down:
 
@@ -35,7 +35,8 @@ Packages under `com.watchdawg.market`:
 | `ingest` | Book reconciliation, partial ingest, quotes, one-book polling |
 | `store` | Repositories, `MarketResolver`, `OrderStore` |
 | `watch` | Watches from `watches.yaml`, checked against the catalog at startup |
-| planned | `wfm/ws` (socket), `poll` (C6), `notify` (C10) |
+| `poll` | The poll loop (C6): every watched item's book, once per interval, on its own thread |
+| planned | `wfm/ws` (socket), `notify` (C10) |
 
 ## Commands
 
@@ -162,6 +163,14 @@ The jar excludes `developmentOnly` deps, so it starts no Postgres: pass `SPRING_
   checked only once the detail sweep has fetched the item, since `/v2/items` never carries them.
 - A watch's `topic` is a logical name. The real ntfy topic is a credential and never goes in the
   file.
+
+### Polling
+
+- The poll loop and anything else that needs its own thread run through `OwnThreadSchedule`, a
+  lifecycle bean declared only when `watchdawg.scheduling.enabled` allows. **Never declare a
+  `TaskScheduler` bean**: it would replace Boot's and take over every `@Scheduled` method.
+- `Cadence` keeps one round per interval: an overrun starts the next round when it ends, with no
+  make-up burst, and a throttle's `Retry-After` holds off the next round (ADR-0019).
 
 ### Time series
 

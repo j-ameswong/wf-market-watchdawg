@@ -22,13 +22,13 @@ checks and nothing else; how a check is met lives in the code and its tests.
 ## C6 — poll scheduler
 
 ### T2: Watched items are polled on a fixed cadence
-- [ ] With N watched items and interval I, each is polled once per I (R6.1, R6.3).
-- [ ] No two polls run at once, and a tick that overruns delays the next (R6.3).
-- [ ] A failed fetch for one item does not stop the others.
-- [ ] A throttle ends the tick, and no request is made before its `Retry-After` has passed: a
+- [x] With N watched items and interval I, each is polled once per I (R6.1, R6.3).
+- [x] No two polls run at once, and a tick that overruns delays the next (R6.3).
+- [x] A failed fetch for one item does not stop the others.
+- [x] A throttle ends the tick, and no request is made before its `Retry-After` has passed: a
       ten-minute `Retry-After` at a two-minute cadence means no poll for ten minutes (R6.6, ADR-0019).
-- [ ] Polling is off under test (R2.6), and runs on a thread the catalog sync does not share.
-- [ ] `wfm.poll.lateness` and per-outcome poll counts are registered at startup (R6.4, R12.4).
+- [x] Polling is off under test (R2.6), and runs on a thread the catalog sync does not share.
+- [x] `wfm.poll.lateness` and per-outcome poll counts are registered at startup (R6.4, R12.4).
 
 ## The first complete path — rule, outbox, notification
 

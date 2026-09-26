@@ -11,6 +11,9 @@ design rationale in [`docs/adr/`](docs/adr/README.md).
   - `watches.yaml` declares the watches: an item, each of its dimensions as a value or `any`, a
     per-unit price threshold, an ntfy priority and a logical topic. A bad watch fails startup
     naming it; a missing slug first gets one catalog refresh.
+  - The poll loop fetches every watched item's book once per `wfm.poll.interval` (2 minutes), on
+    a thread of its own, never overlapping itself. A throttle ends the round and its `Retry-After`
+    holds off the next. `wfm.poll.lateness` and `wfm.polls` (by outcome) measure it.
 - **C4 — Order-book ingest.**
   - `wfm_order` holds every order's current state; `order_book` the latest book per item.
   - Reconciling a full book records `appeared`, `price_changed`, `quantity_changed` and

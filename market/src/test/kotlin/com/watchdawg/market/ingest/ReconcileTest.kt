@@ -14,7 +14,7 @@ import java.time.Instant
 import kotlin.test.assertEquals
 
 /**
- * The classification core (R4.1–R4.10), in plain JUnit: no Spring, no database (SPEC 8).
+ * The classification core (R4.1–R4.10), in plain JUnit: no Spring, no database.
  * `OrderIngestTest` runs the same rules against the store.
  */
 class ReconcileTest {

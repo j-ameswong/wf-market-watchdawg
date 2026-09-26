@@ -121,7 +121,7 @@ class WfmLegacyClientTest {
 
     @Test
     fun `v2 camelCase binding is unaffected by the v1 naming strategy`() {
-        // The regression this guards against is a *global* naming strategy (SPEC 7). Under one,
+        // The regression this guards against is a *global* naming strategy. Under one,
         // `gameRef` would start binding from `game_ref` and stop binding from `gameRef`. Both
         // halves are asserted below.
         val builder = wfmRestClient.mutate()

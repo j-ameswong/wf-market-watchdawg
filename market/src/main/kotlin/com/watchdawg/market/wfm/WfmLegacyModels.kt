@@ -73,8 +73,7 @@ data class ClosedStat(
      * field is absent rather than null.
      *
      * v1 spells two of them differently from v2: `mod_rank` for `rank`, `amber_stars` for
-     * `amberStars`. SPEC 10's first open question is whether `mod_rank` also carries what v2 calls
-     * `charges` for requiem mods. Nothing here maps them; C7 will, once that is settled.
+     * `amberStars`. Nothing here maps them; C7 will, and R7.5 says when `mod_rank` is a rank.
      */
     val modRank: Int? = null,
     val subtype: String? = null,

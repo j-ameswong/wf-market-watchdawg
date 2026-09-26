@@ -56,7 +56,7 @@ class OrderBookPollTest {
         server.verify()
         assertEquals(listOf("book"), jdbc.queryForList("select distinct source from order_event", String::class.java))
         assertEquals(319, count("order_event"))
-        // khra's orders carry ranks 0, 2 and 3 and no charges (SPEC 10 Q1).
+        // khra's orders carry ranks 0, 2 and 3 and no charges (R7.5).
         assertEquals(listOf(0, 2, 3), jdbc.queryForList("select rank from market order by rank", Int::class.java))
     }
 

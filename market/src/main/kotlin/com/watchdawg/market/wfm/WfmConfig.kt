@@ -66,8 +66,8 @@ class WfmConfig {
      * the JSON property casing differ.
      *
      * The snake_case strategy is set on this client's own converter, not on the shared mapper. v2
-     * is camelCase, so a global strategy would quietly stop `updatedAt` and `gameRef` binding
-     * (SPEC 7). **Do not move it.**
+     * is camelCase, so a global strategy would quietly stop `updatedAt` and `gameRef` binding.
+     * **Do not move it.**
      *
      * [JsonMapper.rebuild] starts from the mapper Boot already configured, so the Kotlin module,
      * the `java.time` handling and the deserialization defaults all carry over. Only the naming

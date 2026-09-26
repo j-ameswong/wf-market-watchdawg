@@ -1,0 +1,2 @@
+# Shadows the main watches.yaml on the test classpath, so no test context starts with the real
+# watches, which would need a catalog. A test that needs a watch declares it in its own properties.

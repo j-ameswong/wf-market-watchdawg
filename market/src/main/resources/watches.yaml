@@ -1,0 +1,20 @@
+# What the service watches (R9a.1, ADR-0013). Read at startup; a bad entry fails startup naming it.
+# WATCHDAWG_WATCHES=file:/path/to/watches.yaml reads another file instead, for the packaged jar.
+#
+# Each watch names an item by slug and every dimension that item has, as a value or `any`; a
+# dimension the item lacks must be left out (SPEC §10 Q5). A live sell listing from an online
+# seller at or below max-unit-price (platinum a unit) qualifies.
+#
+# cooldown (default 1h): after a signal, only a cheaper listing signals again for this long.
+#
+# topic is a logical name. The real ntfy topic is a credential and comes from the environment,
+# WATCHDAWG_NOTIFY_TOPICS_<NAME>; it never goes in this file (R10.6).
+watchdawg:
+  watches:
+    - name: serration-max
+      item: serration
+      subtype: any
+      rank: 10
+      max-unit-price: 18
+      priority: default
+      topic: default

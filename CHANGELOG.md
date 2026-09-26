@@ -7,6 +7,27 @@ design rationale in [`docs/adr/`](docs/adr/README.md).
 
 ### Added
 
+- **One alert end to end, by polling (C6, C9a, C10).**
+  - `watches.yaml` declares the watches: an item, each of its dimensions as a value or `any`, a
+    per-unit price threshold, an ntfy priority and a logical topic. A bad watch fails startup
+    naming it; a missing slug first gets one catalog refresh.
+  - The poll loop fetches every watched item's book once per `wfm.poll.interval` (2 minutes), on
+    a thread of its own, never overlapping itself. A throttle ends the round and its `Retry-After`
+    holds off the next. `wfm.poll.lateness` and `wfm.polls` (by outcome) measure it.
+  - The underpriced-listing rule: a live sell order from an online owner at or under a watch's
+    unit price is admitted to the `signal` outbox, in the transaction that reconciled its book.
+  - A dispatcher posts pending signals to ntfy as JSON, the topic in the body, and marks one sent
+    only on a 2xx. The push carries the item, its dimensions, the unit price and lot, when the
+    listing was seen and a link to the item page. It runs only once a topic is mapped.
+  - Suppression: one listing at one price is admitted once; within a watch's `cooldown` (1 hour
+    by default) only a cheaper listing is admitted, counting pending signals as well as sent ones;
+    past `watchdawg.alerts.daily-ceiling` (50) a UTC day, a candidate is recorded as `suppressed`
+    and never sent. `watchdawg.signals` counts signals by watch and state.
+  - Delivery retries a failure with doubling backoff (30 seconds first) up to 5 attempts, then
+    marks the signal `failed`, logs it and counts it. `watchdawg.deliveries` counts attempts by
+    outcome. A pending signal is sent after a restart, however late.
+  - Real topics come from `WATCHDAWG_NOTIFY_TOPICS_<NAME>`. With any mapped, a watch naming an
+    unmapped one fails startup. The topic appears in no URL, stored error or log line.
 - **C4 — Order-book ingest.**
   - `wfm_order` holds every order's current state; `order_book` the latest book per item.
   - Reconciling a full book records `appeared`, `price_changed`, `quantity_changed` and

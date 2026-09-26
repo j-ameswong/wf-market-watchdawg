@@ -4,6 +4,7 @@ import com.watchdawg.market.store.MarketKey
 import com.watchdawg.market.store.MarketResolver
 import com.watchdawg.market.store.OrderStore
 import com.watchdawg.market.store.UnknownItemException
+import com.watchdawg.market.watch.Alerts
 import com.watchdawg.market.wfm.Order
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
@@ -13,7 +14,7 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit.MICROS
 
 sealed interface BookOutcome {
-    data class Reconciled(val events: Int, val quotes: Int) : BookOutcome
+    data class Reconciled(val events: Int, val quotes: Int, val signals: Int = 0) : BookOutcome
 
     /** A book at least as new was already reconciled for this item, so this one changed nothing. */
     data object Stale : BookOutcome
@@ -34,20 +35,23 @@ sealed interface BookOutcome {
 class OrderIngest(
     private val store: OrderStore,
     private val markets: MarketResolver,
+    private val alerts: Alerts,
     transactions: PlatformTransactionManager,
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
     private val transaction = TransactionTemplate(transactions)
 
     /**
-     * Reconciles [orders], the full book of [itemId], observed at [observedAt] (R4.1–R4.10), and
-     * writes one quote per market of the item (R4.3).
+     * Reconciles [orders], the full book of [itemId], observed at [observedAt] (R4.1–R4.10),
+     * writes one quote per market of the item (R4.3), and admits the signals the item's watches
+     * find in the book, all in one transaction (R9a.7).
      *
      * @throws UnknownItemException if [itemId] is not in the catalog; nothing is written.
      */
     fun reconcileBook(itemId: String, orders: List<Order>, observedAt: Instant): BookOutcome {
         val at = observedAt.truncatedTo(MICROS)
-        val book = observe(orders, skipUnknownItems = false) { itemId }
+        val keys = HashMap<MarketKey, Long?>()
+        val book = observe(orders, skipUnknownItems = false, keys) { itemId }
 
         return transaction.execute {
             if (!store.claimBook(itemId, at)) return@execute BookOutcome.Stale
@@ -62,7 +66,8 @@ class OrderIngest(
 
             val quotes = quotes(markets.marketsOf(itemId), book)
             store.insertQuotes(quotes, at)
-            BookOutcome.Reconciled(events.size, quotes.size)
+            val marketKeys = keys.entries.mapNotNull { (key, id) -> id?.let { it to key } }.toMap()
+            BookOutcome.Reconciled(events.size, quotes.size, alerts.evaluate(itemId, book, marketKeys, at))
         }
     }
 
@@ -76,7 +81,7 @@ class OrderIngest(
     fun ingestPartial(orders: List<Order>, source: Source, observedAt: Instant): Int {
         require(source != Source.BOOK) { "a full book goes through reconcileBook" }
         val at = observedAt.truncatedTo(MICROS)
-        val observed = observe(orders, skipUnknownItems = true) { it.itemId }
+        val observed = observe(orders, skipUnknownItems = true, HashMap()) { it.itemId }
 
         return transaction.execute {
             val added = observed.filter { store.insertIfAbsent(it, at) }
@@ -89,13 +94,13 @@ class OrderIngest(
         }
     }
 
-    /** Resolves each visible order's market, once per distinct tuple in this call. */
+    /** Resolves each visible order's market into [resolved], once per distinct tuple in this call. */
     private fun observe(
         orders: List<Order>,
         skipUnknownItems: Boolean,
+        resolved: MutableMap<MarketKey, Long?>,
         itemOf: (Order) -> String?,
     ): List<ObservedOrder> {
-        val resolved = HashMap<MarketKey, Long?>()
         return orders.filter { it.visible }.distinctBy { it.id }.mapNotNull { order ->
             val itemId = itemOf(order) ?: return@mapNotNull skip(order, "it names no item")
             val key = MarketKey(itemId, order.subtype, order.rank, order.charges, order.amberStars, order.cyanStars)

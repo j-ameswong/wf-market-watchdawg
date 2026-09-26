@@ -46,6 +46,21 @@ class WfmMetrics(private val registry: MeterRegistry) {
         }
     }.toMap()
 
+    /**
+     * How late each poll round started against its fixed cadence (R6.4). Demand above the budget
+     * shows up here, never as a `429` (R6.5).
+     */
+    private val pollLateness = Timer.builder(POLL_LATENESS).register(registry)
+
+    /** Book polls by outcome. A throttled poll ends its round, so the items after it are not counted. */
+    private val polls = PollOutcome.entries.associateWith {
+        Counter.builder(POLLS).tag(OUTCOME, it.tag).register(registry)
+    }
+
+    fun pollRoundStarted(lateness: Duration) = pollLateness.record(lateness)
+
+    fun polled(outcome: PollOutcome) = polls.getValue(outcome).increment()
+
     fun requestIssued(bucket: Bucket, waited: Duration) {
         requests.getValue(bucket).increment()
         waits.getValue(bucket).record(waited)
@@ -79,9 +94,25 @@ class WfmMetrics(private val registry: MeterRegistry) {
         const val WAIT = "wfm.request.wait"
         const val RETRIES = "wfm.retries"
         const val CONCURRENCY = "wfm.concurrency.limit"
+        const val POLL_LATENESS = "wfm.poll.lateness"
+        const val POLLS = "wfm.polls"
+        const val OUTCOME = "outcome"
         const val BUCKET = "bucket"
         const val STATUS = "status"
     }
+}
+
+/** What one book poll came to (C6). */
+enum class PollOutcome {
+    RECONCILED,
+
+    /** A book at least as new was already reconciled for the item (R4.9). */
+    STALE,
+    FAILED,
+    THROTTLED,
+    ;
+
+    val tag: String get() = name.lowercase()
 }
 
 /** Micrometer tag values are conventionally lower-kebab-case, and `CONTRACT_SEARCH` is not. */

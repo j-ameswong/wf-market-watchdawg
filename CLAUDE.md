@@ -6,8 +6,9 @@ the rules and traps that the code alone does not make obvious.
 ## What this is
 
 A Spring Boot 4 / Kotlin service that mirrors warframe.market into Postgres + TimescaleDB. It syncs
-the item catalog and can reconcile order books into order state, an event log and quotes; nothing
-polls books on a schedule yet.
+the item catalog, and polls the books of the items `watches.yaml` names on a fixed cadence,
+reconciling each into order state, an event log and quotes. A cheap listing on a watched market
+becomes a signal in an outbox, which a dispatcher sends to ntfy.
 
 Where things are written down:
 
@@ -34,7 +35,10 @@ Packages under `com.watchdawg.market`:
 | `sync` | Catalog refresh (`CollectionSync`, `ItemSync`) and the item detail sweep |
 | `ingest` | Book reconciliation, partial ingest, quotes, one-book polling |
 | `store` | Repositories, `MarketResolver`, `OrderStore` |
-| planned | `wfm/ws` (socket), `poll` (C6), `watch` (C9a), `notify` (C10) |
+| `watch` | Watches from `watches.yaml`, the underpriced rule, and the `signal` outbox |
+| `poll` | The poll loop (C6): every watched item's book, once per interval, on its own thread |
+| `notify` | The dispatcher and the ntfy client (C10) |
+| planned | `wfm/ws` (socket) |
 
 ## Commands
 
@@ -103,7 +107,8 @@ The jar excludes `developmentOnly` deps, so it starts no Postgres: pass `SPRING_
   `crossplay` explicitly**: REST and the socket default to opposite values, and mixing them
   fabricates `vanished` on ~7% of orders ([ADR-0002](docs/adr/0002-crossplay-single-global-setting.md)).
   `wfm.platform` and `wfm.crossplay` have no defaults, so startup fails if either is unset.
-- Meter names live in `WfmMetrics` and are registered at startup, so a quiet service reads as zero
+- Meter names live in `WfmMetrics` (transport and polling) and `AlertMetrics` (signals and
+  deliveries), and are registered at startup, so a quiet service reads as zero
   rather than a missing series. Renaming one breaks whatever dashboard watches it. Actuator exposes `health,metrics` and nothing else;
   `HttpSurfaceTest` fails on a controller or a wider exposure list.
 
@@ -151,6 +156,38 @@ The jar excludes `developmentOnly` deps, so it starts no Postgres: pass `SPRING_
   quote for every market of the item, empty ones included.
 - `wfm_order` rows are never deleted.
 
+### Watches
+
+- `watches.yaml` is imported by `spring.config.import` and bound as `watchdawg.watches`; there is no
+  YAML dependency. `WATCHDAWG_WATCHES=file:/path` replaces it.
+- Watches resolve against the catalog while the context starts, and a bad one fails startup. A
+  missing slug gets one hash-gated catalog refresh first, so a fresh database can start.
+- A watch names every dimension its item has, as a value or `any`, and none it lacks. Charges are
+  checked only once the detail sweep has fetched the item, since `/v2/items` never carries them.
+- A watch's `topic` is a logical name. The real ntfy topic is a credential and never goes in the
+  file, a URL, `signal.last_error` or a log line; `WATCHDAWG_NOTIFY_TOPICS_<NAME>` supplies it.
+- The rule reads the whole reconciled book, not its events: events say nothing about online status.
+  `Alerts` runs inside `reconcileBook`'s transaction, so a signal rolls back with its book (R9a.7).
+- `underpriced()` is pure; keep it free of Spring, like `reconcile()`.
+- Admission is dedup key (watch, order, unit price, whatever the state), then the watch's cooldown
+  over its last **pending or sent** signal, then the daily ceiling over signals **seen** that UTC
+  day. Cooldown and ceiling count `seen_at`, the book's request time, not the clock at insert.
+- Only a 2xx marks a signal sent. A failure retries with doubling backoff to
+  `watchdawg.notify.max-attempts`, then the signal is `failed` and keeps its dedup key.
+- With no topic mapped, the dispatcher is not scheduled. With any mapped, every watch's topic must
+  be, or startup fails. Logical topics are lowercase letters and digits, so an environment variable
+  can name them.
+- `NtfyNotifier` serialises its body to bytes itself: `RestClient` logs an object body at DEBUG,
+  topic and all. Errors recorded or logged have the topic scrubbed.
+
+### Polling
+
+- The poll loop and anything else that needs its own thread run through `OwnThreadSchedule`, a
+  lifecycle bean declared only when `watchdawg.scheduling.enabled` allows. **Never declare a
+  `TaskScheduler` bean**: it would replace Boot's and take over every `@Scheduled` method.
+- `Cadence` keeps one round per interval: an overrun starts the next round when it ends, with no
+  make-up burst, and a throttle's `Retry-After` holds off the next round (ADR-0019).
+
 ### Time series
 
 | Relation | Kept | Policy |
@@ -183,6 +220,9 @@ The jar excludes `developmentOnly` deps, so it starts no Postgres: pass `SPRING_
   - `DatabaseResetListener` empties every table and continuous aggregate before each test. It
     names the hypertables, because `truncate market cascade` leaves compressed `order_event` rows.
 - The defaults come from a context customizer: a test `application.yaml` would shadow the main one.
+- `src/test/resources/watches.yaml` is empty and shadows the main one on purpose: a context
+  resolves its watches at startup, and the test catalog is empty. Build `Watches` by hand in a
+  test that needs one; `WatchesTest` checks the committed file.
 - Classes and methods run in random order; the test task prints its seed. Never rely on another
   test's rows. A test writing fact rows needs a real market: `resolver.marketFor(items)`.
 - Wiring and persistence are `@SpringBootTest`s. Parsing, classification and pacing are plain JUnit.

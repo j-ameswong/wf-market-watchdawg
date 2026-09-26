@@ -60,6 +60,16 @@ shipped as requests. Their routes are alive (they answer `401`, not `404`):
 Write endpoints (`POST`/`PATCH`/`DELETE` on orders and auctions) are also excluded
 because "verifying" them means mutating a real account's live listings.
 
+## Order captures as test fixtures
+
+Order responses name real traders. Before a capture is committed as a fixture, run it through
+`scrub-orders.mjs`, which replaces each owner with a numbered pseudonym and keeps every order
+field as captured:
+
+```
+node bruno/scrub-orders.mjs < response.json > market/src/test/resources/fixtures/v2-orders/<name>.json
+```
+
 ## Notes worth keeping
 
 - `/v2/order/{id}` resolves ids taken from `/v2/orders/item/{slug}`, but ids scraped

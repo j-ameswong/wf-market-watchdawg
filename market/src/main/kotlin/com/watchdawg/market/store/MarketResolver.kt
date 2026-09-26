@@ -65,6 +65,12 @@ class MarketResolver(
         ?: find(key)
         ?: error("market $key conflicted on insert but cannot be found")
 
+    /** Every market [itemId] has on the observer's platform, whichever capability created it. */
+    fun marketsOf(itemId: String): List<Long> = jdbc.query(
+        "select id from market where item_id = :itemId and platform = :platform order by id",
+        MapSqlParameterSource("itemId", itemId).addValue("platform", platform),
+    ) { rs, _ -> rs.getLong(1) }
+
     private fun find(key: MarketKey): Long? = jdbc.query(FIND, parameters(key)) { rs, _ ->
         rs.getLong(1)
     }.singleOrNull()

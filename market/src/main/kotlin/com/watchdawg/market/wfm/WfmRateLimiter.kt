@@ -4,6 +4,7 @@ import java.time.Clock
 import java.time.Duration
 import java.time.Instant
 import java.util.concurrent.Semaphore
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -30,8 +31,10 @@ enum class Bucket {
  * is a separate concern: a `509` from Cloudflare is about open connections, not about any one
  * route (R1.4).
  *
- * A caller takes its turn *before* it takes a permit, never while holding one. Otherwise a thread
- * waiting out its pacing delay would be sitting on a connection slot it is not using.
+ * A caller takes a permit first and its turn second, so a call starts exactly on its turn. The
+ * other order lets callers finish their pacing while every slot is busy and then start together
+ * the moment one frees. The cost is that a caller holds a slot while it waits out its turn, which
+ * can delay a call on the other bucket when every slot is taken.
  */
 class WfmRateLimiter(
     limits: WfmProperties.Limits,
@@ -58,15 +61,16 @@ class WfmRateLimiter(
     }
 
     /**
-     * Waits for this thread's turn on [bucket] and for a free connection slot, then runs [call].
+     * Waits for a free connection slot and then for this thread's turn on [bucket], then runs
+     * [call]. The call is metered when it starts, with the whole wait.
      *
      * The slot is always released, including when [call] throws, so a failing request cannot leak
      * concurrency.
      */
     fun <T> acquire(bucket: Bucket, call: () -> T): T {
-        metrics.requestIssued(bucket, awaitTurn(gates.getValue(bucket)))
-        inFlight.acquire()
+        val slotWait = awaitSlot()
         try {
+            metrics.requestIssued(bucket, slotWait + awaitTurn(gates.getValue(bucket)))
             return call()
         } finally {
             inFlight.release()
@@ -90,6 +94,17 @@ class WfmRateLimiter(
         if (concurrency <= 1) return@withLock concurrency
         inFlight.reduce(1)
         --concurrency
+    }
+
+    /**
+     * Returns how long the caller waited for a slot. The timed zero-wait try keeps the semaphore
+     * fair, which the untimed `tryAcquire()` does not.
+     */
+    private fun awaitSlot(): Duration {
+        if (inFlight.tryAcquire(0, TimeUnit.SECONDS)) return Duration.ZERO
+        val asked = clock.instant()
+        inFlight.acquire()
+        return Duration.between(asked, clock.instant())
     }
 
     /** Returns how long the caller waited. [WfmMetrics] records it as a measure of budget pressure. */

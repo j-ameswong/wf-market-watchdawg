@@ -15,6 +15,12 @@ class WfmClient(@Qualifier(WfmConfig.V2_CLIENT) private val client: RestClient) 
     /** One item in full. It carries fields the list leaves out, such as `tradable` and `rarity`. */
     fun getItem(slug: String): Item = get("/item/{slug}", slug)
 
+    /** Every visible order for one item, across all its markets: a full book (R4.1). */
+    fun getOrders(slug: String): List<Order> = get("/orders/item/{slug}", slug)
+
+    /** Up to 500 orders created in the last 4h by users online now. Partial, never a book (R4.5). */
+    fun getRecentOrders(): List<Order> = get("/orders/recent")
+
     private inline fun <reified T : Any> get(uri: String, vararg vars: Any): T {
         val envelope = client.get()
             .uri(uri, *vars)

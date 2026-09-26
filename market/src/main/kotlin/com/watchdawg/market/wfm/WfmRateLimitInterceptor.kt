@@ -12,9 +12,8 @@ import java.time.Duration
  * Applies the rate limiter between the client and the connection, so no call site can issue an
  * unpaced request even by mistake (R1.1).
  *
- * `WfmConfig` registers this on every `RestClient.Builder` in the context. That is what makes
- * "nothing bypasses the limiter" a fact about the wiring rather than a rule people have to
- * remember.
+ * [WfmTransport] installs this on every client that talks to warframe.market, and
+ * `RateLimitWiringTest` fails if a client skips it.
  *
  * The `429`/`509` retry lives here too (R1.3). A retry has to *spend* budget rather than skip it,
  * and this is the only place that can take a fresh turn before reissuing. A status handler would

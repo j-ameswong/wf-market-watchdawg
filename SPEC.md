@@ -8,8 +8,8 @@
 > | --- | --- |
 > | C1 | **Built.** R1.1–R1.8 each map to a named passing test; R12.1's per-bucket meters ship with it. |
 > | C2 | **Built and reviewed.** R2.1–R2.7 each map to a named passing test or a recorded manual check. |
-> | C3 | **Built and reviewed.** Three acceptance bullets map to named tests; the fourth, and the detail sweep, to live runs recorded in `tasks/archive/c3-todo.md`. |
-> | C4 | **In progress**, with corrections to C1 from the 2026-09-25 review. See `tasks/plan.md`. |
+> | C3 | **Built and reviewed.** Three acceptance bullets map to named tests; the fourth, and the detail sweep, to live runs recorded in `tasks/archive/c3-todo.md`. The sweep is off by default until a rule or query reads its fields. |
+> | C4 | **Built**, with corrections to C1 from the 2026-09-25 review. Every acceptance bullet maps to a named test on live captures; nothing calls ingest on a schedule until C6. Awaiting review. |
 >
 > Grounded in `docs/v2/` (API `v0.25.0`, WebSocket `v0.13.0`), `docs/v1.yml`, and the live-verified
 > route table in `bruno/README.md`. This document describes the system to be built; the reasoning
@@ -682,7 +682,7 @@ Gradle root is `market/`, not the repo root.
 
 - Wiring and persistence are tested as `@SpringBootTest` with a Testcontainers Postgres; parsing and classification logic are plain JUnit, with neither. Identical annotation sets share one context **and one container**, so **order-independence is mandatory** (R2.7): the database is truncated before every test method, and classes and methods run in random order with a printed, replayable seed. Classes with no Spring or JDBC dependency are plain JUnit — booting a container to test token arithmetic buys nothing.
 - `MockRestServiceServer` bound to `RestClient.Builder` for HTTP — already available via `spring-boot-starter-webmvc-test`, no new dependency. **No test reaches the live API** (R2.6). Every Spring test context starts with scheduling off and with a request factory that refuses and records outbound HTTP, registered from `src/test/resources/META-INF/spring.factories` so no test class can opt out; `MarketApplicationTests` asserts both. The defaults come from a context customizer because a `src/test/resources/application.yaml` would shadow the main file by classpath name rather than layer on it.
-- Fixtures are captured from the `bruno` collection, and a representative capture comes **before** any field is committed to. Synthetic payloads test behaviour, never what upstream returns. Order captures have trader identity replaced before they are committed (§9).
+- Fixtures are captured from the `bruno` collection, and a representative capture comes **before** any field is committed to. Synthetic payloads test behaviour, never what upstream returns. Order captures have trader identity replaced before they are committed (`bruno/scrub-orders.mjs`, §9).
 - `WfmClient.get()` is `private inline` and cannot be stubbed — test through the HTTP layer, not by mocking the client.
 - **C4's diff logic gets the densest coverage.** It is where correctness actually lives; everything downstream trusts its output.
 - `bruno-run` re-verifies live contracts after any DTO change. Manual, never in CI.

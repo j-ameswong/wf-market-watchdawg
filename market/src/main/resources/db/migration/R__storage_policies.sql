@@ -4,6 +4,10 @@
 -- mflyway alike. Each policy is removed and re-added, so the whole file is safe to re-run.
 --
 -- Changing a value here changes retention or compression policy, which SPEC 9 makes ask-first.
+--
+-- Dropping a table or rollup named here drops its policy with it. A versioned migration that
+-- recreates one must change this file in the same commit, or Flyway will not re-run it and the new
+-- object is left without a policy. StoragePolicyUpgradeTest checks the upgrade path.
 
 -- The order event log is never dropped, and is compressed once it is a week old (R2.3).
 call remove_columnstore_policy('order_event', if_exists => true);

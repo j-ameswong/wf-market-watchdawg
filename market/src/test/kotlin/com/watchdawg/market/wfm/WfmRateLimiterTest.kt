@@ -86,6 +86,43 @@ class WfmRateLimiterTest {
     }
 
     @Test
+    fun `calls queued behind a slow one still start a turn apart, and count only when they start`() {
+        // 10 req/s, one connection: the queued calls' turns all fall due while the slot is held.
+        val interval = Duration.ofMillis(100)
+        val metrics = freshMetrics()
+        val limiter = WfmRateLimiter(
+            limits(public = WfmProperties.Rate(10, Duration.ofSeconds(1)), maxConcurrency = 1),
+            metrics,
+        )
+        val holding = CountDownLatch(1)
+        val release = CountDownLatch(1)
+        thread(isDaemon = true) {
+            limiter.acquire(Bucket.PUBLIC) {
+                holding.countDown()
+                release.await()
+            }
+        }
+        assertTrue(holding.await(5, SECONDS), "the slow call never got its permit")
+
+        val starts = java.util.concurrent.ConcurrentLinkedQueue<Long>()
+        val done = CountDownLatch(3)
+        repeat(3) {
+            thread(isDaemon = true) {
+                limiter.acquire(Bucket.PUBLIC) { starts += System.nanoTime() }
+                done.countDown()
+            }
+        }
+        Thread.sleep(4 * interval.toMillis())
+        assertEquals(1L, metrics.requestsIssued(Bucket.PUBLIC), "a call was counted before it started")
+
+        release.countDown()
+        assertTrue(done.await(5, SECONDS), "the queued calls never ran")
+        val gaps = starts.sorted().zipWithNext { a, b -> Duration.ofNanos(b - a) }
+        // A little slack for scheduling jitter; a burst shows up as gaps well under a millisecond.
+        assertTrue(gaps.all { it >= interval.minusMillis(10) }, "queued calls started in a burst: $gaps")
+    }
+
+    @Test
     fun `a permit is released even when the call throws`() {
         // One permit, so a leak on the throwing path parks every later acquire forever.
         val limiter = WfmRateLimiter(limits(public = UNPACED, maxConcurrency = 1), freshMetrics())

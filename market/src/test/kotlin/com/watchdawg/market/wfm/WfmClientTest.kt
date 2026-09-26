@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Timeout
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
+import org.springframework.core.io.ClassPathResource
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.test.web.client.ExpectedCount.times
 import org.springframework.test.web.client.MockRestServiceServer
@@ -51,6 +52,19 @@ class WfmClientTest {
         val versions = client.getVersions()
 
         assertEquals("abc123", versions.collections.items)
+        server.verify()
+    }
+
+    @Test
+    fun `getOrders binds a captured book through the application's own mapper`() {
+        server.expect(requestTo("$BASE/orders/item/serration"))
+            .andRespond(withSuccess(ClassPathResource("fixtures/v2-orders/serration.json"), APPLICATION_JSON))
+
+        val book = client.getOrders("serration")
+
+        assertEquals(440, book.size)
+        assertEquals(OrderType.SELL, book.first().type)
+        assertEquals(10, book.first().rank)
         server.verify()
     }
 
@@ -102,6 +116,7 @@ class WfmClientTest {
     }
 
     private companion object {
+        const val BASE = "https://api.warframe.market/v2"
         const val VERSIONS = "https://api.warframe.market/v2/versions"
         const val ITEMS = "https://api.warframe.market/v2/items"
 

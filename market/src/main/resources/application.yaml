@@ -39,8 +39,10 @@ wfm:
     interval: 1h
     initial-delay: 30s
     # /v2/item/{slug} fills what /v2/items leaves out. One batch per interval: 30 a minute is
-    # 0.5 req/s, so a whole catalog of ~3.9k items takes a little over two hours.
+    # 0.5 req/s, so a whole catalog of ~3.9k items takes a little over two hours. Off until a rule
+    # or query reads tradable, rarity or max_charges.
     item-details:
+      enabled: false
       batch-size: 30
       interval: 1m
       initial-delay: 2m

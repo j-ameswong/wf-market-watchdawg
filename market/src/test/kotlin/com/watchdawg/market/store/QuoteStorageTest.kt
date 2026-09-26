@@ -68,7 +68,10 @@ class QuoteStorageTest {
     fun `a quote for a market that does not exist is refused`() {
         assertFailsWith<DataIntegrityViolationException> {
             jdbc.update(
-                "insert into market_quote (market_id, observed_at, buy_count, sell_count) values (999999, now(), 0, 0)",
+                """
+                insert into market_quote (market_id, observed_at, buy_count, sell_count, buy_online_count, sell_online_count)
+                values (999999, now(), 0, 0, 0, 0)
+                """,
             )
         }
     }
@@ -114,8 +117,9 @@ class QuoteStorageTest {
     private fun insert(observedAt: Instant, bestSell: Int) {
         jdbc.update(
             """
-            insert into market_quote (market_id, observed_at, best_buy, best_sell, buy_count, sell_count)
-            values (?, ?, 70, ?, 3, 5)
+            insert into market_quote (market_id, observed_at, best_buy, best_sell, buy_count, sell_count,
+                                      buy_online_count, sell_online_count)
+            values (?, ?, 70, ?, 3, 5, 1, 2)
             """,
             market,
             Timestamp.from(observedAt),

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A Spring Boot 4 / Kotlin service that mirrors warframe.market data into Postgres. It syncs the item catalog; `SPEC.md` specifies the intended growth into a price watcher and warehouse over `/v2/orders/*`, and `docs/adr/` records the decisions behind that design.
+A Spring Boot 4 / Kotlin service that mirrors warframe.market data into Postgres. It syncs the item catalog and can reconcile order books into order state, an event log and quotes, though nothing polls them yet; `SPEC.md` specifies the intended growth into a price watcher and warehouse over `/v2/orders/*`, and `docs/adr/` records the decisions behind that design.
 
 ## Layout
 
@@ -40,7 +40,7 @@ That jar excludes the `developmentOnly` deps, so it will not start its own Postg
 
 ### The sync loop
 
-Two components are scheduled: `CollectionSyncScheduler`, below, and `ItemDetailSync`, which fills the fields `/v2/items` omits. `CollectionSyncScheduler` runs each tick (`wfm.sync.interval`, default 1h):
+Two components are scheduled: `CollectionSyncScheduler`, below, and `ItemDetailSync` (off by default), which fills the fields `/v2/items` omits. `CollectionSyncScheduler` runs each tick (`wfm.sync.interval`, default 1h):
 
 1. `GET /v2/versions` returns a content hash per collection (`items`, `rivens`, `liches`, …).
 2. For each `CollectionSync` bean, compare its hash against the `collection_version` row.
@@ -50,7 +50,7 @@ The transaction boundary is the important invariant: if a refresh throws, the st
 
 `ItemSync` binds `/v2/items` into `item`. Every field the v2 model marks optional binds as null when absent, never as a zero or `false` that looks like data — rank 0 is a real market (R7.8). The live list carries no `tradable`, `rarity` or `maxCharges`. `ItemDetailSync` owns those three columns and fills them from `/v2/item/{slug}`, one item at a time. So the list upsert must never write them, or every catalog refresh would blank the sweep's work. `fixtures/v2-items.json` and `fixtures/v2-item/*.json` are live captures, so keep them that way: refresh them from Bruno's List Items and Get Item requests rather than editing values by hand. `synced_at` is not an upstream timestamp (v2 items have none): the upsert stamps `now()`, the refresh transaction's time, so one refresh marks every row it wrote alike and a row missing from the latest refresh shows an older value.
 
-`ItemDetailSync` fetches one batch per run (`wfm.sync.item-details.batch-size` per `interval`; the defaults, 30 a minute, are 0.5 req/s). It takes never-fetched items first (`detail_synced_at` null), then any whose details are older than their last catalog refresh, so a catalog change costs one re-sweep of the whole catalog, about two hours, and nothing more. A `404` marks the item checked and keeps its old details. A throttle or any other failure ends the run, and the rest waits for the next one. It never runs inside the catalog refresh: a whole sweep is far too long to hold that transaction open.
+`ItemDetailSync` is **off unless `wfm.sync.item-details.enabled` is true**: nothing reads its fields yet. When on, it fetches one batch per run (`wfm.sync.item-details.batch-size` per `interval`; the defaults, 30 a minute, are 0.5 req/s). It takes never-fetched items first (`detail_synced_at` null), then any whose details are older than their last catalog refresh, so a catalog change costs one re-sweep of the whole catalog, about two hours, and nothing more. A `404` marks the item checked and keeps its old details. A throttle or any other failure ends the run, and the rest waits for the next one. It never runs inside the catalog refresh: a whole sweep is far too long to hold that transaction open.
 
 **Adding a collection:** implement `CollectionSync` as a `@Component` with `collection` set to a key of `VersionCollections.asMap()` (add the field and the `asMap()` entry if the collection isn't modelled yet). The scheduler picks it up by list injection; nothing else needs editing.
 
@@ -64,21 +64,21 @@ Failures are typed, in `WfmErrors.kt`, all under one sealed `WfmException`: `Rat
 
 `baseUrl` is v2. `baseUrlLegacy` (v1) exists because three v1 routes have no v2 equivalent — auctions, `/items/{slug}/statistics` (price history), and `/items/{slug}/dropsources`. Everything else in `docs/v1.yml` is dead; `bruno/README.md` has the verified route-by-route table.
 
-`WfmLegacyClient` is that second channel, on `wfmLegacyRestClient`. Both beans come from the same customized builder, so the two differ only in base URL and envelope: v1 is `payload`/`include` in snake_case (`WfmLegacyModels.kt`), v2 is `apiVersion`/`data`/`error` in camelCase. The snake_case naming strategy is scoped to the v1 bean's own JSON converter — **never set one globally**, it would stop `updatedAt` and `gameRef` binding. Two `RestClient` beans also make injection by type ambiguous, so a client names its channel with `@Qualifier(WfmConfig.V2_CLIENT)` or `@Qualifier(WfmConfig.LEGACY_CLIENT)`. Bind every v1 price as `BigDecimal`: the upstream sends `150` and `80.0` for the same field, and an `Int` binding truncates silently rather than failing.
+`WfmLegacyClient` is that second channel, on `wfmLegacyRestClient`. Both beans get the same transport, so the two differ only in base URL and envelope: v1 is `payload`/`include` in snake_case (`WfmLegacyModels.kt`), v2 is `apiVersion`/`data`/`error` in camelCase. The snake_case naming strategy is scoped to the v1 bean's own JSON converter — **never set one globally**, it would stop `updatedAt` and `gameRef` binding. Two `RestClient` beans also make injection by type ambiguous, so a client names its channel with `@Qualifier(WfmConfig.V2_CLIENT)` or `@Qualifier(WfmConfig.LEGACY_CLIENT)`. Bind every v1 price as `BigDecimal`: the upstream sends `150` and `80.0` for the same field, and an `Int` binding truncates silently rather than failing.
 
 ### The transport stack
 
-`WfmConfig.wfmTransportCustomizer` is one `RestClientCustomizer` applied to **every** `RestClient.Builder` the context hands out, so a new client bean is governed the moment it is built rather than when someone remembers to wire it. It installs, in order:
+`WfmTransport.applyTo(builder)` is applied to each client that talks to warframe.market, and to nothing else: a client for another host (C10's ntfy) must not inherit WFM pacing or headers. It installs, in order:
 
 1. `WfmRateLimitInterceptor` — pacing, plus the `429`/`509` retry.
 2. `WfmContextInterceptor` — `Platform`, `Crossplay` and `User-Agent`, `set` rather than added, so a call site that names its own value is overridden ([ADR-0002](docs/adr/0002-crossplay-single-global-setting.md), R1.5). Do not move them back to `defaultHeader`s: a call site *can* override those.
 3. The `defaultStatusHandler` for `4xx`/`5xx` other than `429`/`509`, which the interceptor above has already converted.
 
-`RateLimitWiringTest` enumerates `RestClient` beans and fails if one lacks either interceptor, so it is the standing no-bypass guard for both R1.1 and R1.8 and covers clients added later without being edited.
+`RateLimitWiringTest` enumerates `RestClient` beans: each must carry both interceptors or be named there as non-WFM, and a client from the context's plain builder must carry neither. It is the standing no-bypass guard for R1.1 and R1.8, and covers clients added later.
 
 `WfmContext` (`platform` + `crossplay`) is the single read point for the observer's context, and **C5's socket client is obliged to quote its `crossplay` explicitly** — the two channels take opposite upstream defaults, and mixing them fabricates a `vanished` on ~7% of ingested orders. `WfmProperties.platform` and `.crossplay` deliberately have no Kotlin defaults, so an unset value fails startup.
 
-`WfmRateLimiter` holds two independent budgets keyed by **route**, not by API version and not by which bean called ([ADR-0005](docs/adr/0005-rate-buckets-keyed-by-route-class.md)): `contract-search` for auction-search routes, `public` for everything else — including v1 `statistics`. Both live under `wfm.limits` as `permits`/`per`, alongside `max-concurrency` and `max-retry-after`. Turns are **evenly spaced with no burst allowance**, and are taken *before* the concurrency permit so a thread waiting out pacing never holds a connection slot.
+`WfmRateLimiter` holds two independent budgets keyed by **route**, not by API version and not by which bean called ([ADR-0005](docs/adr/0005-rate-buckets-keyed-by-route-class.md)): `contract-search` for auction-search routes, `public` for everything else — including v1 `statistics`. Both live under `wfm.limits` as `permits`/`per`, alongside `max-concurrency` and `max-retry-after`. Turns are **evenly spaced with no burst allowance**, and are taken *after* the concurrency permit, so a request starts on its turn and is metered then. Taking the turn first lets callers finish pacing while every slot is busy and then start together; `WfmRateLimiterTest` pins that.
 
 Call it as `limiter.acquire(bucket) { … }`. The block form is what guarantees the permit is released when a call throws, so a retry must call `acquire` **again, sequentially** — nesting a re-acquire inside an outstanding one deadlocks against `max-concurrency`.
 
@@ -109,6 +109,16 @@ A `market` row is one order book: `(item, platform, subtype, rank, charges, ambe
 
 Get a market id through `MarketResolver.resolve(key)`, never by inserting into `market` directly. It does a lookup, then an insert-if-absent committed in its **own** transaction, then the lookup again. A market therefore outlives an ingest that rolls back, and two ingests meeting the same new tuple never wait on each other's locks. The second lookup relies on read committed, so do not call it from a repeatable-read transaction. An item the catalog lacks throws `UnknownItemException`. There is deliberately no cache: test resets restart the id sequence.
 
+### Order ingest
+
+`OrderIngest` has two entrypoints with different powers (SPEC §4 C4). `reconcileBook` takes one item's full book and may record any change; `ingestPartial` (socket, `/recent`) may only add orders never seen before, because those sources are partial and `/recent` is up to a minute stale. The classification is the pure function `reconcile()` in `Reconcile.kt`, tested without Spring; keep it that way.
+
+- A book is dated when it was **requested** (`OrderBookPoll`), so nothing the socket reports after that can be vanished by it (R4.10).
+- `order_book` holds the latest book per item. Claiming its row both rejects a book no newer than the last (R4.9) and locks the item, so two reconciliations of one item run in turn. The partial path is insert-only (`on conflict do nothing`) and needs no lock; a book that loses that race drops its own `appeared`.
+- Prices in `market_quote` are per unit (`platinum / perTrade`): `platinum` prices a whole lot. Every reconciled book writes a quote for **every** market of the item, empty ones included.
+- `wfm_order` rows are never deleted. `changed_at` is when the current state, gone or live, was observed.
+- Order fixtures are live captures scrubbed of trader identity by `bruno/scrub-orders.mjs`; refresh them that way, never by hand.
+
 ### Time series
 
 TimescaleDB holds the fact tables ([ADR-0007](docs/adr/0007-timescaledb-with-indefinite-event-log.md)). Each references `market` and is a hypertable partitioned on `observed_at`, so every unique index must include that column — TimescaleDB refuses one that does not, and `FactTablesTest` lists the fact tables and checks every hypertable's indexes.
@@ -119,7 +129,7 @@ TimescaleDB holds the fact tables ([ADR-0007](docs/adr/0007-timescaledb-with-ind
 | `market_quote` | 90 days raw | dropped by retention |
 | `market_quote_hourly`, `market_quote_daily` | forever | continuous aggregates of `market_quote`, refreshed over the last 2 / 4 days |
 
-Every policy value lives in `db/migration/R__storage_policies.sql`, a repeatable migration that Flyway re-applies whenever the file changes. Changing one is an ask-first change (SPEC §9).
+Every policy value lives in `db/migration/R__storage_policies.sql`, a repeatable migration that Flyway re-applies whenever the file changes. Changing one is an ask-first change (SPEC §9). Dropping a table or rollup drops its policy, so a versioned migration that recreates one must change that file in the same commit, or the policy is not re-added on upgrade (`StoragePolicyUpgradeTest`).
 
 **Refreshing a rollup over a range whose raw chunks are gone deletes the rollup's rows for that range.** So a refresh window must start inside raw retention (`QuoteStorageTest` fails otherwise), and never run `refresh_continuous_aggregate(…, null, null)` by hand on a database old enough to have dropped raw quotes. A rollup's shape cannot be altered, only dropped and recreated, which loses everything older than the raw window. Once history has accrued, add a new rollup alongside instead.
 

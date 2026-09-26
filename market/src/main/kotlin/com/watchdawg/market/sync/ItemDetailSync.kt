@@ -5,6 +5,7 @@ import com.watchdawg.market.wfm.WfmClient
 import com.watchdawg.market.wfm.WfmHttpException
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBooleanProperty
 import org.springframework.http.HttpStatus
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
@@ -20,8 +21,12 @@ import org.springframework.stereotype.Component
  *
  * This runs apart from [CollectionSyncScheduler] on purpose. A whole-catalog sweep takes hours at
  * this pace, far too long to hold the catalog refresh's transaction open.
+ *
+ * Off unless `wfm.sync.item-details.enabled` is true: nothing reads these fields yet, and a sweep
+ * costs ~3.9k requests per catalog change.
  */
 @Component
+@ConditionalOnBooleanProperty("wfm.sync.item-details.enabled")
 class ItemDetailSync(
     private val wfm: WfmClient,
     private val items: ItemRepository,

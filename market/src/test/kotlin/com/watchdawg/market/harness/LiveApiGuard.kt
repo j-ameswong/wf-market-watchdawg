@@ -17,6 +17,8 @@ import java.util.concurrent.CopyOnWriteArrayList
  * Refusing alone is not enough, because production code may swallow the exception —
  * `CollectionSyncScheduler` catches everything. So every refusal is also recorded, and
  * [LiveApiGuardListener] fails a test that leaves the record non-empty.
+ *
+ * The socket is not a `RestClient`, so [LiveSocketGuard] records its refusals here too.
  */
 class LiveApiGuard : ClientHttpRequestFactory {
     private val attempts = CopyOnWriteArrayList<String>()
@@ -29,6 +31,12 @@ class LiveApiGuard : ClientHttpRequestFactory {
         throw LiveApiRefused(uri)
     }
 
+    /** Records a socket headed for [uri], a host other than this one, and returns its refusal. */
+    fun refuseSocket(uri: URI): LiveApiRefused {
+        attempts += "WS $uri"
+        return LiveApiRefused(uri, "Point the socket at a local fake server instead.")
+    }
+
     /** Throws if anything was refused since the last call, and starts a fresh record either way. */
     fun assertUntouched() {
         val seen = refused
@@ -39,5 +47,5 @@ class LiveApiGuard : ClientHttpRequestFactory {
     }
 }
 
-class LiveApiRefused(uri: URI) :
-    IllegalStateException("refused $uri: tests never reach the live API (R2.6). Bind MockRestServiceServer instead.")
+class LiveApiRefused(uri: URI, instead: String = "Bind MockRestServiceServer instead.") :
+    IllegalStateException("refused $uri: tests never reach the live API (R2.6). $instead")

@@ -127,6 +127,17 @@ class WfmMetricsTest {
         }
     }
 
+    @Test
+    fun `the socket's meters are registered from startup, with the socket off`() {
+        assertEquals(0.0, contextRegistry.find("wfm.socket.connected").gauge()?.value())
+        listOf("order", "control", "skipped").forEach { outcome ->
+            assertNotNull(
+                contextRegistry.find("wfm.socket.frames").tag("outcome", outcome).counter(),
+                "wfm.socket.frames is not registered for '$outcome' until a message arrives",
+            )
+        }
+    }
+
     private fun MeterRegistry.requests(bucket: String): Double? =
         find("wfm.requests").tag("bucket", bucket).counter()?.count()
 

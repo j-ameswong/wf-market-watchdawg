@@ -23,22 +23,22 @@ checks and nothing else; how a check is met lives in the code and its tests.
 ## C5 — realtime feed
 
 ### T2: The socket connects, subscribes and records new orders
-- [ ] Against a local fake server, the handshake offers the `wfm` subprotocol and the project
+- [x] Against a local fake server, the handshake offers the `wfm` subprotocol and the project
       `User-Agent` (R5.1, R1.5).
-- [ ] The subscribe frame carries `platform` and `crossplay` from `WfmContext`, both always
+- [x] The subscribe frame carries `platform` and `crossplay` from `WfmContext`, both always
       present; a test pins that it and the REST `Crossplay` header agree, for `true` and `false`
       (R1.8, R5.2), and `WfmContext`'s `TODO(C5)` is gone.
-- [ ] A captured `newOrder` frame produces one `appeared` event with `source=ws` (R5.5); the same
+- [x] A captured `newOrder` frame produces one `appeared` event with `source=ws` (R5.5); the same
       frame again produces none.
-- [ ] `:error` with `alreadySubscribed` counts as subscribed; any other `:error` closes the
+- [x] `:error` with `alreadySubscribed` counts as subscribed; any other `:error` closes the
       connection.
-- [ ] A message split across several text frames is ingested once, as one order.
-- [ ] A malformed message and an unknown route are logged and skipped, the connection stays open,
+- [x] A message split across several text frames is ingested once, as one order.
+- [x] A malformed message and an unknown route are logged and skipped, the connection stays open,
       and a valid `newOrder` right after the malformed one is ingested (R5.6).
-- [ ] An order for an item the catalog lacks is skipped, as `ingestPartial` already does.
-- [ ] The socket is off under test and with `watchdawg.socket.enabled=false`; the harness fails a
+- [x] An order for an item the catalog lacks is skipped, as `ingestPartial` already does.
+- [x] The socket is off under test and with `watchdawg.socket.enabled=false`; the harness fails a
       test whose socket reaches a non-local host (R2.6).
-- [ ] `wfm.socket.connected` and `wfm.socket.frames` (by outcome) are registered at startup (R12.2).
+- [x] `wfm.socket.connected` and `wfm.socket.frames` (by outcome) are registered at startup (R12.2).
 
 ### T3: Socket orders reach the rule
 - [ ] A qualifying listing arriving on the socket for a watched market admits one signal, seen at

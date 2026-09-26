@@ -7,6 +7,13 @@ design rationale in [`docs/adr/`](docs/adr/README.md).
 
 ### Added
 
+- **C5 T2 — The socket records new orders.** One connection to `wss://ws.warframe.market/socket`
+  on the `wfm` subprotocol, with the project's `User-Agent`, subscribed to every new order with
+  `platform` and `crossplay` sent explicitly from the one setting, which a test pins against the
+  REST header. Each new order is recorded as `appeared` with `source=ws`, for every item, watched
+  or not (ADR-0022). Malformed messages and unknown routes are skipped. `watchdawg.socket.enabled`
+  turns it off; `wfm.socket.connected` and `wfm.socket.frames` (by outcome) measure it. A dropped
+  connection stays down until restart for now.
 - **C5 T1 — Live socket capture.** A dependency-free JDK capture script under `bruno/` and a
   scrubbed fixture with 74 real new orders, the subscription acknowledgement and an online report.
   All captured orders carry item, status and platform fields; 29 report `offline`, so socket

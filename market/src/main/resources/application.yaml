@@ -22,6 +22,9 @@ management:
 watchdawg:
   scheduling:
     enabled: true
+  # C5: the realtime feed. Declared only where scheduling is on too, so it is off under test.
+  socket:
+    enabled: true
   # C9a: at most this many signals a UTC day, across all watches, may be sent (R9a.8). The rest
   # are recorded as suppressed. A ceiling, not a target: a quiet day is not a defect.
   alerts:
@@ -51,6 +54,11 @@ wfm:
       per: 1m
     max-concurrency: 2
     max-retry-after: 60s
+  # C5: one connection, subscribed to every new order on wfm.platform and wfm.crossplay. It spends
+  # no REST budget.
+  socket:
+    url: wss://ws.warframe.market/socket
+    connect-timeout: 10s
   # C6: every watched item's book, once per interval. N items cost N / interval on the public
   # bucket: 20 items at 2m is 0.17 req/s of the 2 configured.
   poll:

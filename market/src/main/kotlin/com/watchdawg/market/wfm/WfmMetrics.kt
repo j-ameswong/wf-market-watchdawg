@@ -4,6 +4,7 @@ import io.micrometer.core.instrument.Counter
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.Timer
 import java.time.Duration
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * Meters for the rate limiter, so its behaviour can be checked at runtime (R12.1).
@@ -57,7 +58,22 @@ class WfmMetrics(private val registry: MeterRegistry) {
         Counter.builder(POLLS).tag(OUTCOME, it.tag).register(registry)
     }
 
+    /**
+     * 1 while the socket holds a confirmed subscription, 0 otherwise (C5). A connection that is open
+     * but not yet subscribed delivers nothing, so it reads 0.
+     */
+    private val socketConnected = AtomicInteger().also { registry.gauge(SOCKET_CONNECTED, it) }
+
+    /** Whole socket messages by what they held (R12.2). */
+    private val socketFrames = SocketFrame.entries.associateWith {
+        Counter.builder(SOCKET_FRAMES).tag(OUTCOME, it.tag).register(registry)
+    }
+
     fun pollRoundStarted(lateness: Duration) = pollLateness.record(lateness)
+
+    fun socketConnected(connected: Boolean) = socketConnected.set(if (connected) 1 else 0)
+
+    fun socketFrame(frame: SocketFrame) = socketFrames.getValue(frame).increment()
 
     fun polled(outcome: PollOutcome) = polls.getValue(outcome).increment()
 
@@ -96,6 +112,8 @@ class WfmMetrics(private val registry: MeterRegistry) {
         const val CONCURRENCY = "wfm.concurrency.limit"
         const val POLL_LATENESS = "wfm.poll.lateness"
         const val POLLS = "wfm.polls"
+        const val SOCKET_CONNECTED = "wfm.socket.connected"
+        const val SOCKET_FRAMES = "wfm.socket.frames"
         const val OUTCOME = "outcome"
         const val BUCKET = "bucket"
         const val STATUS = "status"
@@ -110,6 +128,21 @@ enum class PollOutcome {
     STALE,
     FAILED,
     THROTTLED,
+    ;
+
+    val tag: String get() = name.lowercase()
+}
+
+/** What one whole socket message held (C5). */
+enum class SocketFrame {
+    /** A new order, recorded or skipped by ingest as any partial observation is. */
+    ORDER,
+
+    /** A subscription reply or a heartbeat. */
+    CONTROL,
+
+    /** Malformed, an unknown route, or an order that would not bind or record (R5.6). */
+    SKIPPED,
     ;
 
     val tag: String get() = name.lowercase()

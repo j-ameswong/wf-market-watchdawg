@@ -1,6 +1,11 @@
 package com.watchdawg.market.wfm
 
 import com.watchdawg.market.TestcontainersConfiguration
+import com.watchdawg.market.wfm.ws.FakeSocketServer
+import com.watchdawg.market.wfm.ws.SocketConnector
+import com.watchdawg.market.wfm.ws.SocketFeed
+import com.watchdawg.market.wfm.ws.WfmSocket
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,6 +19,7 @@ import org.springframework.test.web.client.match.MockRestRequestMatchers.request
 import org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.body
+import tools.jackson.databind.json.JsonMapper
 import kotlin.reflect.full.primaryConstructor
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -35,6 +41,12 @@ class CrossplayHeaderTest {
     @Autowired lateinit var props: WfmProperties
 
     @Autowired lateinit var context: WfmContext
+
+    @Autowired lateinit var connector: SocketConnector
+
+    @Autowired lateinit var feed: SocketFeed
+
+    @Autowired lateinit var mapper: JsonMapper
 
     private lateinit var server: MockRestServiceServer
     private lateinit var client: RestClient
@@ -77,7 +89,7 @@ class CrossplayHeaderTest {
     }
 
     @Test
-    fun `WfmContext reads the one setting, so REST and the C5 socket cannot diverge`() {
+    fun `WfmContext reads the one setting, so REST and the socket cannot diverge`() {
         assertEquals(props.crossplay, context.crossplay)
         assertEquals(props.platform, context.platform)
     }
@@ -91,6 +103,30 @@ class CrossplayHeaderTest {
 
         assertFalse("crossplay" in optional, "wfm.crossplay would bind to a Kotlin default")
         assertFalse("platform" in optional, "wfm.platform would bind to a Kotlin default")
+    }
+
+    @Test
+    fun `the socket's subscription and the REST header quote the same crossplay, both ways (R1_8, R5_2)`() {
+        for (crossplay in listOf(true, false)) {
+            val quoted = WfmContext(props.platform, crossplay)
+            val builder = RestClient.builder().requestInterceptor(WfmContextInterceptor(quoted, props.userAgent))
+            val server = MockRestServiceServer.bindTo(builder).build()
+            server.expect(requestTo(VERSIONS))
+                .andExpect(onlyHeader(WfmContextInterceptor.CROSSPLAY, crossplay.toString()))
+                .andRespond(withSuccess(VERSIONS_JSON, APPLICATION_JSON))
+            builder.build().get().uri(VERSIONS).retrieve().body<String>()
+            server.verify()
+
+            val socketServer = FakeSocketServer()
+            val socket = WfmSocket(connector, socketServer.url, quoted, feed, WfmMetrics(SimpleMeterRegistry()), mapper)
+            try {
+                socket.start()
+                assertEquals(crossplay, socketServer.nextSubscription()["crossplay"], "crossplay=$crossplay")
+            } finally {
+                socket.stop()
+                socketServer.close()
+            }
+        }
     }
 
     /** [MockRestRequestMatchers.header] tolerates extra values, and appending is the failure to catch. */

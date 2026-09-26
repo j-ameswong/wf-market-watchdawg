@@ -12,12 +12,12 @@ checks and nothing else; how a check is met lives in the code and its tests.
 ## Payload first
 
 ### T1: A live socket capture
-- [ ] A script under `bruno/` connects with the `wfm` subprotocol, subscribes to `newOrders` with
+- [x] A script under `bruno/` connects with the `wfm` subprotocol, subscribes to `newOrders` with
       `platform` and `crossplay` sent explicitly, and writes the frames it receives; it adds no
       dependency.
-- [ ] Its capture of real `newOrder` frames, plus the `:ok` and one `reports/online`, is scrubbed
+- [x] Its capture of real `newOrder` frames, plus the `:ok` and one `reports/online`, is scrubbed
       like `scrub-orders.mjs` scrubs orders and committed as a fixture.
-- [ ] The plan records whether a `newOrder` payload carries `itemId`, `user.status` and
+- [x] The plan records whether a `newOrder` payload carries `itemId`, `user.status` and
       `user.platform`, and decision 3 is settled against it.
 
 ## C5 — realtime feed

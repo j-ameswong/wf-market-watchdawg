@@ -70,6 +70,32 @@ field as captured:
 node bruno/scrub-orders.mjs < response.json > market/src/test/resources/fixtures/v2-orders/<name>.json
 ```
 
+## Live socket capture (C5 T1)
+
+From the repository root, with JDK 21+ and Node already on the path:
+
+```sh
+java bruno/CaptureNewOrders.java 30 > /tmp/wfm-socket-raw.json
+node bruno/scrub-orders.mjs --socket < /tmp/wfm-socket-raw.json > /tmp/wfm-socket-scrubbed.json
+```
+
+`CaptureNewOrders.java` uses the JDK WebSocket client without adding a dependency. It opens one
+connection to `wss://ws.warframe.market/socket` with the `wfm` subprotocol and the project's
+`User-Agent`, then sends `subscribe/newOrders` with `platform: "pc"` and `crossplay: true`
+explicitly (the application defaults). The argument is the capture duration in seconds, default
+30; the script closes the connection at the end and does not reconnect. Stdout is a JSON array of
+complete text messages in arrival order, with fragments assembled; diagnostics go to stderr.
+
+Check that the command succeeded and the capture contains `subscribe/newOrders:ok`,
+`reports/online` and `subscriptions/newOrder` before keeping it. `--socket` preserves every
+envelope and scrubs each new order's user exactly as for REST, including stable pseudonyms within
+the capture. Keep only the scrubbed file; remove the raw file after checking it.
+
+The 2026-09-26 capture is committed at
+[`fixtures/v2-socket/new-orders.json`](../market/src/test/resources/fixtures/v2-socket/new-orders.json).
+Its field observations and the resulting status decision are recorded in
+[`tasks/plan.md`](../tasks/plan.md#live-capture-2026-09-26).
+
 ## Notes worth keeping
 
 - `/v2/order/{id}` resolves ids taken from `/v2/orders/item/{slug}`, but ids scraped

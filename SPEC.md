@@ -10,7 +10,7 @@
 > | C2 | **Built and reviewed.** |
 > | C3 | **Built and reviewed.** The item detail sweep is off until a rule or query reads its fields. |
 > | C4 | **Built and reviewed.** |
-> | C5 | **Planned** in `tasks/plan.md`, confirmed by the author 2026-09-26. |
+> | C5 | **Planned** in `tasks/plan.md`, confirmed by the author 2026-09-26. T1's live socket capture is complete; T2–T6 remain. |
 > | C6 | **Built and reviewed.** Watched items are polled on a fixed cadence, honouring a throttle's `Retry-After`. |
 > | C7, C8 | Not started. |
 > | C9a | **Built and reviewed** for the underpriced rule, with dedup, a per-watch cooldown and a daily ceiling. The 72h budget run is planned as the last task of C5; the spread and crossing rules are still to do. |
@@ -692,6 +692,7 @@ Decisions, their rejected alternatives and their trade-offs are recorded in
 - **The limiter is the only thing between demand and the upstream ceiling** ([ADR-0021](docs/adr/0021-limiter-owns-the-ceiling-poll-loop-owns-freshness.md)). It is per process, so the service runs as one instance until a shared limiter exists.
 - **Indefinite retention is only a promise once a restore has been tested.** No backup or restore has been exercised yet.
 - **Real books cross unless offline owners are left out.** Offline owners' orders stay listed for up to 48h, so the best bid over all visible orders can exceed the best ask: 7 against 6 per unit on a captured `ayatan_anasa_sculpture` book (2026-09-25), 7 against 7 among online owners. Rules comparing bid and ask (R9a.3's crossing and spread families) should read the online pair.
+- **Socket arrival does not establish online status.** The 2026-09-26 T1 capture carries `user.status` on all 74 new orders, including 29 `offline`, despite the upstream documentation's non-offline-only description. Socket rules must read that field just as book rules do; see `tasks/plan.md`, decision 3.
 - **R4.5** costs real latency on arguably the most interesting signal: a cheap listing disappearing. The lag is accepted deliberately; the only lever is poll cadence.
 - **§2.2** caps what any analysis built on this warehouse can honestly claim. Worth confirming that limitation is understood *before* building on it, not after.
 - **R9a.8's daily ceiling** is the only number constraining signal quality. If the ceiling is wrong, most of C9a and all of C9b get retuned.

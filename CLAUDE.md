@@ -230,7 +230,10 @@ The jar excludes `developmentOnly` deps, so it starts no Postgres: pass `SPRING_
 - `WfmClient.get()` is `private inline`: test clients through the HTTP layer, not by mocking.
 - Fixtures are live captures from the Bruno collection, taken **before** a field is committed to;
   synthetic payloads test behaviour only. Refresh them from Bruno, never by editing values. Order
-  captures go through `bruno/scrub-orders.mjs` first. After a DTO change, run `bruno-run` by hand.
+  captures go through `bruno/scrub-orders.mjs` first; socket captures from
+  `bruno/CaptureNewOrders.java` use its `--socket` mode (see `bruno/README.md`). The socket fixture
+  includes `offline` owners: use `user.status`, never infer online status from arrival. After a
+  DTO change, run `bruno-run` by hand.
 
 ### Conventions
 

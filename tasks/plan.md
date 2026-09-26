@@ -27,10 +27,9 @@ The milestone is done when:
 
 ## Scope
 
-1. **A live capture first.** No socket frame has been captured yet, and fixtures are live
-   captures taken before a field is committed to. One scrubbed capture of real `newOrder` frames
-   settles what the payload carries (`itemId`, `user.status`, `user.platform`) before any code
-   binds it.
+1. **A live capture first.** T1 is complete (2026-09-26): the scrubbed capture below carries
+   `itemId`, `user.status` and `user.platform` in all 74 `newOrder` payloads. Fixtures are live
+   captures taken before a field is committed to; decision 3 now uses the captured status.
 2. **Connect, subscribe, ingest (R5.1, R5.2, R5.5, R5.6).** One socket, the `wfm` subprotocol,
    `newOrders` subscribed with `platform` and `crossplay` taken from `WfmContext`, and each new
    order recorded through `OrderIngest.ingestPartial` as `source=ws`. Malformed frames and unknown
@@ -95,9 +94,11 @@ plan is the §9 ask-first for it. No new dependency is added (decision 1).
    `ingestPartial` may only add orders (R4.11), so only an order it adds is evaluated; a known
    order's changes still come from book polls. The dedup key (watch, order, unit price) is the
    same whichever source saw the listing first, so the next book poll does not signal it again.
-   Online status is read from `user.status` as today. If T1 shows socket frames carry no status,
-   an order from the socket counts as online, since upstream sends only non-offline owners'
-   orders; `/recent` carries status (its committed fixture does) and keeps using it.
+   **Settled by T1, 2026-09-26:** online status is read from `user.status`, as today, for both
+   socket and `/recent` orders. All 74 captured socket orders carry it, and 29 report `offline`,
+   despite the upstream documentation's non-offline-only description. Only `online` and `ingame`
+   qualify; `offline`, missing and unknown statuses do not. Socket arrival grants no online
+   fallback. Offline owners' orders are still recorded under decision 2.
 4. **Admission is serialised by one transaction-scoped advisory lock** (confirmed, amended in
    review). Until now one poll thread reconciled one book at a time, so admissions never raced
    (`Alerts`' own note). The socket ingests on another thread, so two transactions could both
@@ -151,6 +152,38 @@ plan is the §9 ask-first for it. No new dependency is added (decision 1).
    adds a second path into the outbox, so a run without it would measure a configuration about to
    change. The spread and crossing rules stay out (see Out of scope).
 
+## Live capture (2026-09-26)
+
+T1 ran on the author's machine from **17:45:15 to 17:45:45 UTC**, with
+`java bruno/CaptureNewOrders.java 30`. One connection to `wss://ws.warframe.market/socket`
+negotiated `wfm`, identified the project in `User-Agent`, and sent
+`@wfm|cmd/subscribe/newOrders` with `id: "t1-capture"` and
+`payload: {"platform":"pc","crossplay":true}`. It made no REST calls.
+
+The full 76-message capture, in arrival order, is
+[`fixtures/v2-socket/new-orders.json`](../market/src/test/resources/fixtures/v2-socket/new-orders.json):
+one `@wfm|event/reports/online`, one `@wfm|cmd/subscribe/newOrders:ok` echoing `t1-capture`, and
+74 `@wfm|event/subscriptions/newOrder` messages. Each new order is directly in `payload`, with
+the same order shape as REST, not a nested `data` envelope.
+
+| Field | Present | Observed values |
+| --- | --- | --- |
+| `itemId` | 74/74 | Item identifiers |
+| `user.status` | 74/74 | `ingame`: 42; `offline`: 29; `online`: 3 |
+| `user.platform` | 74/74 | `pc`: 70; `xbox`: 2; `ps4`: 2 |
+| `user.crossplay` | 74/74 | `true`: 73; `false`: 1 |
+
+The sample also carries `rank` and `subtype` on applicable orders. Its non-PC share is 4/74
+(5.4%); this short capture does not replace T5's one-hour diagnostic. Most importantly, the
+documented restriction to non-offline owners does not hold for the captured payload's status.
+Decision 3 therefore uses `user.status` without an online fallback.
+
+`node bruno/scrub-orders.mjs --socket` replaced the 55 owners with consistent pseudonyms,
+removed avatars, zeroed reputation and replaced activity. Every envelope, every other order
+field, and platform, crossplay, status, locale and lastSeen were checked against the raw capture
+and preserved. The REST scrubber's output also remained byte-identical to its previous version
+for all four existing order fixtures. The raw capture was temporary and is not committed.
+
 ## Design notes
 
 - **One socket, one connection at a time.** A `SmartLifecycle` bean opens it on start and closes
@@ -182,8 +215,9 @@ plan is the §9 ask-first for it. No new dependency is added (decision 1).
 
 ## Risks
 
-- **The socket payload may differ from REST's `Order`.** T1 exists for this; decision 3 covers the
-  likeliest gap.
+- **The socket payload may differ from REST's `Order`.** T1 found the required fields in all
+  74 sampled orders and settled decision 3. Future missing or malformed fields still need T2's
+  parsing and skip behaviour; upstream's online-only description cannot replace the status.
 - **Write volume from the whole-market feed is unmeasured.** Every new order is a market lookup
   and two inserts. T5 reads `wfm.socket.frames` over an hour, before T6 runs for 72.
 - **A crossplay mismatch fails silently** (ADR-0002). The cross-channel test pins it in code. T5

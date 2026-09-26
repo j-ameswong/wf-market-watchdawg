@@ -6,8 +6,15 @@
 // Writes one order per line, so a refreshed capture diffs readably:
 //
 //   node bruno/scrub-orders.mjs < response.json > market/src/test/resources/fixtures/v2-orders/<name>.json
+//
+// For a JSON array of socket envelopes from CaptureNewOrders.java, use --socket. This keeps
+// every envelope and scrubs the user of each newOrder payload with the same pseudonym map.
 import { readFileSync } from 'node:fs';
 
+const args = process.argv.slice(2);
+if (args.length > 1 || (args.length === 1 && args[0] !== '--socket')) {
+  throw new Error('Usage: node bruno/scrub-orders.mjs [--socket] < capture.json');
+}
 const envelope = JSON.parse(readFileSync(0, 'utf8'));
 const pseudonyms = new Map();
 
@@ -24,6 +31,14 @@ const scrub = ({ avatar, ...user }) => {
   };
 };
 
-const orders = envelope.data.map((order) => (order.user ? { ...order, user: scrub(order.user) } : order));
-const head = JSON.stringify({ apiVersion: envelope.apiVersion, error: envelope.error });
-process.stdout.write(`${head.slice(0, -1)},"data":[\n${orders.map((o) => JSON.stringify(o)).join(',\n')}\n]}\n`);
+const scrubOrder = (order) => (order.user ? { ...order, user: scrub(order.user) } : order);
+if (args[0] === '--socket') {
+  const frames = envelope.map((frame) =>
+    frame.route === '@wfm|event/subscriptions/newOrder' ? { ...frame, payload: scrubOrder(frame.payload) } : frame,
+  );
+  process.stdout.write(`[\n${frames.map((frame) => JSON.stringify(frame)).join(',\n')}\n]\n`);
+} else {
+  const orders = envelope.data.map(scrubOrder);
+  const head = JSON.stringify({ apiVersion: envelope.apiVersion, error: envelope.error });
+  process.stdout.write(`${head.slice(0, -1)},"data":[\n${orders.map((o) => JSON.stringify(o)).join(',\n')}\n]}\n`);
+}

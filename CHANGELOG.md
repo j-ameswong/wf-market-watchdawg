@@ -7,6 +7,10 @@ design rationale in [`docs/adr/`](docs/adr/README.md).
 
 ### Added
 
+- **C5 T1 — Live socket capture.** A dependency-free JDK capture script under `bruno/` and a
+  scrubbed fixture with 74 real new orders, the subscription acknowledgement and an online report.
+  All captured orders carry item, status and platform fields; 29 report `offline`, so socket
+  rules will use the payload's status without an online fallback.
 - **One alert end to end, by polling (C6, C9a, C10).**
   - `watches.yaml` declares the watches: an item, each of its dimensions as a value or `any`, a
     per-unit price threshold, an ntfy priority and a logical topic. A bad watch fails startup

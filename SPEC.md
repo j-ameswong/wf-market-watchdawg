@@ -10,7 +10,7 @@
 > | C2 | **Built and reviewed.** |
 > | C3 | **Built and reviewed.** The item detail sweep is off until a rule or query reads its fields. |
 > | C4 | **Built and reviewed.** |
-> | C5 | **Planned** in `tasks/plan.md`; decisions 2, 4 and 5 confirmed, the rest still to confirm. |
+> | C5 | **Planned** in `tasks/plan.md`; decisions 2, 4 and 5 confirmed and amended in review, the rest still to confirm. |
 > | C6 | **Built and reviewed.** Watched items are polled on a fixed cadence, honouring a throttle's `Retry-After`. |
 > | C7, C8 | Not started. |
 > | C9a | **Built and reviewed** for the underpriced rule, with dedup, a per-watch cooldown and a daily ceiling. The 72h budget run is planned as the last task of C5; the spread and crossing rules are still to do. |
@@ -565,7 +565,7 @@ Schema: §2.6 and `docs/v1-statistics.md`. Design rationale: [ADR-0010](docs/adr
 - A synthetic order under threshold → exactly one signal; a repeat within cooldown → none.
 - Rolling back an ingest transaction leaves no signal.
 - The spread rule fires only when both sides exist.
-- Over a 72h live run, notification volume sits inside the R9a.8 budget.
+- Over a 72h live run, admissions each UTC day stay at or under the daily ceiling (§10 Q4); deliveries are reported beside them, not held to it.
 
 ### C9b — Baseline rules
 

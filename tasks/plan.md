@@ -9,8 +9,9 @@
 > [0021](../docs/adr/0021-limiter-owns-the-ceiling-poll-loop-owns-freshness.md). Drafted
 > 2026-09-26 on top of the alert milestone (PR #8). Task bodies and acceptance checks are in
 > `tasks/todo.md`.
-> The author confirmed decisions 2, 4 and 5 on 2026-09-26 and bounded 4 (see there). The rest
-> are proposals, each with the default the tasks assume, until the author confirms or changes them.
+> The author confirmed decisions 2, 4 and 5 on 2026-09-26, then amended 4, 5 and 6 and the T2–T6
+> checks in review the same day. The rest are proposals, each with the default the tasks assume,
+> until the author confirms or changes them.
 
 ## Goal
 
@@ -37,8 +38,9 @@ The milestone is done when:
 3. **Socket orders reach the rule.** An order that appears through the socket is evaluated by the
    same underpriced rule and admission as a polled one, in the same transaction. This is the step
    that brings alert latency from minutes to seconds.
-4. **Staying up (R5.3, R5.4).** Reconnect with backoff and jitter, detect a silent dead
-   connection, and gap-fill from `/recent` after each subscription is confirmed.
+4. **Staying up (R5.3, R5.4).** Reconnect with backoff and jitter, give up on a connection that
+   never connects, never confirms its subscription or goes silent, and gap-fill from `/recent`
+   after each subscription is confirmed, honouring a throttle.
 5. **Observable (R12.2).** Connection state, reconnects, frames by outcome and gap-fills, as
    meters registered at startup.
 6. **The live checkpoint, then the 72h budget run.**
@@ -96,33 +98,47 @@ plan is the §9 ask-first for it. No new dependency is added (decision 1).
    Online status is read from `user.status` as today. If T1 shows socket frames carry no status,
    an order from the socket counts as online, since upstream sends only non-offline owners'
    orders; `/recent` carries status (its committed fixture does) and keeps using it.
-4. **Admission is serialised per watch with a transaction-scoped advisory lock** (confirmed, if it
-   stays small). Until now one
-   poll thread reconciled one book at a time, so admissions never raced (`Alerts`' own note). The
-   socket ingests on another thread, so two candidates for one watch could both pass the
-   cooldown check. A `pg_advisory_xact_lock` keyed by the watch, taken inside the ingest
-   transaction before the cooldown read, restores that. The alternative, handing socket orders to
-   the poll thread, would queue them behind a whole poll round and give back the latency this
-   milestone is for. The lock is one `select pg_advisory_xact_lock(hashtext(:watch))` at the top
-   of a watch's admission. If it needs more than that, it is dropped: the race then admits at most
-   one extra signal within a cooldown, still bounded by the dedup key and the daily ceiling.
-5. **Gap-fill once per confirmed subscription, and never within a minute of the last one**
-   (confirmed). After
+4. **Admission is serialised by one transaction-scoped advisory lock** (confirmed, amended in
+   review). Until now one poll thread reconciled one book at a time, so admissions never raced
+   (`Alerts`' own note). The socket ingests on another thread, so two transactions could both
+   pass a check before either commits. A lock per watch would protect a cooldown but not the
+   daily ceiling, which counts across watches: two watches could each read 49 admissions
+   against a ceiling of 50 and each admit another. So there is one lock for all admission,
+   `select pg_advisory_xact_lock(<one constant key>)`, taken in the ingest transaction before
+   the first cooldown or ceiling read, and only when the rule found candidates, so ingesting an
+   unwatched item's order never waits on it. It is held to commit, which comes right after:
+   admission is the last step of both ingest paths, and signals are written only under the lock,
+   so a transaction holding it needs no row another one holds, and it cannot deadlock against the
+   book claim or order rows. That protects the cooldowns and the ceiling together. The alternative, handing socket orders to the poll thread, would queue them behind a
+   whole poll round and give back the latency this milestone is for.
+5. **Gap-fill once per confirmed subscription, never within a minute of the last one, and never
+   before a throttle's `Retry-After` has passed** (confirmed, amended in review). After
    `subscribe/newOrders:ok`, one `/v2/orders/recent` goes through `ingestPartial` as
    `source=recent`, and its orders reach the rule like the socket's. Subscribing first means an
    order posted during the gap-fill is not missed; one seen by both is recorded once. `/recent` is
-   cached for a minute, so a reconnect within a minute of the last gap-fill skips it. There is no
-   standing `/recent` poll while the socket is up: it would only repeat what the socket already
-   delivered. A gap-fill that fails or is throttled is logged and counted, and the socket stays
-   up; the next book poll recovers current state (R5.4). A gap-fill resets no timer: the poll
-   loop keeps its cadence, and its throttle hold-off (R6.6) is set only by its own polls; the
-   only clock a gap-fill starts is its own one-minute skip window.
-6. **Reconnect with full jitter, doubling from 1 second to a 5-minute cap, and treat 90 seconds of
-   silence as a dead connection.** The server broadcasts `reports/online` about every 30 seconds,
-   so three missed broadcasts close the connection and reconnect. Without it a half-open TCP
-   connection would silence the socket with nothing to show for it. The backoff resets once a
-   connection has stayed subscribed for a minute, so a connection that flaps right after
-   subscribing still backs off.
+   cached for a minute, so a reconnect within a minute of the last gap-fill skips it. A throttled
+   gap-fill moves that next-allowed time out to the end of its `Retry-After` when that is later.
+   A `Retry-After` above `wfm.limits.max-retry-after` (60 seconds today, so `Retry-After: 300`
+   qualifies) surfaces from the client at once (ADR-0019), and without this a reconnect 61
+   seconds later would ask again too early. A throttle with no `Retry-After` keeps the one-minute
+   window. There is no standing `/recent` poll while the socket is up: it would only repeat what
+   the socket already delivered. A gap-fill that fails or is throttled is logged and counted, and the socket stays
+   up; the next book poll recovers current state (R5.4). A gap-fill resets no other timer: the
+   poll loop keeps its cadence, and its throttle hold-off (R6.6) is set only by its own polls. The
+   one clock a gap-fill moves is its own next-allowed time.
+6. **Reconnect with full jitter, doubling from 1 second to a 5-minute cap, with three deadlines**
+   (amended in review). Each deadline closes the attempt and reconnects through the backoff:
+   - **Connect: 10 seconds** for the TCP connection and handshake, set on both the `HttpClient`
+     and the `WebSocket.Builder`. The JDK waits forever by default.
+   - **Subscription: 10 seconds** from sending `subscribe/newOrders` to its `:ok` (or
+     `:error alreadySubscribed`). Heartbeats do not count toward it, so a server that keeps
+     broadcasting `reports/online` but never confirms cannot leave the socket up and useless.
+   - **Silence: 90 seconds** without any frame once subscribed. The server broadcasts
+     `reports/online` about every 30 seconds, so three missed broadcasts mean a dead connection;
+     without this a half-open TCP connection would silence the socket with nothing to show.
+
+   The backoff resets once a connection has stayed subscribed for a minute, so a connection that
+   flaps right after subscribing still backs off.
 7. **One setting to turn it off, and off under test.** `watchdawg.socket.enabled` (default
    `true`), and `wfm.socket.url` (default `wss://ws.warframe.market/socket`) so a test can point
    at its fake. The socket is declared only where `watchdawg.scheduling.enabled` allows, as the
@@ -140,7 +156,11 @@ plan is the §9 ask-first for it. No new dependency is added (decision 1).
 - **One socket, one connection at a time.** A `SmartLifecycle` bean opens it on start and closes
   it on stop. Frames arrive on the JDK client's executor; each `newOrder` frame is ingested in its
   own transaction, which is short because the partial path takes no book lock.
-- **Frames are parsed as the v2 envelope `route`/`payload`/`id`**, and only
+- **A message is parsed only once it is whole.** The JDK can deliver one text message across
+  several `onText` calls; the listener appends each part and parses when `last` is true. It asks
+  for the next message after every callback, including one whose message was malformed, so a bad
+  message never stalls the ones behind it.
+- **Messages are parsed as the v2 envelope `route`/`payload`/`id`**, and only
   `@wfm|event/subscriptions/newOrder`, `@wfm|cmd/subscribe/newOrders:ok|:error` and
   `@wfm|event/reports/online` are acted on. `:error` with `alreadySubscribed` counts as
   subscribed; any other `:error` closes the connection and reconnects through the backoff.
@@ -151,9 +171,14 @@ plan is the §9 ask-first for it. No new dependency is added (decision 1).
 - **Partial ingest with the rule** is `ingestPartial` calling `Alerts` over the orders it added,
   inside its existing transaction, with the markets it resolved. `Alerts` grows no second rule: it
   evaluates the watches of each added order's item over those orders only.
-- **Metrics** join `WfmMetrics`: `wfm.socket.connected` (gauge, 0 or 1), `wfm.socket.reconnects`,
-  `wfm.socket.frames` by outcome (`order`, `control`, `skipped`), and `wfm.socket.gapfills` by
-  outcome. All registered at startup, so a service with the socket off reads zero.
+- **Metrics** join `WfmMetrics`: `wfm.socket.connected` (gauge, 0 or 1), `wfm.socket.reconnects`
+  (by the reason the last connection ended), `wfm.socket.frames` by outcome (`order`, `control`,
+  `skipped`), and `wfm.socket.gapfills` by outcome. All registered at startup, so a service with
+  the socket off reads zero.
+- **Every throttled response is counted.** `wfm.retries` counts only the refusals answered with a
+  retry; a `Retry-After` over the ceiling, or a second refusal, throws before it increments. A new
+  `wfm.throttles` (by bucket and status) counts every `429` and `509` the interceptor sees,
+  retried or surfaced, so T6 can show there were none.
 
 ## Risks
 
@@ -161,8 +186,9 @@ plan is the §9 ask-first for it. No new dependency is added (decision 1).
   likeliest gap.
 - **Write volume from the whole-market feed is unmeasured.** Every new order is a market lookup
   and two inserts. T5 reads `wfm.socket.frames` over an hour, before T6 runs for 72.
-- **A crossplay mismatch fails silently** (ADR-0002). The cross-channel test pins it in code; T5
-  also checks that the non-PC share of socket orders is near the ~7% `/recent` showed.
+- **A crossplay mismatch fails silently** (ADR-0002). The cross-channel test pins it in code. T5
+  also reports the non-PC share of socket orders beside the ~7% `/recent` showed, as a diagnostic:
+  that figure is one historical sample, not a property of the protocol.
 - **Gap-fill is best effort** (R5.4): an outage longer than `/recent`'s window loses `appeared`
   events for good. The reconnect meter shows how often that could have happened.
 - **Socket alerts may push the budget.** The socket also sees listings that sell before the next

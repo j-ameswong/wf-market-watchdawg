@@ -32,8 +32,9 @@ checks and nothing else; how a check is met lives in the code and its tests.
       frame again produces none.
 - [ ] `:error` with `alreadySubscribed` counts as subscribed; any other `:error` closes the
       connection.
-- [ ] A malformed frame and an unknown route are logged and skipped, and the connection stays
-      open (R5.6).
+- [ ] A message split across several text frames is ingested once, as one order.
+- [ ] A malformed message and an unknown route are logged and skipped, the connection stays open,
+      and a valid `newOrder` right after the malformed one is ingested (R5.6).
 - [ ] An order for an item the catalog lacks is skipped, as `ingestPartial` already does.
 - [ ] The socket is off under test and with `watchdawg.socket.enabled=false`; the harness fails a
       test whose socket reaches a non-local host (R2.6).
@@ -44,18 +45,28 @@ checks and nothing else; how a check is met lives in the code and its tests.
       the frame's arrival; an order that was already known admits nothing.
 - [ ] The next book poll holding the same listing at the same price admits nothing (dedup key).
 - [ ] Rolling back a partial ingest leaves neither its events nor its signal (R9a.7).
-- [ ] A socket ingest and a book reconcile admitting for one watch at once admit at most one
-      signal within its cooldown.
+- [ ] A socket ingest and a book reconcile each holding an equally priced candidate for one watch,
+      committing at once, admit exactly one signal within its cooldown.
+- [ ] Two ingests with candidates for different watches, competing for the last admission under
+      the daily ceiling, admit one `pending` and write the other `suppressed`.
 - [ ] Orders for unwatched items are recorded and evaluate nothing.
 
 ### T4: The socket stays up and fills its gaps
 - [ ] A dropped connection reconnects with doubling, jittered backoff to the cap, and the backoff
       resets only after a connection has stayed subscribed for a minute (R5.3).
-- [ ] 90 seconds without a frame closes the connection and reconnects.
+- [ ] A server that accepts the connection but never completes the handshake is abandoned after
+      the 10-second connect deadline, and the socket reconnects.
+- [ ] A server that sends `reports/online` but withholds `:ok` is abandoned after the 10-second
+      subscription deadline, and the socket reconnects.
+- [ ] 90 seconds without a frame once subscribed closes the connection and reconnects.
 - [ ] Each confirmed subscription gap-fills once from `/v2/orders/recent` as `source=recent`,
       unless the last gap-fill was under a minute ago; its orders reach the rule (R5.4).
 - [ ] Killing the connection and reconnecting records no duplicate events.
 - [ ] A gap-fill that fails or is throttled is logged and counted, and the socket stays up.
+- [ ] After a gap-fill throttled with `Retry-After: 300`, a reconnect 61 seconds later makes no
+      `/recent` request, and the first reconnect after 300 seconds makes one.
+- [ ] `wfm.throttles` counts every `429` and `509` by bucket and status, including one that
+      surfaces without a retry, and is registered at startup.
 - [ ] `wfm.socket.reconnects` and `wfm.socket.gapfills` (by outcome) are registered at startup.
 
 ## Live checkpoints
@@ -65,13 +76,18 @@ checks and nothing else; how a check is met lives in the code and its tests.
 - [ ] A real underpriced listing on a watched item is pushed within seconds of its `createdAt`,
       before the next poll of that item.
 - [ ] Cutting the network and restoring it reconnects and gap-fills without a restart.
-- [ ] Over an hour, the non-PC share of socket orders is near the ~7% `/recent` showed (§2.7), and
-      `wfm.socket.frames` gives the feed's write volume.
+- [ ] Over an hour, `wfm.socket.frames` gives the feed's write volume, and the non-PC share of
+      socket orders is reported beside the ~7% `/recent` showed (§2.7). The share is a diagnostic,
+      not a pass/fail check.
 
 ### T6: 72 hours inside the alert budget
-- [ ] Over 72 hours with the socket and the poll loop on, deliveries a day stay at or under the
-      daily ceiling, and admissions by watch are read from `watchdawg.signals` (R9a.8).
-- [ ] Over the same run, `wfm.retries` counts no `429` or `509`, and the socket was up for all
+- [ ] Over 72 hours with the socket and the poll loop on, admissions (`pending`, `sent` and
+      `failed` signals by `seen_at`) stay at or under the daily ceiling for every UTC day, read
+      from `signal` with `mpsql` (R9a.8).
+- [ ] Deliveries a day, by outcome, are reported separately from admissions, not held to the
+      ceiling: a signal admitted one day can be delivered the next, and at-least-once delivery can
+      repeat one (R10.2).
+- [ ] Over the same run, `wfm.throttles` counts no `429` or `509`, and the socket was up for all
       but its reconnects.
 
 ## Checkpoint

@@ -24,40 +24,50 @@ checks and nothing else; how a check is met lives in the code and its tests.
 ### T2: Watched items are polled on a fixed cadence
 - [ ] With N watched items and interval I, each is polled once per I (R6.1, R6.3).
 - [ ] No two polls run at once, and a tick that overruns delays the next (R6.3).
-- [ ] A failed fetch for one item does not stop the others; a throttle ends the tick.
+- [ ] A failed fetch for one item does not stop the others.
+- [ ] A throttle ends the tick, and no request is made before its `Retry-After` has passed: a
+      ten-minute `Retry-After` at a two-minute cadence means no poll for ten minutes (ADR-0019).
 - [ ] Polling is off under test (R2.6), and runs on a thread the catalog sync does not share.
 - [ ] `wfm.poll.lateness` and per-outcome poll counts are registered at startup (R6.4, R12.4).
 
-## C9a, second half — the rule and the outbox
+## The first complete path — rule, outbox, notification
 
-### T3: An underpriced listing writes one signal, in the ingest transaction
+### T3: An underpriced listing reaches (mock) ntfy
 - [ ] A live sell order at or below the watch's per-unit threshold, from an online owner: one
-      signal. An offline owner: none, unless the watch sets `includeOffline`.
+      signal. An offline owner: none.
 - [ ] Buy orders, and sell orders in markets the watch does not select, never signal.
-- [ ] Reconciling the same book again: no new signal (dedup key).
 - [ ] An owner coming online with an unchanged cheap listing: one signal on the next poll.
-- [ ] Rolling back the reconcile transaction leaves no signal (R9a.7).
-- [ ] A `Stale` book evaluates nothing.
+- [ ] Rolling back the reconcile transaction leaves no signal (R9a.7); a `Stale` book evaluates
+      nothing.
 - [ ] The rule is a pure function, tested without Spring or a database.
+- [ ] Mock ntfy: a pending signal is POSTed once and marked `sent` with `notified_at`, and only
+      a 2xx marks it (R10.1, R10.2).
+- [ ] The push carries the item's display name, its dimensions, the unit price and lot size,
+      when the listing was seen, and a click-through to the item page (R10.4); watch priority
+      maps to ntfy priority (R10.5).
+- [ ] With no topic mapped, the dispatcher does not run and signals stay `pending`.
 
-### T4: Cooldown and the daily ceiling
-- [ ] Within a watch's cooldown, a second listing at the same or a higher price writes no
-      signal; a cheaper one does (R9a.5).
-- [ ] Past the daily ceiling, a signal is written as `suppressed` and counted, and never sent
-      (R9a.8).
+## C9a, second half — suppression
+
+### T4: Dedup, cooldown and the daily ceiling
+- [ ] Reconciling the same book again: no new signal (dedup key).
+- [ ] With the dispatcher paused, one poll holding two equally cheap qualifying orders admits
+      exactly one signal: the cooldown counts pending signals, not only sent ones (R9a.5).
+- [ ] Within a watch's cooldown, a later listing at the same or a higher price is not admitted;
+      a cheaper one is.
+- [ ] Past the daily ceiling of admissions, a candidate is written as `suppressed`, counted, and
+      never sent; it is not written again on the next poll (R9a.8).
 - [ ] Signal counts by watch and state are registered at startup (R12.3).
 
-## C10 — notifications
+## C10 — delivery guarantees
 
-### T5: The dispatcher delivers the outbox to ntfy
-- [ ] Mock ntfy: one pending signal, one POST, then `sent` with `notified_at` (R10.1).
-- [ ] A 2xx is the only thing that marks a signal sent (R10.2).
+### T5: Delivery survives failure and restart, and is measured
 - [ ] A forced failure retries with backoff to the cap, records the last error, then `failed`
       (R10.3).
-- [ ] A signal older than the expiry when its turn comes is `expired`, not sent.
-- [ ] A signal written before a restart is delivered after it.
-- [ ] The push carries the item's display name, its dimensions, the unit price and lot size, and
-      a click-through to the item page (R10.4); watch priority maps to ntfy priority (R10.5).
+- [ ] A signal written before a restart is delivered after it, however long the restart took.
+- [ ] Deliveries are counted by outcome (`sent`, `retried`, `failed`), separately from signals,
+      and registered at startup (R12.3).
+- [ ] One dispatcher runs at a time and never overlaps itself.
 - [ ] The topic is in the request body, not the URL; neither `last_error` nor any log line at
       DEBUG contains it (R10.6).
 - [ ] The ntfy client carries no WFM interceptor, and `RateLimitWiringTest` names it as non-WFM.

@@ -23,6 +23,11 @@ design rationale in [`docs/adr/`](docs/adr/README.md).
     by default) only a cheaper listing is admitted, counting pending signals as well as sent ones;
     past `watchdawg.alerts.daily-ceiling` (50) a UTC day, a candidate is recorded as `suppressed`
     and never sent. `watchdawg.signals` counts signals by watch and state.
+  - Delivery retries a failure with doubling backoff (30 seconds first) up to 5 attempts, then
+    marks the signal `failed`, logs it and counts it. `watchdawg.deliveries` counts attempts by
+    outcome. A pending signal is sent after a restart, however late.
+  - Real topics come from `WATCHDAWG_NOTIFY_TOPICS_<NAME>`. With any mapped, a watch naming an
+    unmapped one fails startup. The topic appears in no URL, stored error or log line.
 - **C4 — Order-book ingest.**
   - `wfm_order` holds every order's current state; `order_book` the latest book per item.
   - Reconciling a full book records `appeared`, `price_changed`, `quantity_changed` and

@@ -33,6 +33,8 @@ watchdawg:
     base-url: https://ntfy.sh
     interval: 10s
     batch-size: 20
+    max-attempts: 5
+    backoff: 30s
 
 wfm:
   base-url: https://api.warframe.market/v2

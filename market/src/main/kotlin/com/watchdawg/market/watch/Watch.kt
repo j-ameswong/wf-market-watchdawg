@@ -123,7 +123,9 @@ private fun WatchEntry.resolve(item: ItemRecord): Watch {
 
     if (name.isBlank()) throw InvalidWatchException("a watch on ${item.slug} has no name")
     if (maxUnitPrice.signum() <= 0) fail("max-unit-price must be above zero, not $maxUnitPrice")
-    if (topic.isBlank()) fail("topic is blank")
+    if (!topic.matches(LOGICAL_TOPIC)) {
+        fail("topic '$topic' must be lowercase letters and digits, to map from WATCHDAWG_NOTIFY_TOPICS_<NAME>")
+    }
     if (cooldown.isNegative) fail("cooldown is negative")
 
     val chargesKnown = item.maxCharges != null || item.detailSyncedAt != null
@@ -180,3 +182,5 @@ private fun <R : kotlin.Any, T> dimension(
 }
 
 private const val ANY = "any"
+
+private val LOGICAL_TOPIC = Regex("[a-z][a-z0-9]{0,19}")

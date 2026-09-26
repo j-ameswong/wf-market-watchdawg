@@ -172,7 +172,13 @@ The jar excludes `developmentOnly` deps, so it starts no Postgres: pass `SPRING_
 - Admission is dedup key (watch, order, unit price, whatever the state), then the watch's cooldown
   over its last **pending or sent** signal, then the daily ceiling over signals **seen** that UTC
   day. Cooldown and ceiling count `seen_at`, the book's request time, not the clock at insert.
-- Only a 2xx marks a signal sent. With no topic mapped, the dispatcher is not scheduled.
+- Only a 2xx marks a signal sent. A failure retries with doubling backoff to
+  `watchdawg.notify.max-attempts`, then the signal is `failed` and keeps its dedup key.
+- With no topic mapped, the dispatcher is not scheduled. With any mapped, every watch's topic must
+  be, or startup fails. Logical topics are lowercase letters and digits, so an environment variable
+  can name them.
+- `NtfyNotifier` serialises its body to bytes itself: `RestClient` logs an object body at DEBUG,
+  topic and all. Errors recorded or logged have the topic scrubbed.
 
 ### Polling
 

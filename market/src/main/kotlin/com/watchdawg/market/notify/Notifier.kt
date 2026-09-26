@@ -1,7 +1,9 @@
 package com.watchdawg.market.notify
 
 import com.watchdawg.market.watch.Outgoing
+import org.springframework.http.MediaType
 import org.springframework.web.client.RestClient
+import tools.jackson.databind.json.JsonMapper
 import java.math.RoundingMode
 import java.time.ZoneOffset.UTC
 import java.time.format.DateTimeFormatter
@@ -23,20 +25,25 @@ fun interface Notifier {
  * Publishes to ntfy as JSON, to the server's root with the topic in the body. The topic is a
  * credential (R10.6), and a URL is what exception messages and access logs carry, so it never goes
  * in one.
+ *
+ * The body is serialised here and sent as bytes: `RestClient` logs an object body's contents at
+ * DEBUG, topic included, but a byte array only by its type.
  */
-class NtfyNotifier(private val client: RestClient) : Notifier {
+class NtfyNotifier(private val client: RestClient, private val mapper: JsonMapper) : Notifier {
     override fun send(topic: String, push: Push) {
+        val body = mapper.writeValueAsBytes(
+            mapOf(
+                "topic" to topic,
+                "title" to push.title,
+                "message" to push.message,
+                "priority" to push.priority,
+                "click" to push.click,
+            ),
+        )
         client.post()
             .uri("/")
-            .body(
-                mapOf(
-                    "topic" to topic,
-                    "title" to push.title,
-                    "message" to push.message,
-                    "priority" to push.priority,
-                    "click" to push.click,
-                ),
-            )
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(body)
             .retrieve()
             .toBodilessEntity()
     }

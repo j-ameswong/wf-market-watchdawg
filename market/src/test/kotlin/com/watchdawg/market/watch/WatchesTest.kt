@@ -160,6 +160,11 @@ class WatchesTest {
     }
 
     @Test
+    fun `a logical topic an environment variable cannot name fails`() {
+        assertFailsWith<InvalidWatchException> { resolve(entry().copy(topic = "trades-high")) }
+    }
+
+    @Test
     fun `a threshold of zero or less fails`() {
         assertFailsWith<InvalidWatchException> { resolve(entry(maxUnitPrice = BigDecimal.ZERO)) }
     }
@@ -171,7 +176,7 @@ class WatchesTest {
         Binder(MapConfigurationPropertySource(properties)).bind("watchdawg", WatchProperties::class.java).get()
 
     private companion object {
-        val LOGICAL_TOPIC = Regex("[a-z][a-z0-9-]{0,19}")
+        val LOGICAL_TOPIC = Regex("[a-z][a-z0-9]{0,19}")
 
         val KHRA = ItemRecord(id = "khra-id", slug = "khra", name = "Khra", maxRank = 3)
 

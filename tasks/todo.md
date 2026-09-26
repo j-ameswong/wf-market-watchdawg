@@ -62,16 +62,16 @@ checks and nothing else; how a check is met lives in the code and its tests.
 ## C10 — delivery guarantees
 
 ### T5: Delivery survives failure and restart, and is measured
-- [ ] A forced failure retries with backoff to the cap, records the last error, then `failed`
+- [x] A forced failure retries with backoff to the cap, records the last error, then `failed`
       (R10.3).
-- [ ] A signal written before a restart is delivered after it, however long the restart took.
-- [ ] Deliveries are counted by outcome (`sent`, `retried`, `failed`), separately from signals,
+- [x] A signal written before a restart is delivered after it, however long the restart took.
+- [x] Deliveries are counted by outcome (`sent`, `retried`, `failed`), separately from signals,
       and registered at startup (R12.3).
-- [ ] One dispatcher runs at a time and never overlaps itself.
-- [ ] The topic is in the request body, not the URL; neither `last_error` nor any log line at
+- [x] One dispatcher runs at a time and never overlaps itself.
+- [x] The topic is in the request body, not the URL; neither `last_error` nor any log line at
       DEBUG contains it (R10.6).
-- [ ] The ntfy client carries no WFM interceptor, and `RateLimitWiringTest` names it as non-WFM.
-- [ ] A watch naming a logical topic with no runtime mapping fails startup.
+- [x] The ntfy client carries no WFM interceptor, and `RateLimitWiringTest` names it as non-WFM.
+- [x] A watch naming a logical topic with no runtime mapping fails startup.
 
 ## Live checkpoint
 

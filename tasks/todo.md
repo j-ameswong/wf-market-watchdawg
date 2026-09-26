@@ -4,8 +4,8 @@ Plan: `tasks/plan.md`. Requirement ids refer to `SPEC.md` §4. Each task lists i
 checks and nothing else; how a check is met lives in the code and its tests.
 
 ## Before any code
-- [ ] The author has confirmed or changed the nine decisions in `tasks/plan.md`.
-- [ ] `SPEC.md` §10 questions 4–6 record the answers, and C9a/C10 requirements match them.
+- [x] The author has confirmed or changed the nine decisions in `tasks/plan.md` (2026-09-26).
+- [x] `SPEC.md` §10 questions 4–6 record the answers, and C9a/C10 requirements match them.
 
 ## C9a, first half — watches
 
@@ -26,7 +26,7 @@ checks and nothing else; how a check is met lives in the code and its tests.
 - [ ] No two polls run at once, and a tick that overruns delays the next (R6.3).
 - [ ] A failed fetch for one item does not stop the others.
 - [ ] A throttle ends the tick, and no request is made before its `Retry-After` has passed: a
-      ten-minute `Retry-After` at a two-minute cadence means no poll for ten minutes (ADR-0019).
+      ten-minute `Retry-After` at a two-minute cadence means no poll for ten minutes (R6.6, ADR-0019).
 - [ ] Polling is off under test (R2.6), and runs on a thread the catalog sync does not share.
 - [ ] `wfm.poll.lateness` and per-outcome poll counts are registered at startup (R6.4, R12.4).
 

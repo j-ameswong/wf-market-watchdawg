@@ -8,7 +8,7 @@
 > [0019](../docs/adr/0019-long-retry-after-surfaces-to-the-caller.md) and
 > [0021](../docs/adr/0021-limiter-owns-the-ceiling-poll-loop-owns-freshness.md). Drafted
 > 2026-09-26 on top of C4 (PR #4). Task bodies and acceptance checks are in `tasks/todo.md`.
-> **No code until the author has confirmed the decisions below.**
+> The author confirmed the decisions below on 2026-09-26.
 
 ## Goal
 
@@ -66,10 +66,10 @@ already paced, so no new upstream endpoint and no new dependency is introduced (
 20 items at the proposed 2-minute default is 0.17 req/s. Over-demand shows up as poll lateness,
 never as a `429` (R6.5), and the lateness metric is how it is seen.
 
-## Decisions to confirm (author)
+## Decisions (author, 2026-09-26)
 
-Each has a recommended default; the plan is written against it. The author's review of
-2026-09-26 changed 4, 5 and 7 and removed the offline opt-in and `skip locked`.
+The author's review changed 4, 5 and 7 and removed the offline opt-in and `skip locked`, then
+confirmed the rest.
 
 1. **Threshold form: an absolute per-unit price per watch.** A watch says "sell listings at or
    below 12 plat a unit". A threshold relative to the current book (say, 30% under the

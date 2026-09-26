@@ -491,6 +491,7 @@ The first poll loop is deliberately small ([ADR-0021](docs/adr/0021-limiter-owns
 - **R6.1** Poll targets are the items the configured watches name (R9a.1).
 - **R6.2** **One running instance.** The limiter is per process, so a second instance would double the effective request rate; running more needs a shared limiter first.
 - **R6.3** Each watched item is polled on a fixed, configurable cadence. Polls never overlap: one that overruns delays the next.
+- **R6.6** A throttle ends the current round of polls, and no poll starts before its `Retry-After` has passed ([ADR-0019](docs/adr/0019-long-retry-after-surfaces-to-the-caller.md)).
 - **R6.4** Poll lateness and request use are measured (C12), so a cadence that cannot hold is visible rather than silent.
 - **R6.5** Demand above the budget becomes lateness, never a `429`, because every request waits its turn at the limiter.
 
@@ -547,7 +548,7 @@ Schema: §2.6 and `docs/v1-statistics.md`. Design rationale: [ADR-0010](docs/adr
 - **R9a.2** Invalid config fails startup loudly, naming the offending entry.
 - **R9a.3** Three families: **underpriced listing** (order-scoped), **best price crosses** (book-scoped), **spread above margin** (book-scoped). The first milestone ships underpriced listing alone, evaluated as polled books are reconciled; the socket later makes it seconds-level.
 - **R9a.4** A watch selects a market by item plus optional subtype dimensions.
-- **R9a.5** Signals carry a dedup key; the same condition cannot fire twice within its cooldown.
+- **R9a.5** Signals carry a dedup key; the same condition cannot fire twice within its cooldown. The cooldown counts every signal admitted to the outbox, pending or sent, so a burst cannot queue several before one is sent. Within it, only a cheaper listing is admitted.
 - **R9a.6** Rules are a keyed strategy registry — deliberately **not** an expression language.
 - **R9a.7** Signals are written in the same transaction as the ingest that produced them.
 - **R9a.8** **The alert budget is 10–50 notifications/day across all watches.** Cooldowns and thresholds are tuned against that ceiling, and sustained breach is a defect, not a configuration preference — a muted watchdog is a broken one ([ADR-0014](docs/adr/0014-alert-budget-is-a-requirement.md)). Requires C12 to measure (R12.3).
@@ -575,7 +576,7 @@ Schema: §2.6 and `docs/v1-statistics.md`. Design rationale: [ADR-0010](docs/adr
 - **R10.1** Delivery is an outbox: signals are durably queued and sent by a separate dispatcher.
 - **R10.2** Delivery is **at-least-once**. The dispatcher marks a signal sent only after a 2xx from ntfy, so a crash between send and mark may re-deliver one notification. It must never silently drop one. Exactly-once is unavailable: ntfy exposes no idempotency key ([ADR-0015](docs/adr/0015-at-least-once-delivery-through-an-outbox.md)).
   - Note the division of labour: `signal.dedup_key` prevents a rule from producing duplicate **signals**; it does not and cannot prevent duplicate **deliveries** of one signal.
-- **R10.3** Failures retry to a bounded attempt count and record the last error.
+- **R10.3** Failures retry to a bounded attempt count and record the last error. A signal that exhausts them is marked failed, counted, and keeps its dedup key. Signals do not expire: a pending one is sent however late, and says when its listing was seen.
 - **R10.4** A notification carries the item display name, the price, and a click-through to the warframe.market item page.
 - **R10.5** Watch priority maps to ntfy priority.
 - **R10.6** Delivery targets public `ntfy.sh` with a **high-entropy topic name**. That name is a bearer credential — anyone who learns it can read every notification. It is therefore supplied by environment/external config, **never committed and never logged**. Watch YAML (R9a.1) references a topic by *logical name* only; the mapping to a real topic resolves at runtime. See §9 and [ADR-0016](docs/adr/0016-ntfy-high-entropy-topic-as-credential.md).
@@ -716,9 +717,9 @@ Gradle root is `market/`, not the repo root.
 1. ~~Does v1 `mod_rank` carry v2 `charges` for requiem items?~~ **Resolved 2026-09-25: requiem mods trade by rank.** The catalog lists `khra` and `vome` with `maxRank: 3` and no item with `maxCharges` (live `/v2/items`, and all 3,888 item pages), and every order in a captured `/v2/orders/item/khra` book carries `rank` (0, 2 or 3) and never `charges`. `mod_rank` → `rank` is therefore correct for them; R7.5's guard stays in case upstream starts modelling charges.
 2. **What does `Crossplay` mean to v1 `/items/{slug}/statistics`?** The header appears nowhere in `docs/v1.yml`, yet it deterministically rewrites 76/88 historical rows and *lowers* `volume` (§2.7, R7.11). Best reading: trades where **both** sides are crossplay-enabled, which would exclude the PC-crossplay-off cohort — 6 such users appeared in the sampled book. That is an inference from one slug and the direction of one number. Resolvable by sampling more slugs, worth doing before C7 ingests at scale, but R7.11 is written so the answer is **not** load-bearing.
 3. **C9b thresholds are deliberately unspecified** — they cannot be chosen honestly before history exists (R9b.3).
-4. **Is R9a.8's lower bound a requirement?** Zero qualifying opportunities on a day can be correct, so ten alerts a day cannot be demanded. The likely shape is a configurable ceiling plus cooldowns, with a quiet period flagged for review rather than treated as a defect. Settle when C9a is planned.
-5. **What does a watch with an omitted dimension select?** "No rank" (the market whose rank is null) and "any rank" must not be interchangeable (R9a.4). Settle when C9a is planned.
-6. **What happens when delivery fails for good?** Bounded attempts (R10.3) do not guarantee delivery. How a terminal failure is made visible, and whether an opportunity that expired meanwhile is still sent, are open. Settle when C10 is planned.
+4. ~~Is R9a.8's lower bound a requirement?~~ **Resolved 2026-09-26: no, it is a ceiling.** A configurable daily ceiling on signals admitted for sending, across all watches. A signal over it is recorded as suppressed and counted, never sent. A quiet day is not a defect. Delivered notifications are measured separately (R12.3).
+5. ~~What does a watch with an omitted dimension select?~~ **Resolved 2026-09-26: nothing; it fails startup.** A watch must name each dimension its item has, as a value or as `any`, and naming one the item lacks fails too. Neither "no rank" nor "any rank" is ever inferred (R9a.4).
+6. ~~What happens when delivery fails for good?~~ **Resolved 2026-09-26.** The signal is marked failed, logged without the topic, counted, and keeps its dedup key, so a broken topic does not multiply attempts. Nothing expires in the first milestone: a late signal is still sent and carries when its listing was seen. Expiry returns only with a rule for when a condition becomes eligible again (R10.3).
 
 ---
 

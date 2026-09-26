@@ -1,15 +1,16 @@
 # SPEC — wf-market-watchdawg
 
-> **Status: under review.** **No code is written against a capability until it is broken into
-> tasks.** The capability in progress is planned in `tasks/plan.md` and `tasks/todo.md`; finished
-> ones are archived under `tasks/archive/`.
+> **Status: under review.** No code is written against a capability until it is broken into tasks
+> in `tasks/plan.md` and `tasks/todo.md`. Finished plans, with the evidence for each requirement,
+> are archived under `tasks/archive/`.
 >
 > | Capability | State |
 > | --- | --- |
-> | C1 | **Built.** R1.1–R1.8 each map to a named passing test; R12.1's per-bucket meters ship with it. |
-> | C2 | **Built and reviewed.** R2.1–R2.7 each map to a named passing test or a recorded manual check. |
-> | C3 | **Built and reviewed.** Three acceptance bullets map to named tests; the fourth, and the detail sweep, to live runs recorded in `tasks/archive/c3-todo.md`. The sweep is off by default until a rule or query reads its fields. |
-> | C4 | **Built**, with corrections to C1 from the 2026-09-25 review. Every acceptance bullet maps to a named test on live captures; nothing calls ingest on a schedule until C6. Awaiting review. |
+> | C1 | **Built.** |
+> | C2 | **Built and reviewed.** |
+> | C3 | **Built and reviewed.** The item detail sweep is off until a rule or query reads its fields. |
+> | C4 | **Built and reviewed.** Nothing calls ingest on a schedule until C6. |
+> | C5–C12 | Not started. The next milestone is one alert end to end (§3.4). |
 >
 > Grounded in `docs/v2/` (API `v0.25.0`, WebSocket `v0.13.0`), `docs/v1.yml`, and the live-verified
 > route table in `bruno/README.md`. This document describes the system to be built; the reasoning
@@ -25,7 +26,7 @@ A single-operator service that watches warframe.market and does two things off o
 1. **Watchdog** — detect market moves worth acting on and push them to ntfy within seconds.
 2. **Warehouse** — retain order-book and auction history indefinitely, so questions can be asked later that nobody thought to ask up front.
 
-**User:** one operator (the author). Watches are declared in a version-controlled YAML file so they are reviewable in git rather than living only in a database. The warehouse is read directly from Postgres (`mpsql`, or any BI tool pointed at it) — there is no query API and no UI. The service only writes.
+**User:** one operator (the author). Watches are declared in a version-controlled YAML file ([ADR-0013](docs/adr/0013-watches-in-version-controlled-yaml.md)). The warehouse is read directly from Postgres (`mpsql`, or any BI tool pointed at it) — there is no query API and no UI. The service only writes.
 
 **Outcome that defines success:** a push notification arrives on a phone, within seconds of a qualifying order being posted, containing enough information to act — and a year later the database can answer what that item's price did over that year.
 
@@ -56,13 +57,13 @@ New-order coverage therefore costs one socket plus ~1,440 req/day, leaving the R
 | WS `newOrders` | push | 0 | 0 |
 | `/v2/orders/recent` | 60s | 1,440 | 0.017/s |
 | `/v2/versions` + `/v2/items` | 1h, hash-gated | ~30 | ~0 |
-| `/v2/item/{slug}` detail sweep | once per catalog change, 30/min | ~3,900 per change | 0.5/s for ~2h, then 0 |
+| `/v2/item/{slug}` detail sweep, off by default | once per catalog change, 30/min | ~3,900 per change | 0.5/s for ~2h, then 0 |
 | Order books — 200 hot @5m, 800 warm @30m, 2800 cold @6h | tiered | 107,200 | 1.24/s |
 | v1 `statistics` | daily per item | 3,800 | 0.044/s |
 | **v2 bucket total** | | **~112,500** | **~1.3/s** |
 | v1 `/auctions/search` (~220 weapon slugs) | 2h sweep | 2,640 | separate bucket |
 
-**~1.3 req/s against a 3 req/s ceiling.** No capability in this spec requires more. The order-book row is the long-term coverage target, not the first deliverable: C6 starts with a fixed cadence over watched items only. The detail sweep adds 0.5 req/s for about two hours after each catalog change, so the peak is ~1.8 req/s against the 2 req/s configured `public` budget. The poll scheduler (C6) has to leave room for it.
+**~1.3 req/s against a 3 req/s ceiling.** No capability in this spec requires more. The order-book row is the long-term coverage target, not the first deliverable: C6 starts with a fixed cadence over watched items only. When enabled, the detail sweep adds 0.5 req/s for about two hours after each catalog change, so the peak is ~1.8 req/s against the 2 req/s configured `public` budget. The poll scheduler (C6) has to leave room for it.
 
 ### 2.2 Trade data exists, but only aggregated
 
@@ -97,8 +98,8 @@ v2 has a `contracts` concept (`Group.kind`, OAuth scope) but **ships no public r
 Three properties of the payload shape the design:
 
 1. Statistics split by the **same subtype dimensions as orders** (`mod_rank`, `subtype`, `amber_stars`, `cyan_stars`), so rows key to a **`market`**, not just an `item` — the dimension table earns its keep twice.
-2. The "48h and 90d buckets" note understated the payload: each window carries **two different series** with different field sets — `statistics_closed` (real trades, OHLC, no side) and `statistics_live` (open book, has `order_type`, no OHLC).
-3. **Mapping hazard:** no `charges` field appears anywhere. Requiem mods, which v2 models with `maxCharges`, report `mod_rank: 3`. Mapping `mod_rank` → `rank` unconditionally would collapse those onto the wrong market.
+2. Each window carries **two different series** with different field sets — `statistics_closed` (real trades, OHLC, no side) and `statistics_live` (open book, has `order_type`, no OHLC).
+3. **No `charges` field appears anywhere.** Requiem mods report `mod_rank`, and v2 trades them by rank as well: no catalog item carries `maxCharges`, and every order in a captured `khra` book (2026-09-25) carries `rank` 0, 2 or 3 and never `charges`. R7.5 keeps the mapping conditional on the catalog.
 
 ### 2.7 Crossplay is one setting, and the two APIs disagree on what it means
 
@@ -145,8 +146,8 @@ flowchart LR
     LIM{{"WfmRateLimiter<br/>bucket A: 2 req/s<br/>bucket B: 12 req/min"}}
     SOCK["WfmSocketClient<br/>reconnect + gap-fill"]
     SCHED["PollScheduler<br/>fixed cadence over watches"]
-    CAT["ItemSync (existing)"]
-    ING["OrderIngestService<br/>diff · classify · record"]
+    CAT["ItemSync"]
+    ING["OrderIngest<br/>diff · classify · record"]
     RULES["RuleEngine<br/>order-scoped + book-scoped"]
     DISP["NotificationDispatcher"]
   end
@@ -246,7 +247,7 @@ erDiagram
     int quantity
     text owner_platform "pc|ps4|xbox|mobile — from user.platform"
     timestamptz first_seen_at
-    timestamptz changed_at "when the current values were observed"
+    timestamptz changed_at "when the current state was observed"
     timestamptz gone_at
   }
   order_event {
@@ -336,7 +337,7 @@ flowchart TD
 
 Thick nodes are the spine — the shortest path to a real push notification, by polling. Dashed nodes are built when operation shows a need for them. C9b also needs C7 *plus* accumulated history before any threshold in it can be chosen honestly.
 
-### 3.4 Capability table (approved; sequence amended 2026-09-25)
+### 3.4 Capability table
 
 | id | Capability | Depends on |
 | --- | --- | --- |
@@ -355,7 +356,7 @@ Thick nodes are the spine — the shortest path to a real push notification, by 
 
 *There is no C11. The id is retired, not reused, so requirement references stay stable ([ADR-0011](docs/adr/0011-no-query-api-postgres-is-the-read-surface.md)).*
 
-**Build order**, amended after the 2026-09-25 review so the whole path runs early:
+**Build order.** The whole path runs end to end before coverage widens:
 
 1. `C1 ∥ C2` → `C3` → `C4`.
 2. **One alert, end to end, by polling:** `C6` on a fixed cadence over watched items, `C9a` with one rule (underpriced listing), and `C10`. Done when a real push arrives, a repeat within cooldown is suppressed, and a restart between signal and send still delivers.
@@ -364,7 +365,7 @@ Thick nodes are the spine — the shortest path to a real push notification, by 
 
 `C12` runs alongside throughout. Acyclic — nothing depends on a later module.
 
-The spine is `C1 → C2 → C3 → C4 → C6 → C9a → C10`: the shortest path to a real push notification. `C5` then brings it from minutes to seconds. C8 (contracts) is sequenced after that spine proves out ([ADR-0018](docs/adr/0018-contracts-sequenced-after-the-item-spine.md)).
+`C5` brings the spine's latency from minutes to seconds. C8 (contracts) is sequenced after the spine proves out ([ADR-0018](docs/adr/0018-contracts-sequenced-after-the-item-spine.md)).
 
 ---
 
@@ -395,7 +396,7 @@ Every outbound call goes through one compliant, paced, observable path.
 - **R2.2** Fact tables are hypertables. Every unique index includes the partitioning column.
 - **R2.3** The event log is retained **indefinitely**, compressed beyond a configurable age ([ADR-0007](docs/adr/0007-timescaledb-with-indefinite-event-log.md)).
 - **R2.4** Quote snapshots retained raw for a bounded window; hourly and daily aggregates retained indefinitely.
-- **R2.5** Migrations that cannot run inside a transaction (continuous aggregates, policies) are marked as such and apply cleanly via **both** Gradle and the `mflyway` CLI, which share one history table.
+- **R2.5** Every migration applies identically through the application and the `mflyway` CLI, which share one history table. One that cannot run inside a transaction is marked as such.
 - **R2.6** **No test may reach the live warframe.market API** ([ADR-0017](docs/adr/0017-tests-never-reach-the-live-api.md)). Scheduled components are disabled by default under test.
 - **R2.7** Tests are order-independent. The shared container's state is reset between tests.
 
@@ -407,11 +408,11 @@ Every outbound call goes through one compliant, paced, observable path.
 
 ### C3 — Catalog & market dimension
 
-- **R3.1** `item` carries everything downstream needs (`tradable`, `rarity` and `maxCharges` come from `/v2/item/{slug}`, since `/v2/items` omits them): `subtypes`, `maxRank`, `maxCharges`, `maxAmberStars`, `maxCyanStars`, `bulkTradable`, `tradable`, `rarity`, `vaulted`, plus display `name` and `icon` from `i18n.en` (notifications need a human-readable title).
-- **R3.2** `Item` has **no `updatedAt`** in the v2 spec. The existing column is `Instant.EPOCH` on every row — it becomes a local `synced_at`.
+- **R3.1** `item` carries everything downstream needs (`tradable`, `rarity` and `maxCharges` come from `/v2/item/{slug}`, since `/v2/items` omits them, and are fetched only while a consumer needs them): `subtypes`, `maxRank`, `maxCharges`, `maxAmberStars`, `maxCyanStars`, `bulkTradable`, `tradable`, `rarity`, `vaulted`, plus display `name` and `icon` from `i18n.en` (notifications need a human-readable title).
+- **R3.2** `Item` has **no `updatedAt`** in v2. `synced_at` records when this service last wrote the row, never an upstream time.
 - **R3.3** Market resolution (§2.3 tuple → id) is idempotent and safe under concurrency.
 - **R3.4** NULL subtype dimensions must compare **equal** for uniqueness. Postgres treats NULLs as distinct by default, which would silently defeat upserts for the common no-subtype case.
-- **R3.5** Catalog refresh stays version-hash gated. The existing `CollectionSync` contract is **not modified** — it works and its extension point is documented.
+- **R3.5** Catalog refresh is version-hash gated, through the `CollectionSync` contract.
 
 **Acceptance**
 - The real `/v2/items` payload yields ~3.8k rows, with non-empty `subtypes` on known multi-subtype items.
@@ -512,7 +513,7 @@ Schema: §2.6 and `docs/v1-statistics.md`. Design rationale: [ADR-0010](docs/adr
 - **R7.2** Both granularities recorded: hourly (48h window) and daily (90d).
 - **R7.3** Upsert key is the logical tuple `(section, granularity, bucket, dimensions[, order_type], crossplay)`, verified unique across all 3,386 sampled rows. The row's own `id` is stored alongside but **not** used as the key: `id` is unstable. Refetching `frost_prime_set` at an unchanged crossplay setting is byte-identical (0/88 rows differ, ids stable), but flipping `Crossplay` changes **88/88 row ids** on historical buckets whose values did not move.
 - **R7.4** Rows key to a **`market`** (C3), not an `item`, since statistics carry the same subtype dimensions as orders. Field names are snake_case: `mod_rank` → `rank`, `amber_stars` → `amberStars`, `cyan_stars` → `cyanStars`.
-- **R7.5** **`mod_rank` must not be mapped to `rank` unconditionally.** Requiem mods report `mod_rank: 3` where v2 models `maxCharges`; a naive mapping collapses them onto the wrong market. Resolve using the item's own `maxRank`/`maxCharges` from C3.
+- **R7.5** **`mod_rank` maps to `rank` only for an item whose catalog entry has no `maxCharges`.** Today that is every item, requiem mods included (§2.6). An item that gains `maxCharges` is resolved through its own `maxRank`/`maxCharges`, or its charge levels collapse into rank markets.
 - **R7.6** All price fields bind as **decimal**, never integer — `donch_top`, `donch_bot`, `median`, `min_price`, `max_price` arrive as JSON int *or* float depending on value (`150` vs `80.0`). `volume` is always an integer.
 - **R7.7** `moving_avg` is **nullable in both series** (absent on ~2% of closed and ~54% of live rows). A non-null constraint would reject real data.
 - **R7.8** A dimension field is *absent*, not null, when the item lacks that dimension. Parsing must not treat absence as zero — rank 0 is a real, distinct market.
@@ -636,57 +637,10 @@ sequenceDiagram
 
 ---
 
-## 5. Commands
+## 5–8. Development
 
-Per `CLAUDE.md`. `nix develop` provides the toolchain; `mhelp` lists the shell functions. Docker must be running.
-
-| Task | Dev shell | Direct |
-| --- | --- | --- |
-| Build + test | `mbuild` | `cd market && ./gradlew build` |
-| Tests only | `mtest` | `./gradlew test` |
-| One test class | `mtest --tests '*ItemRepositoryTest'` | same |
-| Run | `mrun` | `./gradlew bootRun` |
-| psql | `mpsql` | `psql -h localhost -p 5432 -U watchdawg -d watchdawg` |
-| Reset DB | `mdb-reset` | `docker compose down -v` |
-| Flyway | `mflyway info` | see `flake.nix` |
-| Replay API collection | `bruno-run` | `cd bruno && npx @usebruno/cli run --env production --delay 400 -r` |
-
-Hermetic jar: `nix build .#market`. **Any dependency change requires** `$(nix build --no-link --print-out-paths .#market.mitmCache.updateScript)` from the repo root.
-
-## 6. Project structure
-
-Gradle root is `market/`, not the repo root.
-
-| Package | Role |
-| --- | --- |
-| `wfm` | *existing.* Rate limiter, v2 client, v1 legacy client |
-| `wfm/ws` | Socket client, envelope models, reconnect supervisor |
-| `sync` | `CollectionSync` SPI (unchanged), `ItemSync`, and the `/v2/item/{slug}` detail sweep |
-| `ingest` | Book diffing, order state, event log, quotes |
-| `poll` | Tiered adaptive target queue |
-| `watch` | Config loading, rule registry, signal outbox |
-| `notify` | ntfy delivery |
-| `store` | Records + repositories |
-
-## 7. Code style
-
-- **4 spaces** for indentation (Kotlin official style), enforced by Spotless + ktlint rather than by convention. `spotlessCheck` runs as part of `build`; `spotlessApply` fixes. Config is `market/.editorconfig` — it must live in the Gradle root, since Spotless does not discover `.editorconfig` above it, and the Gradle daemon caches it (`./gradlew --stop` after editing).
-- **ktlint cannot format inside raw-string SQL.** The `@Query` literals in `store/` are string content, so their indentation is maintained by hand and no tool will catch drift there.
-- **Spring Data JDBC, not JPA.** No dirty checking, no lazy loading; `save()` on an assigned id issues `UPDATE`. Upserts are hand-written `@Modifying @Query` with `on conflict … do update`, each paired with a record-taking extension function so call sites stay readable.
-- **A new column touches three places:** the migration, the record, and both the SQL and the parameter list of the upsert.
-- Natural-id records implement `Persistable` with a `@Transient val new` flag; prefer the `upsert` extension over `save()`.
-- **Jackson 3** — the package is `tools.jackson`, not `com.fasterxml.jackson`. v2 is camelCase, so no naming strategy. Declare only the fields actually used.
-- Compiler args `-Xjsr305=strict`, `-Xannotation-default-target=param-property`.
-- Migrations are `V<n>__desc.sql`; the app and the `mflyway` CLI deliberately share one history table.
-
-## 8. Testing strategy
-
-- Wiring and persistence are tested as `@SpringBootTest` with a Testcontainers Postgres; parsing and classification logic are plain JUnit, with neither. Identical annotation sets share one context **and one container**, so **order-independence is mandatory** (R2.7): the database is truncated before every test method, and classes and methods run in random order with a printed, replayable seed. Classes with no Spring or JDBC dependency are plain JUnit — booting a container to test token arithmetic buys nothing.
-- `MockRestServiceServer` bound to `RestClient.Builder` for HTTP — already available via `spring-boot-starter-webmvc-test`, no new dependency. **No test reaches the live API** (R2.6). Every Spring test context starts with scheduling off and with a request factory that refuses and records outbound HTTP, registered from `src/test/resources/META-INF/spring.factories` so no test class can opt out; `MarketApplicationTests` asserts both. The defaults come from a context customizer because a `src/test/resources/application.yaml` would shadow the main file by classpath name rather than layer on it.
-- Fixtures are captured from the `bruno` collection, and a representative capture comes **before** any field is committed to. Synthetic payloads test behaviour, never what upstream returns. Order captures have trader identity replaced before they are committed (`bruno/scrub-orders.mjs`, §9).
-- `WfmClient.get()` is `private inline` and cannot be stubbed — test through the HTTP layer, not by mocking the client.
-- **C4's diff logic gets the densest coverage.** It is where correctness actually lives; everything downstream trusts its output.
-- `bruno-run` re-verifies live contracts after any DTO change. Manual, never in CI.
+Commands, project structure, code style and testing practice live in [`CLAUDE.md`](CLAUDE.md).
+These section numbers are retired, so references to §9–§11 stay stable.
 
 ## 9. Boundaries
 
@@ -714,7 +668,7 @@ Gradle root is `market/`, not the repo root.
 
 ## 10. Open questions
 
-1. ~~Does v1 `mod_rank` carry v2 `charges` for requiem items?~~ **Resolved 2026-09-25: requiem mods trade by rank.** The catalog lists `khra` and `vome` with `maxRank: 3` and no item with `maxCharges` (live `/v2/items`, and all 3,888 item pages), and every order in a captured `/v2/orders/item/khra` book carries `rank` (0, 2 or 3) and never `charges`. `mod_rank` → `rank` is therefore correct for them; R7.5's guard stays in case upstream starts modelling charges.
+1. *Resolved: requiem mods trade by rank (§2.6, R7.5).*
 2. **What does `Crossplay` mean to v1 `/items/{slug}/statistics`?** The header appears nowhere in `docs/v1.yml`, yet it deterministically rewrites 76/88 historical rows and *lowers* `volume` (§2.7, R7.11). Best reading: trades where **both** sides are crossplay-enabled, which would exclude the PC-crossplay-off cohort — 6 such users appeared in the sampled book. That is an inference from one slug and the direction of one number. Resolvable by sampling more slugs, worth doing before C7 ingests at scale, but R7.11 is written so the answer is **not** load-bearing.
 3. **C9b thresholds are deliberately unspecified** — they cannot be chosen honestly before history exists (R9b.3).
 4. ~~Is R9a.8's lower bound a requirement?~~ **Resolved 2026-09-26: no, it is a ceiling.** A configurable daily ceiling on signals admitted for sending, across all watches. A signal over it is recorded as suppressed and counted, never sent. A quiet day is not a defect. Delivered notifications are measured separately (R12.3).

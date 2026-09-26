@@ -2,7 +2,7 @@
 
 > Source: the 2026-09-25 project review, and the author's answers to it the same day. Scope: the
 > review's first deliverable, plus C4 without a scheduler. Task bodies and acceptance checks are in
-> `tasks/todo.md`.
+> `tasks/archive/c4-todo.md`.
 
 ## Scope
 
@@ -13,7 +13,7 @@
    C10's ntfy client will not inherit them.
 3. **The detail sweep is off by default.** No rule or query reads its fields yet.
 4. **The spec says what the service can actually observe, and in what order it is built.**
-   These changes are listed under T4 in `tasks/todo.md`.
+   These changes are listed under T4 in `tasks/archive/c4-todo.md`.
 5. **C4 ingest.** A full book is reconciled against stored state; a partial observation (`ws`,
    `recent`) can only add orders. Quotes carry the minimal contract. Nothing calls either path on
    a schedule yet, so C4 spends no request budget.

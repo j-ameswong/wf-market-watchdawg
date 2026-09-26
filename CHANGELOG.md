@@ -56,6 +56,9 @@ design rationale in [`docs/adr/`](docs/adr/README.md).
 
 ### Changed
 
+- Documentation has one home per kind: `SPEC.md` holds behaviour, constraints and boundaries;
+  `CLAUDE.md` holds commands, layout, conventions, testing practice and traps. SPEC §5–§8 moved
+  to `CLAUDE.md`, and their numbers are retired so §9–§11 keep theirs.
 - The WFM transport (pacing, context headers, error handling) applies to the v2 and v1 clients
   only, not to every `RestClient.Builder`, so a client for another host does not inherit it.
 - The item detail sweep is off unless `wfm.sync.item-details.enabled` is true.

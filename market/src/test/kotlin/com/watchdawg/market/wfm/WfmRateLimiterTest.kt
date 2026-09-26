@@ -19,7 +19,7 @@ import kotlin.test.assertTrue
 
 /**
  * Plain JUnit: no Spring context, no container. `WfmRateLimiter` touches neither, and booting a
- * Postgres just to test pacing buys nothing (SPEC 8).
+ * Postgres just to test pacing buys nothing.
  */
 @Timeout(value = 10, unit = SECONDS, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
 class WfmRateLimiterTest {

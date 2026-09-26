@@ -9,8 +9,8 @@
 > [0021](../docs/adr/0021-limiter-owns-the-ceiling-poll-loop-owns-freshness.md). Drafted
 > 2026-09-26 on top of the alert milestone (PR #8). Task bodies and acceptance checks are in
 > `tasks/todo.md`.
-> **The decisions below are proposals, each with the default the tasks assume, until the author
-> confirms or changes them.**
+> The author confirmed decisions 2, 4 and 5 on 2026-09-26 and bounded 4 (see there). The rest
+> are proposals, each with the default the tasks assume, until the author confirms or changes them.
 
 ## Goal
 
@@ -76,20 +76,18 @@ day, against the 1,440 a day §2.1 budgeted for polling `/recent` every minute.
 `/v2/orders/recent` is already a client call (C4) but has never been called on a schedule, so this
 plan is the §9 ask-first for it. No new dependency is added (decision 1).
 
-## Decisions (proposed)
+## Decisions
 
 1. **The client is the JDK's `java.net.http.WebSocket`; no new dependency.** It supports
    subprotocols and handshake headers, so R5.1 and R1.5 hold. Spring's `WebSocketClient` would add
    `spring-websocket` (§9 ask-first, and a `nix/deps.json` regeneration) for nothing the JDK lacks.
    The fake server in tests is Tomcat's websocket support, already on the test classpath
    (`tomcat-embed-websocket`, via the Tomcat starter).
-2. **Every new order the socket carries is recorded, not only watched items'.** The socket is the
-   only market-wide source of new orders, and it is free (§2.1); an `appeared` not recorded now
-   cannot be recovered later, and the event log is the part of the warehouse kept forever. The
-   cost is that an unpolled item's `wfm_order` rows stay live until some book poll of that item
-   vanishes them (R4.5 already accepts the lag; here it is unbounded until the item is polled).
-   The event log stays true: it records only what was observed. The alternative, watched items
-   only, keeps current state honest and discards the rest of the feed. If this default stands,
+2. **Every new order the socket carries is recorded, not only watched items'** (confirmed). The
+   socket is the only market-wide source of new orders, and it is free (§2.1); an `appeared` not
+   recorded now cannot be recovered later, and the event log is what future analysis reads. An
+   unpolled item's `wfm_order` rows stay live until some book poll of that item vanishes them,
+   and that is accepted: current state matters only for polled items, and the rest is history.
    ADR-0022 records it, since it changes what `wfm_order` means for unpolled items.
 3. **The rule runs over the orders a partial observation adds, not over known ones.**
    `ingestPartial` may only add orders (R4.11), so only an order it adds is evaluated; a known
@@ -98,21 +96,27 @@ plan is the §9 ask-first for it. No new dependency is added (decision 1).
    Online status is read from `user.status` as today. If T1 shows socket frames carry no status,
    an order from the socket counts as online, since upstream sends only non-offline owners'
    orders; `/recent` carries status (its committed fixture does) and keeps using it.
-4. **Admission is serialised per watch with a transaction-scoped advisory lock.** Until now one
+4. **Admission is serialised per watch with a transaction-scoped advisory lock** (confirmed, if it
+   stays small). Until now one
    poll thread reconciled one book at a time, so admissions never raced (`Alerts`' own note). The
    socket ingests on another thread, so two candidates for one watch could both pass the
    cooldown check. A `pg_advisory_xact_lock` keyed by the watch, taken inside the ingest
    transaction before the cooldown read, restores that. The alternative, handing socket orders to
    the poll thread, would queue them behind a whole poll round and give back the latency this
-   milestone is for.
-5. **Gap-fill once per confirmed subscription, and never within a minute of the last one.** After
+   milestone is for. The lock is one `select pg_advisory_xact_lock(hashtext(:watch))` at the top
+   of a watch's admission. If it needs more than that, it is dropped: the race then admits at most
+   one extra signal within a cooldown, still bounded by the dedup key and the daily ceiling.
+5. **Gap-fill once per confirmed subscription, and never within a minute of the last one**
+   (confirmed). After
    `subscribe/newOrders:ok`, one `/v2/orders/recent` goes through `ingestPartial` as
    `source=recent`, and its orders reach the rule like the socket's. Subscribing first means an
    order posted during the gap-fill is not missed; one seen by both is recorded once. `/recent` is
    cached for a minute, so a reconnect within a minute of the last gap-fill skips it. There is no
    standing `/recent` poll while the socket is up: it would only repeat what the socket already
    delivered. A gap-fill that fails or is throttled is logged and counted, and the socket stays
-   up; the next book poll recovers current state (R5.4).
+   up; the next book poll recovers current state (R5.4). A gap-fill resets no timer: the poll
+   loop keeps its cadence, and its throttle hold-off (R6.6) is set only by its own polls; the
+   only clock a gap-fill starts is its own one-minute skip window.
 6. **Reconnect with full jitter, doubling from 1 second to a 5-minute cap, and treat 90 seconds of
    silence as a dead connection.** The server broadcasts `reports/online` about every 30 seconds,
    so three missed broadcasts close the connection and reconnect. Without it a half-open TCP
@@ -156,8 +160,7 @@ plan is the §9 ask-first for it. No new dependency is added (decision 1).
 - **The socket payload may differ from REST's `Order`.** T1 exists for this; decision 3 covers the
   likeliest gap.
 - **Write volume from the whole-market feed is unmeasured.** Every new order is a market lookup
-  and two inserts. T5 reads `wfm.socket.frames` over an hour; if the feed is heavier than expected,
-  decision 2's alternative is one filter away.
+  and two inserts. T5 reads `wfm.socket.frames` over an hour, before T6 runs for 72.
 - **A crossplay mismatch fails silently** (ADR-0002). The cross-channel test pins it in code; T5
   also checks that the non-PC share of socket orders is near the ~7% `/recent` showed.
 - **Gap-fill is best effort** (R5.4): an outage longer than `/recent`'s window loses `appeared`

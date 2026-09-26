@@ -10,7 +10,7 @@
 > | C2 | **Built and reviewed.** |
 > | C3 | **Built and reviewed.** The item detail sweep is off until a rule or query reads its fields. |
 > | C4 | **Built and reviewed.** |
-> | C5 | **Planned** in `tasks/plan.md`, with the author's decisions still to confirm. |
+> | C5 | **Planned** in `tasks/plan.md`; decisions 2, 4 and 5 confirmed, the rest still to confirm. |
 > | C6 | **Built and reviewed.** Watched items are polled on a fixed cadence, honouring a throttle's `Retry-After`. |
 > | C7, C8 | Not started. |
 > | C9a | **Built and reviewed** for the underpriced rule, with dedup, a per-watch cooldown and a daily ceiling. The 72h budget run is planned as the last task of C5; the spread and crossing rules are still to do. |
@@ -482,7 +482,7 @@ stateDiagram-v2
 - **R5.2** Subscribe to `newOrders` for the configured platform, sending `crossplay` **explicitly** from the single global setting (R1.8) rather than relying on the socket's `true` default; handle `:ok` and `:error` (`alreadySubscribed`).
 - **R5.3** Reconnect indefinitely with exponential backoff plus jitter.
 - **R5.4** On every (re)connect, gap-fill from `/v2/orders/recent`. This is **best effort**: `/recent` holds at most 500 orders from the last 4h, from users online at the time, so even a short outage can lose observations. The next full book poll recovers current state, not the changes in between.
-- **R5.5** Socket events feed the same ingest path as polling, tagged `source=ws`.
+- **R5.5** Socket events feed the same ingest path as polling, tagged `source=ws`. Every item's new orders are recorded, watched or not (§10 Q7).
 - **R5.6** Unknown routes and malformed frames are logged and skipped, never fatal. Note `docs/v2/websockets/subscriptions.mdx` warns that item and profile subscriptions exist as unregistered stubs — do not rely on them.
 
 **Acceptance**
@@ -680,7 +680,7 @@ These section numbers are retired, so references to §9–§11 stay stable.
 4. ~~Is R9a.8's lower bound a requirement?~~ **Resolved 2026-09-26: no, it is a ceiling.** A configurable daily ceiling on signals admitted for sending, across all watches. A signal over it is recorded as suppressed and counted, never sent. A quiet day is not a defect. Delivered notifications are measured separately (R12.3).
 5. ~~What does a watch with an omitted dimension select?~~ **Resolved 2026-09-26: nothing; it fails startup.** A watch must name each dimension its item has, as a value or as `any`, and naming one the item lacks fails too. Neither "no rank" nor "any rank" is ever inferred (R9a.4).
 6. ~~What happens when delivery fails for good?~~ **Resolved 2026-09-26.** The signal is marked failed, logged without the topic, counted, and keeps its dedup key, so a broken topic does not multiply attempts. Nothing expires in the first milestone: a late signal is still sent and carries when its listing was seen. Expiry returns only with a rule for when a condition becomes eligible again (R10.3).
-7. **Does the socket record every item's new orders, or only watched items'?** The socket is the only free, market-wide source of `appeared` events (§2.1), and one not recorded is lost for good. Recording every item leaves an unpolled item's `wfm_order` rows live until a book poll of that item vanishes them (R4.5), so current state is honest only for polled items; the event log stays true either way. Proposed: every item (`tasks/plan.md`, decision 2).
+7. ~~Does the socket record every item's new orders, or only watched items'?~~ **Resolved 2026-09-26: every item.** The socket is the only free, market-wide source of `appeared` events (§2.1), and one not recorded is lost for good; the event log is what later analysis reads. An unpolled item's `wfm_order` rows stay live until a book poll of that item vanishes them (R4.5), which is accepted: current state is meaningful only for polled items (R5.5).
 
 ---
 

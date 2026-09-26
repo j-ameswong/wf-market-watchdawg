@@ -4,9 +4,10 @@ Plan: `tasks/plan.md`. Requirement ids refer to `SPEC.md` §4. Each task lists i
 checks and nothing else; how a check is met lives in the code and its tests.
 
 ## Before any code
-- [ ] The author has confirmed or changed the nine decisions in the plan.
-- [ ] `SPEC.md` §10 question 7 records the answer to decision 2, and C5's requirements match the
-      decisions.
+- [ ] The author has confirmed or changed the nine decisions in the plan (2, 4 and 5 confirmed
+      2026-09-26).
+- [x] `SPEC.md` §10 question 7 records the answer to decision 2 (every item, 2026-09-26).
+- [ ] C5's requirements match the confirmed decisions.
 
 ## Payload first
 
@@ -75,6 +76,5 @@ checks and nothing else; how a check is met lives in the code and its tests.
 
 ## Checkpoint
 - [ ] `mbuild` green under several seeds
-- [ ] `SPEC.md` status, `CLAUDE.md` and `CHANGELOG.md` updated; ADR-0022 written if decision 2
-      stands
+- [ ] `SPEC.md` status, `CLAUDE.md` and `CHANGELOG.md` updated; ADR-0022 records decision 2
 - [ ] Review with human

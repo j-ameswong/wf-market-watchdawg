@@ -14,6 +14,11 @@ design rationale in [`docs/adr/`](docs/adr/README.md).
   - The poll loop fetches every watched item's book once per `wfm.poll.interval` (2 minutes), on
     a thread of its own, never overlapping itself. A throttle ends the round and its `Retry-After`
     holds off the next. `wfm.poll.lateness` and `wfm.polls` (by outcome) measure it.
+  - The underpriced-listing rule: a live sell order from an online owner at or under a watch's
+    unit price is admitted to the `signal` outbox, in the transaction that reconciled its book.
+  - A dispatcher posts pending signals to ntfy as JSON, the topic in the body, and marks one sent
+    only on a 2xx. The push carries the item, its dimensions, the unit price and lot, when the
+    listing was seen and a link to the item page. It runs only once a topic is mapped.
 - **C4 — Order-book ingest.**
   - `wfm_order` holds every order's current state; `order_book` the latest book per item.
   - Reconciling a full book records `appeared`, `price_changed`, `quantity_changed` and

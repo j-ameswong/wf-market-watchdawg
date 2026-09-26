@@ -22,6 +22,13 @@ management:
 watchdawg:
   scheduling:
     enabled: true
+  # C10. The real topics are credentials: set WATCHDAWG_NOTIFY_TOPICS_<NAME> in the environment
+  # for each logical topic the watches name (R10.6). With none set, nothing is sent and signals
+  # wait in the outbox.
+  notify:
+    base-url: https://ntfy.sh
+    interval: 10s
+    batch-size: 20
 
 wfm:
   base-url: https://api.warframe.market/v2

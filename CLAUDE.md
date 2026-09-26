@@ -7,7 +7,8 @@ the rules and traps that the code alone does not make obvious.
 
 A Spring Boot 4 / Kotlin service that mirrors warframe.market into Postgres + TimescaleDB. It syncs
 the item catalog, and polls the books of the items `watches.yaml` names on a fixed cadence,
-reconciling each into order state, an event log and quotes.
+reconciling each into order state, an event log and quotes. A cheap listing on a watched market
+becomes a signal in an outbox, which a dispatcher sends to ntfy.
 
 Where things are written down:
 
@@ -34,9 +35,10 @@ Packages under `com.watchdawg.market`:
 | `sync` | Catalog refresh (`CollectionSync`, `ItemSync`) and the item detail sweep |
 | `ingest` | Book reconciliation, partial ingest, quotes, one-book polling |
 | `store` | Repositories, `MarketResolver`, `OrderStore` |
-| `watch` | Watches from `watches.yaml`, checked against the catalog at startup |
+| `watch` | Watches from `watches.yaml`, the underpriced rule, and the `signal` outbox |
 | `poll` | The poll loop (C6): every watched item's book, once per interval, on its own thread |
-| planned | `wfm/ws` (socket), `notify` (C10) |
+| `notify` | The dispatcher and the ntfy client (C10) |
+| planned | `wfm/ws` (socket) |
 
 ## Commands
 
@@ -162,7 +164,11 @@ The jar excludes `developmentOnly` deps, so it starts no Postgres: pass `SPRING_
 - A watch names every dimension its item has, as a value or `any`, and none it lacks. Charges are
   checked only once the detail sweep has fetched the item, since `/v2/items` never carries them.
 - A watch's `topic` is a logical name. The real ntfy topic is a credential and never goes in the
-  file.
+  file, a URL, `signal.last_error` or a log line; `WATCHDAWG_NOTIFY_TOPICS_<NAME>` supplies it.
+- The rule reads the whole reconciled book, not its events: events say nothing about online status.
+  `Alerts` runs inside `reconcileBook`'s transaction, so a signal rolls back with its book (R9a.7).
+- `underpriced()` is pure; keep it free of Spring, like `reconcile()`.
+- Only a 2xx marks a signal sent. With no topic mapped, the dispatcher is not scheduled.
 
 ### Polling
 

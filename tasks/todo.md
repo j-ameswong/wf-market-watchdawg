@@ -33,19 +33,19 @@ checks and nothing else; how a check is met lives in the code and its tests.
 ## The first complete path — rule, outbox, notification
 
 ### T3: An underpriced listing reaches (mock) ntfy
-- [ ] A live sell order at or below the watch's per-unit threshold, from an online owner: one
+- [x] A live sell order at or below the watch's per-unit threshold, from an online owner: one
       signal. An offline owner: none.
-- [ ] Buy orders, and sell orders in markets the watch does not select, never signal.
-- [ ] An owner coming online with an unchanged cheap listing: one signal on the next poll.
-- [ ] Rolling back the reconcile transaction leaves no signal (R9a.7); a `Stale` book evaluates
+- [x] Buy orders, and sell orders in markets the watch does not select, never signal.
+- [x] An owner coming online with an unchanged cheap listing: one signal on the next poll.
+- [x] Rolling back the reconcile transaction leaves no signal (R9a.7); a `Stale` book evaluates
       nothing.
-- [ ] The rule is a pure function, tested without Spring or a database.
-- [ ] Mock ntfy: a pending signal is POSTed once and marked `sent` with `notified_at`, and only
+- [x] The rule is a pure function, tested without Spring or a database.
+- [x] Mock ntfy: a pending signal is POSTed once and marked `sent` with `notified_at`, and only
       a 2xx marks it (R10.1, R10.2).
-- [ ] The push carries the item's display name, its dimensions, the unit price and lot size,
+- [x] The push carries the item's display name, its dimensions, the unit price and lot size,
       when the listing was seen, and a click-through to the item page (R10.4); watch priority
       maps to ntfy priority (R10.5).
-- [ ] With no topic mapped, the dispatcher does not run and signals stay `pending`.
+- [x] With no topic mapped, the dispatcher does not run and signals stay `pending`.
 
 ## C9a, second half — suppression
 

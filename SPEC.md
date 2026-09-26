@@ -13,8 +13,10 @@
 > | C5 | Not started. |
 > | C6 | **In progress.** Watched items are polled on a fixed cadence, honouring a throttle's `Retry-After`. |
 > | C7, C8 | Not started. |
-> | C9a | **In progress.** Watches load from `watches.yaml` and are checked at startup; no rule yet. |
-> | C9b–C12 | Not started. C10 is next, with C9a's rule: one alert end to end (§3.4). |
+> | C9a | **In progress.** Watches load and are checked at startup; the underpriced rule admits signals. Cooldown and the daily ceiling are next. |
+> | C9b | Not started. |
+> | C10 | **In progress.** A dispatcher sends pending signals to ntfy; retries and failure handling are next. |
+> | C12 | Not started beyond the meters each capability registers. |
 >
 > Grounded in `docs/v2/` (API `v0.25.0`, WebSocket `v0.13.0`), `docs/v1.yml`, and the live-verified
 > route table in `bruno/README.md`. This document describes the system to be built; the reasoning

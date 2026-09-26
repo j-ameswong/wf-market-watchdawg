@@ -1,6 +1,7 @@
 package com.watchdawg.market.wfm
 
 import com.watchdawg.market.TestcontainersConfiguration
+import com.watchdawg.market.notify.NotifyConfig
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -65,8 +66,8 @@ class RateLimitWiringTest {
     private companion object {
         val WFM = setOf(WfmConfig.V2_CLIENT, WfmConfig.LEGACY_CLIENT)
 
-        /** `RestClient` beans for hosts other than warframe.market. None yet; C10 adds ntfy's. */
-        val NON_WFM = emptySet<String>()
+        /** `RestClient` beans for hosts other than warframe.market. */
+        val NON_WFM = setOf(NotifyConfig.NTFY_CLIENT)
     }
 
     private fun interceptorsOf(client: RestClient): List<ClientHttpRequestInterceptor> {

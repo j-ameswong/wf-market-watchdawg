@@ -43,6 +43,7 @@ class WfmRateLimitInterceptor(
             // slot would deadlock against max-concurrency.
             val response = limiter.acquire(bucket) { execution.execute(request, body) }
             val throttle = Throttle.of(response.statusCode.value()) ?: return response
+            metrics.throttled(bucket, throttle)
             val refusal = throttle.refusal(retryAfterOf(response.headers, clock))
             response.close()
 

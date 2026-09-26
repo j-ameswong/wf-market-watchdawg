@@ -7,8 +7,9 @@ the rules and traps that the code alone does not make obvious.
 
 A Spring Boot 4 / Kotlin service that mirrors warframe.market into Postgres + TimescaleDB. It syncs
 the item catalog, and polls the books of the items `watches.yaml` names on a fixed cadence,
-reconciling each into order state, an event log and quotes. A cheap listing on a watched market
-becomes a signal in an outbox, which a dispatcher sends to ntfy.
+reconciling each into order state, an event log and quotes. A socket records every new order on
+the market as it is posted. A cheap listing on a watched market becomes a signal in an outbox,
+which a dispatcher sends to ntfy.
 
 Where things are written down:
 
@@ -38,7 +39,7 @@ Packages under `com.watchdawg.market`:
 | `watch` | Watches from `watches.yaml`, the underpriced rule, and the `signal` outbox |
 | `poll` | The poll loop (C6): every watched item's book, once per interval, on its own thread |
 | `notify` | The dispatcher and the ntfy client (C10) |
-| planned | `wfm/ws` (socket) |
+| `wfm/ws` | The socket (C5): connection, subscription, and the feed into partial ingest |
 
 ## Commands
 
@@ -103,13 +104,15 @@ The jar excludes `developmentOnly` deps, so it starts no Postgres: pass `SPRING_
   every v1 price as `BigDecimal`: the upstream sends `150` and `80.0` for one field.
 - Only three v1 routes are alive: auctions, `/items/{slug}/statistics` and
   `/items/{slug}/dropsources`. `bruno/README.md` has the route-by-route table.
-- `WfmContext` is the one read point for platform and crossplay. **C5's socket client must send
-  `crossplay` explicitly**: REST and the socket default to opposite values, and mixing them
-  fabricates `vanished` on ~7% of orders ([ADR-0002](docs/adr/0002-crossplay-single-global-setting.md)).
+- `WfmContext` is the one read point for platform and crossplay. **The socket's subscription
+  sends `crossplay` explicitly**: REST and the socket default to opposite values, and mixing them
+  fabricates `vanished` on ~7% of orders ([ADR-0002](docs/adr/0002-crossplay-single-global-setting.md));
+  `CrossplayHeaderTest` pins that both channels agree.
   `wfm.platform` and `wfm.crossplay` have no defaults, so startup fails if either is unset.
-- Meter names live in `WfmMetrics` (transport and polling) and `AlertMetrics` (signals and
-  deliveries), and are registered at startup, so a quiet service reads as zero
-  rather than a missing series. Renaming one breaks whatever dashboard watches it. Actuator exposes `health,metrics` and nothing else;
+- Meter names live in `WfmMetrics` (transport, polling and the socket) and `AlertMetrics`
+  (signals and deliveries), and are registered at startup, so a quiet service reads as zero
+  rather than a missing series. Renaming one breaks whatever dashboard watches it. Actuator
+  exposes `health,metrics` and nothing else;
   `HttpSurfaceTest` fails on a controller or a wider exposure list.
 
 ### Catalog sync
@@ -167,7 +170,14 @@ The jar excludes `developmentOnly` deps, so it starts no Postgres: pass `SPRING_
 - A watch's `topic` is a logical name. The real ntfy topic is a credential and never goes in the
   file, a URL, `signal.last_error` or a log line; `WATCHDAWG_NOTIFY_TOPICS_<NAME>` supplies it.
 - The rule reads the whole reconciled book, not its events: events say nothing about online status.
-  `Alerts` runs inside `reconcileBook`'s transaction, so a signal rolls back with its book (R9a.7).
+  A partial observation (socket, `/recent`) is evaluated over the orders it added, and nothing
+  else. `Alerts` runs inside the ingest transaction on both paths, so a signal rolls back with the
+  observation behind it (R9a.7).
+- Admission takes one transaction-scoped advisory lock, `SignalStore.ADMISSION_LOCK`, once the
+  rule has found candidates, and holds it to commit: the poll loop and the socket ingest on
+  different threads, and the daily ceiling counts across watches. Keep admission the last step of
+  an ingest transaction and write signals only under the lock, so its holder never waits on
+  anything another ingest holds.
 - `underpriced()` is pure; keep it free of Spring, like `reconcile()`.
 - Admission is dedup key (watch, order, unit price, whatever the state), then the watch's cooldown
   over its last **pending or sent** signal, then the daily ceiling over signals **seen** that UTC
@@ -180,11 +190,34 @@ The jar excludes `developmentOnly` deps, so it starts no Postgres: pass `SPRING_
 - `NtfyNotifier` serialises its body to bytes itself: `RestClient` logs an object body at DEBUG,
   topic and all. Errors recorded or logged have the topic scrubbed.
 
+### The socket
+
+- `WfmSocket` is a lifecycle bean declared only when both `watchdawg.scheduling.enabled` and
+  `watchdawg.socket.enabled` allow. It opens through the `SocketConnector` bean, the JDK client,
+  so no websocket dependency is added. Keep it the only way a socket is opened: the test harness
+  wraps that bean to refuse a non-local host.
+- A message is read only once its last part arrives, and the next one is requested after every
+  callback, whatever this one held. Nothing in a message is fatal (R5.6).
+- Messages are read and ingested on the JDK client's threads. Everything else, connecting, the
+  connect, subscription and silence deadlines, reconnecting and the gap-fill, runs on the
+  socket's own single thread, so none of it takes a lock. The socket is not an `OwnThreadSchedule`:
+  its work is one-off delays, not a trigger.
+- A connection that misses a deadline is abandoned like one that drops; `Reconnects` picks the
+  delay. Heartbeats (`reports/online`) keep a subscribed connection alive but never confirm a
+  subscription.
+- `GapFill` calls `/v2/orders/recent` once per confirmed subscription, never within a minute of
+  the last call or before a throttle's `Retry-After` has passed. It moves no other clock: the poll
+  loop's cadence and hold-off are its own.
+- The socket records every item's new orders, watched or not
+  ([ADR-0022](docs/adr/0022-socket-records-every-items-new-orders.md)); an unpolled item's
+  `wfm_order` rows are history, not current state.
+
 ### Polling
 
-- The poll loop and anything else that needs its own thread run through `OwnThreadSchedule`, a
-  lifecycle bean declared only when `watchdawg.scheduling.enabled` allows. **Never declare a
-  `TaskScheduler` bean**: it would replace Boot's and take over every `@Scheduled` method.
+- The poll loop and anything else on a trigger that needs its own thread run through
+  `OwnThreadSchedule`, a lifecycle bean declared only when `watchdawg.scheduling.enabled` allows.
+  **Never declare a `TaskScheduler` bean**: it would replace Boot's and take over every
+  `@Scheduled` method.
 - `Cadence` keeps one round per interval: an overrun starts the next round when it ends, with no
   make-up burst, and a throttle's `Retry-After` holds off the next round (ADR-0019).
 
@@ -217,6 +250,10 @@ The jar excludes `developmentOnly` deps, so it starts no Postgres: pass `SPRING_
   - every `RestClient` sends through `LiveApiGuard`, which refuses, and `LiveApiGuardListener`
     fails a test that reached it. To exercise HTTP, bind `MockRestServiceServer` to
     `bean.mutate()`;
+  - every `SocketConnector` is wrapped by `LiveSocketGuard`, which refuses a non-local host into
+    the same record. To exercise the socket, point a `WfmSocket` at a `FakeSocketServer`. A test
+    context that turns scheduling on must also set `watchdawg.socket.enabled=false`, or its socket
+    reaches for the live host;
   - `DatabaseResetListener` empties every table and continuous aggregate before each test. It
     names the hypertables, because `truncate market cascade` leaves compressed `order_event` rows.
 - The defaults come from a context customizer: a test `application.yaml` would shadow the main one.

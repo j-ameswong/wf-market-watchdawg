@@ -14,9 +14,16 @@ import java.time.temporal.ChronoUnit.DAYS
 data class AlertProperties(val dailyCeiling: Int)
 
 /**
- * Runs the rules over a reconciled book and decides what reaches the outbox (R9a.5, R9a.8). The
- * caller holds the reconcile transaction, so a signal commits or rolls back with the book behind
- * it (R9a.7), and the poll loop reconciles one book at a time, so admissions never race.
+ * Runs the rules over a reconciled book, or over the orders a partial observation added, and
+ * decides what reaches the outbox (R9a.5, R9a.8). The caller holds the ingest transaction, so a
+ * signal commits or rolls back with the observation behind it (R9a.7).
+ *
+ * The poll loop and the socket ingest on different threads, so admission is serialised: once the
+ * rule has found candidates, the transaction takes one advisory lock before its first cooldown or
+ * ceiling read, and holds it to commit (decision 4). One lock for every watch, because the daily
+ * ceiling counts across watches. Admission is the last step of both ingest paths, so the lock is
+ * held only while it runs, and signals are written only under it, so its holder never waits on a
+ * row another holder has. An observation that finds no candidate never takes it.
  *
  * Candidates are taken cheapest first, and each is:
  * - skipped if its dedup key is taken, whatever that signal's state;
@@ -37,7 +44,7 @@ class Alerts(
 
     /**
      * [markets] maps each market of [book] to its dimensions. [seenAt] is when the book was
-     * requested; cooldowns and the day are counted on it.
+     * requested, or when a partial observation arrived; cooldowns and the day are counted on it.
      *
      * @return how many signals were admitted.
      */
@@ -48,6 +55,8 @@ class Alerts(
         }
 
     private fun admit(watch: Watch, candidates: List<Candidate>, seenAt: Instant): Int {
+        if (candidates.isEmpty()) return 0
+        signals.lockAdmission()
         var last = signals.lastAdmitted(watch.name)
         var admitted = 0
         for (candidate in candidates) {

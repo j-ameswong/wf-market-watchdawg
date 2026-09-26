@@ -7,6 +7,27 @@ design rationale in [`docs/adr/`](docs/adr/README.md).
 
 ### Added
 
+- **C5 T4 — The socket stays up and fills its gaps.** A connection that drops, does not connect
+  within 10 seconds, is not confirmed within 10 seconds of subscribing, or hears nothing for 90
+  seconds once subscribed is abandoned, and the next is made after a delay with full jitter under
+  a ceiling that doubles from 1 second to 5 minutes, reset once a connection has stayed subscribed
+  for a minute. Each confirmed subscription gap-fills once from `/v2/orders/recent` as
+  `source=recent`, through the rules, unless the last gap-fill was under a minute ago or a
+  throttle's `Retry-After` has not passed; a failed one is logged and counted and the socket stays
+  up. `wfm.socket.reconnects` (by why the connection ended), `wfm.socket.gapfills` (by outcome)
+  and `wfm.throttles` (every `429` and `509` by bucket and status, retried or not) are new meters.
+- **C5 T3 — Socket orders reach the rule.** A new order the socket adds is evaluated by the
+  underpriced rule and admitted in the transaction that recorded it, seen when its message
+  arrived. A known order is not evaluated again, and the next book poll does not signal the same
+  listing at the same price. Admission now takes one database advisory lock, so a socket ingest
+  and a book poll committing at once cannot both pass a watch's cooldown or the daily ceiling.
+- **C5 T2 — The socket records new orders.** One connection to `wss://ws.warframe.market/socket`
+  on the `wfm` subprotocol, with the project's `User-Agent`, subscribed to every new order with
+  `platform` and `crossplay` sent explicitly from the one setting, which a test pins against the
+  REST header. Each new order is recorded as `appeared` with `source=ws`, for every item, watched
+  or not (ADR-0022). Malformed messages and unknown routes are skipped. `watchdawg.socket.enabled`
+  turns it off; `wfm.socket.connected` and `wfm.socket.frames` (by outcome) measure it. A dropped
+  connection stays down until restart for now.
 - **C5 T1 — Live socket capture.** A dependency-free JDK capture script under `bruno/` and a
   scrubbed fixture with 74 real new orders, the subscription acknowledgement and an online report.
   All captured orders carry item, status and platform fields; 29 report `offline`, so socket

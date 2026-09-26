@@ -4,6 +4,7 @@ import io.micrometer.core.instrument.Counter
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.Timer
 import java.time.Duration
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * Meters for the rate limiter, so its behaviour can be checked at runtime (R12.1).
@@ -47,6 +48,20 @@ class WfmMetrics(private val registry: MeterRegistry) {
     }.toMap()
 
     /**
+     * Counts every `429` and `509` the transport sees, retried or not. [retries] misses a refusal
+     * that surfaces at once, with a `Retry-After` over the ceiling or on the second attempt, so this
+     * is the meter that shows whether ADR-0004's boundary held. Registered up front like [retries].
+     */
+    private val throttles = Bucket.entries.flatMap { bucket ->
+        Throttle.entries.map { throttle ->
+            (bucket to throttle) to Counter.builder(THROTTLES)
+                .tag(BUCKET, bucket.tag)
+                .tag(STATUS, throttle.status.toString())
+                .register(registry)
+        }
+    }.toMap()
+
+    /**
      * How late each poll round started against its fixed cadence (R6.4). Demand above the budget
      * shows up here, never as a `429` (R6.5).
      */
@@ -57,7 +72,36 @@ class WfmMetrics(private val registry: MeterRegistry) {
         Counter.builder(POLLS).tag(OUTCOME, it.tag).register(registry)
     }
 
+    /**
+     * 1 while the socket holds a confirmed subscription, 0 otherwise (C5). A connection that is open
+     * but not yet subscribed delivers nothing, so it reads 0.
+     */
+    private val socketConnected = AtomicInteger().also { registry.gauge(SOCKET_CONNECTED, it) }
+
+    /** Whole socket messages by what they held (R12.2). */
+    private val socketFrames = SocketFrame.entries.associateWith {
+        Counter.builder(SOCKET_FRAMES).tag(OUTCOME, it.tag).register(registry)
+    }
+
+    /** Socket connections that ended while the socket was running, by why, each followed by a reconnect (R5.3). */
+    private val socketReconnects = SocketEnd.entries.associateWith {
+        Counter.builder(SOCKET_RECONNECTS).tag(REASON, it.tag).register(registry)
+    }
+
+    /** Gap-fills from `/v2/orders/recent` by outcome (R5.4). */
+    private val gapFills = GapFillOutcome.entries.associateWith {
+        Counter.builder(SOCKET_GAPFILLS).tag(OUTCOME, it.tag).register(registry)
+    }
+
     fun pollRoundStarted(lateness: Duration) = pollLateness.record(lateness)
+
+    fun socketReconnect(reason: SocketEnd) = socketReconnects.getValue(reason).increment()
+
+    fun gapFill(outcome: GapFillOutcome) = gapFills.getValue(outcome).increment()
+
+    fun socketConnected(connected: Boolean) = socketConnected.set(if (connected) 1 else 0)
+
+    fun socketFrame(frame: SocketFrame) = socketFrames.getValue(frame).increment()
 
     fun polled(outcome: PollOutcome) = polls.getValue(outcome).increment()
 
@@ -67,6 +111,8 @@ class WfmMetrics(private val registry: MeterRegistry) {
     }
 
     fun retryIssued(bucket: Bucket, throttle: Throttle) = retries.getValue(bucket to throttle).increment()
+
+    fun throttled(bucket: Bucket, throttle: Throttle) = throttles.getValue(bucket to throttle).increment()
 
     /** Reads the attempt count back. This is how tests check that a retry really did spend budget. */
     fun requestsIssued(bucket: Bucket): Long = requests.getValue(bucket).count().toLong()
@@ -93,9 +139,15 @@ class WfmMetrics(private val registry: MeterRegistry) {
         const val REQUESTS = "wfm.requests"
         const val WAIT = "wfm.request.wait"
         const val RETRIES = "wfm.retries"
+        const val THROTTLES = "wfm.throttles"
         const val CONCURRENCY = "wfm.concurrency.limit"
         const val POLL_LATENESS = "wfm.poll.lateness"
         const val POLLS = "wfm.polls"
+        const val SOCKET_CONNECTED = "wfm.socket.connected"
+        const val SOCKET_FRAMES = "wfm.socket.frames"
+        const val SOCKET_RECONNECTS = "wfm.socket.reconnects"
+        const val SOCKET_GAPFILLS = "wfm.socket.gapfills"
+        const val REASON = "reason"
         const val OUTCOME = "outcome"
         const val BUCKET = "bucket"
         const val STATUS = "status"
@@ -110,6 +162,58 @@ enum class PollOutcome {
     STALE,
     FAILED,
     THROTTLED,
+    ;
+
+    val tag: String get() = name.lowercase()
+}
+
+/** What one whole socket message held (C5). */
+enum class SocketFrame {
+    /** A new order, recorded or skipped by ingest as any partial observation is. */
+    ORDER,
+
+    /** A subscription reply or a heartbeat. */
+    CONTROL,
+
+    /** Malformed, an unknown route, or an order that would not bind or record (R5.6). */
+    SKIPPED,
+    ;
+
+    val tag: String get() = name.lowercase()
+}
+
+/** Why a socket connection ended (C5, decision 6). */
+enum class SocketEnd {
+    /** It did not connect, or not within the connect deadline. */
+    UNREACHABLE,
+
+    /** Its subscription was not confirmed within the deadline. Heartbeats do not count. */
+    UNCONFIRMED,
+
+    /** The subscription was refused for a reason other than already having it. */
+    REFUSED,
+
+    /** Subscribed, it received nothing for the silence deadline. */
+    SILENT,
+
+    /** The server closed it. */
+    CLOSED,
+
+    /** The transport failed. */
+    FAILED,
+    ;
+
+    val tag: String get() = name.lowercase()
+}
+
+/** What one gap-fill came to (R5.4). */
+enum class GapFillOutcome {
+    FILLED,
+
+    /** The last gap-fill was under a minute ago, or a throttle's `Retry-After` has not passed. */
+    SKIPPED,
+    THROTTLED,
+    FAILED,
     ;
 
     val tag: String get() = name.lowercase()

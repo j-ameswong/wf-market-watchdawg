@@ -12,15 +12,12 @@ import org.springframework.http.client.ClientHttpResponse
  * Bound once from `wfm.platform` and `wfm.crossplay`, and applied the same way on every channel
  * (R1.8, `docs/adr/0002-crossplay-single-global-setting.md`).
  *
- * **C5's socket client must read [crossplay] from here** and put it in the `subscribe/newOrders`
- * payload explicitly (R5.2). The two channels default the opposite way upstream: REST assumes
- * `false`, the socket assumes `true`. So a channel that leaves the value out does not fail. It
- * just watches a different set of orders than the other channel, and the diff classifier then
- * invents a `vanished` for about 7% of ingested orders, which is exactly the event SPEC 2.2 reads
- * as evidence of a sale. Nothing but this note prevents that.
- *
- * TODO(C5): assert it. There is no cross-channel test today because there is no socket to test
- * against — when the socket client lands, pin that both channels quote the same [crossplay].
+ * The socket reads [crossplay] from here and puts it in the `subscribe/newOrders` payload
+ * explicitly (R5.2). The two channels default the opposite way upstream: REST assumes `false`, the
+ * socket assumes `true`. So a channel that leaves the value out does not fail. It just watches a
+ * different set of orders than the other channel, and the diff classifier then invents a
+ * `vanished` for about 7% of ingested orders, which is exactly the event SPEC 2.2 reads as evidence
+ * of a sale. `CrossplayHeaderTest` pins that both channels quote the same value.
  */
 data class WfmContext(val platform: String, val crossplay: Boolean)
 

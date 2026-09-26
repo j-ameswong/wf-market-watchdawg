@@ -28,7 +28,12 @@ class PollSwitchTest {
 
     @Nested
     @SpringBootTest(
-        properties = ["watchdawg.scheduling.enabled=true", "wfm.poll.initial-delay=1h", "wfm.sync.initial-delay=1h"],
+        properties = [
+            "watchdawg.scheduling.enabled=true",
+            "watchdawg.socket.enabled=false",
+            "wfm.poll.initial-delay=1h",
+            "wfm.sync.initial-delay=1h",
+        ],
     )
     @Import(TestcontainersConfiguration::class)
     inner class WithSchedulingOn {

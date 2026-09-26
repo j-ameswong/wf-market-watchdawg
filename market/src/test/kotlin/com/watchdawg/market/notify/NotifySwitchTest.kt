@@ -15,7 +15,7 @@ import kotlin.test.assertTrue
 class NotifySwitchTest {
 
     @Nested
-    @SpringBootTest(properties = [SCHEDULING_ON, NO_POLL, NO_SYNC, NO_DISPATCH])
+    @SpringBootTest(properties = [SCHEDULING_ON, NO_SOCKET, NO_POLL, NO_SYNC, NO_DISPATCH])
     @Import(TestcontainersConfiguration::class)
     inner class WithNoTopic {
         @Autowired lateinit var context: ApplicationContext
@@ -28,7 +28,14 @@ class NotifySwitchTest {
 
     @Nested
     @SpringBootTest(
-        properties = [SCHEDULING_ON, NO_POLL, NO_SYNC, NO_DISPATCH, "watchdawg.notify.topics.default=wd-test-topic"],
+        properties = [
+            SCHEDULING_ON,
+            NO_SOCKET,
+            NO_POLL,
+            NO_SYNC,
+            NO_DISPATCH,
+            "watchdawg.notify.topics.default=wd-test-topic",
+        ],
     )
     @Import(TestcontainersConfiguration::class)
     inner class WithATopic {
@@ -44,6 +51,7 @@ class NotifySwitchTest {
 // These contexts stay cached for the whole run, so long delays keep their schedules from ever
 // calling out or touching rows another test is using.
 private const val SCHEDULING_ON = "watchdawg.scheduling.enabled=true"
+private const val NO_SOCKET = "watchdawg.socket.enabled=false"
 private const val NO_POLL = "wfm.poll.initial-delay=1h"
 private const val NO_SYNC = "wfm.sync.initial-delay=1h"
 private const val NO_DISPATCH = "watchdawg.notify.interval=1h"

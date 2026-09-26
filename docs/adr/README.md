@@ -29,6 +29,7 @@ are the original decision dates, not the dates the records were written.
 | [0019](0019-long-retry-after-surfaces-to-the-caller.md) | One retry, and a long `Retry-After` surfaces to the caller | accepted | 2026-09-09 |
 | [0020](0020-storage-policies-in-one-repeatable-migration.md) | Storage policies are declared in one repeatable migration | accepted | 2026-09-24 |
 | [0021](0021-limiter-owns-the-ceiling-poll-loop-owns-freshness.md) | The limiter owns the request ceiling; the poll loop owns freshness | accepted | 2026-09-25 |
+| [0022](0022-socket-records-every-items-new-orders.md) | The socket records every item's new orders | accepted | 2026-09-26 |
 
 Decisions scoped to a single capability's implementation are recorded in that capability's plan:
 `tasks/plan.md` for the capability in progress, `tasks/archive/` for finished ones. A decision

@@ -19,6 +19,7 @@ import org.springframework.web.client.RestClient
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import java.util.concurrent.TimeUnit.SECONDS
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -96,6 +97,34 @@ class WfmMetricsTest {
     }
 
     @Test
+    fun `a throttle is counted even when it surfaces without a retry`() {
+        val registry = SimpleMeterRegistry()
+        val metrics = WfmMetrics(registry)
+        val limiter = WfmRateLimiter(props.limits, metrics)
+        val builder = wfmRestClient.mutate().requestInterceptors { chain ->
+            chain.replaceAll {
+                if (it is WfmRateLimitInterceptor) {
+                    WfmRateLimitInterceptor(limiter, metrics, props.limits.maxRetryAfter)
+                } else {
+                    it
+                }
+            }
+        }
+        val server = MockRestServiceServer.bindTo(builder).build()
+        // Over wfm.limits.max-retry-after, so it surfaces at once (ADR-0019).
+        server.expect(requestTo(VERSIONS)).andRespond(withTooManyRequests().header(RETRY_AFTER, "300"))
+
+        assertFailsWith<RateLimitedException> { WfmClient(builder.build()).getVersions() }
+
+        assertEquals(
+            1.0,
+            registry.find("wfm.throttles").tag("bucket", "public").tag("status", "429").counter()?.count(),
+        )
+        assertEquals(0.0, registry.find("wfm.retries").tag("bucket", "public").tag("status", "429").counter()?.count())
+        server.verify()
+    }
+
+    @Test
     fun `the concurrency cap is a gauge, so a 509 leaves a visible trace`() {
         val registry = SimpleMeterRegistry()
         val limiter = WfmRateLimiter(props.limits, WfmMetrics(registry))
@@ -123,7 +152,34 @@ class WfmMetricsTest {
                     contextRegistry.find("wfm.retries").tag("bucket", bucket).tag("status", status).counter(),
                     "wfm.retries is not registered for '$bucket'/'$status' until something is refused",
                 )
+                assertNotNull(
+                    contextRegistry.find("wfm.throttles").tag("bucket", bucket).tag("status", status).counter(),
+                    "wfm.throttles is not registered for '$bucket'/'$status' until something is refused",
+                )
             }
+        }
+    }
+
+    @Test
+    fun `the socket's meters are registered from startup, with the socket off`() {
+        assertEquals(0.0, contextRegistry.find("wfm.socket.connected").gauge()?.value())
+        listOf("order", "control", "skipped").forEach { outcome ->
+            assertNotNull(
+                contextRegistry.find("wfm.socket.frames").tag("outcome", outcome).counter(),
+                "wfm.socket.frames is not registered for '$outcome' until a message arrives",
+            )
+        }
+        listOf("unreachable", "unconfirmed", "refused", "silent", "closed", "failed").forEach { reason ->
+            assertNotNull(
+                contextRegistry.find("wfm.socket.reconnects").tag("reason", reason).counter(),
+                "wfm.socket.reconnects is not registered for '$reason' until a connection ends",
+            )
+        }
+        listOf("filled", "skipped", "throttled", "failed").forEach { outcome ->
+            assertNotNull(
+                contextRegistry.find("wfm.socket.gapfills").tag("outcome", outcome).counter(),
+                "wfm.socket.gapfills is not registered for '$outcome' until a gap-fill runs",
+            )
         }
     }
 

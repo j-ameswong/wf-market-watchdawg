@@ -74,6 +74,14 @@ class SignalStore(private val jdbc: NamedParameterJdbcTemplate) {
             .addValue("seenAt", Timestamp.from(seenAt)),
     ) { rs, _ -> rs.getLong(1) }.isNotEmpty()
 
+    /**
+     * Waits for the one admission lock and holds it until the caller's transaction ends (decision
+     * 4). Taking it again in the same transaction returns at once.
+     */
+    fun lockAdmission() {
+        jdbc.jdbcTemplate.execute("select pg_advisory_xact_lock($ADMISSION_LOCK)")
+    }
+
     fun exists(dedupKey: String): Boolean = jdbc.queryForObject(
         "select exists (select 1 from signal where dedup_key = :dedupKey)",
         MapSqlParameterSource("dedupKey", dedupKey),
@@ -166,4 +174,9 @@ class SignalStore(private val jdbc: NamedParameterJdbcTemplate) {
         seenAt = getTimestamp("seen_at").toInstant(),
         attempts = getInt("attempts"),
     )
+
+    companion object {
+        /** The admission lock's key: any constant no other advisory lock in the database uses. */
+        const val ADMISSION_LOCK = 9_452_001L
+    }
 }

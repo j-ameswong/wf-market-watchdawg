@@ -103,8 +103,9 @@ otherwise.
 > **`mod_rank: 3`** here. The v2 `Item` model has a `maxCharges` field, so `mod_rank` might carry
 > charges for them. The live v2 catalog (`/v2/items`, 2026-09-24) lists `khra` and `vome` with
 > `maxRank: 3` and carries `maxCharges` on no item at all, and `khra`'s item page
-> (`/v2/item/khra`) agrees. That makes `mod_rank` → `rank` consistent at catalog level. What a v2 order for a requiem mod carries is still unconfirmed
-> (SPEC §10, question 1). Until it is, do not map `mod_rank` → `rank` without checking the item.
+> (`/v2/item/khra`) agrees, and every order in a captured `/v2/orders/item/khra` book
+> (2026-09-25) carries `rank` 0, 2 or 3 and never `charges`. So `mod_rank` → `rank` holds for
+> requiem mods; SPEC R7.5 still makes the mapping conditional on the catalog.
 
 ## Natural key
 

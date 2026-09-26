@@ -1,6 +1,6 @@
 # Tasks: correct the foundation, then order-book ingest (C4)
 
-Plan: `tasks/plan.md`. Requirement ids refer to `SPEC.md` §4. Each task lists its acceptance
+Plan: `tasks/archive/c4-plan.md`. Requirement ids refer to `SPEC.md` §4. Each task lists its acceptance
 checks and nothing else; how a check is met lives in the code and its tests.
 
 ## Foundation
@@ -79,4 +79,4 @@ checks and nothing else; how a check is met lives in the code and its tests.
 ## Checkpoint
 - [x] `mbuild` green under several seeds — 139 tests
 - [x] `SPEC.md` status and `CHANGELOG.md` updated
-- [ ] Review with human
+- [x] Review with human — merged as PR #4, 2026-09-26

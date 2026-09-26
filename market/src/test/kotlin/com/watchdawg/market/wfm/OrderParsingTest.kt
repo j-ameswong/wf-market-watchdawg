@@ -41,7 +41,7 @@ class OrderParsingTest {
         val book = orders("khra")
 
         assertEquals(setOf(0, 2, 3), book.map { it.rank }.toSet())
-        assertTrue(book.all { it.charges == null }, "SPEC 10 Q1: requiem mods trade by rank")
+        assertTrue(book.all { it.charges == null }, "R7.5: requiem mods trade by rank")
     }
 
     @Test

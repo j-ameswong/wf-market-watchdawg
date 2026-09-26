@@ -69,6 +69,7 @@ class UnderpricedTest {
             cyanStars = Dimension.Absent,
             maxUnitPrice = BigDecimal(12),
             priority = Priority.DEFAULT,
+            cooldown = java.time.Duration.ofHours(1),
             topic = "default",
         )
 

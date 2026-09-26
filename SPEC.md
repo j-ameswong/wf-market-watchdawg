@@ -13,7 +13,7 @@
 > | C5 | Not started. |
 > | C6 | **In progress.** Watched items are polled on a fixed cadence, honouring a throttle's `Retry-After`. |
 > | C7, C8 | Not started. |
-> | C9a | **In progress.** Watches load and are checked at startup; the underpriced rule admits signals. Cooldown and the daily ceiling are next. |
+> | C9a | **In progress.** Watches load and are checked at startup; the underpriced rule admits signals, with dedup, a per-watch cooldown and a daily ceiling. The 72h budget run follows the live checkpoint. |
 > | C9b | Not started. |
 > | C10 | **In progress.** A dispatcher sends pending signals to ntfy; retries and failure handling are next. |
 > | C12 | Not started beyond the meters each capability registers. |

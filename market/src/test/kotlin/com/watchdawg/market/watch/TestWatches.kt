@@ -9,6 +9,7 @@ import com.watchdawg.market.store.upsert
 import com.watchdawg.market.wfm.Order
 import com.watchdawg.market.wfm.OrderOwner
 import com.watchdawg.market.wfm.OrderType
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import org.springframework.transaction.PlatformTransactionManager
 import java.math.BigDecimal
 
@@ -39,7 +40,9 @@ fun ingestWith(
     markets: MarketResolver,
     signals: SignalStore,
     transactions: PlatformTransactionManager,
-) = OrderIngest(store, markets, Alerts(watches, signals), transactions)
+    dailyCeiling: Int = 50,
+    metrics: AlertMetrics = AlertMetrics(SimpleMeterRegistry(), watches),
+) = OrderIngest(store, markets, Alerts(watches, signals, AlertProperties(dailyCeiling), metrics), transactions)
 
 /** A visible Khra order, sold by default, from an owner in game by default. */
 fun khraOrder(

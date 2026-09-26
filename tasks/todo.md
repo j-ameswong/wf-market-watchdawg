@@ -50,14 +50,14 @@ checks and nothing else; how a check is met lives in the code and its tests.
 ## C9a, second half — suppression
 
 ### T4: Dedup, cooldown and the daily ceiling
-- [ ] Reconciling the same book again: no new signal (dedup key).
-- [ ] With the dispatcher paused, one poll holding two equally cheap qualifying orders admits
+- [x] Reconciling the same book again: no new signal (dedup key).
+- [x] With the dispatcher paused, one poll holding two equally cheap qualifying orders admits
       exactly one signal: the cooldown counts pending signals, not only sent ones (R9a.5).
-- [ ] Within a watch's cooldown, a later listing at the same or a higher price is not admitted;
+- [x] Within a watch's cooldown, a later listing at the same or a higher price is not admitted;
       a cheaper one is.
-- [ ] Past the daily ceiling of admissions, a candidate is written as `suppressed`, counted, and
+- [x] Past the daily ceiling of admissions, a candidate is written as `suppressed`, counted, and
       never sent; it is not written again on the next poll (R9a.8).
-- [ ] Signal counts by watch and state are registered at startup (R12.3).
+- [x] Signal counts by watch and state are registered at startup (R12.3).
 
 ## C10 — delivery guarantees
 

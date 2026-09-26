@@ -22,6 +22,9 @@ enum class SignalState(val db: String) {
     }
 }
 
+/** When a signal was seen and at what unit price. */
+data class Admitted(val seenAt: Instant, val unitPrice: BigDecimal)
+
 /** A pending signal with what its notification needs (R10.4). */
 data class Outgoing(
     val id: Long,
@@ -70,6 +73,37 @@ class SignalStore(private val jdbc: NamedParameterJdbcTemplate) {
             .addValue("state", state.db)
             .addValue("seenAt", Timestamp.from(seenAt)),
     ) { rs, _ -> rs.getLong(1) }.isNotEmpty()
+
+    fun exists(dedupKey: String): Boolean = jdbc.queryForObject(
+        "select exists (select 1 from signal where dedup_key = :dedupKey)",
+        MapSqlParameterSource("dedupKey", dedupKey),
+        Boolean::class.java,
+    ) == true
+
+    /** The last signal admitted for [watch], pending or sent: what its cooldown is counted from. */
+    fun lastAdmitted(watch: String): Admitted? = jdbc.query(
+        """
+        select seen_at, unit_price from signal
+        where watch = :watch and state in ('pending', 'sent')
+        order by seen_at desc, id desc
+        limit 1
+        """,
+        MapSqlParameterSource("watch", watch),
+    ) { rs, _ -> Admitted(rs.getTimestamp(1).toInstant(), rs.getBigDecimal(2)) }.singleOrNull()
+
+    /**
+     * Signals seen in [from, until) that were admitted to be sent, across all watches: what the
+     * daily ceiling counts (R9a.8). A failed signal was admitted, so it counts; a suppressed one
+     * was not.
+     */
+    fun admittedBetween(from: Instant, until: Instant): Int = jdbc.queryForObject(
+        """
+        select count(*) from signal
+        where state in ('pending', 'sent', 'failed') and seen_at >= :from and seen_at < :until
+        """,
+        MapSqlParameterSource("from", Timestamp.from(from)).addValue("until", Timestamp.from(until)),
+        Int::class.java,
+    )!!
 
     /** Pending signals whose next attempt is due at [now], oldest first. */
     fun due(now: Instant, limit: Int): List<Outgoing> = jdbc.query(

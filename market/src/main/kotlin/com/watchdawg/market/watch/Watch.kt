@@ -4,6 +4,7 @@ import com.watchdawg.market.store.ItemRecord
 import com.watchdawg.market.store.MarketKey
 import org.springframework.boot.context.properties.ConfigurationProperties
 import java.math.BigDecimal
+import java.time.Duration
 
 /**
  * The watches, as `watches.yaml` declares them (R9a.1). Nothing here is checked against the
@@ -27,6 +28,8 @@ data class WatchEntry(
     /** Platinum a unit. A sell listing at or below it qualifies. */
     val maxUnitPrice: BigDecimal,
     val priority: Priority = Priority.DEFAULT,
+    /** After a signal is admitted, only a cheaper listing is admitted for this long (R9a.5). */
+    val cooldown: Duration = Duration.ofHours(1),
     /** A logical topic. The real ntfy topic comes from the environment, never from this file (R10.6). */
     val topic: String = "default",
 )
@@ -71,6 +74,7 @@ data class Watch(
     val cyanStars: Dimension<Int>,
     val maxUnitPrice: BigDecimal,
     val priority: Priority,
+    val cooldown: Duration,
     val topic: String,
 ) {
     /** Whether a market of this watch's item is one the watch selects. */
@@ -120,6 +124,7 @@ private fun WatchEntry.resolve(item: ItemRecord): Watch {
     if (name.isBlank()) throw InvalidWatchException("a watch on ${item.slug} has no name")
     if (maxUnitPrice.signum() <= 0) fail("max-unit-price must be above zero, not $maxUnitPrice")
     if (topic.isBlank()) fail("topic is blank")
+    if (cooldown.isNegative) fail("cooldown is negative")
 
     val chargesKnown = item.maxCharges != null || item.detailSyncedAt != null
     return Watch(
@@ -142,6 +147,7 @@ private fun WatchEntry.resolve(item: ItemRecord): Watch {
         cyanStars = numeric("cyan-stars", cyanStars, item.maxCyanStars, ::fail),
         maxUnitPrice = maxUnitPrice,
         priority = priority,
+        cooldown = cooldown,
         topic = topic,
     )
 }

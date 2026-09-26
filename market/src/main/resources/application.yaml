@@ -22,6 +22,10 @@ management:
 watchdawg:
   scheduling:
     enabled: true
+  # C9a: at most this many signals a UTC day, across all watches, may be sent (R9a.8). The rest
+  # are recorded as suppressed. A ceiling, not a target: a quiet day is not a defect.
+  alerts:
+    daily-ceiling: 50
   # C10. The real topics are credentials: set WATCHDAWG_NOTIFY_TOPICS_<NAME> in the environment
   # for each logical topic the watches name (R10.6). With none set, nothing is sent and signals
   # wait in the outbox.

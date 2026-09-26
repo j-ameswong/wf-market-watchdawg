@@ -107,7 +107,8 @@ The jar excludes `developmentOnly` deps, so it starts no Postgres: pass `SPRING_
   `crossplay` explicitly**: REST and the socket default to opposite values, and mixing them
   fabricates `vanished` on ~7% of orders ([ADR-0002](docs/adr/0002-crossplay-single-global-setting.md)).
   `wfm.platform` and `wfm.crossplay` have no defaults, so startup fails if either is unset.
-- Meter names live in `WfmMetrics` and are registered at startup, so a quiet service reads as zero
+- Meter names live in `WfmMetrics` (transport and polling) and `AlertMetrics` (signals and
+  deliveries), and are registered at startup, so a quiet service reads as zero
   rather than a missing series. Renaming one breaks whatever dashboard watches it. Actuator exposes `health,metrics` and nothing else;
   `HttpSurfaceTest` fails on a controller or a wider exposure list.
 
@@ -168,6 +169,9 @@ The jar excludes `developmentOnly` deps, so it starts no Postgres: pass `SPRING_
 - The rule reads the whole reconciled book, not its events: events say nothing about online status.
   `Alerts` runs inside `reconcileBook`'s transaction, so a signal rolls back with its book (R9a.7).
 - `underpriced()` is pure; keep it free of Spring, like `reconcile()`.
+- Admission is dedup key (watch, order, unit price, whatever the state), then the watch's cooldown
+  over its last **pending or sent** signal, then the daily ceiling over signals **seen** that UTC
+  day. Cooldown and ceiling count `seen_at`, the book's request time, not the clock at insert.
 - Only a 2xx marks a signal sent. With no topic mapped, the dispatcher is not scheduled.
 
 ### Polling

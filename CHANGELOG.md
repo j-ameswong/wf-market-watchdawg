@@ -19,6 +19,10 @@ design rationale in [`docs/adr/`](docs/adr/README.md).
   - A dispatcher posts pending signals to ntfy as JSON, the topic in the body, and marks one sent
     only on a 2xx. The push carries the item, its dimensions, the unit price and lot, when the
     listing was seen and a link to the item page. It runs only once a topic is mapped.
+  - Suppression: one listing at one price is admitted once; within a watch's `cooldown` (1 hour
+    by default) only a cheaper listing is admitted, counting pending signals as well as sent ones;
+    past `watchdawg.alerts.daily-ceiling` (50) a UTC day, a candidate is recorded as `suppressed`
+    and never sent. `watchdawg.signals` counts signals by watch and state.
 - **C4 — Order-book ingest.**
   - `wfm_order` holds every order's current state; `order_book` the latest book per item.
   - Reconciling a full book records `appeared`, `price_changed`, `quantity_changed` and

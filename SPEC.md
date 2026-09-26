@@ -11,11 +11,11 @@
 > | C3 | **Built and reviewed.** The item detail sweep is off until a rule or query reads its fields. |
 > | C4 | **Built and reviewed.** |
 > | C5 | Not started. |
-> | C6 | **Built, not yet run live.** Watched items are polled on a fixed cadence, honouring a throttle's `Retry-After`. |
+> | C6 | **Built and reviewed.** Watched items are polled on a fixed cadence, honouring a throttle's `Retry-After`. |
 > | C7, C8 | Not started. |
-> | C9a | **In progress.** Watches load and are checked at startup; the underpriced rule admits signals, with dedup, a per-watch cooldown and a daily ceiling. The 72h budget run follows the live checkpoint. |
+> | C9a | **Built and reviewed** for the underpriced rule, with dedup, a per-watch cooldown and a daily ceiling. The spread and crossing rules and the 72h budget run are still to do. |
 > | C9b | Not started. |
-> | C10 | **Built, not yet run live.** An outbox and one dispatcher send to ntfy, retrying with backoff to a cap, across restarts. |
+> | C10 | **Built and reviewed**, and delivered a real push on 2026-09-26. An outbox and one dispatcher send to ntfy, retrying with backoff to a cap, across restarts. |
 > | C12 | Not started beyond the meters each capability registers. |
 >
 > Grounded in `docs/v2/` (API `v0.25.0`, WebSocket `v0.13.0`), `docs/v1.yml`, and the live-verified

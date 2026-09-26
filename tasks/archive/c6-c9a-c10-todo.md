@@ -1,10 +1,10 @@
 # Tasks: one alert, end to end, by polling (C6, C9a, C10)
 
-Plan: `tasks/plan.md`. Requirement ids refer to `SPEC.md` §4. Each task lists its acceptance
+Plan: `tasks/archive/c6-c9a-c10-plan.md`. Requirement ids refer to `SPEC.md` §4. Each task lists its acceptance
 checks and nothing else; how a check is met lives in the code and its tests.
 
 ## Before any code
-- [x] The author has confirmed or changed the nine decisions in `tasks/plan.md` (2026-09-26).
+- [x] The author has confirmed or changed the nine decisions in the plan (2026-09-26).
 - [x] `SPEC.md` §10 questions 4–6 record the answers, and C9a/C10 requirements match them.
 
 ## C9a, first half — watches
@@ -76,12 +76,12 @@ checks and nothing else; how a check is met lives in the code and its tests.
 ## Live checkpoint
 
 ### T6: One real alert
-- [ ] One real push arrives on the operator's phone, from a real listing.
-- [ ] A repeat within cooldown is suppressed.
-- [ ] Killing the process between a signal and its send still delivers it on restart.
-- [ ] `git grep` for the real topic finds nothing.
+- [x] One real push arrives on the operator's phone, from a real listing.
+- [x] A repeat within cooldown is suppressed.
+- [x] Killing the process between a signal and its send still delivers it on restart.
+- [x] `git grep` for the real topic finds nothing.
 
 ## Checkpoint
-- [ ] `mbuild` green under several seeds
-- [ ] `SPEC.md` status, `CLAUDE.md` and `CHANGELOG.md` updated
-- [ ] Review with human
+- [x] `mbuild` green under several seeds — 196 tests
+- [x] `SPEC.md` status, `CLAUDE.md` and `CHANGELOG.md` updated
+- [x] Review with human — T6 passed on the author's phone, 2026-09-26; merged as PR #8

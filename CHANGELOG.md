@@ -7,7 +7,7 @@ design rationale in [`docs/adr/`](docs/adr/README.md).
 
 ### Added
 
-- **One alert end to end, by polling (C6, C9a, C10), in progress.**
+- **One alert end to end, by polling (C6, C9a, C10).**
   - `watches.yaml` declares the watches: an item, each of its dimensions as a value or `any`, a
     per-unit price threshold, an ntfy priority and a logical topic. A bad watch fails startup
     naming it; a missing slug first gets one catalog refresh.

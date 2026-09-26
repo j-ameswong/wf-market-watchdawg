@@ -53,7 +53,7 @@ back to an upstream default.
 
 ### Negative
 - Changing the setting later reinterprets every subsequent row. For orders this is recoverable
-  (`seller_platform` is on every row); for statistics it is not, which is why crossplay is part of
+  (`owner_platform` is on every row); for statistics it is not, which is why crossplay is part of
   `item_stat`'s identity ([ADR-0010](0010-item-stat-market-keyed-two-series.md)).
 
 ### Risks

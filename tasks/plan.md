@@ -1,172 +1,52 @@
-# Implementation Plan: C3 — Catalog & market dimension
+# Plan: correct the foundation, then order-book ingest (C4)
 
-> Source: `SPEC.md` §4 "C3 — Catalog & market dimension" (R3.1–R3.5), with §2.3 (an item is many
-> order books), §3.2 (data model) and [ADR-0003](../docs/adr/0003-market-is-a-mutually-tradable-pool.md).
-> Drafted 2026-09-24.
+> Source: the 2026-09-25 project review, and the author's answers to it the same day. Scope: the
+> review's first deliverable, plus C4 without a scheduler. Task bodies and acceptance checks are in
+> `tasks/todo.md`.
 
-## Overview
+## Scope
 
-C3 turns the item catalog into something downstream capabilities can key on. It depends on C1
-(the governed `/v2/items` call) and C2 (storage and the test harness), and C4's order ingest, C7's
-statistics and C10's notifications all build on it.
+1. **The limiter paces actual starts.** A caller takes its connection slot before its turn, and
+   the request is metered when it starts.
+2. **The WFM transport covers the WFM clients only.** Pacing, context headers and the error
+   boundary are applied to the v2 and v1 clients by name, not to every `RestClient.Builder`, so
+   C10's ntfy client will not inherit them.
+3. **The detail sweep is off by default.** No rule or query reads its fields yet.
+4. **The spec says what the service can actually observe, and in what order it is built.**
+   These changes are listed under T4 in `tasks/todo.md`.
+5. **C4 ingest.** A full book is reconciled against stored state; a partial observation (`ws`,
+   `recent`) can only add orders. Quotes carry the minimal contract. Nothing calls either path on
+   a schedule yet, so C4 spends no request budget.
 
-Two halves:
+## Out of scope
 
-- **Catalog.** `item` carries every field the later capabilities read: subtype dimensions and
-  their maxima, tradability, rarity, and the English display name and icon that notifications
-  need. It records when this service last synced a row, not an upstream timestamp that v2 does
-  not have.
-- **Market dimension.** A `market` row per `(item, platform, subtype, rank, charges, amberStars,
-  cyanStars)` tuple, resolved idempotently and safely under concurrency. No-subtype dimensions
-  compare equal. The fact tables C2 created reference it.
+The poll loop, the WebSocket, rules and notifications (the next milestone). The Kafka dependency
+removal waits for a planned dependency update, because it needs `nix/deps.json` regenerated on a
+machine with Nix.
 
-## Assumptions
+## Decisions (author, 2026-09-25)
 
-1. **`/v2/items` could not be captured for this plan.** The environment's egress policy refuses
-   `api.warframe.market`. The test fixture is built from the `Item` model in
-   `docs/v2/data-models.mdx`, with dimension values taken from `docs/v1-statistics.md`'s
-   observations, and is labelled as such. The spec's live acceptance bullet ("~3.8k rows") is a
-   manual check for a machine that can reach the API (Decision 1).
-2. **Every R3.1 field is optional in the payload.** The docs flag all of them
-   "optional/contextual", so an absent field binds as null, never as a default that looks like
-   data. `vaulted` keeps its existing `false` default.
-3. **`CollectionSync` and `CollectionSyncScheduler` are not edited** (R3.5). Only `ItemSync`, its
-   DTO and its record change.
-4. **No new dependency.**
+- Best prices are **per unit** (`platinum / perTrade`) and **numeric**. The ayatan capture shows
+  `platinum` prices a lot of `perTrade` units.
+- `order_event` gains the order's **side** and **lot size**, so the log alone reconstructs each
+  market's visible book at poll resolution.
+- The quote contract is the minimum: best bid and ask over all visible orders and over online
+  owners only, order counts, and online counts. Depth and total quantities wait for a consumer.
 
-## Architecture Decisions
+## Captures (2026-09-25)
 
-- **The market's platform comes from `WfmContext`, not from the caller.** `MarketKey` has no
-  platform field; the resolver stamps `WfmContext.platform`. A caller therefore cannot key a book
-  by the *seller's* platform, which is the mistake ADR-0003 rules out (Decision 5).
-- **Resolution is select, then insert-if-absent in its own transaction, then select.** Nothing is
-  cached. A market row is an idempotent fact that outlives a rolled-back ingest harmlessly, and
-  committing it at once means two ingests meeting the same new tuple never wait on each other's
-  locks (Decision 4).
-- **Refresh is forced once after the schema change.** The migration that adds the catalog columns
-  deletes the stored `items` hash, so the next tick refetches and fills them. Otherwise hash
-  gating would leave existing rows without names or subtypes until upstream happened to change
-  (Decision 3).
+`/v2/orders/item/{serration,khra,ayatan_anasa_sculpture}` and `/v2/orders/recent`, crossplay on.
+They settled these before any field was committed to:
 
-## Dependency Graph
+- **Requiem mods trade by rank.** `khra` orders carry `rank` 0, 2 and 3 and never `charges`
+  (SPEC §10 Q1).
+- **`perTrade` is a lot size.** Ayatan sells at `perTrade` 6 have a median of 60 against 10 at 1.
+- **Every order carries its dimensions explicitly.** Ayatan orders carry both star counts,
+  including `0`, and serration orders carry `subtype` and `rank`.
+- **Real books cross unless offline owners are left out.** Per unit, the ayatan (2,2) market's
+  best bid is 7 against a best ask of 6; among online and in-game owners it is 7 against 7.
+  Offline owners' orders stay listed for up to 48h. Rules comparing bid and ask should read the
+  online pair (SPEC §11).
 
-```
-T1 catalog columns + synced_at (R3.1, R3.2)
-     │
-T2 hash-gated refresh, end to end (R3.5)
-     │
-T3 market dimension + resolver (R3.3, R3.4)
-     │
-T4 fact tables reference markets
-
-T5 detail fields from /v2/item/{slug} (R3.1)   ◄── added after the live run; needs only T1
-```
-
-## Task List
-
-### Phase 1 — The catalog
-- [x] T1: The catalog carries what downstream needs
-- [x] T2: Catalog refresh stays hash-gated, end to end
-
-**Checkpoint A** — a refresh fills every R3.1 column and stamps `synced_at`; an unchanged hash
-fetches nothing. *Met: 80 tests.*
-
-### Phase 2 — The market dimension
-- [x] T3: Markets resolve idempotently and safely under concurrency
-- [x] T4: The fact tables reference markets
-
-**Checkpoint B** — C3 acceptance met, apart from the live catalog run; C4 may begin once that run is
-recorded. *Met in the suite: 90 tests. The live run and human review are open.*
-
-### Phase 3 — What the list leaves out
-- [x] T5: Fill `tradable`, `rarity` and `max_charges` from `/v2/item/{slug}`
-
-**Checkpoint C** — the detail sweep fills every catalog item within its budget and never undoes a
-list refresh.
-
-Full task bodies with acceptance criteria live in `tasks/todo.md`.
-
-## Risks and Mitigations
-
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| The real `/v2/items` omits some R3.1 fields (`tradable`, `rarity`, the star maxima) | Med — the columns stay null for every row | *Happened:* the list never carries `tradable`, `rarity` or `maxCharges`. With the author's approval, the detail sweep fills them from `/v2/item/{slug}` (Decision 8) |
-| The hand-built fixture drifts from the real payload | Med | *Happened, then closed:* the capture showed `serration` has subtypes, `khra` has `maxRank` rather than `maxCharges`, and nothing carries `tradable` or `rarity`. The fixture is now a trimmed capture |
-| Existing rows keep empty new columns because the items hash has not changed upstream | **High** — silent, and invisible until C10 renders a nameless notification | The migration deletes the stored hash; a migration test asserts it |
-| `NULL` dimensions compare distinct and every no-subtype order creates a new market | **High** — R3.4's whole point | The unique constraint is `nulls not distinct`; tested with an all-null tuple resolved twice |
-| An order arrives for an item the catalog does not have yet | Med | The foreign key rejects it with a typed exception; C4 decides whether to skip or trigger a resync |
-| `TRUNCATE … CASCADE` from `market` does not empty compressed rows in `order_event` (verified on 2.30.1) | Low — only a bulk reset truncates | The test reset lists every table explicitly rather than relying on cascade; T4 pins that with a test |
-
-## Resolved Decisions
-
-Decided 2026-09-24 while planning; all approved by the project author at Checkpoint B, 2026-09-25.
-
-1. **The fixture is documentation-shaped, and the live acceptance is manual.** *Superseded
-   2026-09-24: the author ran the live check and supplied a capture, which replaced the fixture.* The environment
-   that built C3 cannot reach the API. `v2-items.json` exercises every dimension with values
-   consistent with `docs/v1-statistics.md` (serration ranks 0–10, requiem mods with charges,
-   relics with refinements, ayatan stars). Its test KDoc says it is not a capture.
-2. **Absent means null.** `tradable`, `bulk_tradable`, `rarity`, `max_rank`, `max_charges`,
-   `max_amber_stars` and `max_cyan_stars` are nullable. Null says "the catalog did not say",
-   which R7.8 needs for dimensions and which is honest for the flags.
-3. **`synced_at` is stamped by the database.** The upsert writes `now()`, the refresh
-   transaction's start time, so every row one refresh touched carries the same value. That also
-   makes a row missing from the latest refresh visible: its `synced_at` is older. Rows left at the
-   epoch by the old `updated_at` binding become null ("never synced by this schema"), and the
-   stored `items` hash is deleted so the next tick refetches.
-4. **No resolver cache.** Test resets truncate `market` with `restart identity`, and ingest
-   transactions can roll back. Either would leave a cached id pointing at the wrong row. One
-   indexed lookup per resolution is cheap at C4's volume; C4 can add a per-batch cache if a
-   profile ever says so.
-5. **`MarketKey` carries no platform.** See Architecture Decisions.
-6. **Unknown items fail loudly.** `market.item_id` references `item`. Resolving a market for an
-   item the catalog lacks throws `UnknownItemException` rather than inventing an item row.
-7. **The fact tables get their foreign keys now.** Verified on 2.30.1: they can be added after
-   compression is enabled, alongside the rollups, and they are enforced on inserts into
-   compressed chunks.
-8. **The detail fields come from `/v2/item/{slug}`, one item at a time.** *Approved by the project
-   author, 2026-09-24 (Open Question 4, option 3):* the API is changing quickly, so the explicit
-   fields are wanted rather than inferring rarity from `tags`, which could stop carrying it. A
-   separate scheduled sweep fetches a batch per interval (30 a minute by default, 0.5 req/s, a
-   full catalog in about two hours). It works through never-fetched items first, then any whose
-   details are older than their last catalog refresh, so a catalog change triggers one re-sweep
-   and nothing more. It does not run inside the catalog refresh, which would hold that transaction
-   open for over half an hour. The list sync stops writing the three columns, so a refresh cannot
-   undo the sweep.
-
-## Open Questions
-
-1. **Which R3.1 fields does the live `/v2/items` carry?** *Answered by the live run,
-   2026-09-24: 3,888 items.* Every item carries `id`, `slug`, `gameRef`, `tags` and `i18n` (English
-   only). Some also carry `maxRank` (1,521), `bulkTradable` (1,017, always `true`), `subtypes` (884),
-   `vaulted` (799, both values), `ducats` (757) and the star maxima (10–11). **`tradable`, `rarity`
-   and `maxCharges` never appear**, so those three columns are null on every row. Rarity is carried
-   as a tag instead (`uncommon`, `rare`, `legendary`, …). What to do with the three columns is open
-   question 4.
-2. ~~Replace the fixture with a capture.~~ **Resolved:** the fixture is now eight entries trimmed
-   unchanged from the author's capture.
-3. **Nix verification.** *Partly answered, 2026-09-25:* the author ran `mflyway info` from the dev
-   shell. Its Flyway CLI is 13.2.0, the app's library 12.4.0; the CLI read all nine migrations
-   from the filesystem and reported every one applied by the app as `Success`, nothing pending,
-   and the repeatable not outdated. `nix build .#market` is still unrun. C3 adds no dependency, so
-   `nix/deps.json` is unaffected.
-4. ~~`tradable`, `rarity` and `max_charges` are never populated.~~ **Resolved:** filled from
-   `/v2/item/{slug}` (Decision 8, T5). The option to drop `tradable` rested on the route summary
-   "Get all tradable items" in `docs/v2/api/manifests.mdx`, which is documentation, not evidence.
-   The `Item` model carrying a `tradable` flag at all suggested some items might not be. The
-   author's full sweep (2026-09-25) found **0 of 3,888** listed items with `tradable: false`, so
-   every item the list carries today is tradable by its own page. The column stays: it is the
-   upstream's explicit statement, and it will show if the list ever starts carrying items that
-   are not.
-5. ~~What does `/v2/item/{slug}` actually return?~~ **Resolved** by the author's captures of
-   `khra`, `serration` and `frost_prime_set` (2026-09-24), now in `fixtures/v2-item/`. All three
-   carry `tradable: true`. The two mods carry `rarity`; the set does not. **None carries
-   `maxCharges`**: `khra`'s item page gives `maxRank: 3`, as the list does. The item page also
-   carries fields R3.1 never asked for: `tradingTax`, `setRoot`/`setParts`, `reqMasteryRank`, and
-   an English `description` and `wikiLink`. The author chose to leave them out for now
-   (2026-09-25).
-6. ~~`max_charges` is null on every row.~~ **Resolved: kept**, by the author's call at Checkpoint
-   B (2026-09-25). The full sweep found no item page carrying `maxCharges`, as the three captures
-   had suggested. The column is nullable, so it costs nothing, and R7.5 names it as the input that
-   separates a requiem mod's charges from its rank. C4's first order capture for a requiem mod
-   shows whether v2 models charges at all; if it does not, a later migration can drop the column.
+The committed fixtures are those captures with trader identity replaced (SPEC §9); see
+`bruno/scrub-orders.mjs`.

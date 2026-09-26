@@ -61,7 +61,7 @@ used as a key.
 ### Negative
 - A third population now exists in the warehouse: order books describe a PC+crossplay pool
   ([ADR-0001](0001-pc-observer-context-with-crossplay.md)) while statistics describe something
-  else again. `seller_platform` and `item_stat.crossplay` exist to keep them separable, but they
+  else again. `owner_platform` and `item_stat.crossplay` exist to keep them separable, but they
   only help a query author who knows to use them.
 
 ### Risks

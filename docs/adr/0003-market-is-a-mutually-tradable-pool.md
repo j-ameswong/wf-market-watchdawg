@@ -16,7 +16,7 @@ dimension tuple as the seller's platform or as the observer's.
 
 A **market** is the tuple `(item, platform, subtype, rank, charges, amberStars, cyanStars)`, where
 `platform` is the **observer's context** (`pc`), not the counterparty's. The counterparty's
-platform is an attribute of the order — `wfm_order.seller_platform` — not a dimension of the book.
+platform is an attribute of the order — `wfm_order.owner_platform` — not a dimension of the book.
 
 ## Alternatives Considered
 

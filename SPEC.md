@@ -8,7 +8,8 @@
 > | --- | --- |
 > | C1 | **Built.** R1.1–R1.8 each map to a named passing test; R12.1's per-bucket meters ship with it. |
 > | C2 | **Built and reviewed.** R2.1–R2.7 each map to a named passing test or a recorded manual check. |
-> | C3 | **Built and reviewed.** Three acceptance bullets map to named tests; the fourth, and the detail sweep, to live runs recorded in `tasks/todo.md`. |
+> | C3 | **Built and reviewed.** Three acceptance bullets map to named tests; the fourth, and the detail sweep, to live runs recorded in `tasks/archive/c3-todo.md`. |
+> | C4 | **In progress**, with corrections to C1 from the 2026-09-25 review. See `tasks/plan.md`. |
 >
 > Grounded in `docs/v2/` (API `v0.25.0`, WebSocket `v0.13.0`), `docs/v1.yml`, and the live-verified
 > route table in `bruno/README.md`. This document describes the system to be built; the reasoning
@@ -45,10 +46,10 @@ These are properties of the upstream API, not choices. They bound every module b
 
 Two properties of the upstream API set the shape of the design:
 
-- **`wss://ws.warframe.market/socket` exposes `@wfm|cmd/subscribe/newOrders`** (`docs/v2/websockets/subscriptions.mdx`) — an unauthenticated live feed of every newly posted visible order across the whole market, payload is the full `Order` model, for **zero REST budget**.
-- **`/v2/orders/recent` is server-cached with a 1m refresh** — 500 orders from the last 4h for **1 req/min**. Polling faster buys nothing.
+- **`wss://ws.warframe.market/socket` exposes `@wfm|cmd/subscribe/newOrders`** (`docs/v2/websockets/subscriptions.mdx`) — an unauthenticated live feed of newly posted visible orders across the whole market, payload is the full `Order` model, for **zero REST budget**. It carries new orders only: never edits, never removals.
+- **`/v2/orders/recent` is server-cached with a 1m refresh** — at most 500 orders created in the last 4h, from users online at the time, for **1 req/min**. Polling faster buys nothing.
 
-Whole-market new-order coverage therefore costs one socket plus ~1,440 req/day, leaving the REST budget for order-book depth. Measured against ~3.8k items (`bruno/v2/manifests/list-items.bru`):
+New-order coverage therefore costs one socket plus ~1,440 req/day, leaving the REST budget for order-book depth. It is **best effort**: an outage loses whatever the 500-order, online-only window no longer holds, and a full book poll recovers current state but not the changes in between. Measured against ~3.8k items (`bruno/v2/manifests/list-items.bru`):
 
 | Consumer | Cadence | req/day | sustained |
 | --- | --- | --- | --- |
@@ -61,7 +62,7 @@ Whole-market new-order coverage therefore costs one socket plus ~1,440 req/day, 
 | **v2 bucket total** | | **~112,500** | **~1.3/s** |
 | v1 `/auctions/search` (~220 weapon slugs) | 2h sweep | 2,640 | separate bucket |
 
-**~1.3 req/s against a 3 req/s ceiling.** No capability in this spec requires more. The detail sweep adds 0.5 req/s for about two hours after each catalog change, so the peak is ~1.8 req/s against the 2 req/s configured `public` budget. The poll scheduler (C6) has to leave room for it.
+**~1.3 req/s against a 3 req/s ceiling.** No capability in this spec requires more. The order-book row is the long-term coverage target, not the first deliverable: C6 starts with a fixed cadence over watched items only. The detail sweep adds 0.5 req/s for about two hours after each catalog change, so the peak is ~1.8 req/s against the 2 req/s configured `public` budget. The poll scheduler (C6) has to leave room for it.
 
 ### 2.2 Trade data exists, but only aggregated
 
@@ -79,7 +80,7 @@ Consequences:
 
 `Order` carries `subtype`, `rank`, `charges`, `amberStars`, `cyanStars`, and `/top` exposes all five as filters. A price without its dimension tuple is meaningless. A **market** is the unique tuple `(item, platform, subtype, rank, charges, amberStars, cyanStars)`.
 
-`platform` in that tuple is the **observer's context** (`pc`), not the counterparty's. A market is the set of mutually-tradable orders — that is the thing whose best bid and best ask mean anything — and with crossplay on, a PC operator can trade with every order returned (§2.7). The counterparty's platform is an **attribute of the order** (`wfm_order.seller_platform`), not a dimension of the book. See [ADR-0003](docs/adr/0003-market-is-a-mutually-tradable-pool.md).
+`platform` in that tuple is the **observer's context** (`pc`), not the counterparty's. A market is the set of mutually-tradable orders — that is the thing whose best bid and best ask mean anything — and with crossplay on, a PC operator can trade with every order returned (§2.7). The counterparty's platform is an **attribute of the order** (`wfm_order.owner_platform`), not a dimension of the book. See [ADR-0003](docs/adr/0003-market-is-a-mutually-tradable-pool.md).
 
 ### 2.4 Contracts exist only in v1
 
@@ -143,7 +144,7 @@ flowchart LR
     direction TB
     LIM{{"WfmRateLimiter<br/>bucket A: 2 req/s<br/>bucket B: 12 req/min"}}
     SOCK["WfmSocketClient<br/>reconnect + gap-fill"]
-    SCHED["PollScheduler<br/>decides what budget buys"]
+    SCHED["PollScheduler<br/>fixed cadence over watches"]
     CAT["ItemSync (existing)"]
     ING["OrderIngestService<br/>diff · classify · record"]
     RULES["RuleEngine<br/>order-scoped + book-scoped"]
@@ -169,14 +170,14 @@ flowchart LR
   SOCK ==>|"source=ws"| ING
   SOCK -.->|"on reconnect"| REC
   REC -->|"1 req/min"| LIM
-  BOOK -->|"tiered · 1.24 req/s"| LIM
+  BOOK -->|"watched items"| LIM
   VER --> LIM
   STAT --> LIM
   AUC -->|"bucket B"| LIM
   LIM --> SCHED
   LIM --> CAT
   SCHED ==>|"source=book"| ING
-  SOCK -.->|"activity promotes priority"| SCHED
+  SOCK -.->|"activity promotes priority (deferred)"| SCHED
 
   CAT --> ITEM
   ITEM --> MKT
@@ -239,27 +240,35 @@ erDiagram
   wfm_order {
     text id PK "warframe.market order id"
     bigint market_id FK
-    int platinum
+    text type "buy|sell"
+    int platinum "price of one lot"
+    int per_trade "lot size"
     int quantity
-    text seller_platform "pc|ps4|xbox|mobile — from user.platform"
+    text owner_platform "pc|ps4|xbox|mobile — from user.platform"
     timestamptz first_seen_at
-    timestamptz last_seen_at
+    timestamptz changed_at "when the current values were observed"
     timestamptz gone_at
   }
   order_event {
     timestamptz observed_at PK "partition column"
     text order_id PK
     text event PK "appeared|price_changed|quantity_changed|vanished"
+    text type "buy|sell"
+    int per_trade "lot size"
     int prev_platinum
     text source "ws|recent|book"
   }
   market_quote {
     bigint market_id PK
     timestamptz observed_at PK "partition column"
-    int best_buy
-    int best_sell
+    numeric best_buy "per unit"
+    numeric best_sell "per unit"
+    numeric best_buy_online "owner online or in game"
+    numeric best_sell_online
     int buy_count
     int sell_count
+    int buy_online_count
+    int sell_online_count
   }
   item_stat {
     bigint market_id FK "same dimensions as orders"
@@ -303,11 +312,12 @@ flowchart TD
   C1 --> C3
   C2 --> C3
   C3 --> C4
-  C4 --> C5
   C4 --> C6
   C4 --> C9A
-  C5 --> C9A
+  C6 --> C9A
   C9A --> C10
+  C4 --> C5
+  C5 -.->|"seconds, not minutes"| C9A
   C1 --> C7
   C3 --> C7
   C1 --> C8
@@ -319,14 +329,14 @@ flowchart TD
   C4 -.-> HIST
 
   classDef spine stroke-width:3px
-  classDef blocked stroke-dasharray: 5 5
-  class C1,C2,C3,C4,C5,C9A,C10 spine
-  class C9B blocked
+  classDef later stroke-dasharray: 5 5
+  class C1,C2,C3,C4,C6,C9A,C10 spine
+  class C7,C8,C9B later
 ```
 
-Thick nodes are the spine — the shortest path to a real push notification. C9b is dashed: it needs C7 *plus* accumulated history before any threshold in it can be chosen honestly.
+Thick nodes are the spine — the shortest path to a real push notification, by polling. Dashed nodes are built when operation shows a need for them. C9b also needs C7 *plus* accumulated history before any threshold in it can be chosen honestly.
 
-### 3.4 Capability table (approved)
+### 3.4 Capability table (approved; sequence amended 2026-09-25)
 
 | id | Capability | Depends on |
 | --- | --- | --- |
@@ -338,16 +348,23 @@ Thick nodes are the spine — the shortest path to a real push notification. C9b
 | **C6** | Poll scheduler | C4 |
 | **C7** | Trade statistics | C1, C3 |
 | **C8** | Contracts / auctions | C1, C2 |
-| **C9a** | Threshold rules | C4, C5 |
+| **C9a** | Threshold rules | C4 (C5 for seconds-level latency) |
 | **C9b** | Baseline rules | C7, C9a, + history |
 | **C10** | Notifications | C9a |
 | **C12** | Observability | cross-cutting |
 
 *There is no C11. The id is retired, not reused, so requirement references stay stable ([ADR-0011](docs/adr/0011-no-query-api-postgres-is-the-read-surface.md)).*
 
-**Build order:** `C1 ∥ C2` → `C3` → `C4` → `C5 ∥ C6` → `C9a` → `C10`. Then `C7`, then `C8`. `C9b` last, once history has accrued. `C12` runs continuously alongside. Acyclic — nothing depends on a later module.
+**Build order**, amended after the 2026-09-25 review so the whole path runs early:
 
-The spine is `C1 → C2 → C3 → C4 → C5 → C9a → C10`: the shortest path to a real push notification. C8 (contracts) is sequenced after that spine proves out ([ADR-0018](docs/adr/0018-contracts-sequenced-after-the-item-spine.md)).
+1. `C1 ∥ C2` → `C3` → `C4`.
+2. **One alert, end to end, by polling:** `C6` on a fixed cadence over watched items, `C9a` with one rule (underpriced listing), and `C10`. Done when a real push arrives, a repeat within cooldown is suppressed, and a restart between signal and send still delivers.
+3. **Seconds-level latency:** `C5` feeds the same ingest path.
+4. **On demand**, each when operation gives a reason: `C7` (watched markets first), C6's adaptive scheduling, further `C9a` rules, `C8`, and `C9b` once history has accrued.
+
+`C12` runs alongside throughout. Acyclic — nothing depends on a later module.
+
+The spine is `C1 → C2 → C3 → C4 → C6 → C9a → C10`: the shortest path to a real push notification. `C5` then brings it from minutes to seconds. C8 (contracts) is sequenced after that spine proves out ([ADR-0018](docs/adr/0018-contracts-sequenced-after-the-item-spine.md)).
 
 ---
 
@@ -404,14 +421,22 @@ Every outbound call goes through one compliant, paced, observable path.
 
 ### C4 — Order-book ingest
 
-- **R4.1** Given a full book, classify each order as `appeared` / `price_changed` / `quantity_changed` / `vanished` against last known state.
-- **R4.2** Every observation appends to an immutable event log carrying previous values and its source (`ws` | `recent` | `book`).
-- **R4.3** Each book poll writes exactly one quote row per market observed: best bid, best ask, order counts, quantities, depth, online counts.
-- **R4.4** Ingest is **idempotent** — replaying the same book produces no new events.
+Two entrypoints, with different powers. **Reconciling a full book** (`source=book`) compares every order of one item against stored state and may record any change. **Ingesting a partial observation** (`source=ws` or `recent`) may only add orders.
+
+- **R4.1** Reconciling a full book classifies each order against last known state: `appeared`, `price_changed` (lot price or lot size), `quantity_changed`, or `vanished`.
+- **R4.2** Every detected state change appends one event to an immutable log, carrying the order's values before and after, its side, its lot size, and its source. An unchanged order appends nothing. The log reconstructs each market's visible book (side, lot price, lot size and quantity of every order) as of each poll that changed it. It records nothing about owners' online status and nothing between polls.
+- **R4.3** Each reconciled book writes exactly one quote row for **every market the item has**, including one that has just become empty (counts 0, prices null). Best prices are **per unit** (`platinum / perTrade`) and are recorded twice, over all visible orders and over orders whose owner is online or in game, alongside order counts and online counts. The rollups average over polls, so an average is a mean of sampled quotes, not a time-weighted price.
+- **R4.4** Reconciliation is **idempotent**. Reconciling the same book again records nothing.
 - **R4.5** `vanished` is inferred **only** from a full book poll. The socket and `/recent` are creates-only and partial; absence there means nothing ([ADR-0008](docs/adr/0008-vanished-only-from-full-book-polls.md)).
 - **R4.6** An order for an unknown market creates that market.
+- **R4.7** An order that returns to a book after vanishing is `appeared` again, carrying its last known values as the previous ones. Upstream drops orders whose owner has not been seen for 48h, so owners coming back is routine.
+- **R4.8** An order that moves to another market or side is `vanished` from the old one and `appeared` on the new one.
+- **R4.9** A book no newer than the last one reconciled for its item is ignored whole: no events, no quotes.
+- **R4.10** A book never changes or vanishes an order first observed after that book was fetched, such as a socket event that arrived while the book was in flight.
+- **R4.11** A partial observation records `appeared` for an order never seen before, and nothing for a known order, live or gone, even when its values differ. `/recent` is cached for a minute, so its values can be older than the last book.
+- **R4.12** A failed fetch records nothing, and leaves every market's state as it was.
 
-The classification below is the correctness core of the whole service; everything downstream trusts it. Note which sources can drive which transitions — this is R4.5 drawn out, and it is the subtle part:
+The classification is the correctness core of the whole service; everything downstream trusts it. Note which sources can drive which transitions:
 
 ```mermaid
 stateDiagram-v2
@@ -420,7 +445,7 @@ stateDiagram-v2
   Live --> Live : price_changed<br/>(book only)
   Live --> Live : quantity_changed<br/>(book only)
   Live --> Gone : vanished<br/>(FULL book poll only)
-  Gone --> [*]
+  Gone --> Live : appeared again<br/>(book only)
 
   note right of Live
     Idempotent: re-observing an
@@ -438,15 +463,18 @@ stateDiagram-v2
 - Book A then A → zero new events.
 - A then A' with one price change → exactly one `price_changed` carrying the previous value.
 - A then A'' missing an order → exactly one `vanished`.
-- Quote rows == successful polls.
+- A reconciled book writes one quote row per market of the item, including a market that became empty; a failed fetch writes none.
 - A mixed-rank `/orders/item/{slug}` response splits across the correct markets.
+- An older book reconciled after a newer one records nothing.
+- A socket order that arrived during a book fetch is not vanished by that book.
+- An order returning after it vanished is `appeared`, with its last known values as the previous ones.
 
 ### C5 — Realtime feed
 
 - **R5.1** Connect with the required `wfm` subprotocol. Connections without it are rejected by the server.
 - **R5.2** Subscribe to `newOrders` for the configured platform, sending `crossplay` **explicitly** from the single global setting (R1.8) rather than relying on the socket's `true` default; handle `:ok` and `:error` (`alreadySubscribed`).
 - **R5.3** Reconnect indefinitely with exponential backoff plus jitter.
-- **R5.4** On every (re)connect, gap-fill from `/v2/orders/recent` — its 4h window covers any realistic outage.
+- **R5.4** On every (re)connect, gap-fill from `/v2/orders/recent`. This is **best effort**: `/recent` holds at most 500 orders from the last 4h, from users online at the time, so even a short outage can lose observations. The next full book poll recovers current state, not the changes in between.
 - **R5.5** Socket events feed the same ingest path as polling, tagged `source=ws`.
 - **R5.6** Unknown routes and malformed frames are logged and skipped, never fatal. Note `docs/v2/websockets/subscriptions.mdx` warns that item and profile subscriptions exist as unregistered stubs — do not rely on them.
 
@@ -458,19 +486,24 @@ stateDiagram-v2
 
 ### C6 — Poll scheduler
 
-- **R6.1** Poll targets are database rows: kind, ref, tier, interval, next-due.
-- **R6.2** Draining is safe under concurrency, so a second instance cannot double-poll.
-- **R6.3** Unchanged results back off multiplicatively to a per-tier cap; changes tighten the interval.
-- **R6.4** A realtime event for an item advances that item's next-due time — **push informs poll priority**, so attention follows real activity instead of a fixed schedule.
-- **R6.5** Aggregate demand stays within the C1 budget **by construction**. The scheduler is the component that decides how much budget is spent, so compliance is its responsibility ([ADR-0006](docs/adr/0006-poll-scheduler-owns-budget-compliance.md)).
+The first poll loop is deliberately small ([ADR-0021](docs/adr/0021-limiter-owns-the-ceiling-poll-loop-owns-freshness.md)). The limiter owns the request ceiling; the poll loop owns freshness.
+
+- **R6.1** Poll targets are the items the configured watches name (R9a.1).
+- **R6.2** **One running instance.** The limiter is per process, so a second instance would double the effective request rate; running more needs a shared limiter first.
+- **R6.3** Each watched item is polled on a fixed, configurable cadence. Polls never overlap: one that overruns delays the next.
+- **R6.4** Poll lateness and request use are measured (C12), so a cadence that cannot hold is visible rather than silent.
+- **R6.5** Demand above the budget becomes lateness, never a `429`, because every request waits its turn at the limiter.
 
 **Acceptance**
-- Two concurrent drains never return the same target.
-- N unchanged polls produce the documented interval progression, capped.
-- A socket event on a cold-tier item measurably advances its due time.
-- A simulated full-catalog schedule stays under the configured req/s.
+- With N watched items and interval I, each item is polled once per I, and no two polls run at once.
+- A poll that overruns its interval delays the next rather than overlapping it.
+- Lateness and request rate are readable from the metrics.
+
+**Deferred until lateness measurements call for them:** database poll targets, tiers, multiplicative back-off, socket-driven promotion ("push informs poll priority"), and draining shared across instances.
 
 ### C7 — Trade statistics
+
+*Built on demand, for watched markets first, when the historical-price use case needs it.*
 
 Schema: §2.6 and `docs/v1-statistics.md`. Design rationale: [ADR-0010](docs/adr/0010-item-stat-market-keyed-two-series.md).
 
@@ -498,6 +531,8 @@ Schema: §2.6 and `docs/v1-statistics.md`. Design rationale: [ADR-0010](docs/adr
 
 ### C8 — Contracts / auctions
 
+*Optional; built only when operation gives a reason.*
+
 - **R8.1** Riven, lich and sister auctions recorded with their polymorphic item payload.
 - **R8.2** Riven attributes are normalized — the attribute *combination* is what carries value, so it must be queryable.
 - **R8.3** Auction lifecycle observed: top-bid changes, closure, disappearance.
@@ -510,7 +545,7 @@ Schema: §2.6 and `docs/v1-statistics.md`. Design rationale: [ADR-0010](docs/adr
 
 - **R9a.1** Watches are declared in a version-controlled YAML file loaded at startup ([ADR-0013](docs/adr/0013-watches-in-version-controlled-yaml.md)).
 - **R9a.2** Invalid config fails startup loudly, naming the offending entry.
-- **R9a.3** Three families: **underpriced listing** (order-scoped, socket-driven), **best price crosses** (book-scoped), **spread above margin** (book-scoped).
+- **R9a.3** Three families: **underpriced listing** (order-scoped), **best price crosses** (book-scoped), **spread above margin** (book-scoped). The first milestone ships underpriced listing alone, evaluated as polled books are reconciled; the socket later makes it seconds-level.
 - **R9a.4** A watch selects a market by item plus optional subtype dimensions.
 - **R9a.5** Signals carry a dedup key; the same condition cannot fire twice within its cooldown.
 - **R9a.6** Rules are a keyed strategy registry — deliberately **not** an expression language.
@@ -525,6 +560,8 @@ Schema: §2.6 and `docs/v1-statistics.md`. Design rationale: [ADR-0010](docs/adr
 - Over a 72h live run, notification volume sits inside the R9a.8 budget.
 
 ### C9b — Baseline rules
+
+*Optional; built only when operation gives a reason, and never before history exists.*
 
 - **R9b.1** Volume spike is relative to the item's own trailing baseline from C7, never an absolute number.
 - **R9b.2** Vanish-fast requires a measured lifetime from the event log (appeared→vanished under a threshold).
@@ -591,10 +628,10 @@ sequenceDiagram
 - **R12.1** Outbound req/s consumed **per bucket**, as a metric. This is how the rate-limit boundary is proven at runtime rather than assumed.
 - **R12.2** Socket connection state and reconnect count.
 - **R12.3** Ingest throughput, plus signal and notification counts — the latter is how R9a.8's alert budget is measured rather than guessed at.
-- **R12.4** Poll queue depth and oldest overdue target.
+- **R12.4** Poll lateness: how long after its due time each poll started.
 - **R12.5** These metrics are the service's **only** HTTP surface. Actuator only; no data endpoints.
 
-**Acceptance** — after an hour running, the metrics answer "are we under the limit", "is the socket up", "is the queue keeping up", and "how many pushes today" without reading logs.
+**Acceptance** — after an hour running, the metrics answer "are we under the limit", "is the socket up", "are polls keeping up", and "how many pushes today" without reading logs.
 
 ---
 
@@ -643,9 +680,9 @@ Gradle root is `market/`, not the repo root.
 
 ## 8. Testing strategy
 
-- Any test touching Spring, HTTP or storage is a `@SpringBootTest` with a Testcontainers Postgres. Identical annotation sets share one context **and one container**, so **order-independence is mandatory** (R2.7): the database is truncated before every test method, and classes and methods run in random order with a printed, replayable seed. Classes with no Spring or JDBC dependency are plain JUnit — booting a container to test token arithmetic buys nothing.
+- Wiring and persistence are tested as `@SpringBootTest` with a Testcontainers Postgres; parsing and classification logic are plain JUnit, with neither. Identical annotation sets share one context **and one container**, so **order-independence is mandatory** (R2.7): the database is truncated before every test method, and classes and methods run in random order with a printed, replayable seed. Classes with no Spring or JDBC dependency are plain JUnit — booting a container to test token arithmetic buys nothing.
 - `MockRestServiceServer` bound to `RestClient.Builder` for HTTP — already available via `spring-boot-starter-webmvc-test`, no new dependency. **No test reaches the live API** (R2.6). Every Spring test context starts with scheduling off and with a request factory that refuses and records outbound HTTP, registered from `src/test/resources/META-INF/spring.factories` so no test class can opt out; `MarketApplicationTests` asserts both. The defaults come from a context customizer because a `src/test/resources/application.yaml` would shadow the main file by classpath name rather than layer on it.
-- Fixtures are captured from the `bruno` collection so they match reality.
+- Fixtures are captured from the `bruno` collection, and a representative capture comes **before** any field is committed to. Synthetic payloads test behaviour, never what upstream returns. Order captures have trader identity replaced before they are committed (§9).
 - `WfmClient.get()` is `private inline` and cannot be stubbed — test through the HTTP layer, not by mocking the client.
 - **C4's diff logic gets the densest coverage.** It is where correctness actually lives; everything downstream trusts its output.
 - `bruno-run` re-verifies live contracts after any DTO change. Manual, never in CI.
@@ -676,9 +713,12 @@ Gradle root is `market/`, not the repo root.
 
 ## 10. Open questions
 
-1. **Does v1 `mod_rank` carry v2 `charges` for requiem items?** (R7.5.) Getting it wrong silently merges requiem-mod charge levels into rank buckets, and the corruption stays invisible until someone queries those items specifically. This is the one unresolved *correctness* question. Resolvable from the C3 catalog's `maxRank`/`maxCharges` rather than from more captures. **Evidence from the C3 catalog (live `/v2/items`, 2026-09-24):** `khra` and `vome` are listed with `maxRank: 3`, and no item in the list carries `maxCharges`; `khra`'s own item page (`/v2/item/khra`) likewise gives `maxRank: 3` and no `maxCharges`, and a full sweep of all 3,888 item pages (2026-09-25) found `maxCharges` on none. At catalog level, `mod_rank` → `rank` is therefore consistent for them; what a v2 *order* for a requiem mod carries is still unconfirmed, and C4's first order capture settles it.
+1. ~~Does v1 `mod_rank` carry v2 `charges` for requiem items?~~ **Resolved 2026-09-25: requiem mods trade by rank.** The catalog lists `khra` and `vome` with `maxRank: 3` and no item with `maxCharges` (live `/v2/items`, and all 3,888 item pages), and every order in a captured `/v2/orders/item/khra` book carries `rank` (0, 2 or 3) and never `charges`. `mod_rank` → `rank` is therefore correct for them; R7.5's guard stays in case upstream starts modelling charges.
 2. **What does `Crossplay` mean to v1 `/items/{slug}/statistics`?** The header appears nowhere in `docs/v1.yml`, yet it deterministically rewrites 76/88 historical rows and *lowers* `volume` (§2.7, R7.11). Best reading: trades where **both** sides are crossplay-enabled, which would exclude the PC-crossplay-off cohort — 6 such users appeared in the sampled book. That is an inference from one slug and the direction of one number. Resolvable by sampling more slugs, worth doing before C7 ingests at scale, but R7.11 is written so the answer is **not** load-bearing.
 3. **C9b thresholds are deliberately unspecified** — they cannot be chosen honestly before history exists (R9b.3).
+4. **Is R9a.8's lower bound a requirement?** Zero qualifying opportunities on a day can be correct, so ten alerts a day cannot be demanded. The likely shape is a configurable ceiling plus cooldowns, with a quiet period flagged for review rather than treated as a defect. Settle when C9a is planned.
+5. **What does a watch with an omitted dimension select?** "No rank" (the market whose rank is null) and "any rank" must not be interchangeable (R9a.4). Settle when C9a is planned.
+6. **What happens when delivery fails for good?** Bounded attempts (R10.3) do not guarantee delivery. How a terminal failure is made visible, and whether an opportunity that expired meanwhile is still sent, are open. Settle when C10 is planned.
 
 ---
 
@@ -687,10 +727,12 @@ Gradle root is `market/`, not the repo root.
 Decisions, their rejected alternatives and their trade-offs are recorded in
 [`docs/adr/`](docs/adr/README.md). What follows is what is still worth arguing about.
 
-- **R6.5** makes the poll scheduler responsible for budget compliance — the most load-bearing decision here, since it is what makes §2.1's arithmetic hold at runtime rather than on paper.
-- **R4.5** costs real latency on arguably the most interesting signal: a cheap listing disappearing. The lag is accepted deliberately; the only lever is hot-tier poll cadence.
+- **The limiter is the only thing between demand and the upstream ceiling** ([ADR-0021](docs/adr/0021-limiter-owns-the-ceiling-poll-loop-owns-freshness.md)). It is per process, so the service runs as one instance until a shared limiter exists.
+- **Indefinite retention is only a promise once a restore has been tested.** No backup or restore has been exercised yet.
+- **Real books cross unless offline owners are left out.** Offline owners' orders stay listed for up to 48h, so the best bid over all visible orders can exceed the best ask: 7 against 6 per unit on a captured `ayatan_anasa_sculpture` book (2026-09-25), 7 against 7 among online owners. Rules comparing bid and ask (R9a.3's crossing and spread families) should read the online pair.
+- **R4.5** costs real latency on arguably the most interesting signal: a cheap listing disappearing. The lag is accepted deliberately; the only lever is poll cadence.
 - **§2.2** caps what any analysis built on this warehouse can honestly claim. Worth confirming that limitation is understood *before* building on it, not after.
 - **R9a.8's 10–50/day budget** is the only number constraining signal quality. If the ceiling is wrong, most of C9a and all of C9b get retuned.
 - **C9b's volume-spike rule** has 90 days of real traded volume per market as its baseline. Whether 90 days is enough history to call a spike is unanswerable until the thing runs.
-- **R2.4's rollups are the only permanent quote record, and their shape freezes once they hold history older than the raw window.** An aggregate cannot be altered, only dropped and recreated, and recreating it then loses everything the raw table no longer has. C4 has to settle the quote measures before history accrues; after that, a changed rollup means a new one alongside the old.
-- **Crossplay widens what the warehouse means.** Every order-book series describes a PC+crossplay pool, not a PC pool, and `statistics` describes a third population again. `seller_platform` and `item_stat.crossplay` keep them separable — but only for a query author who knows to use them.
+- **R2.4's rollups are the only permanent quote record, and their shape freezes once they hold history older than the raw window.** An aggregate cannot be altered, only dropped and recreated, and recreating it then loses everything the raw table no longer has. C4 settles a deliberately small set of measures (R4.3); after history accrues, a new measure means a new rollup alongside the old.
+- **Crossplay widens what the warehouse means.** Every order-book series describes a PC+crossplay pool, not a PC pool, and `statistics` describes a third population again. `owner_platform` and `item_stat.crossplay` keep them separable — but only for a query author who knows to use them.

@@ -10,7 +10,7 @@
 > | C2 | **Built and reviewed.** |
 > | C3 | **Built and reviewed.** The item detail sweep is off until a rule or query reads its fields. |
 > | C4 | **Built and reviewed.** |
-> | C5 | **Planned** in `tasks/plan.md`; decisions 2, 4 and 5 confirmed and amended in review, the rest still to confirm. |
+> | C5 | **Planned** in `tasks/plan.md`, confirmed by the author 2026-09-26. |
 > | C6 | **Built and reviewed.** Watched items are polled on a fixed cadence, honouring a throttle's `Retry-After`. |
 > | C7, C8 | Not started. |
 > | C9a | **Built and reviewed** for the underpriced rule, with dedup, a per-watch cooldown and a daily ceiling. The 72h budget run is planned as the last task of C5; the spread and crossing rules are still to do. |
@@ -480,10 +480,10 @@ stateDiagram-v2
 
 - **R5.1** Connect with the required `wfm` subprotocol. Connections without it are rejected by the server.
 - **R5.2** Subscribe to `newOrders` for the configured platform, sending `crossplay` **explicitly** from the single global setting (R1.8) rather than relying on the socket's `true` default; handle `:ok` and `:error` (`alreadySubscribed`).
-- **R5.3** Reconnect indefinitely with exponential backoff plus jitter.
-- **R5.4** On every (re)connect, gap-fill from `/v2/orders/recent`. This is **best effort**: `/recent` holds at most 500 orders from the last 4h, from users online at the time, so even a short outage can lose observations. The next full book poll recovers current state, not the changes in between.
+- **R5.3** Reconnect indefinitely with exponential backoff plus jitter. An attempt is abandoned and retried when it does not connect in time, when its subscription is not confirmed in time, or when a subscribed connection goes silent; server heartbeats do not count as confirmation.
+- **R5.4** Once each (re)connect's subscription is confirmed, gap-fill from `/v2/orders/recent`, unless the last gap-fill was under a minute ago (`/recent` is cached for a minute) or a throttle's `Retry-After` has not yet passed. A gap-fill's throttle holds off only later gap-fills, never the poll loop. This is **best effort**: `/recent` holds at most 500 orders from the last 4h, from users online at the time, so even a short outage can lose observations. The next full book poll recovers current state, not the changes in between.
 - **R5.5** Socket events feed the same ingest path as polling, tagged `source=ws`. Every item's new orders are recorded, watched or not (§10 Q7).
-- **R5.6** Unknown routes and malformed frames are logged and skipped, never fatal. Note `docs/v2/websockets/subscriptions.mdx` warns that item and profile subscriptions exist as unregistered stubs — do not rely on them.
+- **R5.6** A message is parsed only once all its frames have arrived. Unknown routes and malformed messages are logged and skipped, never fatal, and never stop the messages after them. Note `docs/v2/websockets/subscriptions.mdx` warns that item and profile subscriptions exist as unregistered stubs — do not rely on them.
 
 **Acceptance**
 - Against a local fake WS server: handshake completes and a `newOrder` event produces an `appeared` event.
@@ -558,7 +558,7 @@ Schema: §2.6 and `docs/v1-statistics.md`. Design rationale: [ADR-0010](docs/adr
 - **R9a.5** Signals carry a dedup key; the same condition cannot fire twice within its cooldown. The cooldown counts every signal admitted to the outbox, pending or sent, so a burst cannot queue several before one is sent. Within it, only a cheaper listing is admitted.
 - **R9a.6** Rules are a keyed strategy registry — deliberately **not** an expression language.
 - **R9a.7** Signals are written in the same transaction as the ingest that produced them.
-- **R9a.8** **The alert budget is 10–50 notifications/day across all watches.** Cooldowns and thresholds are tuned against that ceiling, and sustained breach is a defect, not a configuration preference — a muted watchdog is a broken one ([ADR-0014](docs/adr/0014-alert-budget-is-a-requirement.md)). Requires C12 to measure (R12.3).
+- **R9a.8** **The alert budget is a daily ceiling on admissions: at most a configured number of signals (50) a UTC day, across all watches, may become sendable** (§10 Q4). A candidate over it is recorded as suppressed and counted, never sent. Cooldowns and thresholds are tuned so the ceiling is rarely reached; sustained suppression is a defect, not a configuration preference — a muted watchdog is a broken one ([ADR-0014](docs/adr/0014-alert-budget-is-a-requirement.md)). Deliveries are measured separately, since a signal admitted one day can be delivered the next and at-least-once delivery can repeat one (R10.2, R12.3).
 
 **Acceptance**
 - A watch naming a nonexistent item slug fails startup with that slug in the message.
@@ -694,7 +694,7 @@ Decisions, their rejected alternatives and their trade-offs are recorded in
 - **Real books cross unless offline owners are left out.** Offline owners' orders stay listed for up to 48h, so the best bid over all visible orders can exceed the best ask: 7 against 6 per unit on a captured `ayatan_anasa_sculpture` book (2026-09-25), 7 against 7 among online owners. Rules comparing bid and ask (R9a.3's crossing and spread families) should read the online pair.
 - **R4.5** costs real latency on arguably the most interesting signal: a cheap listing disappearing. The lag is accepted deliberately; the only lever is poll cadence.
 - **§2.2** caps what any analysis built on this warehouse can honestly claim. Worth confirming that limitation is understood *before* building on it, not after.
-- **R9a.8's 10–50/day budget** is the only number constraining signal quality. If the ceiling is wrong, most of C9a and all of C9b get retuned.
+- **R9a.8's daily ceiling** is the only number constraining signal quality. If the ceiling is wrong, most of C9a and all of C9b get retuned.
 - **C9b's volume-spike rule** has 90 days of real traded volume per market as its baseline. Whether 90 days is enough history to call a spike is unanswerable until the thing runs.
 - **R2.4's rollups are the only permanent quote record, and their shape freezes once they hold history older than the raw window.** An aggregate cannot be altered, only dropped and recreated, and recreating it then loses everything the raw table no longer has. C4 settles a deliberately small set of measures (R4.3); after history accrues, a new measure means a new rollup alongside the old.
 - **Crossplay widens what the warehouse means.** Every order-book series describes a PC+crossplay pool, not a PC pool, and `statistics` describes a third population again. `owner_platform` and `item_stat.crossplay` keep them separable — but only for a query author who knows to use them.

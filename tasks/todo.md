@@ -4,10 +4,10 @@ Plan: `tasks/plan.md`. Requirement ids refer to `SPEC.md` §4. Each task lists i
 checks and nothing else; how a check is met lives in the code and its tests.
 
 ## Before any code
-- [ ] The author has confirmed or changed the nine decisions in the plan (2, 4 and 5 confirmed
-      2026-09-26).
+- [x] The author has confirmed or changed the nine decisions in the plan (2026-09-26; review
+      amended 4, 5 and 6).
 - [x] `SPEC.md` §10 question 7 records the answer to decision 2 (every item, 2026-09-26).
-- [ ] C5's requirements match the confirmed decisions.
+- [x] C5's requirements (R5.3, R5.4, R5.5, R5.6) and R9a.8 match the confirmed decisions.
 
 ## Payload first
 

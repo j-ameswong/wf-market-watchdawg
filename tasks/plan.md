@@ -9,9 +9,8 @@
 > [0021](../docs/adr/0021-limiter-owns-the-ceiling-poll-loop-owns-freshness.md). Drafted
 > 2026-09-26 on top of the alert milestone (PR #8). Task bodies and acceptance checks are in
 > `tasks/todo.md`.
-> The author confirmed decisions 2, 4 and 5 on 2026-09-26, then amended 4, 5 and 6 and the T2–T6
-> checks in review the same day. The rest are proposals, each with the default the tasks assume,
-> until the author confirms or changes them.
+> The author confirmed the plan on 2026-09-26, after a review that amended decisions 4, 5 and 6
+> and the T2–T6 checks.
 
 ## Goal
 
@@ -22,8 +21,9 @@ The milestone is done when:
 2. a dropped connection comes back by itself, gap-fills from `/v2/orders/recent`, and records no
    duplicate events;
 3. the socket and REST quote the same `crossplay` (R1.8), pinned by a test; and
-4. over 72 hours with the socket on, notification volume sits inside the alert budget (R9a.8).
-   This is the C9a acceptance still owed from the last milestone.
+4. over 72 hours with the socket on, admissions each UTC day stay at or under the daily ceiling
+   (R9a.8), with deliveries reported beside them. This is the C9a acceptance still owed from the
+   last milestone.
 
 ## Scope
 

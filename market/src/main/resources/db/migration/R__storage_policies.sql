@@ -36,3 +36,11 @@ select add_continuous_aggregate_policy(
     end_offset => interval '1 hour',
     schedule_interval => interval '30 minutes'
 );
+
+-- C7 retains statistics forever, compressing only after the mutable upstream history window.
+do $$ begin
+    if to_regclass('public.item_stat') is not null then
+        call remove_columnstore_policy('item_stat', if_exists => true);
+        call add_columnstore_policy('item_stat', after => interval '100 days');
+    end if;
+end $$;

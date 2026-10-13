@@ -81,6 +81,7 @@ class SocketConfig {
         ingest: OrderIngest,
         client: WfmClient,
         metrics: WfmMetrics,
+        baselineBudget: com.watchdawg.market.baseline.BaselineBudget,
     ) = WfmSocket(
         props,
         wfm.userAgent,
@@ -89,5 +90,6 @@ class SocketConfig {
         ingest,
         SocketGapFill(client, ingest, metrics),
         metrics,
+        baselineBudget = baselineBudget,
     )
 }

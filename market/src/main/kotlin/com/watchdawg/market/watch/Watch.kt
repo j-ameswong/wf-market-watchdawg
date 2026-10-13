@@ -1,5 +1,7 @@
 package com.watchdawg.market.watch
 
+import com.watchdawg.market.baseline.VANISH_FAST
+import com.watchdawg.market.baseline.VOLUME_SPIKE
 import com.watchdawg.market.store.ItemRecord
 import com.watchdawg.market.store.MarketKey
 import org.springframework.boot.context.properties.ConfigurationProperties
@@ -36,6 +38,8 @@ data class WatchEntry(
     val side: String = "sell",
     val minSpread: BigDecimal? = null,
     val minSpreadPercent: BigDecimal? = null,
+    val minSamples: Int = 35,
+    val targetRate: BigDecimal = BigDecimal("0.1"),
 )
 
 /** ntfy's five priorities, by the names ntfy gives them (R10.5). */
@@ -84,6 +88,8 @@ data class Watch(
     val side: String = "sell",
     val minSpread: BigDecimal? = null,
     val minSpreadPercent: BigDecimal? = null,
+    val minSamples: Int = 35,
+    val targetRate: BigDecimal = BigDecimal("0.1"),
 ) {
     /** Whether a market of this watch's item is one the watch selects. */
     fun selects(market: MarketKey): Boolean = market.itemId == itemId &&
@@ -130,7 +136,12 @@ private fun WatchEntry.resolve(item: ItemRecord): Watch {
     fun fail(problem: String): Nothing = throw InvalidWatchException("watch '$name' on ${item.slug}: $problem")
 
     if (name.isBlank()) throw InvalidWatchException("a watch on ${item.slug} has no name")
-    if (rule !in setOf(UNDERPRICED, PRICE_CROSSING, SPREAD)) fail("unknown rule '$rule'")
+    if (rule !in setOf(UNDERPRICED, PRICE_CROSSING, SPREAD, VOLUME_SPIKE, VANISH_FAST)) fail("unknown rule '$rule'")
+    if (minSamples < 10 || targetRate <= BigDecimal.ZERO ||
+        targetRate >= BigDecimal.ONE
+    ) {
+        fail("invalid baseline sample/rate settings")
+    }
     if (side !in setOf("buy", "sell")) fail("side must be buy or sell")
     if (rule == SPREAD) {
         if (minSpread == null && minSpreadPercent == null) fail("spread needs min-spread or min-spread-percent")
@@ -178,6 +189,8 @@ private fun WatchEntry.resolve(item: ItemRecord): Watch {
         side = side,
         minSpread = minSpread,
         minSpreadPercent = minSpreadPercent,
+        minSamples = minSamples,
+        targetRate = targetRate,
     )
 }
 

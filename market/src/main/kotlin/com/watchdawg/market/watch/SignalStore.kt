@@ -180,7 +180,9 @@ class SignalStore(private val jdbc: NamedParameterJdbcTemplate) {
     }
 
     /** Records a failed attempt. [retryAt] null marks the signal failed for good (R10.3). */
+    @org.springframework.transaction.annotation.Transactional
     fun recordFailure(id: Long, error: String, retryAt: Instant?) {
+        lockAdmission()
         jdbc.update(
             """
             update signal

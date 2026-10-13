@@ -39,6 +39,7 @@ class StatisticsSync(
     registry: MeterRegistry,
     private val props: StatisticsProperties,
     private val clock: Clock = Clock.systemUTC(),
+    private val baselineBudget: com.watchdawg.market.baseline.BaselineBudget? = null,
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
     private val counts = listOf("success", "failed", "throttled").associateWith {
@@ -61,6 +62,7 @@ class StatisticsSync(
                 }
                 val at = clock.instant()
                 ingest.ingest(item, client.getStatistics(slug), at)
+                baselineBudget?.evaluated("statistics|$slug", at, props.interval.multipliedBy(2))
                 counts.getValue("success").increment()
             } catch (e: ThrottledException) {
                 pending.addFirst(slug)

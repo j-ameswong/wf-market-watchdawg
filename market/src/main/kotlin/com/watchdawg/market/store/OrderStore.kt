@@ -18,7 +18,10 @@ import java.time.Instant
  * service decides the boundaries.
  */
 @Component
-class OrderStore(private val jdbc: NamedParameterJdbcTemplate) {
+class OrderStore(
+    private val jdbc: NamedParameterJdbcTemplate,
+    private val context: com.watchdawg.market.wfm.WfmContext,
+) {
 
     /**
      * Records [observedAt] as the latest book for [itemId] and returns true, unless a book at least
@@ -95,9 +98,9 @@ class OrderStore(private val jdbc: NamedParameterJdbcTemplate) {
         jdbc.batchUpdate(
             """
             insert into order_event (observed_at, market_id, order_id, event, source, type, platinum,
-                                     per_trade, quantity, prev_platinum, prev_quantity)
+                                     per_trade, quantity, prev_platinum, prev_quantity, crossplay)
             values (:observedAt, :marketId, :orderId, :event, :source, :type, :platinum,
-                    :perTrade, :quantity, :prevPlatinum, :prevQuantity)
+                    :perTrade, :quantity, :prevPlatinum, :prevQuantity, :crossplay)
             on conflict do nothing
             """,
             events.map { event ->
@@ -113,6 +116,7 @@ class OrderStore(private val jdbc: NamedParameterJdbcTemplate) {
                     .addValue("quantity", event.quantity)
                     .addValue("prevPlatinum", event.prevPlatinum)
                     .addValue("prevQuantity", event.prevQuantity)
+                    .addValue("crossplay", context.crossplay)
             }.toTypedArray(),
         )
     }

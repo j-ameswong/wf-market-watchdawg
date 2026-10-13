@@ -33,6 +33,8 @@ class Alerts(
     private val signals: SignalStore,
     private val props: AlertProperties,
     private val metrics: AlertMetrics,
+    private val baselines: com.watchdawg.market.baseline.BaselineRules? = null,
+    private val baselineBudget: com.watchdawg.market.baseline.BaselineBudget? = null,
 ) {
 
     /**
@@ -47,30 +49,46 @@ class Alerts(
         markets: Map<Long, MarketKey>,
         seenAt: Instant,
         fullBook: Boolean = true,
-    ): Int = watches.forItem(itemId).sumOf { watch ->
-        val selected = markets.filterValues(watch::selects).keys
-        if (watch.rule == UNDERPRICED) {
-            admit(watch, underpriced(watch, book, selected), seenAt)
-        } else if (fullBook) {
+    ): Int {
+        val prepared = if (fullBook) {
             signals.lockAdmission()
-            selected.sumOf { market ->
-                val result = BOOK_RULES.getValue(watch.rule)(watch, book.filter { it.marketId == market })
-                val entered = signals.transition(watch.name, market, watch.definitionKey(), result != null, seenAt)
-                if (entered &&
-                    result != null
-                ) {
-                    val candidate = bookCandidate(watch, market, result, seenAt)
-                    val admitted = admit(watch, listOf(candidate), seenAt)
-                    if (!signals.exists(candidate.dedupKey)) {
-                        signals.retryCondition(watch.name, market, watch.definitionKey())
-                    }
-                    admitted
-                } else {
-                    0
-                }
-            }
+            baselineBudget?.evaluatedItem(itemId, seenAt)
+            baselines?.prepare(seenAt).orEmpty()
         } else {
-            0
+            emptyMap()
+        }
+        return watches.forItem(itemId).sumOf { watch ->
+            val selected = markets.filterValues(watch::selects).keys
+            if (watch.rule == UNDERPRICED) {
+                admit(watch, underpriced(watch, book, selected), seenAt)
+            } else if (fullBook) {
+                signals.lockAdmission()
+                selected.sumOf { market ->
+                    if (watch.rule !in BOOK_RULES) {
+                        return@sumOf admit(
+                            watch,
+                            prepared[watch.name to market] ?: baselines?.candidates(watch, market, seenAt).orEmpty(),
+                            seenAt,
+                        )
+                    }
+                    val result = BOOK_RULES.getValue(watch.rule)(watch, book.filter { it.marketId == market })
+                    val entered = signals.transition(watch.name, market, watch.definitionKey(), result != null, seenAt)
+                    if (entered &&
+                        result != null
+                    ) {
+                        val candidate = bookCandidate(watch, market, result, seenAt)
+                        val admitted = admit(watch, listOf(candidate), seenAt)
+                        if (!signals.exists(candidate.dedupKey)) {
+                            signals.retryCondition(watch.name, market, watch.definitionKey())
+                        }
+                        admitted
+                    } else {
+                        0
+                    }
+                }
+            } else {
+                0
+            }
         }
     }
 
@@ -80,7 +98,9 @@ class Alerts(
 
     private fun admit(watch: Watch, candidates: List<Candidate>, seenAt: Instant): Int {
         signals.lockAdmission()
-        if (candidates.isEmpty()) return 0
+        val baseline = watch.rule in setOf("volume-spike", "vanish-fast")
+        val budgetReady = baselineBudget?.observe(watch, candidates, seenAt) ?: false
+        if (candidates.isEmpty() || (baseline && !budgetReady)) return 0
         var last = signals.lastAdmitted(watch.name)
         var admitted = 0
         for (candidate in candidates) {

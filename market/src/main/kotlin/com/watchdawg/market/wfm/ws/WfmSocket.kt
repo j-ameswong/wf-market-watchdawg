@@ -1,5 +1,6 @@
 package com.watchdawg.market.wfm.ws
 
+import com.watchdawg.market.baseline.BaselineBudget
 import com.watchdawg.market.ingest.OrderIngest
 import com.watchdawg.market.ingest.Source
 import com.watchdawg.market.wfm.WfmMetrics
@@ -30,6 +31,7 @@ class WfmSocket(
     private val gapFill: SocketGapFill,
     private val metrics: WfmMetrics,
     private val clock: Clock = Clock.systemUTC(),
+    private val baselineBudget: BaselineBudget? = null,
     private val jitter: (Long) -> Long = { Random.nextLong(it + 1) },
     private val drainTimeout: Duration = Duration.ofSeconds(10),
 ) : SmartLifecycle {
@@ -42,6 +44,7 @@ class WfmSocket(
     @Volatile private var running = false
 
     @Volatile private var current: Connection? = null
+    private var nextCoverage = Instant.MIN
     private var nextConnect = Instant.MIN
     private var backoff = props.backoffInitial.toMillis()
 
@@ -165,6 +168,24 @@ class WfmSocket(
         gapWorker?.submit { work(connection) { gapFill.run() } }
     }
 
+    private fun recordCoverage(connection: Connection, at: Instant) {
+        val budget = baselineBudget ?: return
+        synchronized(this) {
+            if (!running || current !== connection || connection.subscribedAt == null ||
+                at.isBefore(nextCoverage)
+            ) {
+                return
+            }
+            // Rate-limit attempts too: a telemetry outage must not cause a write per frame.
+            nextCoverage = at.plusSeconds(30)
+        }
+        try {
+            budget.evaluated("socket", at, props.silenceTimeout.multipliedBy(2))
+        } catch (e: Exception) {
+            log.warn("socket coverage failed: {}", e.javaClass.simpleName)
+        }
+    }
+
     private inner class Connection(val started: Instant) : WebSocket.Listener {
         val id = UUID.randomUUID().toString()
 
@@ -233,6 +254,7 @@ class WfmSocket(
                     try {
                         ingest.ingestPartial(listOf(message.order), Source.WS, at)
                         metrics.socketFrame("order")
+                        recordCoverage(this, at)
                     } catch (e: Exception) {
                         metrics.socketFrame("failed")
                         log.warn("socket ingest failed: {}", e.javaClass.simpleName)
@@ -243,6 +265,7 @@ class WfmSocket(
                 SocketMessage.Subscribed -> {
                     metrics.socketFrame("control")
                     subscribed(this)
+                    recordCoverage(this, at)
                 }
 
                 SocketMessage.Rejected -> {
@@ -252,6 +275,7 @@ class WfmSocket(
 
                 SocketMessage.Heartbeat -> {
                     metrics.socketFrame("control")
+                    recordCoverage(this, at)
                 }
 
                 SocketMessage.Unknown -> {
@@ -264,6 +288,7 @@ class WfmSocket(
         override fun onPing(webSocket: WebSocket, message: ByteBuffer): CompletionStage<*>? {
             val at = clock.instant()
             lastFrame = at
+            work(this) { recordCoverage(this, at) }
             webSocket.request(1)
             return webSocket.sendPong(message)
         }
@@ -271,6 +296,7 @@ class WfmSocket(
         override fun onPong(webSocket: WebSocket, message: ByteBuffer): CompletionStage<*>? {
             val at = clock.instant()
             lastFrame = at
+            work(this) { recordCoverage(this, at) }
             webSocket.request(1)
             return null
         }

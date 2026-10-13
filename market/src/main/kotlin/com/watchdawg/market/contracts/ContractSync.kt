@@ -2,6 +2,7 @@ package com.watchdawg.market.contracts
 
 import com.watchdawg.market.OwnThreadSchedule
 import com.watchdawg.market.SCHEDULING_ENABLED
+import com.watchdawg.market.baseline.BaselineBudget
 import com.watchdawg.market.notify.NotifyProperties
 import com.watchdawg.market.notify.checkTopics
 import com.watchdawg.market.poll.Cadence
@@ -29,6 +30,7 @@ class ContractSync(
     private val notify: NotifyProperties,
     registry: MeterRegistry,
     private val clock: Clock = Clock.systemUTC(),
+    private val baselineBudget: BaselineBudget? = null,
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
     val cadence = Cadence(props.interval, props.initialDelay, clock)
@@ -109,6 +111,7 @@ class ContractSync(
                     },
                 ) { "search returned a different target" }
                 ingest.ingest(auctions, at)
+                baselineBudget?.evaluated("contract|$kind|$weapon", at, props.interval.multipliedBy(2))
                 val present = auctions.mapTo(HashSet()) { it.id }
                 // Search absence is only a verification candidate, never evidence of closure.
                 ingest.queueVerification(kind, weapon, present)

@@ -5,6 +5,7 @@ import com.watchdawg.market.ingest.ObservedOrder
 import com.watchdawg.market.ingest.OrderEvent
 import com.watchdawg.market.ingest.Quote
 import com.watchdawg.market.ingest.Source
+import com.watchdawg.market.observability.OrderEventMetrics
 import com.watchdawg.market.wfm.OrderType
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
@@ -21,6 +22,7 @@ import java.time.Instant
 class OrderStore(
     private val jdbc: NamedParameterJdbcTemplate,
     private val context: com.watchdawg.market.wfm.WfmContext,
+    private val eventMetrics: OrderEventMetrics,
 ) {
 
     /**
@@ -95,6 +97,12 @@ class OrderStore(
     /** Appends to the event log. A row already there is kept, so a replay adds nothing (R4.4). */
     fun append(events: Collection<OrderEvent>, source: Source, observedAt: Instant) {
         if (events.isEmpty()) return
+        eventMetrics.appendEvents(source) {
+            appendEvents(events, source, observedAt)
+        }
+    }
+
+    private fun appendEvents(events: Collection<OrderEvent>, source: Source, observedAt: Instant): IntArray =
         jdbc.batchUpdate(
             """
             insert into order_event (observed_at, market_id, order_id, event, source, type, platinum,
@@ -119,7 +127,6 @@ class OrderStore(
                     .addValue("crossplay", context.crossplay)
             }.toTypedArray(),
         )
-    }
 
     fun insertQuotes(quotes: Collection<Quote>, observedAt: Instant) {
         if (quotes.isEmpty()) return

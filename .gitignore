@@ -26,3 +26,8 @@ replay_pid*
 # Nix
 result
 result-*
+
+# Deployment artifacts and credentials
+deploy/.env
+deploy/market.jar
+deploy/backups/

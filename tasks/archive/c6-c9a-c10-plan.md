@@ -108,7 +108,7 @@ confirmed the rest.
    since a suppressed signal is never delivered and a crash can deliver one twice.
 8. **Where watches.yaml lives.** `market/src/main/resources/watches.yaml`, imported with
    `spring.config.import` and bound by `@ConfigurationProperties`, so no YAML dependency is added.
-   `WATCHDAWG_WATCHES` can point at a file elsewhere for the packaged jar.
+   `WATCHDAWG_WATCHES_FILE` can point at a file elsewhere for the packaged jar.
 9. **No trader name in the notification.** The order model binds no identity (T5 of C4, §9), so
    the push carries item, dimensions, unit price, lot size, when it was seen, and a click-through
    to the item page, where the listing is visible. Adding the seller's name would mean storing it

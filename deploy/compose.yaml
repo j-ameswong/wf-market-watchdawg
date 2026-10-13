@@ -1,0 +1,48 @@
+name: watchdawg
+services:
+  postgres:
+    image: timescale/timescaledb:2.30.1-pg18
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${WATCHDAWG_DATABASE:-watchdawg}
+      POSTGRES_USER: watchdawg
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:?set DATABASE_PASSWORD}
+    volumes:
+      - database:/var/lib/postgresql
+    ports:
+      - 127.0.0.1:55432:5432
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U watchdawg -d "$${POSTGRES_DB}"']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    mem_limit: 2g
+  market:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${WATCHDAWG_DATABASE:-watchdawg}
+      SPRING_DATASOURCE_USERNAME: watchdawg
+      SPRING_DATASOURCE_PASSWORD: ${DATABASE_PASSWORD}
+      WATCHDAWG_WATCHES_FILE: file:/config/watches.yaml
+      WATCHDAWG_NOTIFY_BASEURL: ${NTFY_URL}
+      WATCHDAWG_NOTIFY_TOPICS_DEFAULT: ${NTFY_TOPIC:?set NTFY_TOPIC}
+      WATCHDAWG_CONTRACTS_ENABLED: 'true'
+      WATCHDAWG_STATISTICS_ENABLED: 'true'
+      WATCHDAWG_SOCKET_ENABLED: 'true'
+      SPRING_DOCKER_COMPOSE_ENABLED: 'false'
+    volumes:
+      - ./watches.yaml:/config/watches.yaml:ro
+    ports:
+      - 127.0.0.1:8081:8080
+      - ${TAILNET_IP:?set TAILNET_IP}:8081:8080
+    mem_limit: 1g
+    stop_grace_period: 45s
+    read_only: true
+    tmpfs:
+      - /tmp:size=128m
+volumes:
+  database:

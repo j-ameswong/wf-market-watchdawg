@@ -1,0 +1,38 @@
+# User settings; edit and restart the market service. Real topic credentials live in .env.
+watchdawg:
+  watches:
+    - name: serration-max
+      item: serration
+      subtype: any
+      rank: 10
+      max-unit-price: 18
+      topic: default
+    - name: frost-volume
+      item: frost_prime_set
+      rule: volume-spike
+      min-samples: 35
+      target-rate: 0.1
+      topic: default
+  contracts:
+    watches:
+      - name: kulstar-riven
+        kind: riven
+        weapon: kulstar
+        max-price: 20
+        positive:
+          critical_chance: 100
+        priority: high
+        topic: default
+      - name: bramma-lich
+        kind: lich
+        weapon: kuva_bramma
+        max-price: 50
+        min-damage: 50
+        priority: default
+        topic: default
+      - name: tetra-sister
+        kind: sister
+        weapon: tenet_tetra
+        max-price: 50
+        min-damage: 50
+        topic: default

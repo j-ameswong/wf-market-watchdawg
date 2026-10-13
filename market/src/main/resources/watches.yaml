@@ -1,5 +1,5 @@
 # What the service watches (R9a.1, ADR-0013). Read at startup; a bad entry fails startup naming it.
-# WATCHDAWG_WATCHES=file:/path/to/watches.yaml reads another file instead, for the packaged jar.
+# WATCHDAWG_WATCHES_FILE=file:/path/to/watches.yaml reads another file instead, for the packaged jar.
 #
 # Each watch names an item by slug and every dimension that item has, as a value or `any`; a
 # dimension the item lacks must be left out (SPEC §10 Q5). A live sell listing from an online

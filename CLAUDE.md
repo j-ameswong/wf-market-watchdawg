@@ -159,7 +159,7 @@ The jar excludes `developmentOnly` deps, so it starts no Postgres: pass `SPRING_
 ### Watches
 
 - `watches.yaml` is imported by `spring.config.import` and bound as `watchdawg.watches`; there is no
-  YAML dependency. `WATCHDAWG_WATCHES=file:/path` replaces it.
+  YAML dependency. `WATCHDAWG_WATCHES_FILE=file:/path` replaces it.
 - Watches resolve against the catalog while the context starts, and a bad one fails startup. A
   missing slug gets one hash-gated catalog refresh first, so a fresh database can start.
 - A watch names every dimension its item has, as a value or `any`, and none it lacks. Charges are

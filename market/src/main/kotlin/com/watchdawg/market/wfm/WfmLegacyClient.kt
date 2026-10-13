@@ -18,6 +18,13 @@ import org.springframework.web.client.body
 @Component
 class WfmLegacyClient(@Qualifier(WfmConfig.LEGACY_CLIENT) private val client: RestClient) {
 
+    fun getAuctions(kind: String, weapon: String): com.watchdawg.market.contracts.AuctionSearch {
+        require(kind in com.watchdawg.market.contracts.CONTRACT_KINDS)
+        return get("/auctions/search?type={kind}&weapon_url_name={weapon}", kind, weapon)
+    }
+
+    fun getAuction(id: String): com.watchdawg.market.contracts.AuctionEntry = get("/auctions/entry/{id}", id)
+
     fun getStatistics(slug: String): ItemStatistics = get("/items/{slug}/statistics", slug)
 
     private inline fun <reified T : Any> get(uri: String, vararg vars: Any): T = client.get()

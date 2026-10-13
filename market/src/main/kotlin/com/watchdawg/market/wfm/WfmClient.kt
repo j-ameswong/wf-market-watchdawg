@@ -8,6 +8,13 @@ import org.springframework.web.client.body
 /** The v2 channel. [WfmLegacyClient] is the v1 one, and the qualifier is what tells them apart. */
 @Component
 class WfmClient(@Qualifier(WfmConfig.V2_CLIENT) private val client: RestClient) {
+    fun getRivenAttributes(): List<com.watchdawg.market.contracts.ContractWeapon> = get("/riven/attributes")
+
+    fun getContractWeapons(kind: String): List<com.watchdawg.market.contracts.ContractWeapon> {
+        require(kind in com.watchdawg.market.contracts.CONTRACT_KINDS)
+        return get("/{kind}/weapons", kind)
+    }
+
     fun getVersions(): Versions = get("/versions")
 
     fun getItems(): List<Item> = get("/items")

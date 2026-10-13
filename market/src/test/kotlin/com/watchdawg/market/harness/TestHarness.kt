@@ -40,6 +40,7 @@ private object TestHarness : ContextCustomizer {
                 SCHEDULING_ENABLED to "false",
                 "watchdawg.socket.enabled" to "false",
                 "watchdawg.statistics.enabled" to "false",
+                "watchdawg.contracts.enabled" to "false",
             ),
         )
         val sources = context.environment.propertySources

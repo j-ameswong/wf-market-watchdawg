@@ -74,6 +74,10 @@ class Alerts(
         }
     }
 
+    /** Other observational sources share the same lock, cooldown and UTC admission budget. */
+    fun admitCandidates(watch: Watch, candidates: List<Candidate>, seenAt: Instant): Int =
+        admit(watch, candidates, seenAt)
+
     private fun admit(watch: Watch, candidates: List<Candidate>, seenAt: Instant): Int {
         signals.lockAdmission()
         if (candidates.isEmpty()) return 0

@@ -34,7 +34,13 @@ class TestHarnessContextCustomizerFactory : ContextCustomizerFactory {
  */
 private object TestHarness : ContextCustomizer {
     override fun customizeContext(context: ConfigurableApplicationContext, mergedConfig: MergedContextConfiguration) {
-        val defaults = MapPropertySource("watchdawgTestHarness", mapOf(SCHEDULING_ENABLED to "false"))
+        val defaults = MapPropertySource(
+            "watchdawgTestHarness",
+            mapOf(
+                SCHEDULING_ENABLED to "false",
+                "watchdawg.socket.enabled" to "false",
+            ),
+        )
         val sources = context.environment.propertySources
         if (sources.contains(INLINED_PROPERTIES_PROPERTY_SOURCE_NAME)) {
             sources.addAfter(INLINED_PROPERTIES_PROPERTY_SOURCE_NAME, defaults)
@@ -44,6 +50,7 @@ private object TestHarness : ContextCustomizer {
 
         // Boot's own builder backs off when one is already registered, so RestClient.Builder gets
         // this one instead.
+        context.beanFactory.registerSingleton("socketGuard", SocketGuard())
         val guard = LiveApiGuard()
         context.beanFactory.registerSingleton("liveApiGuard", guard)
         context.beanFactory.registerSingleton(
@@ -57,6 +64,7 @@ private object TestHarness : ContextCustomizer {
 class LiveApiGuardListener : AbstractTestExecutionListener() {
     override fun afterTestMethod(testContext: TestContext) {
         if (!testContext.hasApplicationContext()) return
+        testContext.applicationContext.getBean(SocketGuard::class.java).assertUntouched()
         testContext.applicationContext.getBeanProvider(LiveApiGuard::class.java).ifAvailable { it.assertUntouched() }
     }
 }

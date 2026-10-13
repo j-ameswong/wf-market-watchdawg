@@ -31,7 +31,7 @@ watchdawg:
   # wait in the outbox.
   notify:
     base-url: https://ntfy.sh
-    interval: 10s
+    interval: 1s
     batch-size: 20
     max-attempts: 5
     backoff: 30s

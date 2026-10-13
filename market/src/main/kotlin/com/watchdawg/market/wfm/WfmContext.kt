@@ -19,8 +19,7 @@ import org.springframework.http.client.ClientHttpResponse
  * invents a `vanished` for about 7% of ingested orders, which is exactly the event SPEC 2.2 reads
  * as evidence of a sale. Nothing but this note prevents that.
  *
- * TODO(C5): assert it. There is no cross-channel test today because there is no socket to test
- * against — when the socket client lands, pin that both channels quote the same [crossplay].
+ * Socket integration tests pin agreement between the two channels for both crossplay values.
  */
 data class WfmContext(val platform: String, val crossplay: Boolean)
 

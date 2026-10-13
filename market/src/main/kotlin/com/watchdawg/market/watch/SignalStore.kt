@@ -45,6 +45,14 @@ data class Outgoing(
 @Component
 class SignalStore(private val jdbc: NamedParameterJdbcTemplate) {
 
+    /** Acquire only after all order writes, held until the surrounding ingest commits. */
+    fun lockAdmission() {
+        check(org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive()) {
+            "signal admission requires an ingest transaction"
+        }
+        jdbc.jdbcTemplate.execute("select pg_advisory_xact_lock(726193504)")
+    }
+
     /**
      * Writes [candidate] in [state] and returns true, or returns false when its dedup key is
      * already taken, whatever that signal's state (R9a.5).

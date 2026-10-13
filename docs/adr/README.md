@@ -30,6 +30,8 @@ are the original decision dates, not the dates the records were written.
 | [0020](0020-storage-policies-in-one-repeatable-migration.md) | Storage policies are declared in one repeatable migration | accepted | 2026-09-24 |
 | [0021](0021-limiter-owns-the-ceiling-poll-loop-owns-freshness.md) | The limiter owns the request ceiling; the poll loop owns freshness | accepted | 2026-09-25 |
 
+| [0022](0022-whole-market-socket-feed.md) | Record the whole-market socket feed | accepted | 2026-10-13 |
+
 Decisions scoped to a single capability's implementation are recorded in that capability's plan:
 `tasks/plan.md` for the capability in progress, `tasks/archive/` for finished ones. A decision
 graduates to an ADR here when it constrains the design beyond the capability that raised it.

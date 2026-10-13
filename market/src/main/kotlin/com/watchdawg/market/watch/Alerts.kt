@@ -16,7 +16,7 @@ data class AlertProperties(val dailyCeiling: Int)
 /**
  * Runs the rules over a reconciled book and decides what reaches the outbox (R9a.5, R9a.8). The
  * caller holds the reconcile transaction, so a signal commits or rolls back with the book behind
- * it (R9a.7), and the poll loop reconciles one book at a time, so admissions never race.
+ * it (R9a.7). A transaction-scoped lock serialises admission across polling and the socket.
  *
  * Candidates are taken cheapest first, and each is:
  * - skipped if its dedup key is taken, whatever that signal's state;
@@ -41,13 +41,20 @@ class Alerts(
      *
      * @return how many signals were admitted.
      */
-    fun evaluate(itemId: String, book: Collection<ObservedOrder>, markets: Map<Long, MarketKey>, seenAt: Instant): Int =
-        watches.forItem(itemId).sumOf { watch ->
-            val selected = markets.filterValues(watch::selects).keys
-            admit(watch, underpriced(watch, book, selected), seenAt)
-        }
+    fun evaluate(
+        itemId: String,
+        book: Collection<ObservedOrder>,
+        markets: Map<Long, MarketKey>,
+        seenAt: Instant,
+        fullBook: Boolean = true,
+    ): Int = watches.forItem(itemId).sumOf { watch ->
+        val selected = markets.filterValues(watch::selects).keys
+        admit(watch, underpriced(watch, book, selected), seenAt)
+    }
 
     private fun admit(watch: Watch, candidates: List<Candidate>, seenAt: Instant): Int {
+        if (candidates.isEmpty()) return 0
+        signals.lockAdmission()
         var last = signals.lastAdmitted(watch.name)
         var admitted = 0
         for (candidate in candidates) {
@@ -58,7 +65,13 @@ class Alerts(
 
             val state = if (overCeiling(seenAt)) SignalState.SUPPRESSED else SignalState.PENDING
             if (!signals.admit(candidate, state, seenAt)) continue
-            metrics.signal(watch.name, state)
+            org.springframework.transaction.support.TransactionSynchronizationManager.registerSynchronization(
+                object : org.springframework.transaction.support.TransactionSynchronization {
+                    override fun afterCommit() {
+                        metrics.signal(watch.name, state)
+                    }
+                },
+            )
             // A suppressed candidate stands in for an admission here, so one burst over the
             // ceiling writes one row a poll, not one for every cheap listing in the book.
             last = Admitted(seenAt, price)

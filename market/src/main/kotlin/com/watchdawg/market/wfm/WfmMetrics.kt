@@ -57,6 +57,33 @@ class WfmMetrics(private val registry: MeterRegistry) {
         Counter.builder(POLLS).tag(OUTCOME, it.tag).register(registry)
     }
 
+    private val throttles = Bucket.entries.flatMap { bucket ->
+        Throttle.entries.map { throttle ->
+            (bucket to throttle) to Counter.builder("wfm.throttles")
+                .tag(BUCKET, bucket.tag).tag(STATUS, throttle.status.toString()).register(registry)
+        }
+    }.toMap()
+    private val connected = java.util.concurrent.atomic.AtomicInteger()
+    private val frames = listOf("order", "control", "skipped", "failed").associateWith {
+        Counter.builder("wfm.socket.frames").tag(OUTCOME, it).register(registry)
+    }
+    private val reconnects = listOf("connect", "subscription", "silence", "closed", "error", "ingest").associateWith {
+        Counter.builder("wfm.socket.reconnects").tag("reason", it).register(registry)
+    }
+    private val gapfills = listOf("success", "failed", "throttled", "skipped").associateWith {
+        Counter.builder("wfm.socket.gapfills").tag(OUTCOME, it).register(registry)
+    }
+
+    init {
+        registry.gauge("wfm.socket.connected", connected)
+    }
+
+    fun throttleSeen(bucket: Bucket, throttle: Throttle) = throttles.getValue(bucket to throttle).increment()
+    fun socketConnected(up: Boolean) = connected.set(if (up) 1 else 0)
+    fun socketFrame(outcome: String) = frames.getValue(outcome).increment()
+    fun socketReconnect(reason: String) = reconnects.getValue(reason).increment()
+    fun socketGapFill(outcome: String) = gapfills.getValue(outcome).increment()
+
     fun pollRoundStarted(lateness: Duration) = pollLateness.record(lateness)
 
     fun polled(outcome: PollOutcome) = polls.getValue(outcome).increment()

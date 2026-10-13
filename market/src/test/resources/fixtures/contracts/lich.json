@@ -1,0 +1,3922 @@
+{
+  "payload": {
+    "auctions": [
+      {
+        "starting_price": 120,
+        "visible": true,
+        "buyout_price": null,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2024-01-14T19:53:07.000+00:00",
+        "updated": "2026-05-04T13:16:23.000+00:00",
+        "is_direct_sell": false,
+        "id": "65a43ba38269a901ab2a27b4",
+        "item": {
+          "damage": 39,
+          "type": "lich",
+          "having_ephemera": false,
+          "element": "toxin",
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 60,
+        "buyout_price": null,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-10-18T02:37:50.000+00:00",
+        "updated": "2026-10-08T05:29:27.000+00:00",
+        "is_direct_sell": false,
+        "id": "68f2fd7e8a7959015047c6a5",
+        "item": {
+          "element": "impact",
+          "quirk": "none",
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": false,
+          "type": "lich",
+          "damage": 44
+        }
+      },
+      {
+        "starting_price": 15,
+        "buyout_price": null,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": 25,
+        "created": "2026-08-31T10:32:07.000+00:00",
+        "updated": "2026-09-10T22:52:12.000+00:00",
+        "is_direct_sell": false,
+        "id": "6a95582751f7f20b4bef8913",
+        "item": {
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "damage": 25,
+          "element": "toxin",
+          "type": "lich"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 1,
+        "buyout_price": null,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": 15,
+        "created": "2022-04-24T16:16:39.000+00:00",
+        "updated": "2026-09-12T19:02:47.000+00:00",
+        "is_direct_sell": false,
+        "id": "626577e7596f2f03e8a4bcd2",
+        "item": {
+          "element": "toxin",
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": false,
+          "damage": 30,
+          "type": "lich"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 5000,
+        "starting_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": 100,
+        "created": "2026-06-18T02:04:09.000+00:00",
+        "updated": "2026-10-08T09:37:58.000+00:00",
+        "is_direct_sell": false,
+        "id": "6a33521953147701c0c89d66",
+        "item": {
+          "type": "lich",
+          "having_ephemera": true,
+          "damage": 60,
+          "weapon_url_name": "kuva_bramma",
+          "element": "electricity"
+        }
+      },
+      {
+        "starting_price": 1300,
+        "buyout_price": 1300,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-09T06:06:12.000+00:00",
+        "updated": "2026-10-11T14:01:29.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac88454dd18e5005c2048e3",
+        "item": {
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich",
+          "element": "radiation",
+          "having_ephemera": true,
+          "damage": 60
+        }
+      },
+      {
+        "starting_price": 1000,
+        "buyout_price": 1000,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-22T02:52:15.000+00:00",
+        "updated": "2026-08-22T02:52:15.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a890edf51f7f206ace47174",
+        "item": {
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "fear_of_space_travel",
+          "damage": 60,
+          "element": "toxin",
+          "type": "lich"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 1000,
+        "buyout_price": 1000,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-27T04:13:24.000+00:00",
+        "updated": "2026-08-17T20:13:38.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a66dae41138b80613143b14",
+        "item": {
+          "having_ephemera": false,
+          "quirk": "none",
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "element": "radiation",
+          "damage": 60
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 1000,
+        "buyout_price": 1000,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-04-24T13:53:06.000+00:00",
+        "updated": "2026-04-24T13:53:06.000+00:00",
+        "is_direct_sell": true,
+        "id": "69eb75c234493d03ea7abccb",
+        "item": {
+          "damage": 60,
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "element": "cold",
+          "type": "lich",
+          "quirk": "always_hungry"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 1,
+        "buyout_price": 1000,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-04T18:33:17.000+00:00",
+        "updated": "2026-10-09T13:05:33.000+00:00",
+        "is_direct_sell": false,
+        "id": "6ac29bed64a7ca032cd64d3a",
+        "item": {
+          "type": "lich",
+          "damage": 57,
+          "having_ephemera": false,
+          "element": "heat",
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "starting_price": 700,
+        "buyout_price": 700,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-15T02:07:39.000+00:00",
+        "updated": "2026-08-17T06:45:55.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a7fc9eb51f7f20355060c13",
+        "item": {
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma",
+          "damage": 51,
+          "element": "radiation",
+          "type": "lich"
+        }
+      },
+      {
+        "buyout_price": 550,
+        "starting_price": 550,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-07T19:40:13.000+00:00",
+        "updated": "2026-10-07T23:22:25.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac6a01dc94ce404205f959d",
+        "item": {
+          "having_ephemera": true,
+          "quirk": "none",
+          "element": "toxin",
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich",
+          "damage": 55
+        }
+      },
+      {
+        "buyout_price": 500,
+        "starting_price": 500,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-06T17:39:25.000+00:00",
+        "updated": "2026-10-06T17:39:25.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac5324dc94ce403cc802951",
+        "item": {
+          "having_ephemera": false,
+          "element": "electricity",
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich",
+          "damage": 58
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 500,
+        "starting_price": 500,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-30T18:45:00.000+00:00",
+        "updated": "2026-10-11T09:48:51.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abd58ac27b8c001c07c0e12",
+        "item": {
+          "type": "lich",
+          "damage": 60,
+          "element": "heat",
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "having_ephemera": false
+        }
+      },
+      {
+        "starting_price": 470,
+        "visible": true,
+        "buyout_price": 470,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-01-04T23:47:33.000+00:00",
+        "updated": "2026-01-04T23:47:33.000+00:00",
+        "is_direct_sell": true,
+        "id": "695afc15a8a2730007b4c5af",
+        "item": {
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma",
+          "element": "heat",
+          "damage": 47,
+          "type": "lich"
+        }
+      },
+      {
+        "starting_price": 450,
+        "buyout_price": 450,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-11T12:34:25.000+00:00",
+        "updated": "2026-08-18T18:17:54.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a7b16d151f7f20181ea9b0b",
+        "item": {
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma",
+          "damage": 60,
+          "element": "toxin",
+          "type": "lich"
+        }
+      },
+      {
+        "buyout_price": 450,
+        "starting_price": 450,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-15T14:53:01.000+00:00",
+        "updated": "2026-10-13T08:14:26.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a07334dc7bcef0183b52701",
+        "item": {
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich",
+          "damage": 60,
+          "element": "heat"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 440,
+        "buyout_price": 440,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-04-07T09:00:10.000+00:00",
+        "updated": "2026-10-11T10:50:02.000+00:00",
+        "is_direct_sell": true,
+        "id": "69d4c79a34493d002afdb733",
+        "item": {
+          "damage": 57,
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma",
+          "element": "toxin",
+          "type": "lich"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 400,
+        "buyout_price": 400,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-17T20:23:30.000+00:00",
+        "updated": "2026-09-17T20:23:30.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aac4c42624e74158ffbeccc",
+        "item": {
+          "damage": 57,
+          "type": "lich",
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "element": "magnetic"
+        }
+      },
+      {
+        "buyout_price": 400,
+        "starting_price": 400,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-23T06:09:31.000+00:00",
+        "updated": "2026-10-01T11:38:03.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a61b01b9a73bd03f7ab5657",
+        "item": {
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": false,
+          "type": "lich",
+          "quirk": "none",
+          "damage": 60,
+          "element": "magnetic"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 225,
+        "buyout_price": 400,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": 225,
+        "created": "2026-10-02T00:44:17.000+00:00",
+        "updated": "2026-10-04T17:28:05.000+00:00",
+        "is_direct_sell": false,
+        "id": "6abefe6164a7ca02526113b0",
+        "item": {
+          "type": "lich",
+          "damage": 60,
+          "having_ephemera": true,
+          "element": "heat",
+          "quirk": "none",
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 380,
+        "buyout_price": 380,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-04-16T23:19:00.000+00:00",
+        "updated": "2026-04-16T23:19:00.000+00:00",
+        "is_direct_sell": true,
+        "id": "69e16e64c735ec025011153c",
+        "item": {
+          "weapon_url_name": "kuva_bramma",
+          "element": "impact",
+          "type": "lich",
+          "damage": 52,
+          "having_ephemera": true,
+          "quirk": "none"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 375,
+        "starting_price": 375,
+        "platform": "ps4",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-07T19:02:48.000+00:00",
+        "updated": "2026-09-06T22:45:15.000+00:00",
+        "is_direct_sell": true,
+        "id": "69fce1d81e9a6c06e643b32e",
+        "item": {
+          "having_ephemera": true,
+          "element": "magnetic",
+          "damage": 60,
+          "type": "lich",
+          "quirk": "none",
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "starting_price": 350,
+        "buyout_price": 350,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-01T13:47:30.000+00:00",
+        "updated": "2026-09-01T13:48:31.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a96d77251f7f20bf3498dd2",
+        "item": {
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "damage": 56,
+          "element": "electricity",
+          "type": "lich"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 350,
+        "buyout_price": 350,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-23T18:17:43.000+00:00",
+        "updated": "2026-09-15T12:53:32.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a8b39474103b50793e902d2",
+        "item": {
+          "type": "lich",
+          "damage": 60,
+          "element": "electricity",
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "having_ephemera": true
+        }
+      },
+      {
+        "buyout_price": 350,
+        "starting_price": 350,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-30T15:12:24.000+00:00",
+        "updated": "2026-10-11T05:43:47.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a43dcd81dbb3d02a6f64406",
+        "item": {
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": false,
+          "damage": 29,
+          "element": "impact",
+          "type": "lich"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 325,
+        "buyout_price": 325,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-29T08:42:04.000+00:00",
+        "updated": "2026-09-29T08:42:04.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abb79dc64a7ca012d73f446",
+        "item": {
+          "type": "lich",
+          "damage": 53,
+          "having_ephemera": false,
+          "element": "toxin",
+          "quirk": "none",
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "buyout_price": 325,
+        "starting_price": 325,
+        "visible": true,
+        "platform": "ps4",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-04-06T02:33:42.000+00:00",
+        "updated": "2026-04-27T03:36:35.000+00:00",
+        "is_direct_sell": true,
+        "id": "69d31b86f11b6c03f9bc58dd",
+        "item": {
+          "damage": 57,
+          "element": "magnetic",
+          "type": "lich",
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 300,
+        "buyout_price": 300,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-04T02:59:47.000+00:00",
+        "updated": "2026-10-08T04:59:03.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac1c12364a7ca03175d7b0a",
+        "item": {
+          "type": "lich",
+          "damage": 53,
+          "having_ephemera": false,
+          "element": "heat",
+          "quirk": "hatred_of_infested",
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 300,
+        "buyout_price": 300,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-03T09:40:55.000+00:00",
+        "updated": "2026-10-03T09:40:55.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac0cda764a7ca02e60e5689",
+        "item": {
+          "type": "lich",
+          "damage": 54,
+          "having_ephemera": false,
+          "element": "heat",
+          "quirk": "none",
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "starting_price": 300,
+        "buyout_price": 300,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-27T17:03:49.000+00:00",
+        "updated": "2026-08-27T17:03:49.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a906df551f7f20984239111",
+        "item": {
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma",
+          "damage": 48,
+          "element": "electricity",
+          "type": "lich"
+        }
+      },
+      {
+        "starting_price": 300,
+        "visible": true,
+        "buyout_price": 300,
+        "platform": "ps4",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-28T13:29:43.000+00:00",
+        "updated": "2026-07-28T13:29:43.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a68aec724cd4006c082d7ac",
+        "item": {
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "damage": 38,
+          "element": "heat",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 300,
+        "starting_price": 300,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-29T04:13:40.000+00:00",
+        "updated": "2026-09-21T09:47:52.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a19127436f8740009a7bca5",
+        "item": {
+          "element": "electricity",
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich",
+          "damage": 60,
+          "quirk": "allergic_to_nature",
+          "having_ephemera": true
+        }
+      },
+      {
+        "starting_price": 145,
+        "buyout_price": 300,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-19T14:45:41.000+00:00",
+        "updated": "2026-09-19T14:45:41.000+00:00",
+        "is_direct_sell": false,
+        "id": "6aaea01551f7f216b2312aa9",
+        "item": {
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "bloodhound",
+          "damage": 49,
+          "element": "electricity",
+          "type": "lich"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 280,
+        "starting_price": 280,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-29T08:44:43.000+00:00",
+        "updated": "2026-09-29T08:44:43.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abb7a7b27b8c0013457dbdf",
+        "item": {
+          "type": "lich",
+          "damage": 46,
+          "element": "toxin",
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "having_ephemera": false
+        }
+      },
+      {
+        "buyout_price": 260,
+        "starting_price": 150,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2022-12-22T22:41:16.000+00:00",
+        "updated": "2026-10-13T11:19:06.000+00:00",
+        "is_direct_sell": false,
+        "id": "63a4dd0c4176ae084c9f2ff0",
+        "item": {
+          "weapon_url_name": "kuva_bramma",
+          "element": "electricity",
+          "damage": 58,
+          "type": "lich",
+          "having_ephemera": true
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 250,
+        "buyout_price": 250,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-30T09:25:03.000+00:00",
+        "updated": "2026-09-30T09:25:03.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abcd56f64a7ca01ab4b2db1",
+        "item": {
+          "type": "lich",
+          "damage": 44,
+          "having_ephemera": false,
+          "element": "toxin",
+          "quirk": "paranoid",
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 250,
+        "starting_price": 250,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-27T08:15:15.000+00:00",
+        "updated": "2026-09-27T10:37:36.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab8d09327b8c00054364c3c",
+        "item": {
+          "type": "lich",
+          "damage": 54,
+          "element": "magnetic",
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": false
+        }
+      },
+      {
+        "starting_price": 250,
+        "buyout_price": 250,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-14T20:10:58.000+00:00",
+        "updated": "2026-09-14T20:28:27.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aa854d251f7f2139b80266f",
+        "item": {
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "hatred_of_corpus",
+          "damage": 51,
+          "element": "radiation",
+          "type": "lich"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 250,
+        "buyout_price": 250,
+        "platform": "xbox",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-25T13:54:48.000+00:00",
+        "updated": "2026-08-25T13:54:48.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a8d9ea84103b5086cdd0f05",
+        "item": {
+          "type": "lich",
+          "damage": 42,
+          "element": "heat",
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "having_ephemera": false
+        }
+      },
+      {
+        "buyout_price": 250,
+        "starting_price": 250,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-07T01:43:10.000+00:00",
+        "updated": "2026-08-07T01:43:10.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a75382e2d7dee029929ed01",
+        "item": {
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "damage": 46,
+          "element": "magnetic",
+          "quirk": "loner",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 250,
+        "buyout_price": 250,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-04-26T23:51:10.000+00:00",
+        "updated": "2026-04-26T23:51:10.000+00:00",
+        "is_direct_sell": true,
+        "id": "69eea4ee34493d046c32ecc0",
+        "item": {
+          "damage": 52,
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma",
+          "element": "toxin",
+          "type": "lich"
+        }
+      },
+      {
+        "starting_price": 100,
+        "visible": true,
+        "buyout_price": 250,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-20T06:56:04.000+00:00",
+        "updated": "2026-06-20T06:56:04.000+00:00",
+        "is_direct_sell": false,
+        "id": "6a363984663c560261b6ade2",
+        "item": {
+          "having_ephemera": true,
+          "damage": 47,
+          "type": "lich",
+          "element": "toxin",
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "pyromaniac"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 240,
+        "starting_price": 240,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-28T15:34:53.000+00:00",
+        "updated": "2026-09-28T15:34:53.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aba891d27b8c000f55cfd65",
+        "item": {
+          "type": "lich",
+          "damage": 49,
+          "element": "impact",
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": false
+        }
+      },
+      {
+        "buyout_price": 240,
+        "starting_price": 240,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-05T16:06:51.000+00:00",
+        "updated": "2026-09-12T07:27:01.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a735f9b56f7e401f8d23923",
+        "item": {
+          "element": "radiation",
+          "type": "lich",
+          "damage": 41,
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "buyout_price": 235,
+        "starting_price": 235,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-29T09:26:43.000+00:00",
+        "updated": "2026-09-29T09:26:43.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abb8453c94ce40133ce8b41",
+        "item": {
+          "having_ephemera": false,
+          "quirk": "none",
+          "element": "toxin",
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich",
+          "damage": 42
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 225,
+        "starting_price": 145,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": 200,
+        "created": "2026-07-14T03:12:54.000+00:00",
+        "updated": "2026-09-30T02:29:52.000+00:00",
+        "is_direct_sell": false,
+        "id": "6a55a93680f0b5034f6029fe",
+        "item": {
+          "damage": 54,
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": true,
+          "element": "heat",
+          "type": "lich"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 220,
+        "buyout_price": 220,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-15T19:17:58.000+00:00",
+        "updated": "2026-09-15T20:41:41.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aa999e6624e741423ef8a37",
+        "item": {
+          "damage": 57,
+          "type": "lich",
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "element": "magnetic"
+        }
+      },
+      {
+        "starting_price": 210,
+        "visible": true,
+        "buyout_price": 210,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-01-05T21:46:24.000+00:00",
+        "updated": "2026-08-22T19:03:01.000+00:00",
+        "is_direct_sell": true,
+        "id": "695c313024b79000090d5865",
+        "item": {
+          "damage": 25,
+          "weapon_url_name": "kuva_bramma",
+          "element": "impact",
+          "type": "lich",
+          "having_ephemera": true
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 200,
+        "buyout_price": 200,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-03T19:30:22.000+00:00",
+        "updated": "2026-10-10T03:35:33.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac157ce64a7ca02f4f8cc5b",
+        "item": {
+          "type": "lich",
+          "damage": 53,
+          "having_ephemera": false,
+          "element": "cold",
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 200,
+        "buyout_price": 200,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-14T21:54:17.000+00:00",
+        "updated": "2026-09-16T00:12:08.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aa86d094103b5139a9e90b1",
+        "item": {
+          "type": "lich",
+          "damage": 41,
+          "element": "radiation",
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 200,
+        "buyout_price": 200,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-09T03:41:28.000+00:00",
+        "updated": "2026-09-09T03:41:28.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aa0d5684103b50fc7bd7c37",
+        "item": {
+          "type": "lich",
+          "damage": 48,
+          "element": "heat",
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "having_ephemera": true
+        }
+      },
+      {
+        "starting_price": 200,
+        "buyout_price": 200,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-07T19:56:56.000+00:00",
+        "updated": "2026-09-07T19:56:56.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a9f170851f7f20ef5198ca6",
+        "item": {
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "deserter",
+          "damage": 28,
+          "element": "toxin",
+          "type": "lich"
+        }
+      },
+      {
+        "starting_price": 200,
+        "buyout_price": 200,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-05T10:02:48.000+00:00",
+        "updated": "2026-09-11T11:31:15.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a9be8c851f7f20dac2003d6",
+        "item": {
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "vain",
+          "damage": 52,
+          "element": "heat",
+          "type": "lich"
+        }
+      },
+      {
+        "buyout_price": 200,
+        "starting_price": 200,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-04T07:00:22.000+00:00",
+        "updated": "2026-08-04T07:00:22.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a718e0656f7e4013b83c4af",
+        "item": {
+          "element": "toxin",
+          "type": "lich",
+          "damage": 25,
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "starting_price": 200,
+        "visible": true,
+        "buyout_price": 200,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-24T12:46:41.000+00:00",
+        "updated": "2026-07-24T12:46:41.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a635eb124cd4004b375061a",
+        "item": {
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "damage": 57,
+          "element": "radiation",
+          "quirk": "none",
+          "having_ephemera": false
+        }
+      },
+      {
+        "buyout_price": 200,
+        "starting_price": 200,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-01T20:49:54.000+00:00",
+        "updated": "2026-06-01T20:51:07.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a1df072580ed500d985aefb",
+        "item": {
+          "element": "electricity",
+          "damage": 48,
+          "type": "lich",
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 200,
+        "starting_price": 200,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-04-26T08:42:47.000+00:00",
+        "updated": "2026-10-07T11:53:43.000+00:00",
+        "is_direct_sell": true,
+        "id": "69edd0071e9a6c0457efbabe",
+        "item": {
+          "having_ephemera": false,
+          "element": "heat",
+          "damage": 60,
+          "type": "lich",
+          "quirk": "none",
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 200,
+        "buyout_price": 200,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-04-20T05:54:00.000+00:00",
+        "updated": "2026-04-20T05:54:00.000+00:00",
+        "is_direct_sell": true,
+        "id": "69e5bf7834493d03041d2115",
+        "item": {
+          "damage": 27,
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma",
+          "element": "magnetic",
+          "type": "lich"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 200,
+        "starting_price": 200,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-03-11T14:23:47.000+00:00",
+        "updated": "2026-10-02T02:17:48.000+00:00",
+        "is_direct_sell": true,
+        "id": "69b17af37d304506afc56812",
+        "item": {
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": false,
+          "type": "lich",
+          "damage": 51,
+          "element": "electricity"
+        }
+      },
+      {
+        "starting_price": 200,
+        "buyout_price": 200,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-11-07T03:43:26.000+00:00",
+        "updated": "2026-09-29T08:40:50.000+00:00",
+        "is_direct_sell": true,
+        "id": "690d6ade8a79590043eb88b9",
+        "item": {
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "type": "lich",
+          "having_ephemera": true,
+          "element": "toxin",
+          "damage": 38
+        }
+      },
+      {
+        "buyout_price": 200,
+        "starting_price": 150,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-03T23:11:00.000+00:00",
+        "updated": "2026-08-03T23:11:00.000+00:00",
+        "is_direct_sell": false,
+        "id": "6a71200456f7e40118bf8cbc",
+        "item": {
+          "element": "heat",
+          "type": "lich",
+          "damage": 47,
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "starting_price": 50,
+        "buyout_price": 200,
+        "visible": true,
+        "platform": "xbox",
+        "closed": false,
+        "top_bid": 50,
+        "created": "2026-08-31T03:10:05.000+00:00",
+        "updated": "2026-10-02T22:32:02.000+00:00",
+        "is_direct_sell": false,
+        "id": "6a94f08d51f7f20b3dc0de07",
+        "item": {
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "damage": 50,
+          "element": "toxin",
+          "type": "lich"
+        }
+      },
+      {
+        "buyout_price": 180,
+        "starting_price": 180,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-03-21T11:15:58.000+00:00",
+        "updated": "2026-10-13T01:30:43.000+00:00",
+        "is_direct_sell": true,
+        "id": "69be7deef11b6c00dee0ecc9",
+        "item": {
+          "damage": 25,
+          "element": "toxin",
+          "quirk": "none",
+          "type": "lich",
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 180,
+        "buyout_price": 180,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-10-21T14:39:18.000+00:00",
+        "updated": "2026-06-26T17:31:47.000+00:00",
+        "is_direct_sell": true,
+        "id": "68f79b161c2cfa0048ea9055",
+        "item": {
+          "element": "electricity",
+          "having_ephemera": false,
+          "type": "lich",
+          "quirk": "none",
+          "weapon_url_name": "kuva_bramma",
+          "damage": 53
+        }
+      },
+      {
+        "starting_price": 180,
+        "visible": true,
+        "buyout_price": 180,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-09-12T06:21:11.000+00:00",
+        "updated": "2026-03-30T08:06:23.000+00:00",
+        "is_direct_sell": true,
+        "id": "68c3bbd72a87dd004f93cc64",
+        "item": {
+          "quirk": "allergic_to_nature",
+          "type": "lich",
+          "element": "electricity",
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma",
+          "damage": 48
+        }
+      },
+      {
+        "buyout_price": 180,
+        "starting_price": 180,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-08-31T17:23:16.000+00:00",
+        "updated": "2026-10-13T01:31:07.000+00:00",
+        "is_direct_sell": true,
+        "id": "68b48504388ac8001e889982",
+        "item": {
+          "damage": 33,
+          "type": "lich",
+          "quirk": "vain",
+          "element": "toxin",
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": true
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 155,
+        "buyout_price": 155,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-21T15:34:06.000+00:00",
+        "updated": "2026-08-27T19:02:41.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a886fee4103b50696c413a9",
+        "item": {
+          "type": "lich",
+          "damage": 34,
+          "element": "heat",
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "having_ephemera": true
+        }
+      },
+      {
+        "buyout_price": 150,
+        "starting_price": 150,
+        "visible": true,
+        "platform": "mobile",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-12T18:02:47.000+00:00",
+        "updated": "2026-10-12T18:02:47.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acd20c795e00c017ab69ce8",
+        "item": {
+          "element": "electricity",
+          "weapon_url_name": "kuva_bramma",
+          "damage": 30,
+          "having_ephemera": true,
+          "type": "lich"
+        }
+      },
+      {
+        "buyout_price": 150,
+        "starting_price": 150,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-08T07:46:51.000+00:00",
+        "updated": "2026-10-08T16:24:19.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac74a6b95e00c0009efa3bb",
+        "item": {
+          "element": "toxin",
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "damage": 58,
+          "having_ephemera": false,
+          "type": "lich"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 150,
+        "buyout_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-07T04:42:43.000+00:00",
+        "updated": "2026-10-07T04:42:43.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac5cdc364a7ca03f05fafab",
+        "item": {
+          "type": "lich",
+          "damage": 46,
+          "having_ephemera": true,
+          "element": "electricity",
+          "quirk": "none",
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 150,
+        "starting_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-03T19:40:12.000+00:00",
+        "updated": "2026-10-03T19:40:45.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac15a1c27b8c003022a2790",
+        "item": {
+          "type": "lich",
+          "damage": 46,
+          "element": "radiation",
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": false
+        }
+      },
+      {
+        "starting_price": 150,
+        "visible": true,
+        "buyout_price": 150,
+        "platform": "xbox",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-26T00:11:24.000+00:00",
+        "updated": "2026-09-26T00:11:49.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab70dac28d4f6004d64cd04",
+        "item": {
+          "damage": 34,
+          "type": "lich",
+          "having_ephemera": true,
+          "element": "electricity",
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 150,
+        "buyout_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-03T22:53:44.000+00:00",
+        "updated": "2026-09-03T22:53:44.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a99fa784103b50d27151ee7",
+        "item": {
+          "type": "lich",
+          "damage": 49,
+          "element": "electricity",
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 150,
+        "buyout_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-30T14:02:06.000+00:00",
+        "updated": "2026-09-25T02:43:58.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a9437de4103b50af74430d8",
+        "item": {
+          "type": "lich",
+          "damage": 51,
+          "element": "electricity",
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "having_ephemera": true
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 150,
+        "buyout_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-26T06:14:30.000+00:00",
+        "updated": "2026-08-26T06:16:40.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a8e8446624e7408d5787243",
+        "item": {
+          "damage": 41,
+          "type": "lich",
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma",
+          "element": "toxin"
+        }
+      },
+      {
+        "starting_price": 150,
+        "buyout_price": 150,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-08T18:50:23.000+00:00",
+        "updated": "2026-08-13T04:56:39.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a777a6f51f7f20007011102",
+        "item": {
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "damage": 49,
+          "element": "electricity",
+          "type": "lich"
+        }
+      },
+      {
+        "buyout_price": 150,
+        "visible": true,
+        "starting_price": 150,
+        "platform": "xbox",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-02T21:11:37.000+00:00",
+        "updated": "2026-08-02T21:11:37.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a6fb289861e8c0085453318",
+        "item": {
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": false,
+          "damage": 57,
+          "element": "electricity"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 150,
+        "buyout_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-20T21:31:34.000+00:00",
+        "updated": "2026-07-20T21:31:34.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a5e93b61138b8030a1b7ef7",
+        "item": {
+          "having_ephemera": true,
+          "quirk": "none",
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "element": "radiation",
+          "damage": 39
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 150,
+        "starting_price": 150,
+        "platform": "mobile",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-10T20:07:03.000+00:00",
+        "updated": "2026-09-09T10:09:20.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a5150e780f0b501963ee9f3",
+        "item": {
+          "damage": 51,
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": false,
+          "element": "electricity",
+          "quirk": "hatred_of_corpus",
+          "type": "lich"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 150,
+        "buyout_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-27T13:33:21.000+00:00",
+        "updated": "2026-06-27T13:33:21.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a3fd12199b97901a482d271",
+        "item": {
+          "type": "lich",
+          "element": "toxin",
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": false,
+          "damage": 42,
+          "quirk": "none"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 150,
+        "starting_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-15T04:41:02.000+00:00",
+        "updated": "2026-10-07T03:45:14.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a06a3de6af86e01747d225e",
+        "item": {
+          "damage": 45,
+          "quirk": "pyromaniac",
+          "type": "lich",
+          "having_ephemera": true,
+          "element": "toxin",
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 150,
+        "buyout_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-02-27T14:43:16.000+00:00",
+        "updated": "2026-02-27T14:43:16.000+00:00",
+        "is_direct_sell": true,
+        "id": "69a1ad846254e404930e1e95",
+        "item": {
+          "damage": 40,
+          "having_ephemera": true,
+          "quirk": "none",
+          "element": "electricity",
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich"
+        }
+      },
+      {
+        "starting_price": 150,
+        "buyout_price": 150,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-02-25T16:18:09.000+00:00",
+        "updated": "2026-02-25T16:18:09.000+00:00",
+        "is_direct_sell": true,
+        "id": "699f20c1d8b8b00457074a7a",
+        "item": {
+          "quirk": "none",
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "damage": 41,
+          "element": "electricity",
+          "having_ephemera": true
+        }
+      },
+      {
+        "starting_price": 150,
+        "buyout_price": 150,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-11-15T16:23:33.000+00:00",
+        "updated": "2026-05-16T21:13:59.000+00:00",
+        "is_direct_sell": true,
+        "id": "6918a905a450720008ae92a9",
+        "item": {
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "damage": 49,
+          "having_ephemera": true,
+          "element": "toxin"
+        }
+      },
+      {
+        "buyout_price": 150,
+        "visible": true,
+        "starting_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2024-07-04T16:10:33.000+00:00",
+        "updated": "2026-10-02T18:31:57.000+00:00",
+        "is_direct_sell": true,
+        "id": "6686c979c405f61ef12300ed",
+        "item": {
+          "weapon_url_name": "kuva_bramma",
+          "element": "cold",
+          "type": "lich",
+          "having_ephemera": false,
+          "damage": 55
+        }
+      },
+      {
+        "buyout_price": 150,
+        "visible": true,
+        "starting_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2023-04-22T07:19:56.000+00:00",
+        "updated": "2026-07-20T13:23:57.000+00:00",
+        "is_direct_sell": true,
+        "id": "64438a9ca6e34b0a451e6daa",
+        "item": {
+          "damage": 44,
+          "element": "electricity",
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich"
+        }
+      },
+      {
+        "buyout_price": 150,
+        "visible": true,
+        "starting_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2023-04-21T15:59:48.000+00:00",
+        "updated": "2026-08-13T10:26:23.000+00:00",
+        "is_direct_sell": true,
+        "id": "6442b2f4a6e34b09bb71a3b2",
+        "item": {
+          "damage": 25,
+          "element": "radiation",
+          "quirk": "none",
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich"
+        }
+      },
+      {
+        "buyout_price": 150,
+        "visible": true,
+        "starting_price": 45,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-10-22T06:43:47.000+00:00",
+        "updated": "2025-10-22T06:43:47.000+00:00",
+        "is_direct_sell": false,
+        "id": "68f87d23c4dcef0031e39cc0",
+        "item": {
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich",
+          "damage": 37,
+          "element": "electricity",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 140,
+        "buyout_price": 140,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-23T06:00:59.000+00:00",
+        "updated": "2026-09-23T06:00:59.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab36b1b4103b518f79c1c09",
+        "item": {
+          "type": "lich",
+          "damage": 53,
+          "element": "radiation",
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "having_ephemera": false
+        }
+      },
+      {
+        "starting_price": 130,
+        "buyout_price": 130,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-10T16:47:41.000+00:00",
+        "updated": "2026-09-19T06:17:51.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a7a00ad51f7f201110360f8",
+        "item": {
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "damage": 52,
+          "element": "cold",
+          "type": "lich"
+        }
+      },
+      {
+        "buyout_price": 130,
+        "starting_price": 130,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-03-24T11:02:16.000+00:00",
+        "updated": "2026-10-07T04:36:48.000+00:00",
+        "is_direct_sell": true,
+        "id": "69c26f38f11b6c0174c261f9",
+        "item": {
+          "damage": 39,
+          "element": "cold",
+          "type": "lich",
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 120,
+        "buyout_price": 120,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-27T08:13:18.000+00:00",
+        "updated": "2026-09-27T08:13:18.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab8d01e64a7ca00466ea9dc",
+        "item": {
+          "type": "lich",
+          "damage": 41,
+          "having_ephemera": true,
+          "element": "electricity",
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 120,
+        "buyout_price": 120,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-01T06:01:08.000+00:00",
+        "updated": "2026-09-01T13:46:03.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a966a24624e740bd3ff1229",
+        "item": {
+          "damage": 26,
+          "type": "lich",
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "element": "toxin"
+        }
+      },
+      {
+        "starting_price": 120,
+        "visible": true,
+        "buyout_price": 120,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-17T02:35:23.000+00:00",
+        "updated": "2026-07-04T05:59:06.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a3207ebc7bf3f017301d30f",
+        "item": {
+          "having_ephemera": true,
+          "type": "lich",
+          "element": "magnetic",
+          "weapon_url_name": "kuva_bramma",
+          "damage": 44
+        }
+      },
+      {
+        "buyout_price": 120,
+        "visible": true,
+        "starting_price": 120,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-01-15T19:49:56.000+00:00",
+        "updated": "2026-03-28T15:59:26.000+00:00",
+        "is_direct_sell": true,
+        "id": "696944e46d567d0009b3de0a",
+        "item": {
+          "quirk": "none",
+          "element": "magnetic",
+          "having_ephemera": true,
+          "damage": 38,
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 101,
+        "starting_price": 101,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-03-22T16:56:30.000+00:00",
+        "updated": "2026-03-22T16:56:30.000+00:00",
+        "is_direct_sell": true,
+        "id": "69c01f3eeed498012a6a19d2",
+        "item": {
+          "type": "lich",
+          "element": "toxin",
+          "damage": 27,
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "starting_price": 100,
+        "buyout_price": 100,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-13T13:22:50.000+00:00",
+        "updated": "2026-10-13T13:22:50.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ace30aadd18e501bf0f16c6",
+        "item": {
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich",
+          "element": "radiation",
+          "quirk": "paranoid",
+          "having_ephemera": false,
+          "damage": 40
+        }
+      },
+      {
+        "buyout_price": 100,
+        "starting_price": 100,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-12T13:20:46.000+00:00",
+        "updated": "2026-10-12T13:20:46.000+00:00",
+        "is_direct_sell": true,
+        "id": "6accdeae95e00c016c5aebaa",
+        "item": {
+          "element": "cold",
+          "weapon_url_name": "kuva_bramma",
+          "damage": 36,
+          "having_ephemera": true,
+          "type": "lich"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 100,
+        "buyout_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-11T20:15:32.000+00:00",
+        "updated": "2026-10-11T20:15:32.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acbee6406857601344972ba",
+        "item": {
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "damage": 50,
+          "having_ephemera": false,
+          "element": "toxin"
+        }
+      },
+      {
+        "starting_price": 100,
+        "buyout_price": 100,
+        "visible": true,
+        "platform": "xbox",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-08T09:19:50.000+00:00",
+        "updated": "2026-10-08T09:19:50.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac76036dd18e5000b79084f",
+        "item": {
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich",
+          "element": "heat",
+          "quirk": "none",
+          "having_ephemera": true,
+          "damage": 33
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 100,
+        "buyout_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-07T19:07:31.000+00:00",
+        "updated": "2026-10-07T19:07:31.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac6987364a7ca041ab30ec6",
+        "item": {
+          "type": "lich",
+          "damage": 38,
+          "having_ephemera": false,
+          "element": "heat",
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 100,
+        "starting_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-05T12:17:22.000+00:00",
+        "updated": "2026-10-13T11:42:33.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac3955227b8c0036b28fa10",
+        "item": {
+          "type": "lich",
+          "damage": 33,
+          "element": "magnetic",
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "having_ephemera": true
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 100,
+        "buyout_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-04T08:15:30.000+00:00",
+        "updated": "2026-10-04T08:15:30.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac20b2264a7ca032576c322",
+        "item": {
+          "type": "lich",
+          "damage": 49,
+          "having_ephemera": true,
+          "element": "toxin",
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "buyout_price": 100,
+        "starting_price": 100,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-27T04:32:23.000+00:00",
+        "updated": "2026-09-28T10:55:23.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab89c57c94ce40022d496a7",
+        "item": {
+          "having_ephemera": false,
+          "quirk": "prone_to_vertigo",
+          "element": "electricity",
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich",
+          "damage": 55
+        }
+      },
+      {
+        "starting_price": 100,
+        "visible": true,
+        "buyout_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-26T19:12:30.000+00:00",
+        "updated": "2026-09-26T19:13:34.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab8191e305c0800a859dddc",
+        "item": {
+          "element": "magnetic",
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "damage": 44,
+          "quirk": "paranoid",
+          "type": "lich"
+        }
+      },
+      {
+        "starting_price": 100,
+        "buyout_price": 100,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-02T14:05:06.000+00:00",
+        "updated": "2026-09-27T16:27:22.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a982d1251f7f20c5c19256a",
+        "item": {
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "damage": 33,
+          "element": "cold",
+          "type": "lich"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 100,
+        "buyout_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-25T18:45:03.000+00:00",
+        "updated": "2026-08-25T18:45:03.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a8de2af624e74088b359327",
+        "item": {
+          "damage": 29,
+          "type": "lich",
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "element": "toxin"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 100,
+        "buyout_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-24T05:32:22.000+00:00",
+        "updated": "2026-08-25T21:57:04.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a8bd7664103b507cbb41521",
+        "item": {
+          "type": "lich",
+          "damage": 48,
+          "element": "toxin",
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 100,
+        "buyout_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-19T19:56:04.000+00:00",
+        "updated": "2026-10-02T22:23:05.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a5d2bd41138b80285dd09d0",
+        "item": {
+          "having_ephemera": true,
+          "quirk": "none",
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "element": "magnetic",
+          "damage": 41
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 100,
+        "starting_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-11-20T18:16:57.000+00:00",
+        "updated": "2026-10-04T01:39:01.000+00:00",
+        "is_direct_sell": true,
+        "id": "691f5b190ded1c000621bb43",
+        "item": {
+          "damage": 31,
+          "element": "toxin",
+          "type": "lich",
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "starting_price": 100,
+        "visible": true,
+        "buyout_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-11-18T11:22:59.000+00:00",
+        "updated": "2025-11-18T11:22:59.000+00:00",
+        "is_direct_sell": true,
+        "id": "691c5713ba8f59001fd53a13",
+        "item": {
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "element": "magnetic",
+          "having_ephemera": true,
+          "damage": 29
+        }
+      },
+      {
+        "starting_price": 100,
+        "visible": true,
+        "buyout_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-08-19T15:39:01.000+00:00",
+        "updated": "2026-10-10T05:12:47.000+00:00",
+        "is_direct_sell": true,
+        "id": "68a49a9544f5940067f623f7",
+        "item": {
+          "type": "lich",
+          "damage": 26,
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma",
+          "element": "toxin"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 100,
+        "starting_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-05-13T20:41:35.000+00:00",
+        "updated": "2025-05-13T20:41:35.000+00:00",
+        "is_direct_sell": true,
+        "id": "6823ae7f353ea103857e70f0",
+        "item": {
+          "having_ephemera": false,
+          "type": "lich",
+          "damage": 33,
+          "weapon_url_name": "kuva_bramma",
+          "element": "heat"
+        }
+      },
+      {
+        "starting_price": 100,
+        "visible": true,
+        "buyout_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-01-18T15:09:21.000+00:00",
+        "updated": "2025-01-18T15:09:21.000+00:00",
+        "is_direct_sell": true,
+        "id": "678bc4213ba9d80103289d31",
+        "item": {
+          "element": "cold",
+          "type": "lich",
+          "damage": 27,
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": true
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 100,
+        "starting_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2024-12-23T15:12:47.000+00:00",
+        "updated": "2026-10-05T12:00:49.000+00:00",
+        "is_direct_sell": true,
+        "id": "67697deff278b1000a9d5f72",
+        "item": {
+          "damage": 44,
+          "having_ephemera": false,
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "element": "impact"
+        }
+      },
+      {
+        "buyout_price": 100,
+        "starting_price": 100,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2024-07-22T20:46:56.000+00:00",
+        "updated": "2025-03-26T08:10:43.000+00:00",
+        "is_direct_sell": true,
+        "id": "669ec540adc83a22943514b5",
+        "item": {
+          "having_ephemera": false,
+          "damage": 33,
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich",
+          "element": "heat"
+        }
+      },
+      {
+        "starting_price": 100,
+        "buyout_price": 100,
+        "visible": true,
+        "platform": "ps4",
+        "closed": false,
+        "top_bid": null,
+        "created": "2023-07-11T09:10:05.000+00:00",
+        "updated": "2026-10-05T00:38:04.000+00:00",
+        "is_direct_sell": true,
+        "id": "64ad1c6d0600742420aaec02",
+        "item": {
+          "type": "lich",
+          "damage": 25,
+          "weapon_url_name": "kuva_bramma",
+          "element": "heat",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 100,
+        "starting_price": 50,
+        "platform": "ps4",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-14T11:44:02.000+00:00",
+        "updated": "2026-10-06T15:16:54.000+00:00",
+        "is_direct_sell": false,
+        "id": "6a2e940253147700c46db42a",
+        "item": {
+          "type": "lich",
+          "quirk": "always_hungry",
+          "having_ephemera": false,
+          "damage": 51,
+          "weapon_url_name": "kuva_bramma",
+          "element": "electricity"
+        }
+      },
+      {
+        "starting_price": 99,
+        "buyout_price": 99,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-10T20:05:28.000+00:00",
+        "updated": "2026-10-10T20:05:28.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aca9a88dd18e500da10428f",
+        "item": {
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich",
+          "element": "toxin",
+          "having_ephemera": true,
+          "damage": 30
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 95,
+        "buyout_price": 95,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-12T21:20:57.000+00:00",
+        "updated": "2026-10-12T21:39:25.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acd4f39068576017a6a10f2",
+        "item": {
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "damage": 53,
+          "having_ephemera": false,
+          "element": "toxin"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 95,
+        "starting_price": 95,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-03T16:00:50.000+00:00",
+        "updated": "2026-10-09T16:17:54.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac126b227b8c002edf057bc",
+        "item": {
+          "type": "lich",
+          "damage": 52,
+          "element": "cold",
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "having_ephemera": true
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 95,
+        "buyout_price": 95,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-09T08:52:54.000+00:00",
+        "updated": "2026-10-09T06:53:48.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aa11e664103b50fea31aa22",
+        "item": {
+          "type": "lich",
+          "damage": 33,
+          "element": "cold",
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": true
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 90,
+        "buyout_price": 90,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-10T07:08:18.000+00:00",
+        "updated": "2026-09-10T07:08:18.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aa257624103b510a0d6f908",
+        "item": {
+          "type": "lich",
+          "damage": 39,
+          "element": "impact",
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "trophy_hunter",
+          "having_ephemera": true
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 90,
+        "buyout_price": 90,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-27T00:30:45.000+00:00",
+        "updated": "2026-08-27T00:30:45.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a8f85354103b50945476179",
+        "item": {
+          "type": "lich",
+          "damage": 46,
+          "element": "toxin",
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "having_ephemera": true
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 90,
+        "buyout_price": 90,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-10T20:59:54.000+00:00",
+        "updated": "2026-10-09T23:22:21.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a515d4a8928a5019dc71199",
+        "item": {
+          "element": "heat",
+          "having_ephemera": true,
+          "type": "lich",
+          "damage": 36,
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none"
+        }
+      },
+      {
+        "buyout_price": 90,
+        "starting_price": 90,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-03-05T21:33:29.000+00:00",
+        "updated": "2025-03-23T21:44:28.000+00:00",
+        "is_direct_sell": true,
+        "id": "67c8c32930f00700312a318b",
+        "item": {
+          "damage": 39,
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": false,
+          "element": "heat",
+          "type": "lich"
+        }
+      },
+      {
+        "starting_price": 90,
+        "buyout_price": 90,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2024-12-01T14:24:40.000+00:00",
+        "updated": "2024-12-01T14:24:40.000+00:00",
+        "is_direct_sell": true,
+        "id": "674c71a801035700095efccc",
+        "item": {
+          "weapon_url_name": "kuva_bramma",
+          "element": "magnetic",
+          "quirk": "none",
+          "damage": 40,
+          "having_ephemera": false,
+          "type": "lich"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 85,
+        "starting_price": 85,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-04-09T10:32:57.000+00:00",
+        "updated": "2026-10-10T21:34:03.000+00:00",
+        "is_direct_sell": true,
+        "id": "69d780591e9a6c00a2583d85",
+        "item": {
+          "having_ephemera": true,
+          "element": "toxin",
+          "damage": 40,
+          "type": "lich",
+          "quirk": "pyromaniac",
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 80,
+        "starting_price": 80,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-28T07:47:54.000+00:00",
+        "updated": "2026-09-28T07:47:54.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aba1baa27b8c000d9634b67",
+        "item": {
+          "type": "lich",
+          "damage": 33,
+          "element": "toxin",
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 80,
+        "buyout_price": 80,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-23T01:41:50.000+00:00",
+        "updated": "2026-08-23T01:41:50.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a8a4fde624e740738d129bd",
+        "item": {
+          "damage": 43,
+          "type": "lich",
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma",
+          "element": "toxin"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 80,
+        "buyout_price": 80,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-09T06:56:04.000+00:00",
+        "updated": "2026-09-14T11:13:14.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a4f46048928a500e08e9adf",
+        "item": {
+          "element": "radiation",
+          "having_ephemera": false,
+          "type": "lich",
+          "damage": 47,
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "allergic_to_nature"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 80,
+        "starting_price": 80,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-16T22:25:38.000+00:00",
+        "updated": "2026-08-25T17:29:23.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a31cd6253147701731ae0d1",
+        "item": {
+          "type": "lich",
+          "having_ephemera": false,
+          "damage": 40,
+          "weapon_url_name": "kuva_bramma",
+          "element": "electricity"
+        }
+      },
+      {
+        "buyout_price": 80,
+        "starting_price": 80,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-29T16:57:50.000+00:00",
+        "updated": "2026-10-08T15:15:12.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a19c58ef160470034f51c05",
+        "item": {
+          "having_ephemera": false,
+          "element": "electricity",
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich",
+          "damage": 48
+        }
+      },
+      {
+        "starting_price": 80,
+        "buyout_price": 80,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-03-15T19:48:05.000+00:00",
+        "updated": "2026-10-06T16:32:47.000+00:00",
+        "is_direct_sell": true,
+        "id": "69b70cf5d8b8b007759c8492",
+        "item": {
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "damage": 27,
+          "element": "heat",
+          "having_ephemera": true
+        }
+      },
+      {
+        "buyout_price": 80,
+        "visible": true,
+        "starting_price": 80,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-09-04T22:42:27.000+00:00",
+        "updated": "2025-09-04T22:42:27.000+00:00",
+        "is_direct_sell": true,
+        "id": "68ba15d3388ac800256631ce",
+        "item": {
+          "element": "toxin",
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": false,
+          "type": "lich",
+          "damage": 36
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 80,
+        "starting_price": 80,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-02-18T13:53:32.000+00:00",
+        "updated": "2026-09-20T08:52:03.000+00:00",
+        "is_direct_sell": true,
+        "id": "67b490dcde50f30006ab62b2",
+        "item": {
+          "type": "lich",
+          "having_ephemera": false,
+          "element": "magnetic",
+          "weapon_url_name": "kuva_bramma",
+          "damage": 33
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 10,
+        "buyout_price": 80,
+        "platform": "mobile",
+        "closed": false,
+        "top_bid": null,
+        "created": "2021-10-14T05:35:53.000+00:00",
+        "updated": "2022-01-18T01:27:24.000+00:00",
+        "is_direct_sell": false,
+        "id": "6167c1b977ed2e048b762221",
+        "item": {
+          "damage": 30,
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "element": "toxin",
+          "quirk": "none",
+          "having_ephemera": true
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 75,
+        "buyout_price": 75,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-06T07:18:27.000+00:00",
+        "updated": "2026-10-09T13:44:12.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a9d13c34103b50e2a5291f8",
+        "item": {
+          "type": "lich",
+          "damage": 28,
+          "element": "cold",
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 75,
+        "buyout_price": 75,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-06T07:15:02.000+00:00",
+        "updated": "2026-09-06T07:15:02.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a9d12f6624e740e42d2f745",
+        "item": {
+          "damage": 44,
+          "type": "lich",
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "element": "impact"
+        }
+      },
+      {
+        "starting_price": 75,
+        "buyout_price": 75,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-06T07:10:55.000+00:00",
+        "updated": "2026-09-06T07:10:55.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a9d11ff51f7f20e465a829a",
+        "item": {
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "loner",
+          "damage": 27,
+          "element": "impact",
+          "type": "lich"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 75,
+        "starting_price": 75,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2024-07-22T09:00:28.000+00:00",
+        "updated": "2025-03-26T08:10:45.000+00:00",
+        "is_direct_sell": true,
+        "id": "669e1fac6b174104f9a23da5",
+        "item": {
+          "damage": 28,
+          "element": "heat",
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "fear_of_children",
+          "type": "lich",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 70,
+        "buyout_price": 70,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-10T12:51:31.000+00:00",
+        "updated": "2026-10-10T12:51:31.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aca34d306857600b65d53df",
+        "item": {
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "damage": 52,
+          "having_ephemera": false,
+          "element": "heat"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 70,
+        "buyout_price": 70,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-06T12:52:22.000+00:00",
+        "updated": "2026-10-06T12:52:22.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac4ef0664a7ca03c62b926c",
+        "item": {
+          "type": "lich",
+          "damage": 32,
+          "having_ephemera": false,
+          "element": "magnetic",
+          "quirk": "none",
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 70,
+        "starting_price": 70,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-29T00:02:25.000+00:00",
+        "updated": "2026-10-02T16:10:00.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abb001127b8c00111a35c68",
+        "item": {
+          "type": "lich",
+          "damage": 39,
+          "element": "cold",
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": false
+        }
+      },
+      {
+        "starting_price": 70,
+        "buyout_price": 70,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-06T21:00:39.000+00:00",
+        "updated": "2026-09-07T12:38:44.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a9dd47751f7f20e854106a5",
+        "item": {
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "damage": 39,
+          "element": "electricity",
+          "type": "lich"
+        }
+      },
+      {
+        "buyout_price": 70,
+        "starting_price": 70,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-08T14:07:02.000+00:00",
+        "updated": "2026-09-09T14:21:08.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a7738062d7dee035d16b873",
+        "item": {
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "damage": 39,
+          "element": "toxin",
+          "quirk": "poor_sense_of_balance",
+          "having_ephemera": true
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 65,
+        "buyout_price": 65,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-02T11:03:43.000+00:00",
+        "updated": "2026-10-11T16:37:28.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abf8f8f64a7ca0268ab1c5c",
+        "item": {
+          "type": "lich",
+          "damage": 41,
+          "having_ephemera": false,
+          "element": "electricity",
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 60,
+        "starting_price": 60,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-07T00:11:00.000+00:00",
+        "updated": "2026-10-07T00:11:00.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac58e1427b8c003e29d0c3d",
+        "item": {
+          "type": "lich",
+          "damage": 38,
+          "element": "toxin",
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": false
+        }
+      },
+      {
+        "buyout_price": 60,
+        "starting_price": 60,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-27T07:15:43.000+00:00",
+        "updated": "2026-09-30T20:11:30.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab8c29fc94ce4003e5ac2c1",
+        "item": {
+          "having_ephemera": false,
+          "element": "electricity",
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich",
+          "damage": 37
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 60,
+        "buyout_price": 60,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-12T23:18:27.000+00:00",
+        "updated": "2026-09-25T18:20:02.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a7cff43624e740230db3487",
+        "item": {
+          "damage": 28,
+          "type": "lich",
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "pyromaniac",
+          "element": "magnetic"
+        }
+      },
+      {
+        "buyout_price": 60,
+        "visible": true,
+        "starting_price": 60,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-08T14:08:36.000+00:00",
+        "updated": "2026-09-09T14:20:49.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a773864861e8c03642a7a76",
+        "item": {
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": false,
+          "damage": 35,
+          "quirk": "fear_of_being_alone",
+          "element": "toxin"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 60,
+        "buyout_price": 60,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-04-17T05:26:35.000+00:00",
+        "updated": "2026-08-19T05:07:51.000+00:00",
+        "is_direct_sell": true,
+        "id": "69e1c48b34493d025f440b51",
+        "item": {
+          "damage": 40,
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "element": "heat",
+          "type": "lich"
+        }
+      },
+      {
+        "buyout_price": 60,
+        "visible": true,
+        "starting_price": 60,
+        "platform": "xbox",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-03-14T03:58:11.000+00:00",
+        "updated": "2026-09-04T01:11:25.000+00:00",
+        "is_direct_sell": true,
+        "id": "67d3a953d4600b0008ba1e58",
+        "item": {
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "damage": 37,
+          "type": "lich",
+          "element": "toxin"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 55,
+        "buyout_price": 55,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-12-23T04:10:27.000+00:00",
+        "updated": "2026-04-06T03:03:58.000+00:00",
+        "is_direct_sell": true,
+        "id": "694a1633bbe8290007905a05",
+        "item": {
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich",
+          "damage": 29,
+          "having_ephemera": false,
+          "element": "toxin"
+        }
+      },
+      {
+        "starting_price": 55,
+        "visible": true,
+        "buyout_price": 55,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-08-10T00:11:47.000+00:00",
+        "updated": "2026-06-06T23:05:27.000+00:00",
+        "is_direct_sell": true,
+        "id": "6897e3c3388ac8003dec6a1b",
+        "item": {
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": false,
+          "element": "electricity",
+          "damage": 25,
+          "type": "lich"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 50,
+        "buyout_price": 50,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-11T11:11:34.000+00:00",
+        "updated": "2026-10-11T11:11:34.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acb6ee6068576010a43de93",
+        "item": {
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "damage": 49,
+          "having_ephemera": false,
+          "element": "heat"
+        }
+      },
+      {
+        "starting_price": 50,
+        "buyout_price": 50,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-10T14:08:18.000+00:00",
+        "updated": "2026-10-10T14:09:47.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aca46d2dd18e500cb18ea9f",
+        "item": {
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich",
+          "element": "magnetic",
+          "having_ephemera": true,
+          "damage": 32
+        }
+      },
+      {
+        "buyout_price": 50,
+        "starting_price": 50,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-04T19:31:17.000+00:00",
+        "updated": "2026-10-04T19:31:17.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac2a985c94ce403475b5c03",
+        "item": {
+          "having_ephemera": false,
+          "element": "heat",
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich",
+          "damage": 46
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 50,
+        "buyout_price": 50,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-03T09:08:32.000+00:00",
+        "updated": "2026-10-03T09:08:32.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac0c61064a7ca02ca57c95a",
+        "item": {
+          "type": "lich",
+          "damage": 30,
+          "having_ephemera": false,
+          "element": "cold",
+          "quirk": "prone_to_vertigo",
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 50,
+        "starting_price": 50,
+        "platform": "ps4",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-28T17:51:41.000+00:00",
+        "updated": "2026-10-11T17:04:59.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abaa92d27b8c000e7e10b0b",
+        "item": {
+          "type": "lich",
+          "damage": 42,
+          "element": "radiation",
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 50,
+        "buyout_price": 50,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-27T05:53:00.000+00:00",
+        "updated": "2026-09-27T05:53:00.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab8af3c64a7ca002a84a87c",
+        "item": {
+          "type": "lich",
+          "damage": 36,
+          "having_ephemera": false,
+          "element": "toxin",
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 50,
+        "buyout_price": 50,
+        "platform": "xbox",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-25T00:36:33.000+00:00",
+        "updated": "2026-09-25T00:42:33.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab5c211624e7419cc530e63",
+        "item": {
+          "damage": 40,
+          "type": "lich",
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "element": "heat"
+        }
+      },
+      {
+        "starting_price": 50,
+        "buyout_price": 50,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-24T09:42:12.000+00:00",
+        "updated": "2026-08-24T09:42:12.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a8c11f451f7f207e74a8f11",
+        "item": {
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma",
+          "damage": 27,
+          "element": "toxin",
+          "type": "lich"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 50,
+        "buyout_price": 50,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-19T14:29:17.000+00:00",
+        "updated": "2026-08-19T14:29:17.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a85bdbd624e74058606c53e",
+        "item": {
+          "damage": 44,
+          "type": "lich",
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "element": "toxin"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 50,
+        "buyout_price": 50,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-18T20:08:18.000+00:00",
+        "updated": "2026-08-18T20:08:18.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a84bbb2624e740532db8082",
+        "item": {
+          "damage": 30,
+          "type": "lich",
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "poor_sense_of_balance",
+          "element": "toxin"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 50,
+        "buyout_price": 50,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-16T14:28:29.000+00:00",
+        "updated": "2026-09-20T18:47:22.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a81c90d624e74041a9718e2",
+        "item": {
+          "damage": 40,
+          "type": "lich",
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "element": "toxin"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 50,
+        "buyout_price": 50,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-13T14:03:59.000+00:00",
+        "updated": "2026-08-13T14:03:59.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a7dcecf624e74027d4e2414",
+        "item": {
+          "damage": 41,
+          "type": "lich",
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "element": "toxin"
+        }
+      },
+      {
+        "starting_price": 50,
+        "buyout_price": 50,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-13T10:16:37.000+00:00",
+        "updated": "2026-05-13T10:16:37.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a044f85f8ec2d0110ca916c",
+        "item": {
+          "damage": 27,
+          "weapon_url_name": "kuva_bramma",
+          "element": "cold",
+          "having_ephemera": false,
+          "type": "lich"
+        }
+      },
+      {
+        "starting_price": 50,
+        "buyout_price": 50,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-12-04T03:41:57.000+00:00",
+        "updated": "2025-12-04T03:42:27.000+00:00",
+        "is_direct_sell": true,
+        "id": "69310305b44a1b001f939b51",
+        "item": {
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": false,
+          "damage": 30,
+          "element": "cold"
+        }
+      },
+      {
+        "buyout_price": 50,
+        "starting_price": 50,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-12-04T03:35:25.000+00:00",
+        "updated": "2025-12-04T03:36:11.000+00:00",
+        "is_direct_sell": true,
+        "id": "6931017d73286100371e81a5",
+        "item": {
+          "quirk": "loner",
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich",
+          "element": "toxin",
+          "damage": 27
+        }
+      },
+      {
+        "buyout_price": 50,
+        "visible": true,
+        "starting_price": 50,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-11-23T14:32:41.000+00:00",
+        "updated": "2026-08-15T23:26:38.000+00:00",
+        "is_direct_sell": true,
+        "id": "69231b090ded1c000a2ea7c3",
+        "item": {
+          "element": "electricity",
+          "type": "lich",
+          "having_ephemera": false,
+          "damage": 26,
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "buyout_price": 50,
+        "visible": true,
+        "starting_price": 50,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-09-24T21:41:51.000+00:00",
+        "updated": "2025-09-24T21:41:51.000+00:00",
+        "is_direct_sell": true,
+        "id": "68d4659f99a6b6003dc13c8b",
+        "item": {
+          "element": "heat",
+          "type": "lich",
+          "damage": 28,
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 50,
+        "buyout_price": 50,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-04-06T15:51:05.000+00:00",
+        "updated": "2026-10-12T12:52:28.000+00:00",
+        "is_direct_sell": true,
+        "id": "67f2a2e9fb9ffe00373b0c45",
+        "item": {
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "element": "magnetic",
+          "having_ephemera": false,
+          "damage": 33
+        }
+      },
+      {
+        "starting_price": 50,
+        "buyout_price": 50,
+        "visible": true,
+        "platform": "xbox",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-03-18T16:41:10.000+00:00",
+        "updated": "2026-09-04T01:11:23.000+00:00",
+        "is_direct_sell": true,
+        "id": "67d9a226425767005bcb2219",
+        "item": {
+          "damage": 25,
+          "element": "toxin",
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich"
+        }
+      },
+      {
+        "buyout_price": 50,
+        "visible": true,
+        "starting_price": 50,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2024-07-24T10:44:04.000+00:00",
+        "updated": "2026-10-12T12:52:21.000+00:00",
+        "is_direct_sell": true,
+        "id": "66a0daf4b12b742479a095f0",
+        "item": {
+          "damage": 26,
+          "quirk": "hatred_of_infested",
+          "element": "electricity",
+          "type": "lich",
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "starting_price": 50,
+        "buyout_price": 50,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2023-06-22T15:43:04.000+00:00",
+        "updated": "2026-09-27T22:53:01.000+00:00",
+        "is_direct_sell": true,
+        "id": "64946c0820b9c51c3fcafc4d",
+        "item": {
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich",
+          "element": "magnetic",
+          "quirk": "hatred_of_corpus",
+          "damage": 25,
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 45,
+        "buyout_price": 45,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-24T12:35:59.000+00:00",
+        "updated": "2026-07-26T01:46:05.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a635c2f1138b804a7000e7b",
+        "item": {
+          "having_ephemera": true,
+          "quirk": "none",
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "element": "toxin",
+          "damage": 25
+        }
+      },
+      {
+        "starting_price": 45,
+        "visible": true,
+        "buyout_price": 45,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-17T06:42:06.000+00:00",
+        "updated": "2026-06-17T06:42:06.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a3241bec7bf3f017301d3a5",
+        "item": {
+          "having_ephemera": false,
+          "type": "lich",
+          "element": "radiation",
+          "weapon_url_name": "kuva_bramma",
+          "damage": 37
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 40,
+        "starting_price": 40,
+        "platform": "mobile",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-07T07:46:53.000+00:00",
+        "updated": "2026-10-07T07:47:47.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac5f8ed27b8c003f7df8674",
+        "item": {
+          "type": "lich",
+          "damage": 29,
+          "element": "toxin",
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 40,
+        "buyout_price": 40,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-27T23:13:55.000+00:00",
+        "updated": "2026-08-27T23:14:23.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a90c4b3624e7409b15fe47d",
+        "item": {
+          "damage": 39,
+          "type": "lich",
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "element": "toxin"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 40,
+        "buyout_price": 40,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-02-03T07:20:25.000+00:00",
+        "updated": "2026-06-10T13:53:18.000+00:00",
+        "is_direct_sell": true,
+        "id": "6981a1b96254e4001fd98ef8",
+        "item": {
+          "damage": 26,
+          "having_ephemera": true,
+          "quirk": "none",
+          "element": "toxin",
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich"
+        }
+      },
+      {
+        "buyout_price": 40,
+        "starting_price": 40,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-02-18T13:55:31.000+00:00",
+        "updated": "2026-09-20T08:52:20.000+00:00",
+        "is_direct_sell": true,
+        "id": "67b49153a2cfa8002bd807c2",
+        "item": {
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "element": "impact",
+          "damage": 30,
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 35,
+        "buyout_price": 35,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-13T19:29:57.000+00:00",
+        "updated": "2026-09-13T19:29:57.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aa6f9b5624e7412e8dccf81",
+        "item": {
+          "damage": 37,
+          "type": "lich",
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "element": "electricity"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 35,
+        "buyout_price": 35,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-27T08:32:46.000+00:00",
+        "updated": "2026-08-27T08:32:46.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a8ff62e624e74095dbcc6ea",
+        "item": {
+          "damage": 32,
+          "type": "lich",
+          "having_ephemera": true,
+          "weapon_url_name": "kuva_bramma",
+          "element": "toxin"
+        }
+      },
+      {
+        "buyout_price": 30,
+        "starting_price": 30,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-12T19:55:51.000+00:00",
+        "updated": "2026-10-13T00:10:20.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acd3b4795e00c0181dd5723",
+        "item": {
+          "element": "magnetic",
+          "weapon_url_name": "kuva_bramma",
+          "damage": 27,
+          "having_ephemera": false,
+          "type": "lich"
+        }
+      },
+      {
+        "buyout_price": 30,
+        "starting_price": 30,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-02T22:40:57.000+00:00",
+        "updated": "2026-10-11T19:11:39.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac032f9c94ce402bbae8bd1",
+        "item": {
+          "having_ephemera": false,
+          "element": "radiation",
+          "weapon_url_name": "kuva_bramma",
+          "type": "lich",
+          "damage": 41
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 30,
+        "buyout_price": 30,
+        "platform": "xbox",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-29T22:00:52.000+00:00",
+        "updated": "2026-10-03T20:53:31.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abc351464a7ca017355a504",
+        "item": {
+          "type": "lich",
+          "damage": 39,
+          "having_ephemera": false,
+          "element": "electricity",
+          "quirk": "none",
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "starting_price": 30,
+        "buyout_price": 30,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-25T18:12:07.000+00:00",
+        "updated": "2026-09-25T18:12:07.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab6b977a62a7a000710e556",
+        "item": {
+          "damage": 34,
+          "element": "electricity",
+          "type": "lich",
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 30,
+        "buyout_price": 30,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-20T13:39:30.000+00:00",
+        "updated": "2026-09-20T13:39:30.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aafe212624e7417568644c7",
+        "item": {
+          "damage": 29,
+          "type": "lich",
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "element": "electricity"
+        }
+      },
+      {
+        "starting_price": 30,
+        "buyout_price": 30,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-10T11:38:05.000+00:00",
+        "updated": "2026-10-06T18:15:47.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a006e1df8ec2d0066503f1b",
+        "item": {
+          "damage": 35,
+          "weapon_url_name": "kuva_bramma",
+          "element": "heat",
+          "having_ephemera": false,
+          "type": "lich"
+        }
+      },
+      {
+        "starting_price": 30,
+        "buyout_price": 30,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-12-18T08:18:50.000+00:00",
+        "updated": "2025-12-18T08:18:50.000+00:00",
+        "is_direct_sell": true,
+        "id": "6943b8ea133a4e000771b860",
+        "item": {
+          "element": "cold",
+          "having_ephemera": false,
+          "type": "lich",
+          "damage": 29,
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 30,
+        "starting_price": 30,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2024-03-03T23:16:44.000+00:00",
+        "updated": "2026-10-04T19:29:01.000+00:00",
+        "is_direct_sell": true,
+        "id": "65e504dc7df0640067ef6212",
+        "item": {
+          "quirk": "none",
+          "damage": 27,
+          "weapon_url_name": "kuva_bramma",
+          "element": "heat",
+          "type": "lich",
+          "having_ephemera": false
+        }
+      },
+      {
+        "buyout_price": 25,
+        "starting_price": 25,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-13T04:28:09.000+00:00",
+        "updated": "2026-10-13T04:28:09.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acdb35995e00c01abec3066",
+        "item": {
+          "element": "toxin",
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "always_hungry",
+          "damage": 34,
+          "having_ephemera": false,
+          "type": "lich"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 25,
+        "buyout_price": 25,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-13T04:25:51.000+00:00",
+        "updated": "2026-10-13T04:25:51.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acdb2cf068576019defad6f",
+        "item": {
+          "type": "lich",
+          "quirk": "bloodhound",
+          "weapon_url_name": "kuva_bramma",
+          "damage": 32,
+          "having_ephemera": false,
+          "element": "electricity"
+        }
+      },
+      {
+        "starting_price": 25,
+        "buyout_price": 25,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-11T14:18:34.000+00:00",
+        "updated": "2026-09-12T14:39:45.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aa40dba51f7f21187bd6c8e",
+        "item": {
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "deserter",
+          "damage": 27,
+          "element": "heat",
+          "type": "lich"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 25,
+        "buyout_price": 25,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-02T09:33:57.000+00:00",
+        "updated": "2026-06-11T03:21:09.000+00:00",
+        "is_direct_sell": true,
+        "id": "69f5c50534493d0598ee2463",
+        "item": {
+          "damage": 27,
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma",
+          "element": "heat",
+          "type": "lich",
+          "quirk": "prone_to_vertigo"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 20,
+        "buyout_price": 20,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-09T09:23:54.000+00:00",
+        "updated": "2026-08-21T15:35:08.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a78472a4103b5005bf4a41e",
+        "item": {
+          "type": "lich",
+          "damage": 30,
+          "element": "radiation",
+          "weapon_url_name": "kuva_bramma",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 10,
+        "buyout_price": 10,
+        "platform": "ps4",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-10T01:44:18.000+00:00",
+        "updated": "2026-10-10T01:44:18.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac9987206857600930b6c4c",
+        "item": {
+          "type": "lich",
+          "weapon_url_name": "kuva_bramma",
+          "damage": 29,
+          "having_ephemera": false,
+          "element": "radiation"
+        }
+      },
+      {
+        "buyout_price": 10,
+        "starting_price": 10,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-07T11:27:25.000+00:00",
+        "updated": "2026-06-07T11:27:25.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a25559d580ed501f176d970",
+        "item": {
+          "element": "magnetic",
+          "damage": 38,
+          "type": "lich",
+          "having_ephemera": false,
+          "weapon_url_name": "kuva_bramma"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 1,
+        "starting_price": 1,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-07T04:38:32.000+00:00",
+        "updated": "2026-10-07T04:38:32.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac5ccc827b8c003e29d0cff",
+        "item": {
+          "type": "lich",
+          "damage": 37,
+          "element": "toxin",
+          "weapon_url_name": "kuva_bramma",
+          "quirk": "none",
+          "having_ephemera": true
+        }
+      }
+    ]
+  }
+}

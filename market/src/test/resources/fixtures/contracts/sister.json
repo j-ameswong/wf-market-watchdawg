@@ -1,0 +1,3242 @@
+{
+  "payload": {
+    "auctions": [
+      {
+        "starting_price": 1,
+        "buyout_price": 1000,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-25T17:56:06.000+00:00",
+        "updated": "2026-10-01T13:01:22.000+00:00",
+        "is_direct_sell": false,
+        "id": "6a8dd73651f7f2089d204830",
+        "item": {
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "damage": 44,
+          "element": "cold",
+          "type": "sister"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 998,
+        "buyout_price": 998,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-26T07:46:35.000+00:00",
+        "updated": "2026-08-26T07:46:35.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a8e99db4103b508eaa3ad00",
+        "item": {
+          "type": "sister",
+          "damage": 58,
+          "element": "toxin",
+          "weapon_url_name": "tenet_tetra",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 796,
+        "starting_price": 796,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-15T22:48:32.000+00:00",
+        "updated": "2026-06-15T22:48:32.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a3081405314770134c55c63",
+        "item": {
+          "type": "sister",
+          "having_ephemera": true,
+          "damage": 56,
+          "weapon_url_name": "tenet_tetra",
+          "element": "toxin"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 796,
+        "starting_price": 796,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-15T22:48:20.000+00:00",
+        "updated": "2026-06-15T22:48:20.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a3081345314770134c55c62",
+        "item": {
+          "type": "sister",
+          "having_ephemera": false,
+          "damage": 56,
+          "weapon_url_name": "tenet_tetra",
+          "element": "toxin"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 700,
+        "buyout_price": 700,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-18T05:28:55.000+00:00",
+        "updated": "2026-07-18T05:28:55.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a5b0f171138b801b3708887",
+        "item": {
+          "having_ephemera": false,
+          "quirk": "trophy_hunter",
+          "type": "sister",
+          "weapon_url_name": "tenet_tetra",
+          "element": "toxin",
+          "damage": 55
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 560,
+        "buyout_price": 560,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-04-24T20:21:22.000+00:00",
+        "updated": "2026-04-27T22:36:19.000+00:00",
+        "is_direct_sell": true,
+        "id": "69ebd0c2c735ec03f99cb359",
+        "item": {
+          "weapon_url_name": "tenet_tetra",
+          "element": "radiation",
+          "type": "sister",
+          "damage": 60,
+          "having_ephemera": false
+        }
+      },
+      {
+        "buyout_price": 550,
+        "starting_price": 550,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-12T03:47:20.000+00:00",
+        "updated": "2026-05-12T03:47:54.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a02a2c8c7bcef00cfcea692",
+        "item": {
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "type": "sister",
+          "damage": 60,
+          "element": "radiation"
+        }
+      },
+      {
+        "buyout_price": 502,
+        "starting_price": 502,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2021-12-03T13:57:02.000+00:00",
+        "updated": "2022-09-09T00:30:13.000+00:00",
+        "is_direct_sell": true,
+        "id": "61aa222e4c545b08c45186b7",
+        "item": {
+          "element": "impact",
+          "weapon_url_name": "tenet_tetra",
+          "damage": 57,
+          "having_ephemera": false,
+          "type": "sister"
+        }
+      },
+      {
+        "starting_price": 500,
+        "buyout_price": 500,
+        "visible": true,
+        "platform": "mobile",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-14T13:47:18.000+00:00",
+        "updated": "2026-10-13T09:47:27.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a7f1c6651f7f2030235fc8b",
+        "item": {
+          "having_ephemera": true,
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "fear_of_kubrows",
+          "damage": 57,
+          "element": "toxin",
+          "type": "sister"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 500,
+        "buyout_price": 500,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-03-15T11:53:36.000+00:00",
+        "updated": "2026-03-15T11:53:36.000+00:00",
+        "is_direct_sell": true,
+        "id": "69b69dc06254e4076fa0604e",
+        "item": {
+          "damage": 56,
+          "having_ephemera": false,
+          "quirk": "none",
+          "element": "toxin",
+          "weapon_url_name": "tenet_tetra",
+          "type": "sister"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 200,
+        "buyout_price": 500,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-19T16:48:45.000+00:00",
+        "updated": "2026-09-19T16:48:45.000+00:00",
+        "is_direct_sell": false,
+        "id": "6aaebced624e7416c34d1b31",
+        "item": {
+          "damage": 60,
+          "type": "sister",
+          "having_ephemera": true,
+          "weapon_url_name": "tenet_tetra",
+          "element": "cold"
+        }
+      },
+      {
+        "starting_price": 491,
+        "visible": true,
+        "buyout_price": 491,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-16T15:10:45.000+00:00",
+        "updated": "2026-06-16T15:10:45.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a316775c7bf3f016c8671b8",
+        "item": {
+          "having_ephemera": false,
+          "type": "sister",
+          "element": "toxin",
+          "weapon_url_name": "tenet_tetra",
+          "damage": 51
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 450,
+        "buyout_price": 450,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-01-17T16:17:30.000+00:00",
+        "updated": "2026-03-15T10:13:50.000+00:00",
+        "is_direct_sell": true,
+        "id": "696bb61aa8a2730009700de3",
+        "item": {
+          "weapon_url_name": "tenet_tetra",
+          "element": "cold",
+          "type": "sister",
+          "damage": 54,
+          "quirk": "none",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 450,
+        "buyout_price": 450,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-12-10T12:15:31.000+00:00",
+        "updated": "2026-10-04T15:04:13.000+00:00",
+        "is_direct_sell": true,
+        "id": "693964631560b0013fcbdb8c",
+        "item": {
+          "element": "heat",
+          "type": "sister",
+          "damage": 55,
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 400,
+        "buyout_price": 400,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-19T07:00:49.000+00:00",
+        "updated": "2026-09-19T07:00:49.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aae3321624e741668094a19",
+        "item": {
+          "damage": 60,
+          "type": "sister",
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "element": "electricity"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 400,
+        "buyout_price": 400,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-25T09:59:06.000+00:00",
+        "updated": "2026-09-24T04:26:02.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a6488ea1138b80510f938c2",
+        "item": {
+          "having_ephemera": false,
+          "quirk": "none",
+          "type": "sister",
+          "weapon_url_name": "tenet_tetra",
+          "element": "toxin",
+          "damage": 60
+        }
+      },
+      {
+        "starting_price": 400,
+        "visible": true,
+        "buyout_price": 400,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-21T01:45:51.000+00:00",
+        "updated": "2026-06-21T01:45:51.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a37424fc7bf3f02bc12bc58",
+        "item": {
+          "having_ephemera": false,
+          "type": "sister",
+          "element": "cold",
+          "weapon_url_name": "tenet_tetra",
+          "damage": 53
+        }
+      },
+      {
+        "starting_price": 400,
+        "buyout_price": 400,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-21T12:12:24.000+00:00",
+        "updated": "2026-05-21T12:12:24.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a0ef6a84b3049008e82fbd9",
+        "item": {
+          "type": "sister",
+          "damage": 54,
+          "having_ephemera": false,
+          "element": "cold",
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 400,
+        "starting_price": 400,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-21T04:23:48.000+00:00",
+        "updated": "2026-05-21T04:23:48.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a0e88d4dcc12300899397ad",
+        "item": {
+          "element": "cold",
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "damage": 55,
+          "type": "sister"
+        }
+      },
+      {
+        "starting_price": 375,
+        "visible": true,
+        "buyout_price": 375,
+        "platform": "xbox",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-30T00:24:46.000+00:00",
+        "updated": "2026-10-10T18:28:17.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a6a99cecf1bb600a039e541",
+        "item": {
+          "weapon_url_name": "tenet_tetra",
+          "type": "sister",
+          "element": "cold",
+          "damage": 56,
+          "having_ephemera": true
+        }
+      },
+      {
+        "buyout_price": 370,
+        "starting_price": 370,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2023-04-21T18:20:12.000+00:00",
+        "updated": "2023-04-21T18:20:12.000+00:00",
+        "is_direct_sell": true,
+        "id": "6442d3dcabd2ae09f6f0df37",
+        "item": {
+          "weapon_url_name": "tenet_tetra",
+          "damage": 37,
+          "type": "sister",
+          "having_ephemera": true,
+          "element": "toxin",
+          "quirk": "none"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 350,
+        "buyout_price": 350,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-04T11:51:17.000+00:00",
+        "updated": "2026-10-04T11:51:44.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac23db564a7ca03175d7d1a",
+        "item": {
+          "type": "sister",
+          "damage": 49,
+          "having_ephemera": true,
+          "element": "toxin",
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "buyout_price": 350,
+        "starting_price": 350,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-04T07:06:23.000+00:00",
+        "updated": "2026-08-04T07:06:23.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a718f6f2d7dee0141a110cb",
+        "item": {
+          "type": "sister",
+          "weapon_url_name": "tenet_tetra",
+          "damage": 48,
+          "element": "toxin",
+          "having_ephemera": true
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 350,
+        "starting_price": 350,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-01T15:59:10.000+00:00",
+        "updated": "2026-09-11T02:41:09.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a6e17ce556f50007059bef7",
+        "item": {
+          "damage": 57,
+          "type": "sister",
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "element": "heat"
+        }
+      },
+      {
+        "buyout_price": 350,
+        "visible": true,
+        "starting_price": 350,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2022-09-27T09:40:20.000+00:00",
+        "updated": "2026-07-26T20:16:54.000+00:00",
+        "is_direct_sell": true,
+        "id": "6332c504b69dd8038314790f",
+        "item": {
+          "element": "toxin",
+          "type": "sister",
+          "having_ephemera": true,
+          "weapon_url_name": "tenet_tetra",
+          "damage": 40
+        }
+      },
+      {
+        "starting_price": 300,
+        "visible": true,
+        "buyout_price": 300,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-20T05:57:47.000+00:00",
+        "updated": "2026-07-20T05:57:47.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a5db8db24cd4002bb9baadb",
+        "item": {
+          "type": "sister",
+          "weapon_url_name": "tenet_tetra",
+          "damage": 47,
+          "element": "electricity",
+          "having_ephemera": true
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 300,
+        "starting_price": 300,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-04-20T05:49:03.000+00:00",
+        "updated": "2026-04-20T05:49:03.000+00:00",
+        "is_direct_sell": true,
+        "id": "69e5be4f1e9a6c030864525a",
+        "item": {
+          "having_ephemera": false,
+          "element": "cold",
+          "damage": 48,
+          "type": "sister",
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 300,
+        "starting_price": 300,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-04-02T14:14:50.000+00:00",
+        "updated": "2026-04-30T14:16:43.000+00:00",
+        "is_direct_sell": true,
+        "id": "69ce79daeed498033ca46680",
+        "item": {
+          "type": "sister",
+          "element": "toxin",
+          "damage": 53,
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "starting_price": 300,
+        "visible": true,
+        "buyout_price": 300,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-10-11T02:49:13.000+00:00",
+        "updated": "2026-04-10T22:57:55.000+00:00",
+        "is_direct_sell": true,
+        "id": "68e9c5a9e5207500432f1707",
+        "item": {
+          "weapon_url_name": "tenet_tetra",
+          "having_ephemera": false,
+          "damage": 51,
+          "element": "radiation",
+          "type": "sister"
+        }
+      },
+      {
+        "starting_price": 100,
+        "buyout_price": 300,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-01-29T06:16:50.000+00:00",
+        "updated": "2026-02-08T20:30:34.000+00:00",
+        "is_direct_sell": false,
+        "id": "697afb52fed8420109c84e2b",
+        "item": {
+          "type": "sister",
+          "having_ephemera": true,
+          "weapon_url_name": "tenet_tetra",
+          "element": "heat",
+          "damage": 34
+        }
+      },
+      {
+        "starting_price": 275,
+        "buyout_price": 275,
+        "visible": true,
+        "platform": "xbox",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-29T23:14:44.000+00:00",
+        "updated": "2026-10-10T18:28:19.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a6a8964a164fd009ad31160",
+        "item": {
+          "element": "cold",
+          "weapon_url_name": "tenet_tetra",
+          "having_ephemera": false,
+          "damage": 53,
+          "type": "sister"
+        }
+      },
+      {
+        "buyout_price": 260,
+        "starting_price": 260,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-03T15:16:13.000+00:00",
+        "updated": "2026-10-11T02:11:36.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a70b0bd56f7e400eee6caae",
+        "item": {
+          "element": "cold",
+          "type": "sister",
+          "damage": 58,
+          "having_ephemera": true,
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 250,
+        "buyout_price": 250,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-11T01:58:11.000+00:00",
+        "updated": "2026-10-11T08:22:19.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acaed3306857600fca11c5d",
+        "item": {
+          "type": "sister",
+          "quirk": "hatred_of_grineer",
+          "weapon_url_name": "tenet_tetra",
+          "damage": 60,
+          "having_ephemera": false,
+          "element": "toxin"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 250,
+        "starting_price": 250,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-07T08:05:25.000+00:00",
+        "updated": "2026-10-07T08:05:25.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac5fd4527b8c003f7df868d",
+        "item": {
+          "type": "sister",
+          "damage": 56,
+          "element": "cold",
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "none",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 250,
+        "buyout_price": 250,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-29T23:24:27.000+00:00",
+        "updated": "2026-09-30T07:26:21.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abc48ab64a7ca016c7e9c87",
+        "item": {
+          "type": "sister",
+          "damage": 58,
+          "having_ephemera": true,
+          "element": "electricity",
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 230,
+        "buyout_price": 230,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-01T20:46:32.000+00:00",
+        "updated": "2026-09-15T11:19:32.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a9739a84103b50c1d655b41",
+        "item": {
+          "type": "sister",
+          "damage": 58,
+          "element": "electricity",
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "deserter",
+          "having_ephemera": false
+        }
+      },
+      {
+        "starting_price": 230,
+        "buyout_price": 230,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-01T06:42:45.000+00:00",
+        "updated": "2026-09-17T10:28:38.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a9673e551f7f20be583df94",
+        "item": {
+          "having_ephemera": true,
+          "weapon_url_name": "tenet_tetra",
+          "damage": 60,
+          "element": "cold",
+          "type": "sister"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 230,
+        "buyout_price": 230,
+        "platform": "ps4",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-04-22T12:27:49.000+00:00",
+        "updated": "2026-10-11T19:09:02.000+00:00",
+        "is_direct_sell": true,
+        "id": "69e8bec5c735ec0377f6e64a",
+        "item": {
+          "weapon_url_name": "tenet_tetra",
+          "element": "toxin",
+          "type": "sister",
+          "damage": 60,
+          "having_ephemera": false
+        }
+      },
+      {
+        "buyout_price": 210,
+        "starting_price": 210,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-21T04:20:13.000+00:00",
+        "updated": "2026-05-27T00:22:58.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a0e87fdbba403007fbf0e77",
+        "item": {
+          "type": "sister",
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "element": "heat",
+          "damage": 56
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 200,
+        "buyout_price": 200,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-11T06:41:05.000+00:00",
+        "updated": "2026-10-11T06:41:05.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acb2f810685760103a87c7f",
+        "item": {
+          "type": "sister",
+          "quirk": "bloodhound",
+          "weapon_url_name": "tenet_tetra",
+          "damage": 60,
+          "having_ephemera": false,
+          "element": "magnetic"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 200,
+        "starting_price": 200,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-06T07:47:01.000+00:00",
+        "updated": "2026-10-12T12:02:12.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac4a77527b8c003b1c8977d",
+        "item": {
+          "type": "sister",
+          "damage": 56,
+          "element": "cold",
+          "weapon_url_name": "tenet_tetra",
+          "having_ephemera": true
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 200,
+        "buyout_price": 200,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-30T11:28:53.000+00:00",
+        "updated": "2026-09-30T11:28:53.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abcf27564a7ca01ab4b2e2f",
+        "item": {
+          "type": "sister",
+          "damage": 39,
+          "having_ephemera": true,
+          "element": "impact",
+          "quirk": "none",
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 200,
+        "starting_price": 200,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-29T18:20:01.000+00:00",
+        "updated": "2026-09-29T18:20:01.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abc015127b8c00157eafe4f",
+        "item": {
+          "type": "sister",
+          "damage": 38,
+          "element": "impact",
+          "weapon_url_name": "tenet_tetra",
+          "having_ephemera": true
+        }
+      },
+      {
+        "buyout_price": 200,
+        "starting_price": 200,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-27T08:14:00.000+00:00",
+        "updated": "2026-09-27T08:14:00.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab8d048c94ce4004c488c39",
+        "item": {
+          "having_ephemera": true,
+          "element": "electricity",
+          "weapon_url_name": "tenet_tetra",
+          "type": "sister",
+          "damage": 50
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 200,
+        "buyout_price": 200,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-11T03:10:40.000+00:00",
+        "updated": "2026-09-11T03:10:40.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aa371304103b51117b42cdb",
+        "item": {
+          "type": "sister",
+          "damage": 51,
+          "element": "impact",
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "deserter",
+          "having_ephemera": true
+        }
+      },
+      {
+        "starting_price": 200,
+        "buyout_price": 200,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-05T02:12:36.000+00:00",
+        "updated": "2026-10-05T21:32:40.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a9b7a9451f7f20da4dd943a",
+        "item": {
+          "having_ephemera": true,
+          "weapon_url_name": "tenet_tetra",
+          "damage": 44,
+          "element": "radiation",
+          "type": "sister"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 200,
+        "buyout_price": 200,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-24T07:41:13.000+00:00",
+        "updated": "2026-08-24T07:41:13.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a8bf5994103b507eeb9d840",
+        "item": {
+          "type": "sister",
+          "damage": 51,
+          "element": "heat",
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "hatered_of_children",
+          "having_ephemera": true
+        }
+      },
+      {
+        "buyout_price": 200,
+        "starting_price": 200,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-25T20:43:50.000+00:00",
+        "updated": "2026-07-25T20:43:50.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a6520069a73bd0555dc6081",
+        "item": {
+          "weapon_url_name": "tenet_tetra",
+          "having_ephemera": false,
+          "type": "sister",
+          "quirk": "none",
+          "damage": 56,
+          "element": "cold"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 200,
+        "buyout_price": 200,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-21T14:02:12.000+00:00",
+        "updated": "2026-09-26T04:07:05.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a5f7be41138b803509f488c",
+        "item": {
+          "having_ephemera": true,
+          "type": "sister",
+          "weapon_url_name": "tenet_tetra",
+          "element": "electricity",
+          "damage": 45
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 200,
+        "buyout_price": 200,
+        "platform": "xbox",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-15T16:13:24.000+00:00",
+        "updated": "2026-09-26T22:28:41.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a57b1a41138b8007fa6629e",
+        "item": {
+          "having_ephemera": false,
+          "type": "sister",
+          "weapon_url_name": "tenet_tetra",
+          "element": "toxin",
+          "damage": 50
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 200,
+        "buyout_price": 200,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-10T21:05:19.000+00:00",
+        "updated": "2026-07-10T21:05:19.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a515e8f8928a5019dc7119d",
+        "item": {
+          "element": "impact",
+          "having_ephemera": false,
+          "type": "sister",
+          "damage": 51,
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 200,
+        "buyout_price": 200,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-10T04:46:48.000+00:00",
+        "updated": "2026-07-10T04:47:30.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a5079388928a50142931e9e",
+        "item": {
+          "element": "magnetic",
+          "having_ephemera": false,
+          "type": "sister",
+          "damage": 40,
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "none"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 200,
+        "buyout_price": 200,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-05T00:43:44.000+00:00",
+        "updated": "2026-08-01T15:59:39.000+00:00",
+        "is_direct_sell": true,
+        "id": "69f93d40c735ec063d2cd68e",
+        "item": {
+          "weapon_url_name": "tenet_tetra",
+          "element": "cold",
+          "type": "sister",
+          "damage": 47,
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 200,
+        "starting_price": 200,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-04-20T05:51:28.000+00:00",
+        "updated": "2026-04-20T05:51:28.000+00:00",
+        "is_direct_sell": true,
+        "id": "69e5bee01e9a6c0308645260",
+        "item": {
+          "having_ephemera": false,
+          "element": "cold",
+          "damage": 45,
+          "type": "sister",
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "buyout_price": 200,
+        "starting_price": 200,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-02-21T01:22:04.000+00:00",
+        "updated": "2026-01-10T02:14:18.000+00:00",
+        "is_direct_sell": true,
+        "id": "67b7d53ca2cfa800d31bf2ce",
+        "item": {
+          "type": "sister",
+          "weapon_url_name": "tenet_tetra",
+          "element": "magnetic",
+          "damage": 52,
+          "having_ephemera": true
+        }
+      },
+      {
+        "starting_price": 200,
+        "buyout_price": 200,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2024-08-18T19:47:15.000+00:00",
+        "updated": "2026-01-10T02:13:52.000+00:00",
+        "is_direct_sell": true,
+        "id": "66c24fc39454322671114277",
+        "item": {
+          "having_ephemera": true,
+          "element": "toxin",
+          "damage": 56,
+          "quirk": "none",
+          "weapon_url_name": "tenet_tetra",
+          "type": "sister"
+        }
+      },
+      {
+        "buyout_price": 200,
+        "visible": true,
+        "starting_price": 200,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2023-01-17T16:05:43.000+00:00",
+        "updated": "2025-01-04T10:35:03.000+00:00",
+        "is_direct_sell": true,
+        "id": "63c6c757ce279800430d5c97",
+        "item": {
+          "weapon_url_name": "tenet_tetra",
+          "damage": 44,
+          "element": "radiation",
+          "having_ephemera": false,
+          "type": "sister"
+        }
+      },
+      {
+        "starting_price": 199,
+        "buyout_price": 199,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-23T13:15:00.000+00:00",
+        "updated": "2026-10-11T04:49:56.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab3d0d451f7f2191a0d7d8e",
+        "item": {
+          "having_ephemera": true,
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "none",
+          "damage": 55,
+          "element": "cold",
+          "type": "sister"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 190,
+        "buyout_price": 190,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-09T14:35:48.000+00:00",
+        "updated": "2026-10-12T13:05:19.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aa16ec4624e7410176ff3ae",
+        "item": {
+          "damage": 60,
+          "type": "sister",
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "element": "magnetic"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 190,
+        "buyout_price": 190,
+        "platform": "ps4",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-07T23:35:05.000+00:00",
+        "updated": "2026-09-07T23:36:23.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a9f4a294103b50f1fa919f5",
+        "item": {
+          "type": "sister",
+          "damage": 25,
+          "element": "toxin",
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "trophy_hunter",
+          "having_ephemera": true
+        }
+      },
+      {
+        "buyout_price": 190,
+        "visible": true,
+        "starting_price": 190,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-03-16T05:35:52.000+00:00",
+        "updated": "2025-03-16T05:37:30.000+00:00",
+        "is_direct_sell": true,
+        "id": "67d6633863ca6a000a453b83",
+        "item": {
+          "type": "sister",
+          "quirk": "none",
+          "element": "impact",
+          "damage": 51,
+          "weapon_url_name": "tenet_tetra",
+          "having_ephemera": false
+        }
+      },
+      {
+        "buyout_price": 190,
+        "visible": true,
+        "starting_price": 55,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2024-11-02T03:55:32.000+00:00",
+        "updated": "2026-10-05T22:29:53.000+00:00",
+        "is_direct_sell": false,
+        "id": "6725a2b45ca3223b2ba7dd0b",
+        "item": {
+          "type": "sister",
+          "element": "magnetic",
+          "damage": 30,
+          "weapon_url_name": "tenet_tetra",
+          "having_ephemera": true
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 180,
+        "buyout_price": 180,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-12T09:23:54.000+00:00",
+        "updated": "2026-10-12T09:23:54.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acca72a0685760149697051",
+        "item": {
+          "type": "sister",
+          "weapon_url_name": "tenet_tetra",
+          "damage": 56,
+          "having_ephemera": true,
+          "element": "impact"
+        }
+      },
+      {
+        "starting_price": 180,
+        "buyout_price": 180,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-08T17:40:56.000+00:00",
+        "updated": "2026-10-08T17:43:53.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac7d5a8dd18e500402e1371",
+        "item": {
+          "weapon_url_name": "tenet_tetra",
+          "type": "sister",
+          "element": "electricity",
+          "quirk": "vain",
+          "having_ephemera": true,
+          "damage": 46
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 180,
+        "buyout_price": 180,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-11T07:56:33.000+00:00",
+        "updated": "2026-08-11T08:23:30.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a7ad5b1624e740157b3cbac",
+        "item": {
+          "damage": 56,
+          "type": "sister",
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "element": "toxin"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 170,
+        "buyout_price": 170,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-15T07:21:25.000+00:00",
+        "updated": "2026-09-29T23:01:12.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aa8f1f54103b513ef2f4ab7",
+        "item": {
+          "type": "sister",
+          "damage": 28,
+          "element": "toxin",
+          "weapon_url_name": "tenet_tetra",
+          "having_ephemera": false
+        }
+      },
+      {
+        "buyout_price": 154,
+        "starting_price": 154,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2024-12-20T12:43:45.000+00:00",
+        "updated": "2026-04-20T17:35:26.000+00:00",
+        "is_direct_sell": true,
+        "id": "6765668199f7de002a46efcd",
+        "item": {
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "element": "cold",
+          "damage": 55,
+          "type": "sister"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 150,
+        "buyout_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-13T03:52:45.000+00:00",
+        "updated": "2026-10-13T03:52:45.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acdab0d06857601960df3ab",
+        "item": {
+          "type": "sister",
+          "weapon_url_name": "tenet_tetra",
+          "damage": 57,
+          "having_ephemera": true,
+          "element": "cold"
+        }
+      },
+      {
+        "starting_price": 150,
+        "buyout_price": 150,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-12T07:49:52.000+00:00",
+        "updated": "2026-10-12T07:49:52.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acc9120dd18e5014aa39970",
+        "item": {
+          "weapon_url_name": "tenet_tetra",
+          "type": "sister",
+          "element": "electricity",
+          "quirk": "none",
+          "having_ephemera": false,
+          "damage": 56
+        }
+      },
+      {
+        "starting_price": 150,
+        "buyout_price": 150,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-11T16:12:41.000+00:00",
+        "updated": "2026-10-11T16:21:21.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acbb579dd18e501208b5dd0",
+        "item": {
+          "weapon_url_name": "tenet_tetra",
+          "type": "sister",
+          "element": "impact",
+          "quirk": "fear_of_kubrows",
+          "having_ephemera": false,
+          "damage": 52
+        }
+      },
+      {
+        "buyout_price": 150,
+        "starting_price": 150,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-10T17:32:14.000+00:00",
+        "updated": "2026-10-10T17:33:06.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aca769e95e00c00cbfd1a89",
+        "item": {
+          "element": "magnetic",
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "none",
+          "damage": 54,
+          "having_ephemera": true,
+          "type": "sister"
+        }
+      },
+      {
+        "starting_price": 150,
+        "buyout_price": 150,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-09T21:22:22.000+00:00",
+        "updated": "2026-10-09T21:22:22.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac95b0edd18e5009489072c",
+        "item": {
+          "weapon_url_name": "tenet_tetra",
+          "type": "sister",
+          "element": "electricity",
+          "having_ephemera": false,
+          "damage": 49
+        }
+      },
+      {
+        "starting_price": 150,
+        "buyout_price": 150,
+        "visible": true,
+        "platform": "ps4",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-08T11:36:44.000+00:00",
+        "updated": "2026-10-08T11:36:44.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac7804cdd18e5003297c7a3",
+        "item": {
+          "weapon_url_name": "tenet_tetra",
+          "type": "sister",
+          "element": "magnetic",
+          "having_ephemera": false,
+          "damage": 55
+        }
+      },
+      {
+        "buyout_price": 150,
+        "starting_price": 150,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-06T01:21:19.000+00:00",
+        "updated": "2026-10-06T01:21:19.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac44d0fc94ce4039b1c8344",
+        "item": {
+          "having_ephemera": true,
+          "quirk": "none",
+          "element": "heat",
+          "weapon_url_name": "tenet_tetra",
+          "type": "sister",
+          "damage": 41
+        }
+      },
+      {
+        "buyout_price": 150,
+        "starting_price": 150,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-05T07:57:53.000+00:00",
+        "updated": "2026-10-05T07:57:53.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac35881c94ce4036a1b90e8",
+        "item": {
+          "having_ephemera": true,
+          "quirk": "none",
+          "element": "magnetic",
+          "weapon_url_name": "tenet_tetra",
+          "type": "sister",
+          "damage": 36
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 150,
+        "starting_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-30T11:29:53.000+00:00",
+        "updated": "2026-09-30T11:29:53.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abcf2b127b8c001b9425edd",
+        "item": {
+          "type": "sister",
+          "damage": 27,
+          "element": "heat",
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "none",
+          "having_ephemera": true
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 150,
+        "buyout_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-30T11:26:18.000+00:00",
+        "updated": "2026-09-30T11:26:18.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abcf1da64a7ca01a4b77b25",
+        "item": {
+          "type": "sister",
+          "damage": 56,
+          "having_ephemera": true,
+          "element": "cold",
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 150,
+        "buyout_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-29T10:58:32.000+00:00",
+        "updated": "2026-10-06T12:11:00.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abb99d864a7ca0142f0eeb1",
+        "item": {
+          "type": "sister",
+          "damage": 42,
+          "having_ephemera": true,
+          "element": "heat",
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 150,
+        "starting_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-27T13:21:22.000+00:00",
+        "updated": "2026-09-27T13:21:22.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab9185227b8c00070a03352",
+        "item": {
+          "type": "sister",
+          "damage": 52,
+          "element": "radiation",
+          "weapon_url_name": "tenet_tetra",
+          "having_ephemera": false
+        }
+      },
+      {
+        "buyout_price": 150,
+        "visible": true,
+        "starting_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-01T16:43:10.000+00:00",
+        "updated": "2026-08-01T16:43:52.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a6e221e8dbb83005b9305d9",
+        "item": {
+          "element": "electricity",
+          "type": "sister",
+          "having_ephemera": true,
+          "quirk": "prone_to_vertigo",
+          "weapon_url_name": "tenet_tetra",
+          "damage": 27
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 150,
+        "starting_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-01T16:00:46.000+00:00",
+        "updated": "2026-08-01T16:00:46.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a6e182e556f500062c96180",
+        "item": {
+          "damage": 40,
+          "type": "sister",
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "element": "electricity"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 150,
+        "buyout_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-24T01:56:36.000+00:00",
+        "updated": "2026-06-24T01:56:36.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a3b395499b979008c28a32e",
+        "item": {
+          "type": "sister",
+          "element": "cold",
+          "weapon_url_name": "tenet_tetra",
+          "having_ephemera": false,
+          "damage": 49,
+          "quirk": "hatred_of_grineer"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 150,
+        "starting_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-02-16T17:53:55.000+00:00",
+        "updated": "2026-06-10T12:58:28.000+00:00",
+        "is_direct_sell": true,
+        "id": "699359b37d3045029507b3d4",
+        "item": {
+          "weapon_url_name": "tenet_tetra",
+          "having_ephemera": false,
+          "type": "sister",
+          "damage": 43,
+          "element": "cold"
+        }
+      },
+      {
+        "buyout_price": 150,
+        "starting_price": 150,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-09-09T16:30:42.000+00:00",
+        "updated": "2026-07-18T05:29:30.000+00:00",
+        "is_direct_sell": true,
+        "id": "68c0563244f59400089b8042",
+        "item": {
+          "type": "sister",
+          "having_ephemera": false,
+          "element": "toxin",
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "trophy_hunter",
+          "damage": 37
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 150,
+        "starting_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-06-02T13:49:31.000+00:00",
+        "updated": "2025-06-02T13:50:46.000+00:00",
+        "is_direct_sell": true,
+        "id": "683dabeb84f80800e4949861",
+        "item": {
+          "element": "magnetic",
+          "damage": 26,
+          "type": "sister",
+          "weapon_url_name": "tenet_tetra",
+          "having_ephemera": true
+        }
+      },
+      {
+        "buyout_price": 150,
+        "starting_price": 150,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2024-12-27T11:22:41.000+00:00",
+        "updated": "2024-12-27T11:22:41.000+00:00",
+        "is_direct_sell": true,
+        "id": "676e8e0199f7de00090be48f",
+        "item": {
+          "type": "sister",
+          "damage": 38,
+          "having_ephemera": false,
+          "element": "toxin",
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "buyout_price": 150,
+        "starting_price": 150,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2021-07-23T18:16:00.000+00:00",
+        "updated": "2021-07-25T18:25:39.000+00:00",
+        "is_direct_sell": true,
+        "id": "60fb07602aedc500e2a82932",
+        "item": {
+          "type": "sister",
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "none",
+          "having_ephemera": true,
+          "damage": 35,
+          "element": "heat"
+        }
+      },
+      {
+        "buyout_price": 140,
+        "starting_price": 140,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-04T07:08:30.000+00:00",
+        "updated": "2026-08-08T14:32:11.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a718fee2d7dee0141a110ce",
+        "item": {
+          "type": "sister",
+          "weapon_url_name": "tenet_tetra",
+          "damage": 42,
+          "element": "toxin",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 135,
+        "starting_price": 135,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-27T13:45:55.000+00:00",
+        "updated": "2026-09-27T16:00:48.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab91e1327b8c0005b900885",
+        "item": {
+          "type": "sister",
+          "damage": 29,
+          "element": "heat",
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "none",
+          "having_ephemera": true
+        }
+      },
+      {
+        "buyout_price": 130,
+        "starting_price": 130,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-02T09:39:03.000+00:00",
+        "updated": "2026-10-09T06:16:52.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a6f103756f7e400465bb7e0",
+        "item": {
+          "element": "heat",
+          "type": "sister",
+          "damage": 46,
+          "having_ephemera": false,
+          "quirk": "none",
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 130,
+        "starting_price": 130,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-24T10:26:41.000+00:00",
+        "updated": "2026-06-27T11:19:59.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a12d261dcc1230129613410",
+        "item": {
+          "element": "impact",
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "damage": 49,
+          "type": "sister"
+        }
+      },
+      {
+        "starting_price": 130,
+        "buyout_price": 130,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-20T13:45:09.000+00:00",
+        "updated": "2026-06-27T11:20:09.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a0dbae54b304900667939a8",
+        "item": {
+          "type": "sister",
+          "damage": 48,
+          "having_ephemera": false,
+          "element": "impact",
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 130,
+        "buyout_price": 130,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-02-25T18:48:47.000+00:00",
+        "updated": "2026-10-06T09:05:42.000+00:00",
+        "is_direct_sell": true,
+        "id": "699f440f6254e4044b90ff5f",
+        "item": {
+          "damage": 42,
+          "having_ephemera": true,
+          "quirk": "vain",
+          "element": "heat",
+          "weapon_url_name": "tenet_tetra",
+          "type": "sister"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 125,
+        "starting_price": 125,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-24T15:42:11.000+00:00",
+        "updated": "2026-10-12T21:55:15.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a131c53dcc1230133bb0f73",
+        "item": {
+          "element": "impact",
+          "having_ephemera": true,
+          "weapon_url_name": "tenet_tetra",
+          "damage": 54,
+          "type": "sister"
+        }
+      },
+      {
+        "buyout_price": 120,
+        "starting_price": 120,
+        "visible": true,
+        "platform": "xbox",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-10T17:03:38.000+00:00",
+        "updated": "2026-10-10T22:20:42.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aca6fea95e00c00d26adbab",
+        "item": {
+          "element": "toxin",
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "none",
+          "damage": 32,
+          "having_ephemera": true,
+          "type": "sister"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 120,
+        "buyout_price": 120,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-09T15:22:59.000+00:00",
+        "updated": "2026-10-09T15:22:59.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac906d306857600774ec630",
+        "item": {
+          "type": "sister",
+          "weapon_url_name": "tenet_tetra",
+          "damage": 25,
+          "having_ephemera": true,
+          "element": "toxin"
+        }
+      },
+      {
+        "starting_price": 120,
+        "visible": true,
+        "buyout_price": 120,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-26T06:25:45.000+00:00",
+        "updated": "2026-09-26T06:25:45.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab7656928d4f6006948a4d5",
+        "item": {
+          "damage": 56,
+          "type": "sister",
+          "having_ephemera": true,
+          "element": "heat",
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "starting_price": 120,
+        "buyout_price": 120,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-10T16:03:12.000+00:00",
+        "updated": "2026-09-10T16:03:12.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aa2d4c051f7f210d18ee099",
+        "item": {
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "damage": 60,
+          "element": "heat",
+          "type": "sister"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 120,
+        "buyout_price": 120,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-08T12:06:53.000+00:00",
+        "updated": "2026-09-13T19:41:38.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a9ffa5d4103b50f737207a5",
+        "item": {
+          "type": "sister",
+          "damage": 57,
+          "element": "cold",
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "none",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 120,
+        "buyout_price": 120,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-11T13:07:18.000+00:00",
+        "updated": "2026-08-11T13:07:18.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a7b1e864103b50181ffb5ca",
+        "item": {
+          "type": "sister",
+          "damage": 50,
+          "element": "cold",
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "none",
+          "having_ephemera": false
+        }
+      },
+      {
+        "buyout_price": 120,
+        "starting_price": 120,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-04T07:04:39.000+00:00",
+        "updated": "2026-08-08T14:32:51.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a718f0756f7e40142a898f3",
+        "item": {
+          "element": "electricity",
+          "type": "sister",
+          "damage": 38,
+          "having_ephemera": false,
+          "quirk": "vain",
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 120,
+        "starting_price": 120,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-03-29T20:36:38.000+00:00",
+        "updated": "2026-09-09T13:20:09.000+00:00",
+        "is_direct_sell": true,
+        "id": "69c98d56eed498027e3d66ed",
+        "item": {
+          "type": "sister",
+          "element": "impact",
+          "damage": 37,
+          "having_ephemera": true,
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "buyout_price": 120,
+        "starting_price": 120,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2023-11-28T14:55:45.000+00:00",
+        "updated": "2023-11-28T14:55:45.000+00:00",
+        "is_direct_sell": true,
+        "id": "6565ff712d2bbe17892d9a57",
+        "item": {
+          "type": "sister",
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "none",
+          "element": "heat",
+          "damage": 26
+        }
+      },
+      {
+        "buyout_price": 120,
+        "visible": true,
+        "starting_price": 120,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2022-10-20T12:29:47.000+00:00",
+        "updated": "2026-07-20T13:23:49.000+00:00",
+        "is_direct_sell": true,
+        "id": "63513f3b92f3eb09dede248b",
+        "item": {
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "damage": 49,
+          "element": "electricity",
+          "type": "sister"
+        }
+      },
+      {
+        "buyout_price": 110,
+        "starting_price": 110,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-04T07:01:52.000+00:00",
+        "updated": "2026-08-08T14:33:30.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a718e602d7dee0141a110c4",
+        "item": {
+          "type": "sister",
+          "weapon_url_name": "tenet_tetra",
+          "damage": 35,
+          "element": "magnetic",
+          "having_ephemera": false
+        }
+      },
+      {
+        "starting_price": 110,
+        "visible": true,
+        "buyout_price": 110,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-01-06T15:31:39.000+00:00",
+        "updated": "2026-10-13T15:59:25.000+00:00",
+        "is_direct_sell": true,
+        "id": "695d2adba8a2730008635c2f",
+        "item": {
+          "damage": 56,
+          "element": "magnetic",
+          "weapon_url_name": "tenet_tetra",
+          "type": "sister",
+          "having_ephemera": false
+        }
+      },
+      {
+        "buyout_price": 110,
+        "visible": true,
+        "starting_price": 110,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2024-03-23T15:05:32.000+00:00",
+        "updated": "2025-01-04T10:30:30.000+00:00",
+        "is_direct_sell": true,
+        "id": "65feefbcb12b740211233b9f",
+        "item": {
+          "damage": 32,
+          "element": "toxin",
+          "type": "sister",
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "buyout_price": 100,
+        "starting_price": 100,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-11T16:10:27.000+00:00",
+        "updated": "2026-10-11T16:21:44.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acbb4f395e00c01189423e6",
+        "item": {
+          "element": "radiation",
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "none",
+          "damage": 35,
+          "having_ephemera": false,
+          "type": "sister"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 100,
+        "buyout_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-11T10:13:47.000+00:00",
+        "updated": "2026-10-11T10:13:47.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acb615b0685760111b4d0d6",
+        "item": {
+          "type": "sister",
+          "quirk": "allergic_to_nature",
+          "weapon_url_name": "tenet_tetra",
+          "damage": 36,
+          "having_ephemera": false,
+          "element": "toxin"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 100,
+        "buyout_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-11T06:00:13.000+00:00",
+        "updated": "2026-10-11T06:00:13.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acb25ed06857600fca11da5",
+        "item": {
+          "type": "sister",
+          "weapon_url_name": "tenet_tetra",
+          "damage": 25,
+          "having_ephemera": true,
+          "element": "heat"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 100,
+        "buyout_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-02T05:44:08.000+00:00",
+        "updated": "2026-10-02T05:44:08.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abf44a864a7ca027d12b365",
+        "item": {
+          "type": "sister",
+          "damage": 42,
+          "having_ephemera": false,
+          "element": "cold",
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 100,
+        "starting_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-02T04:12:34.000+00:00",
+        "updated": "2026-10-02T04:12:34.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abf2f3227b8c0027641cce2",
+        "item": {
+          "type": "sister",
+          "damage": 35,
+          "element": "cold",
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "none",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 100,
+        "buyout_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-15T02:21:54.000+00:00",
+        "updated": "2026-10-04T01:05:06.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aa8abc2624e7413c894dfb6",
+        "item": {
+          "damage": 36,
+          "type": "sister",
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "element": "cold"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 100,
+        "buyout_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-11T02:40:31.000+00:00",
+        "updated": "2026-09-11T02:40:54.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aa36a1f4103b51125d2cede",
+        "item": {
+          "type": "sister",
+          "damage": 34,
+          "element": "radiation",
+          "weapon_url_name": "tenet_tetra",
+          "having_ephemera": false
+        }
+      },
+      {
+        "buyout_price": 100,
+        "starting_price": 100,
+        "visible": true,
+        "platform": "ps4",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-06T18:27:29.000+00:00",
+        "updated": "2026-08-06T22:38:42.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a74d2112d7dee026fcfdd23",
+        "item": {
+          "type": "sister",
+          "weapon_url_name": "tenet_tetra",
+          "damage": 33,
+          "element": "heat",
+          "having_ephemera": false
+        }
+      },
+      {
+        "buyout_price": 100,
+        "starting_price": 100,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-24T01:52:37.000+00:00",
+        "updated": "2026-06-24T01:52:37.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a3b3865de1e9a007de969ad",
+        "item": {
+          "type": "sister",
+          "damage": 34,
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "element": "cold"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 100,
+        "starting_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-14T09:21:45.000+00:00",
+        "updated": "2026-08-12T12:02:46.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a2e72a953147700cbf8dc28",
+        "item": {
+          "type": "sister",
+          "having_ephemera": true,
+          "damage": 37,
+          "weapon_url_name": "tenet_tetra",
+          "element": "magnetic"
+        }
+      },
+      {
+        "buyout_price": 100,
+        "starting_price": 100,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-10T03:03:49.000+00:00",
+        "updated": "2026-08-15T09:23:24.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a28d415f1604702783a36ad",
+        "item": {
+          "having_ephemera": false,
+          "element": "cold",
+          "weapon_url_name": "tenet_tetra",
+          "type": "sister",
+          "damage": 45
+        }
+      },
+      {
+        "buyout_price": 100,
+        "starting_price": 100,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-05T11:07:22.000+00:00",
+        "updated": "2026-09-30T22:24:23.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a22adea580ed50197eceb93",
+        "item": {
+          "element": "impact",
+          "damage": 34,
+          "quirk": "hatred_of_infested",
+          "type": "sister",
+          "having_ephemera": true,
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "starting_price": 100,
+        "buyout_price": 100,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-23T20:36:02.000+00:00",
+        "updated": "2026-05-23T20:36:02.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a120fb24b3049010bae2bcd",
+        "item": {
+          "type": "sister",
+          "damage": 41,
+          "having_ephemera": false,
+          "element": "toxin",
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 100,
+        "starting_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-21T04:23:28.000+00:00",
+        "updated": "2026-05-21T04:23:28.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a0e88c0dcc1230093ec0432",
+        "item": {
+          "element": "cold",
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "damage": 43,
+          "type": "sister"
+        }
+      },
+      {
+        "buyout_price": 100,
+        "starting_price": 100,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-11-02T02:02:10.000+00:00",
+        "updated": "2025-11-02T02:02:10.000+00:00",
+        "is_direct_sell": true,
+        "id": "6906bba298a18800089d8c0f",
+        "item": {
+          "weapon_url_name": "tenet_tetra",
+          "damage": 35,
+          "having_ephemera": true,
+          "element": "heat",
+          "type": "sister"
+        }
+      },
+      {
+        "buyout_price": 94,
+        "visible": true,
+        "starting_price": 94,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2022-12-07T18:52:41.000+00:00",
+        "updated": "2026-06-06T17:57:06.000+00:00",
+        "is_direct_sell": true,
+        "id": "6390e0f9f5535302c53f72c6",
+        "item": {
+          "quirk": "none",
+          "damage": 52,
+          "having_ephemera": false,
+          "element": "toxin",
+          "type": "sister",
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 90,
+        "starting_price": 90,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-28T20:26:22.000+00:00",
+        "updated": "2026-09-28T20:26:22.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abacd6e27b8c0010a43b4fa",
+        "item": {
+          "type": "sister",
+          "damage": 36,
+          "element": "magnetic",
+          "weapon_url_name": "tenet_tetra",
+          "having_ephemera": true
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 90,
+        "buyout_price": 90,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-09T17:45:01.000+00:00",
+        "updated": "2026-08-15T17:27:52.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a78bc9d624e74009a8707c7",
+        "item": {
+          "damage": 53,
+          "type": "sister",
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "none",
+          "element": "radiation"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 90,
+        "buyout_price": 90,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-19T23:44:16.000+00:00",
+        "updated": "2026-10-02T13:04:46.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a5d61501138b8029a7da9fa",
+        "item": {
+          "having_ephemera": false,
+          "type": "sister",
+          "weapon_url_name": "tenet_tetra",
+          "element": "magnetic",
+          "damage": 50
+        }
+      },
+      {
+        "starting_price": 80,
+        "buyout_price": 80,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-10T17:40:07.000+00:00",
+        "updated": "2026-10-10T17:40:07.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aca7877dd18e500d3b92e73",
+        "item": {
+          "weapon_url_name": "tenet_tetra",
+          "type": "sister",
+          "element": "magnetic",
+          "having_ephemera": false,
+          "damage": 52
+        }
+      },
+      {
+        "buyout_price": 80,
+        "starting_price": 80,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-08T07:51:14.000+00:00",
+        "updated": "2026-10-08T07:51:14.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac74b7295e00c0009efa3c0",
+        "item": {
+          "element": "heat",
+          "weapon_url_name": "tenet_tetra",
+          "damage": 34,
+          "having_ephemera": true,
+          "type": "sister"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 80,
+        "starting_price": 80,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-30T21:03:09.000+00:00",
+        "updated": "2026-10-06T21:05:44.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abd790d27b8c001eae60cf0",
+        "item": {
+          "type": "sister",
+          "damage": 46,
+          "element": "cold",
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "none",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 80,
+        "starting_price": 80,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-29T22:46:48.000+00:00",
+        "updated": "2026-09-29T22:46:48.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abc3fd827b8c0016cc006c3",
+        "item": {
+          "type": "sister",
+          "damage": 46,
+          "element": "cold",
+          "weapon_url_name": "tenet_tetra",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 80,
+        "starting_price": 80,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-29T04:57:18.000+00:00",
+        "updated": "2026-10-08T06:47:32.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abb452e27b8c00118fd6d94",
+        "item": {
+          "type": "sister",
+          "damage": 48,
+          "element": "cold",
+          "weapon_url_name": "tenet_tetra",
+          "having_ephemera": false
+        }
+      },
+      {
+        "buyout_price": 80,
+        "starting_price": 80,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-28T22:57:16.000+00:00",
+        "updated": "2026-10-09T23:22:12.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abaf0ccc94ce401029e469f",
+        "item": {
+          "having_ephemera": true,
+          "quirk": "none",
+          "element": "magnetic",
+          "weapon_url_name": "tenet_tetra",
+          "type": "sister",
+          "damage": 26
+        }
+      },
+      {
+        "buyout_price": 80,
+        "starting_price": 80,
+        "visible": true,
+        "platform": "ps4",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-06T00:01:27.000+00:00",
+        "updated": "2026-10-13T17:43:45.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a73ced72d7dee021439e06f",
+        "item": {
+          "type": "sister",
+          "weapon_url_name": "tenet_tetra",
+          "damage": 53,
+          "element": "electricity",
+          "having_ephemera": false
+        }
+      },
+      {
+        "buyout_price": 80,
+        "visible": true,
+        "starting_price": 80,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-03T15:57:19.000+00:00",
+        "updated": "2026-10-10T14:22:59.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a70ba5f861e8c00f56c6e8d",
+        "item": {
+          "type": "sister",
+          "weapon_url_name": "tenet_tetra",
+          "having_ephemera": false,
+          "damage": 39,
+          "element": "toxin"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 80,
+        "buyout_price": 80,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-05T15:04:56.000+00:00",
+        "updated": "2026-08-10T11:07:36.000+00:00",
+        "is_direct_sell": true,
+        "id": "69fa0718c735ec066f735afe",
+        "item": {
+          "weapon_url_name": "tenet_tetra",
+          "element": "cold",
+          "type": "sister",
+          "damage": 46,
+          "having_ephemera": false,
+          "quirk": "none"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 80,
+        "starting_price": 80,
+        "platform": "mobile",
+        "closed": false,
+        "top_bid": null,
+        "created": "2021-10-20T05:19:49.000+00:00",
+        "updated": "2022-01-18T01:28:08.000+00:00",
+        "is_direct_sell": true,
+        "id": "616fa6f5de776d00d4fe259c",
+        "item": {
+          "type": "sister",
+          "quirk": "none",
+          "weapon_url_name": "tenet_tetra",
+          "damage": 48,
+          "having_ephemera": false,
+          "element": "impact"
+        }
+      },
+      {
+        "buyout_price": 76,
+        "starting_price": 76,
+        "visible": true,
+        "platform": "ps4",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-06T00:00:57.000+00:00",
+        "updated": "2026-10-13T17:43:34.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a73ceb92d7dee020dd05b93",
+        "item": {
+          "type": "sister",
+          "weapon_url_name": "tenet_tetra",
+          "damage": 48,
+          "element": "toxin",
+          "having_ephemera": false
+        }
+      },
+      {
+        "starting_price": 75,
+        "buyout_price": 75,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-15T13:57:19.000+00:00",
+        "updated": "2026-08-27T11:44:07.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a80703f51f7f2038e2157c4",
+        "item": {
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "damage": 56,
+          "element": "radiation",
+          "type": "sister"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 75,
+        "buyout_price": 75,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-14T04:12:22.000+00:00",
+        "updated": "2026-07-23T17:57:33.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a55b7268928a5034145b361",
+        "item": {
+          "element": "toxin",
+          "having_ephemera": false,
+          "type": "sister",
+          "damage": 55,
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 75,
+        "starting_price": 75,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-24T11:51:01.000+00:00",
+        "updated": "2026-07-29T12:36:18.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a12e625dcc123012ebb1413",
+        "item": {
+          "element": "impact",
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "damage": 46,
+          "type": "sister"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 75,
+        "buyout_price": 75,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-04-22T00:16:28.000+00:00",
+        "updated": "2026-04-25T00:48:16.000+00:00",
+        "is_direct_sell": true,
+        "id": "69e8135c34493d0368f801e0",
+        "item": {
+          "damage": 30,
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "element": "cold",
+          "type": "sister",
+          "quirk": "none"
+        }
+      },
+      {
+        "buyout_price": 70,
+        "starting_price": 70,
+        "visible": true,
+        "platform": "mobile",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-13T16:09:48.000+00:00",
+        "updated": "2026-10-13T16:09:48.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ace57cc95e00c01c7c2a82f",
+        "item": {
+          "element": "electricity",
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "none",
+          "damage": 52,
+          "having_ephemera": false,
+          "type": "sister"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 70,
+        "buyout_price": 70,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-28T09:13:53.000+00:00",
+        "updated": "2026-09-28T09:13:53.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aba2fd164a7ca00d9f3c53b",
+        "item": {
+          "type": "sister",
+          "damage": 44,
+          "having_ephemera": false,
+          "element": "toxin",
+          "quirk": "none",
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 70,
+        "starting_price": 70,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-12-08T03:23:02.000+00:00",
+        "updated": "2026-09-24T05:27:15.000+00:00",
+        "is_direct_sell": true,
+        "id": "693644963fdc2d00ecaf987a",
+        "item": {
+          "type": "sister",
+          "element": "magnetic",
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "damage": 47
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 70,
+        "starting_price": 70,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-12-07T21:58:31.000+00:00",
+        "updated": "2025-12-07T21:58:31.000+00:00",
+        "is_direct_sell": true,
+        "id": "6935f8873fdc2d00e0909bec",
+        "item": {
+          "type": "sister",
+          "element": "toxin",
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "damage": 29
+        }
+      },
+      {
+        "starting_price": 60,
+        "buyout_price": 60,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-15T14:41:07.000+00:00",
+        "updated": "2026-07-29T12:36:57.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a073083f8ec2d0187ee55c5",
+        "item": {
+          "damage": 40,
+          "weapon_url_name": "tenet_tetra",
+          "element": "radiation",
+          "having_ephemera": false,
+          "quirk": "none",
+          "type": "sister"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 55,
+        "buyout_price": 55,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-02-01T00:58:45.000+00:00",
+        "updated": "2026-02-03T05:02:05.000+00:00",
+        "is_direct_sell": true,
+        "id": "697ea545cdffaa0199cb7e2b",
+        "item": {
+          "damage": 34,
+          "element": "impact",
+          "type": "sister",
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 50,
+        "starting_price": 50,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-02T14:40:22.000+00:00",
+        "updated": "2026-10-02T14:40:22.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abfc25627b8c0028b0f62b5",
+        "item": {
+          "type": "sister",
+          "damage": 47,
+          "element": "impact",
+          "weapon_url_name": "tenet_tetra",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 50,
+        "buyout_price": 50,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-02T14:39:55.000+00:00",
+        "updated": "2026-10-02T14:39:55.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abfc23b64a7ca02927362dd",
+        "item": {
+          "type": "sister",
+          "damage": 47,
+          "having_ephemera": false,
+          "element": "impact",
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 50,
+        "buyout_price": 50,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-19T23:20:55.000+00:00",
+        "updated": "2026-09-19T23:20:55.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aaf18d7624e7416ed71b14a",
+        "item": {
+          "damage": 25,
+          "type": "sister",
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "none",
+          "element": "toxin"
+        }
+      },
+      {
+        "starting_price": 50,
+        "buyout_price": 50,
+        "visible": true,
+        "platform": "ps4",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-03-10T01:06:15.000+00:00",
+        "updated": "2026-09-23T00:14:31.000+00:00",
+        "is_direct_sell": true,
+        "id": "69af6e87dfac98067355dd84",
+        "item": {
+          "damage": 25,
+          "weapon_url_name": "tenet_tetra",
+          "having_ephemera": false,
+          "type": "sister",
+          "quirk": "none",
+          "element": "cold"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 50,
+        "buyout_price": 50,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-01-18T21:39:41.000+00:00",
+        "updated": "2026-07-23T17:57:27.000+00:00",
+        "is_direct_sell": true,
+        "id": "696d531da8a273003df8e12b",
+        "item": {
+          "weapon_url_name": "tenet_tetra",
+          "type": "sister",
+          "damage": 49,
+          "element": "heat",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 45,
+        "starting_price": 45,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-07T02:37:29.000+00:00",
+        "updated": "2026-10-07T03:44:14.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac5b06927b8c003f01219fd",
+        "item": {
+          "type": "sister",
+          "damage": 45,
+          "element": "impact",
+          "weapon_url_name": "tenet_tetra",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 43,
+        "starting_price": 43,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-06T12:50:18.000+00:00",
+        "updated": "2026-10-06T12:50:18.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac4ee8a27b8c003d4b13318",
+        "item": {
+          "type": "sister",
+          "damage": 43,
+          "element": "heat",
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "none",
+          "having_ephemera": false
+        }
+      },
+      {
+        "buyout_price": 40,
+        "starting_price": 40,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-12T20:40:43.000+00:00",
+        "updated": "2026-10-12T20:40:43.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acd45cb95e00c017ab69dde",
+        "item": {
+          "element": "electricity",
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "trophy_hunter",
+          "damage": 36,
+          "having_ephemera": false,
+          "type": "sister"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 40,
+        "buyout_price": 40,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-10T12:06:44.000+00:00",
+        "updated": "2026-10-11T03:44:31.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aca2a5406857600cbe6afc9",
+        "item": {
+          "type": "sister",
+          "quirk": "fear_of_space_travel",
+          "weapon_url_name": "tenet_tetra",
+          "damage": 42,
+          "having_ephemera": false,
+          "element": "heat"
+        }
+      },
+      {
+        "buyout_price": 40,
+        "visible": true,
+        "starting_price": 40,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2021-07-25T21:36:42.000+00:00",
+        "updated": "2021-07-25T21:36:42.000+00:00",
+        "is_direct_sell": true,
+        "id": "60fdd96a26aecd0175399df1",
+        "item": {
+          "having_ephemera": false,
+          "damage": 30,
+          "quirk": "loner",
+          "element": "magnetic",
+          "weapon_url_name": "tenet_tetra",
+          "type": "sister"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 35,
+        "buyout_price": 35,
+        "platform": "ps4",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-01T13:57:05.000+00:00",
+        "updated": "2026-10-01T13:57:05.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abe66b164a7ca0229f1480d",
+        "item": {
+          "type": "sister",
+          "damage": 46,
+          "having_ephemera": false,
+          "element": "heat",
+          "quirk": "none",
+          "weapon_url_name": "tenet_tetra"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 33,
+        "starting_price": 33,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-02T13:03:09.000+00:00",
+        "updated": "2026-10-02T13:03:09.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abfab8d27b8c0028448647b",
+        "item": {
+          "type": "sister",
+          "damage": 33,
+          "element": "radiation",
+          "weapon_url_name": "tenet_tetra",
+          "having_ephemera": false
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 30,
+        "buyout_price": 30,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-11T09:02:59.000+00:00",
+        "updated": "2026-10-11T09:02:59.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acb50c306857600f577ab1c",
+        "item": {
+          "type": "sister",
+          "quirk": "none",
+          "weapon_url_name": "tenet_tetra",
+          "damage": 34,
+          "having_ephemera": false,
+          "element": "toxin"
+        }
+      },
+      {
+        "starting_price": 30,
+        "buyout_price": 30,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-10T22:04:20.000+00:00",
+        "updated": "2026-10-10T22:04:20.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acab664dd18e500d3b92ff8",
+        "item": {
+          "weapon_url_name": "tenet_tetra",
+          "type": "sister",
+          "element": "radiation",
+          "having_ephemera": false,
+          "damage": 28
+        }
+      },
+      {
+        "starting_price": 30,
+        "buyout_price": 30,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-22T02:35:28.000+00:00",
+        "updated": "2026-10-04T19:58:36.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a890af051f7f206ba9cbd69",
+        "item": {
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "damage": 26,
+          "element": "radiation",
+          "type": "sister"
+        }
+      },
+      {
+        "buyout_price": 30,
+        "starting_price": 30,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-11T01:50:15.000+00:00",
+        "updated": "2026-09-25T22:29:48.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a0135d7c7bcef00936652c7",
+        "item": {
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "type": "sister",
+          "damage": 45,
+          "element": "heat"
+        }
+      },
+      {
+        "starting_price": 25,
+        "buyout_price": 25,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-10T13:41:19.000+00:00",
+        "updated": "2026-10-10T13:41:19.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aca407fdd18e500be59ad61",
+        "item": {
+          "weapon_url_name": "tenet_tetra",
+          "type": "sister",
+          "element": "electricity",
+          "quirk": "allergic_to_nature",
+          "having_ephemera": false,
+          "damage": 37
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 25,
+        "starting_price": 25,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-20T02:01:05.000+00:00",
+        "updated": "2026-06-20T02:01:05.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a35f461531477026fdd9ab0",
+        "item": {
+          "type": "sister",
+          "having_ephemera": false,
+          "damage": 27,
+          "weapon_url_name": "tenet_tetra",
+          "element": "magnetic"
+        }
+      },
+      {
+        "starting_price": 20,
+        "buyout_price": 20,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-13T10:02:23.000+00:00",
+        "updated": "2026-10-13T11:25:22.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ace01afdd18e501ac4bafda",
+        "item": {
+          "weapon_url_name": "tenet_tetra",
+          "type": "sister",
+          "element": "electricity",
+          "quirk": "none",
+          "having_ephemera": false,
+          "damage": 31
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 15,
+        "buyout_price": 15,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-31T09:15:45.000+00:00",
+        "updated": "2026-10-10T10:57:07.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a954641624e740b5c1cdbc2",
+        "item": {
+          "damage": 41,
+          "type": "sister",
+          "having_ephemera": false,
+          "weapon_url_name": "tenet_tetra",
+          "quirk": "none",
+          "element": "radiation"
+        }
+      }
+    ]
+  }
+}

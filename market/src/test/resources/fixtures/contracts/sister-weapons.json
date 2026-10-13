@@ -1,0 +1,160 @@
+{
+  "apiVersion": "0.25.0",
+  "data": [
+    {
+      "id": "60f3feb1b64404003f0bf602",
+      "slug": "tenet_tetra",
+      "gameRef": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBETetra/CrpBETetra",
+      "reqMasteryRank": 16,
+      "i18n": {
+        "en": {
+          "name": "Tenet Tetra",
+          "wikiLink": "https://wiki.warframe.com/w/Tenet_Tetra",
+          "icon": "sister_weapons/images/tenet_tetra.574603420c8673450692e0316abbb8cc.png",
+          "thumb": "sister_weapons/images/thumbs/tenet_tetra.574603420c8673450692e0316abbb8cc.128x128.png"
+        }
+      }
+    },
+    {
+      "id": "60f3feb1b64404003f0bf603",
+      "slug": "tenet_diplos",
+      "gameRef": "/Lotus/Weapons/Corpus/Pistols/CrpBriefcaseAkimbo/CrpBriefcaseAkimboPistol",
+      "reqMasteryRank": 16,
+      "i18n": {
+        "en": {
+          "name": "Tenet Diplos",
+          "wikiLink": "https://wiki.warframe.com/w/Tenet_Diplos",
+          "icon": "sister_weapons/images/tenet_diplos.12c9784343dc222697dcf4dffe313198.png",
+          "thumb": "sister_weapons/images/thumbs/tenet_diplos.12c9784343dc222697dcf4dffe313198.128x128.png"
+        }
+      }
+    },
+    {
+      "id": "60f3feb1b64404003f0bf604",
+      "slug": "tenet_arca_plasmor",
+      "gameRef": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEArcaPlasmor/CrpBEArcaPlasmor",
+      "reqMasteryRank": 16,
+      "i18n": {
+        "en": {
+          "name": "Tenet Arca Plasmor",
+          "wikiLink": "https://wiki.warframe.com/w/Tenet_Arca_Plasmor",
+          "icon": "sister_weapons/images/tenet_arca_plasmor.db1c2e77975a03b9817b14e315e3d666.png",
+          "thumb": "sister_weapons/images/thumbs/tenet_arca_plasmor.db1c2e77975a03b9817b14e315e3d666.128x128.png"
+        }
+      }
+    },
+    {
+      "id": "60f3feb1b64404003f0bf605",
+      "slug": "tenet_envoy",
+      "gameRef": "/Lotus/Weapons/Corpus/LongGuns/CrpBriefcaseLauncher/CrpBriefcaseLauncher",
+      "reqMasteryRank": 16,
+      "i18n": {
+        "en": {
+          "name": "Tenet Envoy",
+          "wikiLink": "https://wiki.warframe.com/w/Tenet_Envoy",
+          "icon": "sister_weapons/images/tenet_envoy.a71da410bea25b5c129cf02e4432f482.png",
+          "thumb": "sister_weapons/images/thumbs/tenet_envoy.a71da410bea25b5c129cf02e4432f482.128x128.png"
+        }
+      }
+    },
+    {
+      "id": "60f3feb2b64404003f0bf606",
+      "slug": "tenet_detron",
+      "gameRef": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEDetron/CrpBEDetron",
+      "reqMasteryRank": 16,
+      "i18n": {
+        "en": {
+          "name": "Tenet Detron",
+          "wikiLink": "https://wiki.warframe.com/w/Tenet_Detron",
+          "icon": "sister_weapons/images/tenet_detron.7c66c2e5d59e453e6cc9dd3a2cae7957.png",
+          "thumb": "sister_weapons/images/thumbs/tenet_detron.7c66c2e5d59e453e6cc9dd3a2cae7957.128x128.png"
+        }
+      }
+    },
+    {
+      "id": "60f3feb2b64404003f0bf607",
+      "slug": "tenet_flux_rifle",
+      "gameRef": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEFluxRifle/CrpBEFluxRifle",
+      "reqMasteryRank": 16,
+      "i18n": {
+        "en": {
+          "name": "Tenet Flux Rifle",
+          "wikiLink": "https://wiki.warframe.com/w/Tenet_Flux_Rifle",
+          "icon": "sister_weapons/images/tenet_flux_rifle.5a3d115d241567ea0c575690bf1e3278.png",
+          "thumb": "sister_weapons/images/thumbs/tenet_flux_rifle.5a3d115d241567ea0c575690bf1e3278.128x128.png"
+        }
+      }
+    },
+    {
+      "id": "60f3feb2b64404003f0bf608",
+      "slug": "tenet_cycron",
+      "gameRef": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBECycron/CrpBECycron",
+      "reqMasteryRank": 14,
+      "i18n": {
+        "en": {
+          "name": "Tenet Cycron",
+          "wikiLink": "https://wiki.warframe.com/w/Tenet_Cycron",
+          "icon": "sister_weapons/images/tenet_cycron.f70ea556db7a8c9ce91b2c5a97a0bf78.png",
+          "thumb": "sister_weapons/images/thumbs/tenet_cycron.f70ea556db7a8c9ce91b2c5a97a0bf78.128x128.png"
+        }
+      }
+    },
+    {
+      "id": "60f3feb2b64404003f0bf609",
+      "slug": "tenet_spirex",
+      "gameRef": "/Lotus/Weapons/Corpus/Pistols/CrpIgniterPistol/CrpIgniterPistol",
+      "reqMasteryRank": 14,
+      "i18n": {
+        "en": {
+          "name": "Tenet Spirex",
+          "wikiLink": "https://wiki.warframe.com/w/Tenet_Spirex",
+          "icon": "sister_weapons/images/tenet_spirex.83d8bd8063942b58eace31b5e2ad7ebc.png",
+          "thumb": "sister_weapons/images/thumbs/tenet_spirex.83d8bd8063942b58eace31b5e2ad7ebc.128x128.png"
+        }
+      }
+    },
+    {
+      "id": "63886651e7c98800a3b47117",
+      "slug": "tenet_plinx",
+      "gameRef": "/Lotus/Weapons/Corpus/BoardExec/Secondary/CrpBEPlinx/CrpBEPlinxWeapon",
+      "reqMasteryRank": 6,
+      "i18n": {
+        "en": {
+          "name": "Tenet Plinx",
+          "wikiLink": "https://wiki.warframe.com/w/Tenet_Plinx",
+          "icon": "sister_weapons/images/tenet_plinx.8cf2fb67d76147c5f0b09549a4283325.png",
+          "thumb": "sister_weapons/images/thumbs/tenet_plinx.8cf2fb67d76147c5f0b09549a4283325.128x128.png"
+        }
+      }
+    },
+    {
+      "id": "664538c46cf5812870c33d25",
+      "slug": "tenet_glaxion",
+      "gameRef": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEGlaxion/CrpBEGlaxion",
+      "reqMasteryRank": 16,
+      "i18n": {
+        "en": {
+          "name": "Tenet Glaxion",
+          "wikiLink": "https://wiki.warframe.com/w/Tenet_Glaxion",
+          "icon": "sister_weapons/images/tenet_glaxion.c1a37b3f7866bb1b98850a5bbeb7792d.png",
+          "thumb": "sister_weapons/images/thumbs/tenet_glaxion.c1a37b3f7866bb1b98850a5bbeb7792d.128x128.png"
+        }
+      }
+    },
+    {
+      "id": "69c6b2d07e9d0a1afb371399",
+      "slug": "tenet_quanta",
+      "gameRef": "/Lotus/Weapons/Corpus/BoardExec/Primary/CrpBEQuanta/CrpBEQuanta",
+      "reqMasteryRank": 16,
+      "i18n": {
+        "en": {
+          "name": "Tenet Quanta",
+          "wikiLink": "https://wiki.warframe.com/w/Tenet_Quanta",
+          "icon": "items/images/en/tenet_quanta.5f766502697066cdb11955deb619cfd0.webp",
+          "thumb": "items/images/en/thumbs/tenet_quanta.5f766502697066cdb11955deb619cfd0.128x128.webp"
+        }
+      }
+    }
+  ],
+  "error": null
+}

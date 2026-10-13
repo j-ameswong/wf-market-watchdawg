@@ -1,0 +1,6383 @@
+{
+  "payload": {
+    "auctions": [
+      {
+        "buyout_price": null,
+        "starting_price": 1,
+        "visible": true,
+        "platform": "mobile",
+        "closed": false,
+        "top_bid": 100,
+        "created": "2026-06-28T05:50:29.000+00:00",
+        "updated": "2026-10-01T07:02:45.000+00:00",
+        "is_direct_sell": false,
+        "id": "6a40b625de1e9a01db19aeea",
+        "item": {
+          "name": "crita-satitis",
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 190.2,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 101.6,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 141.5,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": -67.2,
+              "positive": false,
+              "url_name": "fire_rate_/_attack_speed"
+            }
+          ],
+          "re_rolls": 0,
+          "polarity": "madurai",
+          "weapon_url_name": "kulstar",
+          "mastery_level": 15,
+          "mod_rank": 8
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 70,
+        "buyout_price": null,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-02-11T12:02:46.000+00:00",
+        "updated": "2026-03-17T06:11:56.000+00:00",
+        "is_direct_sell": false,
+        "id": "698c6fe66254e401b7c161de",
+        "item": {
+          "mastery_level": 15,
+          "attributes": [
+            {
+              "value": 9.9,
+              "positive": true,
+              "url_name": "toxin_damage"
+            },
+            {
+              "value": 10.2,
+              "positive": true,
+              "url_name": "electric_damage"
+            },
+            {
+              "value": 1.05,
+              "positive": true,
+              "url_name": "damage_vs_infested"
+            }
+          ],
+          "re_rolls": 0,
+          "polarity": "vazarin",
+          "name": "vexi-toxiada",
+          "weapon_url_name": "kulstar",
+          "mod_rank": 0,
+          "type": "riven"
+        }
+      },
+      {
+        "starting_price": 20,
+        "buyout_price": null,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-08T18:18:59.000+00:00",
+        "updated": "2026-10-08T18:18:59.000+00:00",
+        "is_direct_sell": false,
+        "id": "6ac7de93dd18e50039771329",
+        "item": {
+          "mastery_level": 13,
+          "weapon_url_name": "kulstar",
+          "name": "critadra",
+          "type": "riven",
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 21.6,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 10.1,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            }
+          ],
+          "polarity": "madurai",
+          "mod_rank": 0
+        }
+      },
+      {
+        "starting_price": 800,
+        "buyout_price": 25000,
+        "visible": true,
+        "platform": "mobile",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-06T06:19:53.000+00:00",
+        "updated": "2026-10-09T13:59:28.000+00:00",
+        "is_direct_sell": false,
+        "id": "6a9d060951f7f20e238cbc28",
+        "item": {
+          "polarity": "vazarin",
+          "attributes": [
+            {
+              "value": 268.8,
+              "positive": true,
+              "url_name": "base_damage_/_melee_damage"
+            },
+            {
+              "value": 194.6,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 106.9,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 0.55,
+              "positive": false,
+              "url_name": "damage_vs_corpus"
+            }
+          ],
+          "re_rolls": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 15,
+          "name": "crita-visitis",
+          "mod_rank": 8,
+          "type": "riven"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 12000,
+        "buyout_price": 12000,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-12T14:47:02.000+00:00",
+        "updated": "2026-09-12T14:47:02.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aa565e64103b512195c2377",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 109.8,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 169.0,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 147.4,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": -73.8,
+              "positive": false,
+              "url_name": "zoom"
+            }
+          ],
+          "re_rolls": 0,
+          "mod_rank": 8,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 9,
+          "polarity": "vazarin",
+          "name": "sati-acricron"
+        }
+      },
+      {
+        "starting_price": 8000,
+        "buyout_price": 8000,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-10-28T17:36:20.000+00:00",
+        "updated": "2025-10-28T17:36:20.000+00:00",
+        "is_direct_sell": true,
+        "id": "6900ff140d1e040008793520",
+        "item": {
+          "attributes": [
+            {
+              "value": 119.2,
+              "positive": true,
+              "url_name": "heat_damage"
+            },
+            {
+              "value": 101.4,
+              "positive": true,
+              "url_name": "status_chance"
+            },
+            {
+              "value": 101.0,
+              "positive": true,
+              "url_name": "projectile_speed"
+            },
+            {
+              "value": -52.9,
+              "positive": false,
+              "url_name": "magazine_capacity"
+            }
+          ],
+          "mod_rank": 8,
+          "mastery_level": 14,
+          "re_rolls": 6,
+          "weapon_url_name": "kulstar",
+          "polarity": "vazarin",
+          "name": "igni-hexanak",
+          "type": "riven"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 8000,
+        "starting_price": 8000,
+        "platform": "ps4",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-04-05T20:59:57.000+00:00",
+        "updated": "2026-10-09T12:16:11.000+00:00",
+        "is_direct_sell": true,
+        "id": "69d2cd4deed49803f01d3aa5",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 113.7,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 131.9,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 118.4,
+              "positive": true,
+              "url_name": "toxin_damage"
+            },
+            {
+              "value": -107.3,
+              "positive": false,
+              "url_name": "impact_damage"
+            }
+          ],
+          "mod_rank": 8,
+          "name": "toxi-acrican",
+          "polarity": "vazarin",
+          "re_rolls": 2,
+          "mastery_level": 10,
+          "weapon_url_name": "kulstar"
+        }
+      },
+      {
+        "buyout_price": 3000,
+        "starting_price": 3000,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-11T14:57:03.000+00:00",
+        "updated": "2026-10-11T14:57:03.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acba3bf95e00c011894235c",
+        "item": {
+          "polarity": "madurai",
+          "name": "crita-satitis",
+          "weapon_url_name": "kulstar",
+          "mod_rank": 8,
+          "re_rolls": 1,
+          "attributes": [
+            {
+              "value": 198.0,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 100.0,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 146.0,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": -93.0,
+              "positive": false,
+              "url_name": "projectile_speed"
+            }
+          ],
+          "mastery_level": 13,
+          "type": "riven"
+        }
+      },
+      {
+        "buyout_price": 2222,
+        "visible": true,
+        "starting_price": 2222,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2024-09-10T15:38:16.000+00:00",
+        "updated": "2026-04-13T04:27:09.000+00:00",
+        "is_direct_sell": true,
+        "id": "66e067e8c405f63000b25ad2",
+        "item": {
+          "weapon_url_name": "kulstar",
+          "polarity": "madurai",
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 9.2,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 12.8,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 17.5,
+              "positive": true,
+              "url_name": "critical_chance"
+            }
+          ],
+          "mod_rank": 8,
+          "name": "crita-satitis",
+          "re_rolls": 1,
+          "mastery_level": 12
+        }
+      },
+      {
+        "starting_price": 1700,
+        "visible": true,
+        "buyout_price": 1700,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-05-10T23:41:36.000+00:00",
+        "updated": "2025-05-10T23:41:36.000+00:00",
+        "is_direct_sell": true,
+        "id": "681fe4308e487d02d7a8479b",
+        "item": {
+          "attributes": [
+            {
+              "value": 11.6,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 18.6,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 12.7,
+              "positive": true,
+              "url_name": "cold_damage"
+            },
+            {
+              "value": 0.95,
+              "positive": false,
+              "url_name": "damage_vs_infested"
+            }
+          ],
+          "mod_rank": 0,
+          "weapon_url_name": "kulstar",
+          "polarity": "madurai",
+          "name": "geli-acricron",
+          "re_rolls": 0,
+          "type": "riven",
+          "mastery_level": 13
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 1200,
+        "buyout_price": 1200,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-09T16:38:00.000+00:00",
+        "updated": "2026-09-09T16:38:00.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aa18b684103b5101bb59424",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 87.9,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 199.9,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 153.7,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": -118.3,
+              "positive": false,
+              "url_name": "impact_damage"
+            }
+          ],
+          "re_rolls": 0,
+          "mod_rank": 8,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 9,
+          "polarity": "madurai",
+          "name": "crita-satidra"
+        }
+      },
+      {
+        "buyout_price": 1000,
+        "starting_price": 1000,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-01-07T07:13:18.000+00:00",
+        "updated": "2026-08-30T13:09:42.000+00:00",
+        "is_direct_sell": true,
+        "id": "695e078ea8a2730008260022",
+        "item": {
+          "name": "acri-critatox",
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "attributes": [
+            {
+              "value": 191.3,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 117.1,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 108.9,
+              "positive": true,
+              "url_name": "toxin_damage"
+            },
+            {
+              "value": -87.0,
+              "positive": false,
+              "url_name": "status_chance"
+            }
+          ],
+          "polarity": "madurai",
+          "re_rolls": 0,
+          "mastery_level": 16,
+          "mod_rank": 8
+        }
+      },
+      {
+        "buyout_price": 900,
+        "starting_price": 900,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-10T18:14:02.000+00:00",
+        "updated": "2026-08-10T16:01:18.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a00caeac7bcef007aba4623",
+        "item": {
+          "weapon_url_name": "kulstar",
+          "type": "riven",
+          "mod_rank": 8,
+          "re_rolls": 0,
+          "polarity": "madurai",
+          "mastery_level": 16,
+          "attributes": [
+            {
+              "value": 324.8,
+              "positive": true,
+              "url_name": "base_damage_/_melee_damage"
+            },
+            {
+              "value": 176.9,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": -79.3,
+              "positive": false,
+              "url_name": "impact_damage"
+            }
+          ],
+          "name": "visican"
+        }
+      },
+      {
+        "starting_price": 899,
+        "visible": true,
+        "buyout_price": 899,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-07-29T16:37:35.000+00:00",
+        "updated": "2025-10-21T15:29:33.000+00:00",
+        "is_direct_sell": true,
+        "id": "6888f8cf1a935b00087e06ec",
+        "item": {
+          "re_rolls": 12,
+          "attributes": [
+            {
+              "value": 132.0,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 253.0,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": -32.4,
+              "positive": false,
+              "url_name": "magazine_capacity"
+            }
+          ],
+          "polarity": "naramon",
+          "mod_rank": 8,
+          "weapon_url_name": "kulstar",
+          "name": "critatis",
+          "type": "riven",
+          "mastery_level": 11
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 780,
+        "buyout_price": 780,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-02-02T17:06:33.000+00:00",
+        "updated": "2026-05-19T10:46:54.000+00:00",
+        "is_direct_sell": true,
+        "id": "6980d9996254e4000900d09a",
+        "item": {
+          "mastery_level": 8,
+          "attributes": [
+            {
+              "value": 131.7,
+              "positive": true,
+              "url_name": "impact_damage"
+            },
+            {
+              "value": 146.5,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 118.3,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": -96.5,
+              "positive": false,
+              "url_name": "status_duration"
+            }
+          ],
+          "re_rolls": 0,
+          "polarity": "naramon",
+          "name": "acri-satiton",
+          "weapon_url_name": "kulstar",
+          "mod_rank": 8,
+          "type": "riven"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 700,
+        "buyout_price": 700,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-13T09:31:09.000+00:00",
+        "updated": "2026-10-13T09:35:57.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acdfa5d06857601a4752fcc",
+        "item": {
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 129.8,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 193.0,
+              "positive": true,
+              "url_name": "impact_damage"
+            },
+            {
+              "value": 0.7,
+              "positive": false,
+              "url_name": "damage_vs_corpus"
+            }
+          ],
+          "mod_rank": 8,
+          "name": "croniton",
+          "polarity": "naramon",
+          "mastery_level": 10
+        }
+      },
+      {
+        "buyout_price": 600,
+        "visible": true,
+        "starting_price": 600,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-08-28T11:17:46.000+00:00",
+        "updated": "2026-07-15T03:51:11.000+00:00",
+        "is_direct_sell": true,
+        "id": "68b03ada1a935b003138dc5d",
+        "item": {
+          "name": "argi-satitis",
+          "type": "riven",
+          "re_rolls": 0,
+          "mastery_level": 13,
+          "polarity": "naramon",
+          "mod_rank": 0,
+          "weapon_url_name": "kulstar",
+          "attributes": [
+            {
+              "value": 103.1,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 1.58,
+              "positive": true,
+              "url_name": "damage_vs_grineer"
+            },
+            {
+              "value": 141.0,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": -80.3,
+              "positive": false,
+              "url_name": "zoom"
+            }
+          ]
+        }
+      },
+      {
+        "starting_price": 500,
+        "buyout_price": 500,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2023-06-12T06:41:35.000+00:00",
+        "updated": "2026-07-17T12:36:55.000+00:00",
+        "is_direct_sell": true,
+        "id": "6486be1f3545811cf97db534",
+        "item": {
+          "name": "vexi-visicron",
+          "weapon_url_name": "kulstar",
+          "type": "riven",
+          "polarity": "naramon",
+          "mod_rank": 0,
+          "re_rolls": 24,
+          "attributes": [
+            {
+              "positive": true,
+              "value": 169.6,
+              "url_name": "critical_chance"
+            },
+            {
+              "positive": true,
+              "value": 119.3,
+              "url_name": "electric_damage"
+            },
+            {
+              "positive": true,
+              "value": 275.8,
+              "url_name": "base_damage_/_melee_damage"
+            },
+            {
+              "positive": false,
+              "value": 85.3,
+              "url_name": "recoil"
+            }
+          ],
+          "mastery_level": 11
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 500,
+        "buyout_price": 500,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-11T08:36:31.000+00:00",
+        "updated": "2026-08-11T08:36:31.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a7adf0f624e74016ca160ee",
+        "item": {
+          "mod_rank": 0,
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "mastery_level": 16,
+          "name": "toxi-satitis",
+          "polarity": "madurai",
+          "re_rolls": 2,
+          "attributes": [
+            {
+              "value": 9.3,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 10.7,
+              "positive": true,
+              "url_name": "toxin_damage"
+            },
+            {
+              "value": 13.9,
+              "positive": true,
+              "url_name": "multishot"
+            }
+          ]
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 500,
+        "buyout_price": 500,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-14T20:13:22.000+00:00",
+        "updated": "2026-09-14T20:13:22.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aa855624103b51386d9aa0f",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 153.2,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 79.3,
+              "positive": true,
+              "url_name": "toxin_damage"
+            },
+            {
+              "value": 87.8,
+              "positive": true,
+              "url_name": "critical_damage"
+            }
+          ],
+          "re_rolls": 0,
+          "mod_rank": 8,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 13,
+          "polarity": "naramon",
+          "name": "crita-acritox"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 500,
+        "buyout_price": 500,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-12T16:45:59.000+00:00",
+        "updated": "2026-10-12T16:45:59.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acd0ec7068576016cef80ad",
+        "item": {
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "re_rolls": 1,
+          "attributes": [
+            {
+              "value": 12.9,
+              "positive": true,
+              "url_name": "toxin_damage"
+            },
+            {
+              "value": 12.3,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 16.0,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": -7.7,
+              "positive": false,
+              "url_name": "fire_rate_/_attack_speed"
+            }
+          ],
+          "mod_rank": 0,
+          "name": "toxi-acrican",
+          "polarity": "madurai",
+          "mastery_level": 11
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 450,
+        "buyout_price": 450,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-02-07T20:41:41.000+00:00",
+        "updated": "2026-06-25T17:15:36.000+00:00",
+        "is_direct_sell": true,
+        "id": "6987a3856254e40109f3a3cb",
+        "item": {
+          "mastery_level": 11,
+          "attributes": [
+            {
+              "value": 132.8,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 1.41,
+              "positive": true,
+              "url_name": "damage_vs_corpus"
+            },
+            {
+              "value": 1.4,
+              "positive": true,
+              "url_name": "damage_vs_infested"
+            }
+          ],
+          "re_rolls": 7,
+          "polarity": "naramon",
+          "name": "manti-puracron",
+          "weapon_url_name": "kulstar",
+          "mod_rank": 8,
+          "type": "riven"
+        }
+      },
+      {
+        "buyout_price": 450,
+        "starting_price": 450,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-06T00:42:41.000+00:00",
+        "updated": "2026-10-06T00:42:41.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac44401c94ce403ad23f31e",
+        "item": {
+          "mastery_level": 11,
+          "re_rolls": 2,
+          "mod_rank": 8,
+          "attributes": [
+            {
+              "value": 79.3,
+              "positive": true,
+              "url_name": "heat_damage"
+            },
+            {
+              "value": 141.7,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": -94.6,
+              "positive": true,
+              "url_name": "recoil"
+            }
+          ],
+          "weapon_url_name": "kulstar",
+          "type": "riven",
+          "name": "zeti-critapha",
+          "polarity": "vazarin"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 400,
+        "starting_price": 400,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-25T08:48:48.000+00:00",
+        "updated": "2026-09-30T05:30:07.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a140cf0dcc123015b1fb47a",
+        "item": {
+          "weapon_url_name": "kulstar",
+          "polarity": "madurai",
+          "attributes": [
+            {
+              "value": 12.9,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 21.3,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 10.9,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 0.95,
+              "positive": false,
+              "url_name": "damage_vs_grineer"
+            }
+          ],
+          "re_rolls": 0,
+          "name": "croni-acricron",
+          "type": "riven",
+          "mastery_level": 12,
+          "mod_rank": 0
+        }
+      },
+      {
+        "buyout_price": 400,
+        "starting_price": 400,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-03T14:08:50.000+00:00",
+        "updated": "2026-08-31T04:19:40.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a47c272de1e9a03a273fdcf",
+        "item": {
+          "name": "crita-cronican",
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 200.4,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 88.2,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 148.6,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 0.54,
+              "positive": false,
+              "url_name": "damage_vs_infested"
+            }
+          ],
+          "re_rolls": 18,
+          "polarity": "naramon",
+          "weapon_url_name": "kulstar",
+          "mastery_level": 8,
+          "mod_rank": 8
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 390,
+        "starting_price": 390,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-05T01:00:45.000+00:00",
+        "updated": "2026-10-13T14:41:28.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac2f6bd27b8c0034f371022",
+        "item": {
+          "name": "sati-armamag",
+          "re_rolls": 10,
+          "type": "riven",
+          "mastery_level": 10,
+          "polarity": "vazarin",
+          "attributes": [
+            {
+              "value": 139.9,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 59.7,
+              "positive": true,
+              "url_name": "magazine_capacity"
+            },
+            {
+              "value": -114.6,
+              "positive": true,
+              "url_name": "recoil"
+            },
+            {
+              "value": -73.1,
+              "positive": false,
+              "url_name": "zoom"
+            }
+          ],
+          "weapon_url_name": "kulstar",
+          "mod_rank": 0
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 350,
+        "starting_price": 350,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-03-11T05:49:23.000+00:00",
+        "updated": "2026-03-18T02:49:13.000+00:00",
+        "is_direct_sell": true,
+        "id": "69b102637d304506b592cd4e",
+        "item": {
+          "weapon_url_name": "kulstar",
+          "attributes": [
+            {
+              "value": 163.5,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 254.7,
+              "positive": true,
+              "url_name": "base_damage_/_melee_damage"
+            }
+          ],
+          "polarity": "naramon",
+          "type": "riven",
+          "mastery_level": 16,
+          "name": "satiata",
+          "re_rolls": 302,
+          "mod_rank": 8
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 350,
+        "buyout_price": 350,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-01T05:34:16.000+00:00",
+        "updated": "2026-09-01T05:34:16.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a9663d84103b50bc2d1c814",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 167.0,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 111.0,
+              "positive": true,
+              "url_name": "critical_damage"
+            }
+          ],
+          "re_rolls": 30,
+          "mod_rank": 8,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 11,
+          "polarity": "madurai",
+          "name": "satitis"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 350,
+        "starting_price": 350,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-29T20:12:44.000+00:00",
+        "updated": "2026-09-29T20:12:44.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abc1bbc27b8c0016cc00616",
+        "item": {
+          "name": "gelibin",
+          "re_rolls": 0,
+          "type": "riven",
+          "mastery_level": 8,
+          "polarity": "naramon",
+          "attributes": [
+            {
+              "value": 146.5,
+              "positive": true,
+              "url_name": "ammo_maximum"
+            },
+            {
+              "value": 148.9,
+              "positive": true,
+              "url_name": "cold_damage"
+            },
+            {
+              "value": -61.5,
+              "positive": false,
+              "url_name": "projectile_speed"
+            }
+          ],
+          "weapon_url_name": "kulstar",
+          "mod_rank": 8
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 350,
+        "buyout_price": 350,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-03T00:29:30.000+00:00",
+        "updated": "2026-10-03T00:29:30.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac04c6a64a7ca02bc11583a",
+        "item": {
+          "attributes": [
+            {
+              "value": 106.5,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 91.1,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 249.3,
+              "positive": true,
+              "url_name": "base_damage_/_melee_damage"
+            },
+            {
+              "value": -70.8,
+              "positive": false,
+              "url_name": "zoom"
+            }
+          ],
+          "mod_rank": 0,
+          "type": "riven",
+          "polarity": "vazarin",
+          "re_rolls": 17,
+          "name": "croni-acriata",
+          "weapon_url_name": "kulstar",
+          "mastery_level": 8
+        }
+      },
+      {
+        "buyout_price": 300,
+        "starting_price": 300,
+        "visible": true,
+        "platform": "ps4",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-03-31T03:49:31.000+00:00",
+        "updated": "2026-03-31T03:49:31.000+00:00",
+        "is_direct_sell": true,
+        "id": "69cb444bf11b6c02aaa5b7e3",
+        "item": {
+          "name": "crita-decipha",
+          "mod_rank": 8,
+          "polarity": "madurai",
+          "type": "riven",
+          "re_rolls": 3,
+          "attributes": [
+            {
+              "value": 81.4,
+              "positive": true,
+              "url_name": "heat_damage"
+            },
+            {
+              "value": 94.9,
+              "positive": true,
+              "url_name": "status_duration"
+            },
+            {
+              "value": 154.0,
+              "positive": true,
+              "url_name": "critical_chance"
+            }
+          ],
+          "mastery_level": 16,
+          "weapon_url_name": "kulstar"
+        }
+      },
+      {
+        "buyout_price": 300,
+        "starting_price": 300,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-27T09:23:54.000+00:00",
+        "updated": "2026-07-04T19:03:07.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a16b82abba40301b0836559",
+        "item": {
+          "mod_rank": 8,
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "name": "crita-acrides",
+          "re_rolls": 0,
+          "mastery_level": 12,
+          "polarity": "naramon",
+          "attributes": [
+            {
+              "value": 183.0,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 108.4,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 110.0,
+              "positive": true,
+              "url_name": "status_duration"
+            },
+            {
+              "value": 87.5,
+              "positive": false,
+              "url_name": "recoil"
+            }
+          ]
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 300,
+        "buyout_price": 300,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-12T15:47:59.000+00:00",
+        "updated": "2026-10-12T15:47:59.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acd012f068576015ec9c82c",
+        "item": {
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "re_rolls": 13,
+          "attributes": [
+            {
+              "value": 9.3,
+              "positive": true,
+              "url_name": "projectile_speed"
+            },
+            {
+              "value": 16.6,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 24.4,
+              "positive": true,
+              "url_name": "base_damage_/_melee_damage"
+            }
+          ],
+          "mod_rank": 0,
+          "name": "visi-critanak",
+          "polarity": "madurai",
+          "mastery_level": 8
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 280,
+        "buyout_price": 280,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-30T17:01:18.000+00:00",
+        "updated": "2026-06-30T17:01:18.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a43f65e99b97902bf4929ab",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 23.3,
+              "positive": true,
+              "url_name": "base_damage_/_melee_damage"
+            },
+            {
+              "value": 10.1,
+              "positive": true,
+              "url_name": "cold_damage"
+            },
+            {
+              "value": 12.1,
+              "positive": true,
+              "url_name": "multishot"
+            }
+          ],
+          "weapon_url_name": "kulstar",
+          "re_rolls": 0,
+          "mastery_level": 11,
+          "mod_rank": 0,
+          "name": "geli-visican",
+          "polarity": "naramon"
+        }
+      },
+      {
+        "starting_price": 250,
+        "visible": true,
+        "buyout_price": 250,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-18T05:29:14.000+00:00",
+        "updated": "2026-06-27T20:23:39.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a33822a663c5601dc0ef03f",
+        "item": {
+          "polarity": "madurai",
+          "attributes": [
+            {
+              "value": 154.8,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 84.4,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 253.5,
+              "positive": true,
+              "url_name": "base_damage_/_melee_damage"
+            },
+            {
+              "value": -93.6,
+              "positive": false,
+              "url_name": "projectile_speed"
+            }
+          ],
+          "mod_rank": 8,
+          "name": "sati-visidra",
+          "mastery_level": 11,
+          "re_rolls": 3,
+          "type": "riven",
+          "weapon_url_name": "kulstar"
+        }
+      },
+      {
+        "starting_price": 200,
+        "visible": true,
+        "buyout_price": 200,
+        "platform": "xbox",
+        "closed": false,
+        "top_bid": null,
+        "created": "2020-12-04T22:13:39.000+00:00",
+        "updated": "2026-10-02T15:48:59.000+00:00",
+        "is_direct_sell": true,
+        "id": "5fcab4933e8c4f0018deb58e",
+        "item": {
+          "weapon_url_name": "kulstar",
+          "type": "riven",
+          "re_rolls": 2,
+          "polarity": "madurai",
+          "mastery_level": 9,
+          "attributes": [
+            {
+              "positive": true,
+              "value": 120.5,
+              "url_name": "critical_damage"
+            },
+            {
+              "positive": true,
+              "value": 164.7,
+              "url_name": "critical_chance"
+            },
+            {
+              "positive": true,
+              "value": 92.9,
+              "url_name": "zoom"
+            },
+            {
+              "positive": false,
+              "value": -95.4,
+              "url_name": "status_duration"
+            }
+          ],
+          "name": "acri-heracron",
+          "mod_rank": 8
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 200,
+        "starting_price": 200,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-10T18:18:45.000+00:00",
+        "updated": "2026-08-10T15:59:11.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a00cc056af86e0075dc2eb1",
+        "item": {
+          "type": "riven",
+          "re_rolls": 2,
+          "name": "conci-critacan",
+          "polarity": "madurai",
+          "mastery_level": 14,
+          "weapon_url_name": "kulstar",
+          "attributes": [
+            {
+              "value": 109.4,
+              "positive": true,
+              "url_name": "projectile_speed"
+            },
+            {
+              "value": 138.6,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 177.4,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": -82.6,
+              "positive": false,
+              "url_name": "zoom"
+            }
+          ],
+          "mod_rank": 8
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 200,
+        "starting_price": 200,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-02T20:31:22.000+00:00",
+        "updated": "2026-06-02T20:31:22.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a1f3d9a36f8740115f98241",
+        "item": {
+          "weapon_url_name": "kulstar",
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 260.1,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 134.1,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 0.73,
+              "positive": false,
+              "url_name": "damage_vs_corpus"
+            }
+          ],
+          "polarity": "naramon",
+          "mod_rank": 8,
+          "re_rolls": 5,
+          "mastery_level": 15,
+          "name": "critatis"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 200,
+        "buyout_price": 200,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-19T16:07:50.000+00:00",
+        "updated": "2026-09-19T16:07:50.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aaeb3564103b516ab00b836",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 263.2,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 136.9,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 58.9,
+              "positive": false,
+              "url_name": "recoil"
+            }
+          ],
+          "re_rolls": 1,
+          "mod_rank": 8,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 11,
+          "polarity": "madurai",
+          "name": "critatis"
+        }
+      },
+      {
+        "starting_price": 200,
+        "buyout_price": 200,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-25T17:10:43.000+00:00",
+        "updated": "2026-09-25T17:10:43.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab6ab13a62a7a0008320a59",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 102.8,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 145.2,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 100.0,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 0.6,
+              "positive": false,
+              "url_name": "damage_vs_infested"
+            }
+          ],
+          "mod_rank": 0,
+          "polarity": "vazarin",
+          "re_rolls": 7,
+          "mastery_level": 16,
+          "name": "acri-satidra",
+          "weapon_url_name": "kulstar"
+        }
+      },
+      {
+        "starting_price": 150,
+        "buyout_price": 150,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2024-03-05T00:49:32.000+00:00",
+        "updated": "2025-03-23T16:11:53.000+00:00",
+        "is_direct_sell": true,
+        "id": "65e66c1c0d1bf700a9ec519f",
+        "item": {
+          "weapon_url_name": "kulstar",
+          "polarity": "vazarin",
+          "name": "croni-visido",
+          "mod_rank": 0,
+          "mastery_level": 11,
+          "attributes": [
+            {
+              "value": 29.2,
+              "positive": true,
+              "url_name": "base_damage_/_melee_damage"
+            },
+            {
+              "value": 10.7,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 11.3,
+              "positive": true,
+              "url_name": "cold_damage"
+            },
+            {
+              "value": -5.6,
+              "positive": false,
+              "url_name": "magazine_capacity"
+            }
+          ],
+          "type": "riven",
+          "re_rolls": 0
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 150,
+        "buyout_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-04T05:16:38.000+00:00",
+        "updated": "2026-09-04T05:16:38.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a9a5436624e740d23eb9a9e",
+        "item": {
+          "mod_rank": 0,
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "mastery_level": 16,
+          "name": "acri-argican",
+          "polarity": "naramon",
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 101.0,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 1.56,
+              "positive": true,
+              "url_name": "damage_vs_grineer"
+            },
+            {
+              "value": 139.0,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 79.0,
+              "positive": false,
+              "url_name": "recoil"
+            }
+          ]
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 150,
+        "buyout_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-18T18:32:57.000+00:00",
+        "updated": "2026-10-10T16:11:58.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aad83d9624e74161434ac16",
+        "item": {
+          "mod_rank": 8,
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "mastery_level": 14,
+          "name": "visi-acricron",
+          "polarity": "vazarin",
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 86.5,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 137.3,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 211.2,
+              "positive": true,
+              "url_name": "base_damage_/_melee_damage"
+            }
+          ]
+        }
+      },
+      {
+        "starting_price": 150,
+        "buyout_price": 150,
+        "visible": true,
+        "platform": "ps4",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-25T21:00:36.000+00:00",
+        "updated": "2026-09-29T02:27:07.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab6e0f4a62a7a0038ba5031",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 10.0,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 6.6,
+              "positive": true,
+              "url_name": "magazine_capacity"
+            },
+            {
+              "value": 12.9,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": -9.8,
+              "positive": false,
+              "url_name": "ammo_maximum"
+            }
+          ],
+          "mod_rank": 0,
+          "polarity": "madurai",
+          "re_rolls": 8,
+          "mastery_level": 8,
+          "name": "acri-cronitin",
+          "weapon_url_name": "kulstar"
+        }
+      },
+      {
+        "starting_price": 75,
+        "visible": true,
+        "buyout_price": 150,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2024-12-13T12:45:30.000+00:00",
+        "updated": "2025-01-09T22:09:31.000+00:00",
+        "is_direct_sell": false,
+        "id": "675c2c6a9641c700087b9205",
+        "item": {
+          "re_rolls": 10,
+          "weapon_url_name": "kulstar",
+          "polarity": "vazarin",
+          "attributes": [
+            {
+              "value": 88.1,
+              "positive": true,
+              "url_name": "heat_damage"
+            },
+            {
+              "value": 81.4,
+              "positive": true,
+              "url_name": "electric_damage"
+            },
+            {
+              "value": 82.1,
+              "positive": true,
+              "url_name": "critical_damage"
+            }
+          ],
+          "type": "riven",
+          "name": "igni-acritio",
+          "mastery_level": 10,
+          "mod_rank": 8
+        }
+      },
+      {
+        "starting_price": 120,
+        "buyout_price": 120,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-11T20:03:44.000+00:00",
+        "updated": "2026-10-11T20:03:44.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acbeba0dd18e5013c52240d",
+        "item": {
+          "mastery_level": 13,
+          "weapon_url_name": "kulstar",
+          "name": "acri-visitron",
+          "type": "riven",
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 1.05,
+              "positive": true,
+              "url_name": "damage_vs_corpus"
+            },
+            {
+              "value": 23.2,
+              "positive": true,
+              "url_name": "base_damage_/_melee_damage"
+            },
+            {
+              "value": 9.7,
+              "positive": true,
+              "url_name": "critical_damage"
+            }
+          ],
+          "polarity": "vazarin",
+          "mod_rank": 0
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 120,
+        "buyout_price": 120,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-13T16:58:28.000+00:00",
+        "updated": "2026-10-13T16:58:28.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ace633406857601c070d60b",
+        "item": {
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "re_rolls": 3,
+          "attributes": [
+            {
+              "value": 121.4,
+              "positive": true,
+              "url_name": "electric_damage"
+            },
+            {
+              "value": 112.3,
+              "positive": true,
+              "url_name": "projectile_speed"
+            }
+          ],
+          "mod_rank": 8,
+          "name": "vexinak",
+          "polarity": "vazarin",
+          "mastery_level": 11
+        }
+      },
+      {
+        "buyout_price": 100,
+        "starting_price": 100,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2024-12-25T11:58:39.000+00:00",
+        "updated": "2026-10-01T05:23:04.000+00:00",
+        "is_direct_sell": true,
+        "id": "676bf36f99f7de002587df20",
+        "item": {
+          "weapon_url_name": "kulstar",
+          "attributes": [
+            {
+              "value": 11.9,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 0.4,
+              "positive": true,
+              "url_name": "punch_through"
+            },
+            {
+              "value": 17.1,
+              "positive": true,
+              "url_name": "impact_damage"
+            },
+            {
+              "value": -8.2,
+              "positive": false,
+              "url_name": "zoom"
+            }
+          ],
+          "polarity": "naramon",
+          "re_rolls": 7,
+          "mastery_level": 15,
+          "type": "riven",
+          "mod_rank": 0,
+          "name": "lexi-magnatis"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 100,
+        "starting_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-08T16:43:45.000+00:00",
+        "updated": "2026-05-08T16:43:45.000+00:00",
+        "is_direct_sell": true,
+        "id": "69fe12c11e9a6c070efe7d99",
+        "item": {
+          "name": "manti-satinok",
+          "mod_rank": 0,
+          "attributes": [
+            {
+              "value": 1.06,
+              "positive": true,
+              "url_name": "damage_vs_corpus"
+            },
+            {
+              "value": 16.7,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 0.4,
+              "positive": true,
+              "url_name": "punch_through"
+            },
+            {
+              "value": -13.7,
+              "positive": false,
+              "url_name": "impact_damage"
+            }
+          ],
+          "type": "riven",
+          "mastery_level": 16,
+          "re_rolls": 2,
+          "weapon_url_name": "kulstar",
+          "polarity": "vazarin"
+        }
+      },
+      {
+        "starting_price": 100,
+        "visible": true,
+        "buyout_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-29T19:56:37.000+00:00",
+        "updated": "2026-07-29T19:56:37.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a6a5af5cf1bb60076773e2f",
+        "item": {
+          "weapon_url_name": "kulstar",
+          "type": "riven",
+          "name": "crita-saticon",
+          "mod_rank": 8,
+          "re_rolls": 7,
+          "attributes": [
+            {
+              "value": 141.0,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 1.41,
+              "positive": true,
+              "url_name": "damage_vs_grineer"
+            },
+            {
+              "value": 109.0,
+              "positive": true,
+              "url_name": "multishot"
+            }
+          ],
+          "polarity": "vazarin",
+          "mastery_level": 12
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 100,
+        "buyout_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-19T14:45:50.000+00:00",
+        "updated": "2026-09-19T14:45:50.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aaea01e4103b516b28228d8",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 17.3,
+              "positive": true,
+              "url_name": "status_chance"
+            },
+            {
+              "value": 15.2,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": -5.7,
+              "positive": false,
+              "url_name": "zoom"
+            }
+          ],
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 9,
+          "polarity": "madurai",
+          "name": "hexatis"
+        }
+      },
+      {
+        "buyout_price": 100,
+        "starting_price": 100,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-01T22:32:07.000+00:00",
+        "updated": "2026-10-01T22:32:07.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abedf67c94ce4024bb6c9e4",
+        "item": {
+          "mastery_level": 8,
+          "re_rolls": 5,
+          "mod_rank": 8,
+          "attributes": [
+            {
+              "value": 110.9,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 110.6,
+              "positive": true,
+              "url_name": "electric_damage"
+            },
+            {
+              "value": 56.5,
+              "positive": true,
+              "url_name": "magazine_capacity"
+            },
+            {
+              "value": -87.3,
+              "positive": false,
+              "url_name": "ammo_maximum"
+            }
+          ],
+          "weapon_url_name": "kulstar",
+          "type": "riven",
+          "name": "acri-vexitin",
+          "polarity": "vazarin"
+        }
+      },
+      {
+        "buyout_price": 100,
+        "starting_price": 100,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-09T23:06:05.000+00:00",
+        "updated": "2026-10-09T23:06:05.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac9735d95e00c009aa36408",
+        "item": {
+          "polarity": "vazarin",
+          "name": "sati-magnadra",
+          "weapon_url_name": "kulstar",
+          "mod_rank": 0,
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 12.8,
+              "positive": true,
+              "url_name": "impact_damage"
+            },
+            {
+              "value": 13.7,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 7.8,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            }
+          ],
+          "mastery_level": 11,
+          "type": "riven"
+        }
+      },
+      {
+        "starting_price": 100,
+        "buyout_price": 100,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-10T20:23:48.000+00:00",
+        "updated": "2026-10-10T20:23:48.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aca9ed4dd18e500da1042a8",
+        "item": {
+          "mastery_level": 8,
+          "weapon_url_name": "kulstar",
+          "name": "conci-satisco",
+          "type": "riven",
+          "re_rolls": 17,
+          "attributes": [
+            {
+              "value": 148.5,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 106.8,
+              "positive": true,
+              "url_name": "viral"
+            },
+            {
+              "value": 120.1,
+              "positive": true,
+              "url_name": "projectile_speed"
+            },
+            {
+              "value": -81.8,
+              "positive": false,
+              "url_name": "zoom"
+            }
+          ],
+          "polarity": "naramon",
+          "mod_rank": 8
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 100,
+        "buyout_price": 100,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-11T20:30:30.000+00:00",
+        "updated": "2026-10-11T20:30:30.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acbf1e60685760126aabb16",
+        "item": {
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 1.49,
+              "positive": true,
+              "url_name": "damage_vs_infested"
+            },
+            {
+              "value": 275.9,
+              "positive": true,
+              "url_name": "base_damage_/_melee_damage"
+            },
+            {
+              "value": 117.2,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 83.6,
+              "positive": false,
+              "url_name": "recoil"
+            }
+          ],
+          "mod_rank": 8,
+          "name": "acri-visiada",
+          "polarity": "vazarin",
+          "mastery_level": 8
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 88,
+        "starting_price": 88,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2023-12-24T05:50:41.000+00:00",
+        "updated": "2026-10-08T13:38:44.000+00:00",
+        "is_direct_sell": true,
+        "id": "6587c6b1faacc4288082d062",
+        "item": {
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 8.1,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 10.0,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 12.4,
+              "positive": true,
+              "url_name": "multishot"
+            }
+          ],
+          "mod_rank": 0,
+          "mastery_level": 8,
+          "name": "acri-cronican",
+          "polarity": "vazarin",
+          "weapon_url_name": "kulstar",
+          "type": "riven"
+        }
+      },
+      {
+        "buyout_price": 80,
+        "visible": true,
+        "starting_price": 80,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-07-08T22:29:11.000+00:00",
+        "updated": "2026-10-09T19:41:09.000+00:00",
+        "is_direct_sell": true,
+        "id": "686d9bb72a87dd002ad46387",
+        "item": {
+          "weapon_url_name": "kulstar",
+          "mastery_level": 14,
+          "re_rolls": 0,
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 72.1,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 118.8,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 153.3,
+              "positive": true,
+              "url_name": "critical_chance"
+            }
+          ],
+          "polarity": "madurai",
+          "mod_rank": 8,
+          "name": "crita-satidra"
+        }
+      },
+      {
+        "buyout_price": 80,
+        "starting_price": 80,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-06T02:36:57.000+00:00",
+        "updated": "2026-08-17T01:56:26.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a4b14c9de1e9a047ba9722d",
+        "item": {
+          "name": "fevacron",
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 183.5,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 62.0,
+              "positive": true,
+              "url_name": "reload_speed"
+            }
+          ],
+          "re_rolls": 0,
+          "polarity": "naramon",
+          "weapon_url_name": "kulstar",
+          "mastery_level": 13,
+          "mod_rank": 0
+        }
+      },
+      {
+        "starting_price": 75,
+        "buyout_price": 75,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-03-15T12:05:15.000+00:00",
+        "updated": "2026-09-22T21:48:47.000+00:00",
+        "is_direct_sell": true,
+        "id": "69b6a07bdfac980751ec0b72",
+        "item": {
+          "attributes": [
+            {
+              "value": 28.7,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 16.3,
+              "positive": true,
+              "url_name": "critical_damage"
+            }
+          ],
+          "mastery_level": 14,
+          "mod_rank": 0,
+          "weapon_url_name": "kulstar",
+          "name": "critatis",
+          "type": "riven",
+          "polarity": "vazarin",
+          "re_rolls": 2
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 60,
+        "buyout_price": 60,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-09T05:24:10.000+00:00",
+        "updated": "2026-10-09T05:24:10.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac87a7a068576005b703a35",
+        "item": {
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 1.0,
+              "positive": true,
+              "url_name": "toxin_damage"
+            },
+            {
+              "value": 1.0,
+              "positive": true,
+              "url_name": "heat_damage"
+            },
+            {
+              "value": 1.0,
+              "positive": true,
+              "url_name": "cold_damage"
+            },
+            {
+              "value": -1.0,
+              "positive": false,
+              "url_name": "magazine_capacity"
+            }
+          ],
+          "mod_rank": 0,
+          "name": "geli-toxipha",
+          "polarity": "naramon",
+          "mastery_level": 11
+        }
+      },
+      {
+        "buyout_price": 59,
+        "starting_price": 59,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-05T17:22:56.000+00:00",
+        "updated": "2026-08-05T17:22:56.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a7371702d7dee01eafabcd2",
+        "item": {
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "attributes": [
+            {
+              "value": 11.4,
+              "positive": true,
+              "url_name": "status_chance"
+            },
+            {
+              "value": 10.8,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 20.9,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": -9.6,
+              "positive": false,
+              "url_name": "ammo_maximum"
+            }
+          ],
+          "re_rolls": 0,
+          "polarity": "madurai",
+          "name": "croni-critadex",
+          "mastery_level": 13,
+          "mod_rank": 0
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 55,
+        "starting_price": 55,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-27T17:45:17.000+00:00",
+        "updated": "2026-09-27T17:45:17.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab9562d27b8c00085acf0a1",
+        "item": {
+          "name": "lexi-visitin",
+          "re_rolls": 0,
+          "type": "riven",
+          "mastery_level": 8,
+          "polarity": "vazarin",
+          "attributes": [
+            {
+              "value": 32.2,
+              "positive": true,
+              "url_name": "base_damage_/_melee_damage"
+            },
+            {
+              "value": 6.6,
+              "positive": true,
+              "url_name": "magazine_capacity"
+            },
+            {
+              "value": 0.4,
+              "positive": true,
+              "url_name": "punch_through"
+            },
+            {
+              "value": -5.6,
+              "positive": false,
+              "url_name": "reload_speed"
+            }
+          ],
+          "weapon_url_name": "kulstar",
+          "mod_rank": 0
+        }
+      },
+      {
+        "starting_price": 50,
+        "buyout_price": 50,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2023-11-22T10:00:15.000+00:00",
+        "updated": "2025-10-21T16:17:01.000+00:00",
+        "is_direct_sell": true,
+        "id": "655dd12fd55871103e7562bc",
+        "item": {
+          "weapon_url_name": "kulstar",
+          "attributes": [
+            {
+              "positive": true,
+              "value": 1.0,
+              "url_name": "status_chance"
+            },
+            {
+              "positive": true,
+              "value": 1.0,
+              "url_name": "status_duration"
+            }
+          ],
+          "polarity": "naramon",
+          "re_rolls": 0,
+          "mastery_level": 9,
+          "mod_rank": 0,
+          "name": "decidex",
+          "type": "riven"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 50,
+        "buyout_price": 50,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-01-29T10:13:53.000+00:00",
+        "updated": "2026-01-29T10:13:53.000+00:00",
+        "is_direct_sell": true,
+        "id": "697b32e18f5df70109d2f9d7",
+        "item": {
+          "type": "riven",
+          "name": "vexi-magnadex",
+          "mod_rank": 0,
+          "attributes": [
+            {
+              "value": 13.1,
+              "positive": true,
+              "url_name": "electric_damage"
+            },
+            {
+              "value": 17.1,
+              "positive": true,
+              "url_name": "impact_damage"
+            },
+            {
+              "value": 11.4,
+              "positive": true,
+              "url_name": "status_chance"
+            },
+            {
+              "value": -9.6,
+              "positive": false,
+              "url_name": "projectile_speed"
+            }
+          ],
+          "polarity": "vazarin",
+          "re_rolls": 0,
+          "mastery_level": 14,
+          "weapon_url_name": "kulstar"
+        }
+      },
+      {
+        "buyout_price": 50,
+        "starting_price": 50,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-03-23T19:41:23.000+00:00",
+        "updated": "2026-09-28T18:24:21.000+00:00",
+        "is_direct_sell": true,
+        "id": "69c19763f11b6c0160c16803",
+        "item": {
+          "name": "crita-visibin",
+          "mod_rank": 8,
+          "polarity": "naramon",
+          "type": "riven",
+          "re_rolls": 1,
+          "attributes": [
+            {
+              "value": 187.0,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 262.0,
+              "positive": true,
+              "url_name": "base_damage_/_melee_damage"
+            },
+            {
+              "value": -73.0,
+              "positive": false,
+              "url_name": "zoom"
+            },
+            {
+              "value": 114.0,
+              "positive": true,
+              "url_name": "ammo_maximum"
+            }
+          ],
+          "mastery_level": 10,
+          "weapon_url_name": "kulstar"
+        }
+      },
+      {
+        "buyout_price": 50,
+        "starting_price": 50,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-03-25T17:54:33.000+00:00",
+        "updated": "2026-08-06T15:46:44.000+00:00",
+        "is_direct_sell": true,
+        "id": "69c421594a1f6501b06fecea",
+        "item": {
+          "polarity": "naramon",
+          "type": "riven",
+          "mod_rank": 0,
+          "weapon_url_name": "kulstar",
+          "attributes": [
+            {
+              "value": 10.5,
+              "positive": true,
+              "url_name": "cold_damage"
+            },
+            {
+              "value": 15.6,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 10.7,
+              "positive": true,
+              "url_name": "critical_damage"
+            }
+          ],
+          "re_rolls": 0,
+          "mastery_level": 12,
+          "name": "acri-gelicron"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 50,
+        "starting_price": 50,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-04-15T17:11:58.000+00:00",
+        "updated": "2026-05-09T13:39:41.000+00:00",
+        "is_direct_sell": true,
+        "id": "69dfc6de1e9a6c01fa8684fc",
+        "item": {
+          "name": "toxi-satidra",
+          "mod_rank": 8,
+          "attributes": [
+            {
+              "value": 108.8,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 86.4,
+              "positive": true,
+              "url_name": "toxin_damage"
+            },
+            {
+              "value": 66.1,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            }
+          ],
+          "type": "riven",
+          "mastery_level": 14,
+          "re_rolls": 9,
+          "weapon_url_name": "kulstar",
+          "polarity": "madurai"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 50,
+        "starting_price": 50,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-24T03:40:42.000+00:00",
+        "updated": "2026-05-24T03:40:42.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a12733adcc123011f01a438",
+        "item": {
+          "weapon_url_name": "kulstar",
+          "polarity": "vazarin",
+          "attributes": [
+            {
+              "value": 15.7,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 15.4,
+              "positive": true,
+              "url_name": "zoom"
+            },
+            {
+              "value": -7.8,
+              "positive": false,
+              "url_name": "status_duration"
+            }
+          ],
+          "re_rolls": 0,
+          "name": "heratis",
+          "type": "riven",
+          "mastery_level": 10,
+          "mod_rank": 0
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 50,
+        "buyout_price": 50,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-27T10:50:08.000+00:00",
+        "updated": "2026-08-27T10:50:08.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a9016604103b50953dc6f41",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 10.0,
+              "positive": true,
+              "url_name": "status_duration"
+            },
+            {
+              "value": 13.8,
+              "positive": true,
+              "url_name": "impact_damage"
+            },
+            {
+              "value": 9.4,
+              "positive": true,
+              "url_name": "status_chance"
+            }
+          ],
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 15,
+          "polarity": "vazarin",
+          "name": "magna-hexades"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 50,
+        "buyout_price": 50,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-30T10:51:38.000+00:00",
+        "updated": "2026-08-30T10:51:38.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a940b3a624e740aec08dc8c",
+        "item": {
+          "mod_rank": 0,
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "mastery_level": 16,
+          "name": "satidra",
+          "polarity": "madurai",
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 16.8,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 10.3,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            }
+          ]
+        }
+      },
+      {
+        "starting_price": 50,
+        "buyout_price": 50,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-20T18:44:59.000+00:00",
+        "updated": "2026-09-20T18:44:59.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab029ab51f7f217688c4cb8",
+        "item": {
+          "polarity": "naramon",
+          "attributes": [
+            {
+              "value": 0.5,
+              "positive": true,
+              "url_name": "punch_through"
+            },
+            {
+              "value": 38.8,
+              "positive": true,
+              "url_name": "base_damage_/_melee_damage"
+            },
+            {
+              "value": -3.5,
+              "positive": false,
+              "url_name": "reload_speed"
+            }
+          ],
+          "re_rolls": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 9,
+          "name": "lexiata",
+          "mod_rank": 0,
+          "type": "riven"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 45,
+        "buyout_price": 45,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-05T20:44:30.000+00:00",
+        "updated": "2026-10-05T20:44:30.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac40c2e64a7ca0387be873b",
+        "item": {
+          "attributes": [
+            {
+              "value": 12.1,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 9.8,
+              "positive": true,
+              "url_name": "heat_damage"
+            },
+            {
+              "value": 10.7,
+              "positive": true,
+              "url_name": "cold_damage"
+            }
+          ],
+          "mod_rank": 0,
+          "type": "riven",
+          "polarity": "madurai",
+          "re_rolls": 0,
+          "name": "geli-ignican",
+          "weapon_url_name": "kulstar",
+          "mastery_level": 15
+        }
+      },
+      {
+        "buyout_price": 40,
+        "starting_price": 40,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-01-08T15:38:04.000+00:00",
+        "updated": "2026-07-28T13:38:56.000+00:00",
+        "is_direct_sell": true,
+        "id": "695fcf5c635d4500099dbf13",
+        "item": {
+          "mastery_level": 14,
+          "mod_rank": 0,
+          "polarity": "vazarin",
+          "name": "pura-decicon",
+          "attributes": [
+            {
+              "value": 10.6,
+              "positive": true,
+              "url_name": "status_duration"
+            },
+            {
+              "value": 1.05,
+              "positive": true,
+              "url_name": "damage_vs_infested"
+            },
+            {
+              "value": 1.05,
+              "positive": true,
+              "url_name": "damage_vs_grineer"
+            }
+          ],
+          "type": "riven",
+          "re_rolls": 0,
+          "weapon_url_name": "kulstar"
+        }
+      },
+      {
+        "starting_price": 40,
+        "buyout_price": 40,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-09T12:19:34.000+00:00",
+        "updated": "2026-05-09T12:19:34.000+00:00",
+        "is_direct_sell": true,
+        "id": "69ff2656f8ec2d002fdedb1f",
+        "item": {
+          "weapon_url_name": "kulstar",
+          "attributes": [
+            {
+              "value": 20.9,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 1.07,
+              "positive": true,
+              "url_name": "damage_vs_grineer"
+            }
+          ],
+          "re_rolls": 0,
+          "name": "argicron",
+          "type": "riven",
+          "mastery_level": 16,
+          "polarity": "vazarin",
+          "mod_rank": 0
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 40,
+        "starting_price": 40,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-09T12:19:40.000+00:00",
+        "updated": "2026-05-09T12:19:40.000+00:00",
+        "is_direct_sell": true,
+        "id": "69ff265c6af86e002f36eee3",
+        "item": {
+          "type": "riven",
+          "re_rolls": 0,
+          "name": "croni-decitio",
+          "polarity": "naramon",
+          "mastery_level": 11,
+          "weapon_url_name": "kulstar",
+          "attributes": [
+            {
+              "value": 8.5,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 11.2,
+              "positive": true,
+              "url_name": "status_duration"
+            },
+            {
+              "value": 9.1,
+              "positive": true,
+              "url_name": "electric_damage"
+            }
+          ],
+          "mod_rank": 0
+        }
+      },
+      {
+        "starting_price": 40,
+        "visible": true,
+        "buyout_price": 40,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-22T14:31:56.000+00:00",
+        "updated": "2026-09-01T08:26:07.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a60d45c24cd4003c5ca34b7",
+        "item": {
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 134.8,
+              "positive": true,
+              "url_name": "impact_damage"
+            },
+            {
+              "value": 188.4,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 155.5,
+              "positive": true,
+              "url_name": "multishot"
+            }
+          ],
+          "type": "riven",
+          "polarity": "naramon",
+          "mod_rank": 8,
+          "mastery_level": 8,
+          "weapon_url_name": "kulstar",
+          "name": "magna-critacan"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 40,
+        "buyout_price": 40,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-11T08:36:47.000+00:00",
+        "updated": "2026-08-11T08:36:47.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a7adf1f4103b5016581d2e2",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 1.06,
+              "positive": true,
+              "url_name": "damage_vs_infested"
+            },
+            {
+              "value": 14.0,
+              "positive": true,
+              "url_name": "status_duration"
+            },
+            {
+              "value": 0.4,
+              "positive": true,
+              "url_name": "punch_through"
+            },
+            {
+              "value": -14.9,
+              "positive": false,
+              "url_name": "critical_chance"
+            }
+          ],
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 12,
+          "polarity": "vazarin",
+          "name": "pura-decinok"
+        }
+      },
+      {
+        "starting_price": 40,
+        "buyout_price": 40,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-19T04:57:12.000+00:00",
+        "updated": "2026-09-19T04:57:12.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aae162851f7f216721fcd6a",
+        "item": {
+          "polarity": "madurai",
+          "attributes": [
+            {
+              "value": 14.6,
+              "positive": true,
+              "url_name": "heat_damage"
+            },
+            {
+              "value": 17.9,
+              "positive": true,
+              "url_name": "status_duration"
+            },
+            {
+              "value": 0.97,
+              "positive": false,
+              "url_name": "damage_vs_corpus"
+            }
+          ],
+          "re_rolls": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 14,
+          "name": "decipha",
+          "mod_rank": 0,
+          "type": "riven"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 40,
+        "buyout_price": 40,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-20T14:01:12.000+00:00",
+        "updated": "2026-09-20T14:01:12.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aafe7284103b5174c195f8b",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 12.3,
+              "positive": true,
+              "url_name": "ammo_maximum"
+            },
+            {
+              "value": 19.4,
+              "positive": true,
+              "url_name": "critical_chance"
+            }
+          ],
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 15,
+          "polarity": "naramon",
+          "name": "ampicron"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 35,
+        "starting_price": 35,
+        "platform": "ps4",
+        "closed": false,
+        "top_bid": null,
+        "created": "2024-12-02T03:04:37.000+00:00",
+        "updated": "2026-10-09T04:34:56.000+00:00",
+        "is_direct_sell": true,
+        "id": "674d23c5010357000a7be651",
+        "item": {
+          "type": "riven",
+          "name": "cronitin",
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "attributes": [
+            {
+              "value": 14.6,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 8.1,
+              "positive": true,
+              "url_name": "magazine_capacity"
+            },
+            {
+              "value": -6.9,
+              "positive": false,
+              "url_name": "projectile_speed"
+            }
+          ],
+          "polarity": "madurai",
+          "weapon_url_name": "kulstar",
+          "mastery_level": 8
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 35,
+        "buyout_price": 35,
+        "platform": "ps4",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-04-03T04:45:29.000+00:00",
+        "updated": "2026-10-09T04:34:51.000+00:00",
+        "is_direct_sell": true,
+        "id": "67ee12696c6de200070a0426",
+        "item": {
+          "mod_rank": 0,
+          "attributes": [
+            {
+              "value": 14.6,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 8.1,
+              "positive": true,
+              "url_name": "magazine_capacity"
+            },
+            {
+              "value": -6.9,
+              "positive": false,
+              "url_name": "projectile_speed"
+            }
+          ],
+          "name": "cronitin",
+          "polarity": "madurai",
+          "type": "riven",
+          "re_rolls": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 8
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 35,
+        "starting_price": 35,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-29T22:54:02.000+00:00",
+        "updated": "2026-09-29T22:54:02.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abc418a27b8c001817a283f",
+        "item": {
+          "name": "magnatis",
+          "re_rolls": 0,
+          "type": "riven",
+          "mastery_level": 14,
+          "polarity": "madurai",
+          "attributes": [
+            {
+              "value": 208.5,
+              "positive": true,
+              "url_name": "impact_damage"
+            },
+            {
+              "value": 151.4,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": -49.1,
+              "positive": false,
+              "url_name": "fire_rate_/_attack_speed"
+            }
+          ],
+          "weapon_url_name": "kulstar",
+          "mod_rank": 0
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 30,
+        "buyout_price": 30,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-11-25T10:30:10.000+00:00",
+        "updated": "2025-11-25T10:30:10.000+00:00",
+        "is_direct_sell": true,
+        "id": "692585320ded1c001fe0fd5a",
+        "item": {
+          "mod_rank": 0,
+          "attributes": [
+            {
+              "value": 10.8,
+              "positive": true,
+              "url_name": "zoom"
+            },
+            {
+              "value": 13.3,
+              "positive": true,
+              "url_name": "electric_damage"
+            },
+            {
+              "value": 30.1,
+              "positive": true,
+              "url_name": "base_damage_/_melee_damage"
+            },
+            {
+              "value": 9.2,
+              "positive": false,
+              "url_name": "recoil"
+            }
+          ],
+          "name": "vexi-visilis",
+          "polarity": "vazarin",
+          "mastery_level": 8,
+          "re_rolls": 0,
+          "weapon_url_name": "kulstar",
+          "type": "riven"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 30,
+        "buyout_price": 30,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-04-16T00:46:30.000+00:00",
+        "updated": "2026-04-16T00:46:30.000+00:00",
+        "is_direct_sell": true,
+        "id": "69e03166c735ec02238c0949",
+        "item": {
+          "weapon_url_name": "kulstar",
+          "mastery_level": 9,
+          "polarity": "vazarin",
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 15.1,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 1.08,
+              "positive": true,
+              "url_name": "damage_vs_infested"
+            },
+            {
+              "value": -6.7,
+              "positive": false,
+              "url_name": "status_chance"
+            }
+          ],
+          "re_rolls": 0,
+          "name": "puratis",
+          "mod_rank": 0
+        }
+      },
+      {
+        "starting_price": 30,
+        "buyout_price": 30,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-23T22:24:36.000+00:00",
+        "updated": "2026-09-27T09:05:43.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a1229244b304901011e0949",
+        "item": {
+          "type": "riven",
+          "name": "lexican",
+          "polarity": "madurai",
+          "mastery_level": 9,
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "weapon_url_name": "kulstar",
+          "attributes": [
+            {
+              "value": 17.5,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 0.4,
+              "positive": true,
+              "url_name": "punch_through"
+            }
+          ]
+        }
+      },
+      {
+        "buyout_price": 30,
+        "starting_price": 30,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-21T08:17:17.000+00:00",
+        "updated": "2026-07-21T08:17:17.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a5f2b0d9a73bd031e94fe09",
+        "item": {
+          "polarity": "naramon",
+          "weapon_url_name": "kulstar",
+          "type": "riven",
+          "mastery_level": 9,
+          "attributes": [
+            {
+              "value": 9.3,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 7.8,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 14.9,
+              "positive": true,
+              "url_name": "critical_chance"
+            }
+          ],
+          "mod_rank": 0,
+          "name": "acri-cronicron",
+          "re_rolls": 0
+        }
+      },
+      {
+        "starting_price": 30,
+        "buyout_price": 30,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-17T10:43:48.000+00:00",
+        "updated": "2026-08-31T11:42:15.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a82e5e451f7f2048a4366b5",
+        "item": {
+          "polarity": "madurai",
+          "attributes": [
+            {
+              "value": 11.1,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 0.4,
+              "positive": true,
+              "url_name": "punch_through"
+            },
+            {
+              "value": 15.9,
+              "positive": true,
+              "url_name": "impact_damage"
+            },
+            {
+              "value": -5.4,
+              "positive": false,
+              "url_name": "magazine_capacity"
+            }
+          ],
+          "re_rolls": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 12,
+          "name": "lexi-magnatis",
+          "mod_rank": 0,
+          "type": "riven"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 30,
+        "buyout_price": 30,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-25T23:28:57.000+00:00",
+        "updated": "2026-08-25T23:28:57.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a8e25394103b508abea85fb",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 0.4,
+              "positive": true,
+              "url_name": "puncture_damage"
+            },
+            {
+              "value": 13.3,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 15.0,
+              "positive": true,
+              "url_name": "impact_damage"
+            },
+            {
+              "value": -12.1,
+              "positive": false,
+              "url_name": "multishot"
+            }
+          ],
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 15,
+          "polarity": "madurai",
+          "name": "insi-acriton"
+        }
+      },
+      {
+        "starting_price": 30,
+        "buyout_price": 30,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-25T23:31:16.000+00:00",
+        "updated": "2026-08-25T23:31:16.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a8e25c451f7f208a47b7833",
+        "item": {
+          "polarity": "madurai",
+          "attributes": [
+            {
+              "value": 13.0,
+              "positive": true,
+              "url_name": "zoom"
+            },
+            {
+              "value": 16.0,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 0.97,
+              "positive": false,
+              "url_name": "damage_vs_infested"
+            }
+          ],
+          "re_rolls": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 15,
+          "name": "heratis",
+          "mod_rank": 0,
+          "type": "riven"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 30,
+        "buyout_price": 30,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-23T08:44:03.000+00:00",
+        "updated": "2026-09-23T08:44:03.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab391534103b518fe176001",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 13.8,
+              "positive": true,
+              "url_name": "electric_damage"
+            },
+            {
+              "value": 17.8,
+              "positive": true,
+              "url_name": "impact_damage"
+            }
+          ],
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 10,
+          "polarity": "madurai",
+          "name": "vexiton"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 30,
+        "buyout_price": 30,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-25T03:25:09.000+00:00",
+        "updated": "2026-09-25T03:25:09.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab5e9954103b519fa83ab31",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 10.4,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 9.5,
+              "positive": true,
+              "url_name": "status_chance"
+            },
+            {
+              "value": 10.2,
+              "positive": true,
+              "url_name": "ammo_maximum"
+            }
+          ],
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 14,
+          "polarity": "vazarin",
+          "name": "acri-ampidex"
+        }
+      },
+      {
+        "starting_price": 30,
+        "buyout_price": 30,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-25T16:18:36.000+00:00",
+        "updated": "2026-09-25T16:18:36.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab69edca62a7a000710e4b5",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 8.6,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 11.7,
+              "positive": true,
+              "url_name": "status_duration"
+            },
+            {
+              "value": 8.9,
+              "positive": true,
+              "url_name": "toxin_damage"
+            }
+          ],
+          "mod_rank": 0,
+          "polarity": "madurai",
+          "re_rolls": 0,
+          "mastery_level": 10,
+          "name": "deci-cronitox",
+          "weapon_url_name": "kulstar"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 30,
+        "starting_price": 30,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-03T06:40:09.000+00:00",
+        "updated": "2026-10-03T06:40:09.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac0a34927b8c002d1a8dc27",
+        "item": {
+          "name": "argibin",
+          "re_rolls": 0,
+          "type": "riven",
+          "mastery_level": 8,
+          "polarity": "vazarin",
+          "attributes": [
+            {
+              "value": 1.07,
+              "positive": true,
+              "url_name": "damage_vs_grineer"
+            },
+            {
+              "value": 14.6,
+              "positive": true,
+              "url_name": "ammo_maximum"
+            },
+            {
+              "value": -5.9,
+              "positive": false,
+              "url_name": "critical_damage"
+            }
+          ],
+          "weapon_url_name": "kulstar",
+          "mod_rank": 0
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 30,
+        "starting_price": 30,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-05T12:50:59.000+00:00",
+        "updated": "2026-10-05T12:50:59.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac39d3327b8c00372859dd4",
+        "item": {
+          "name": "hexa-gelimag",
+          "re_rolls": 0,
+          "type": "riven",
+          "mastery_level": 10,
+          "polarity": "naramon",
+          "attributes": [
+            {
+              "value": 12.0,
+              "positive": true,
+              "url_name": "cold_damage"
+            },
+            {
+              "value": 13.1,
+              "positive": true,
+              "url_name": "status_chance"
+            },
+            {
+              "value": -11.4,
+              "positive": true,
+              "url_name": "recoil"
+            },
+            {
+              "value": -10.1,
+              "positive": false,
+              "url_name": "projectile_speed"
+            }
+          ],
+          "weapon_url_name": "kulstar",
+          "mod_rank": 0
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 30,
+        "buyout_price": 30,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-09T23:48:51.000+00:00",
+        "updated": "2026-10-09T23:48:51.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac97d63068576009a8b7dfc",
+        "item": {
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 9.4,
+              "positive": true,
+              "url_name": "ammo_maximum"
+            },
+            {
+              "value": 1.05,
+              "positive": true,
+              "url_name": "damage_vs_infested"
+            },
+            {
+              "value": 1.05,
+              "positive": true,
+              "url_name": "damage_vs_grineer"
+            }
+          ],
+          "mod_rank": 0,
+          "name": "pura-ampicon",
+          "polarity": "vazarin",
+          "mastery_level": 12
+        }
+      },
+      {
+        "buyout_price": 25,
+        "starting_price": 25,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-02T03:43:34.000+00:00",
+        "updated": "2026-08-02T03:43:34.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a6ebce62d7dee0030a1789f",
+        "item": {
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "attributes": [
+            {
+              "value": 1.0,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 1.0,
+              "positive": true,
+              "url_name": "magazine_capacity"
+            }
+          ],
+          "re_rolls": 0,
+          "polarity": "naramon",
+          "name": "armadra",
+          "mastery_level": 14,
+          "mod_rank": 0
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 25,
+        "buyout_price": 25,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-10T16:35:56.000+00:00",
+        "updated": "2026-08-28T17:14:36.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a79fdec624e74010aacaa91",
+        "item": {
+          "mod_rank": 0,
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "mastery_level": 11,
+          "name": "pura-heracron",
+          "polarity": "vazarin",
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 18.8,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 1.07,
+              "positive": true,
+              "url_name": "damage_vs_infested"
+            },
+            {
+              "value": 10.6,
+              "positive": true,
+              "url_name": "zoom"
+            },
+            {
+              "value": -14.0,
+              "positive": false,
+              "url_name": "multishot"
+            }
+          ]
+        }
+      },
+      {
+        "starting_price": 25,
+        "buyout_price": 25,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-12T06:07:58.000+00:00",
+        "updated": "2026-08-20T09:27:27.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a7c0dbe51f7f201c74794b9",
+        "item": {
+          "polarity": "madurai",
+          "attributes": [
+            {
+              "value": 17.1,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 13.8,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": -6.7,
+              "positive": false,
+              "url_name": "status_duration"
+            }
+          ],
+          "re_rolls": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 12,
+          "name": "acridra",
+          "mod_rank": 0,
+          "type": "riven"
+        }
+      },
+      {
+        "buyout_price": 25,
+        "starting_price": 25,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-02T07:43:31.000+00:00",
+        "updated": "2026-10-12T02:40:39.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abf60a3c94ce4026714a8f4",
+        "item": {
+          "mastery_level": 11,
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "attributes": [
+            {
+              "value": 13.0,
+              "positive": true,
+              "url_name": "electric_damage"
+            },
+            {
+              "value": 12.8,
+              "positive": true,
+              "url_name": "cold_damage"
+            }
+          ],
+          "weapon_url_name": "kulstar",
+          "type": "riven",
+          "name": "vexido",
+          "polarity": "madurai"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 24,
+        "buyout_price": 24,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-20T22:54:04.000+00:00",
+        "updated": "2026-09-20T22:54:04.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab0640c624e74178edcb026",
+        "item": {
+          "mod_rank": 0,
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "mastery_level": 12,
+          "name": "igni-argiton",
+          "polarity": "vazarin",
+          "re_rolls": 3,
+          "attributes": [
+            {
+              "value": 12.4,
+              "positive": true,
+              "url_name": "impact_damage"
+            },
+            {
+              "value": 1.05,
+              "positive": true,
+              "url_name": "damage_vs_grineer"
+            },
+            {
+              "value": 10.6,
+              "positive": true,
+              "url_name": "heat_damage"
+            }
+          ]
+        }
+      },
+      {
+        "buyout_price": 20,
+        "visible": true,
+        "starting_price": 20,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-01-15T20:37:15.000+00:00",
+        "updated": "2026-06-16T03:39:42.000+00:00",
+        "is_direct_sell": true,
+        "id": "69694ffb24b7900007a22d0a",
+        "item": {
+          "name": "arma-lexido",
+          "polarity": "naramon",
+          "weapon_url_name": "kulstar",
+          "mastery_level": 10,
+          "attributes": [
+            {
+              "value": 5.5,
+              "positive": true,
+              "url_name": "magazine_capacity"
+            },
+            {
+              "value": 9.3,
+              "positive": true,
+              "url_name": "cold_damage"
+            },
+            {
+              "value": 0.3,
+              "positive": true,
+              "url_name": "punch_through"
+            }
+          ],
+          "type": "riven",
+          "mod_rank": 0,
+          "re_rolls": 0
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 20,
+        "starting_price": 20,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-02-21T06:25:10.000+00:00",
+        "updated": "2026-09-22T05:53:35.000+00:00",
+        "is_direct_sell": true,
+        "id": "69994fc67d3045037f5ad597",
+        "item": {
+          "weapon_url_name": "kulstar",
+          "attributes": [
+            {
+              "value": 374.7,
+              "positive": true,
+              "url_name": "base_damage_/_melee_damage"
+            },
+            {
+              "value": 73.9,
+              "positive": true,
+              "url_name": "magazine_capacity"
+            },
+            {
+              "value": -78.1,
+              "positive": false,
+              "url_name": "impact_damage"
+            }
+          ],
+          "polarity": "naramon",
+          "type": "riven",
+          "mastery_level": 15,
+          "name": "visitin",
+          "re_rolls": 0,
+          "mod_rank": 0
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 20,
+        "buyout_price": 20,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-04-20T00:18:12.000+00:00",
+        "updated": "2026-04-20T00:18:12.000+00:00",
+        "is_direct_sell": true,
+        "id": "69e570c434493d03041d1ebe",
+        "item": {
+          "polarity": "naramon",
+          "mod_rank": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 13,
+          "type": "riven",
+          "name": "conciata",
+          "attributes": [
+            {
+              "value": 30.1,
+              "positive": true,
+              "url_name": "base_damage_/_melee_damage"
+            },
+            {
+              "value": 12.4,
+              "positive": true,
+              "url_name": "projectile_speed"
+            }
+          ],
+          "re_rolls": 0
+        }
+      },
+      {
+        "buyout_price": 20,
+        "starting_price": 20,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-26T14:47:13.000+00:00",
+        "updated": "2026-05-26T14:47:13.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a15b271bba4030197a6a13b",
+        "item": {
+          "mod_rank": 0,
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "name": "acri-magnamag",
+          "re_rolls": 0,
+          "mastery_level": 13,
+          "polarity": "madurai",
+          "attributes": [
+            {
+              "value": 10.3,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 13.0,
+              "positive": true,
+              "url_name": "impact_damage"
+            },
+            {
+              "value": -9.6,
+              "positive": true,
+              "url_name": "recoil"
+            }
+          ]
+        }
+      },
+      {
+        "buyout_price": 20,
+        "starting_price": 20,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-03T07:55:23.000+00:00",
+        "updated": "2026-08-03T07:55:23.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a70496b56f7e400af6e3517",
+        "item": {
+          "type": "riven",
+          "polarity": "naramon",
+          "mastery_level": 9,
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 11.5,
+              "positive": true,
+              "url_name": "ammo_maximum"
+            },
+            {
+              "value": 11.8,
+              "positive": true,
+              "url_name": "heat_damage"
+            },
+            {
+              "value": 13.0,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": -13.8,
+              "positive": false,
+              "url_name": "impact_damage"
+            }
+          ],
+          "mod_rank": 0,
+          "name": "acri-ignibin",
+          "weapon_url_name": "kulstar"
+        }
+      },
+      {
+        "buyout_price": 20,
+        "starting_price": 20,
+        "visible": true,
+        "platform": "ps4",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-07T22:43:09.000+00:00",
+        "updated": "2026-08-23T07:32:16.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a765f7d56f7e40310aed526",
+        "item": {
+          "type": "riven",
+          "polarity": "madurai",
+          "mastery_level": 12,
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 14.1,
+              "positive": true,
+              "url_name": "status_chance"
+            },
+            {
+              "value": 0.4,
+              "positive": true,
+              "url_name": "punch_through"
+            }
+          ],
+          "mod_rank": 0,
+          "name": "hexanok",
+          "weapon_url_name": "kulstar"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 20,
+        "buyout_price": 20,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-14T03:08:54.000+00:00",
+        "updated": "2026-08-27T19:03:53.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a7e86c64103b502c3c0d81d",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 8.7,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 17.4,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": 9.1,
+              "positive": true,
+              "url_name": "toxin_damage"
+            }
+          ],
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 14,
+          "polarity": "madurai",
+          "name": "croni-critatox"
+        }
+      },
+      {
+        "starting_price": 20,
+        "buyout_price": 20,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-18T08:48:13.000+00:00",
+        "updated": "2026-09-03T07:09:45.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a841c4d51f7f20501a95873",
+        "item": {
+          "polarity": "naramon",
+          "attributes": [
+            {
+              "value": 19.5,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 9.4,
+              "positive": true,
+              "url_name": "magazine_capacity"
+            },
+            {
+              "value": 6.7,
+              "positive": false,
+              "url_name": "recoil"
+            }
+          ],
+          "re_rolls": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 16,
+          "name": "armacan",
+          "mod_rank": 0,
+          "type": "riven"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 20,
+        "buyout_price": 20,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-29T05:42:10.000+00:00",
+        "updated": "2026-08-29T05:42:10.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a927132624e740a2f758e12",
+        "item": {
+          "mod_rank": 0,
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "mastery_level": 16,
+          "name": "vexi-gelican",
+          "polarity": "madurai",
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 11.8,
+              "positive": true,
+              "url_name": "electric_damage"
+            },
+            {
+              "value": 15.0,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 11.5,
+              "positive": true,
+              "url_name": "cold_damage"
+            },
+            {
+              "value": 0.95,
+              "positive": false,
+              "url_name": "damage_vs_infested"
+            }
+          ]
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 20,
+        "buyout_price": 20,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-14T15:54:08.000+00:00",
+        "updated": "2026-09-14T15:54:08.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aa818a04103b513712f55d8",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 20.5,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 14.6,
+              "positive": true,
+              "url_name": "electric_damage"
+            },
+            {
+              "value": 0.97,
+              "positive": false,
+              "url_name": "damage_vs_grineer"
+            }
+          ],
+          "re_rolls": 7,
+          "mod_rank": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 9,
+          "polarity": "madurai",
+          "name": "satitio"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 20,
+        "buyout_price": 20,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-16T00:50:10.000+00:00",
+        "updated": "2026-09-16T00:50:10.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aa9e7c24103b51466413193",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 1.08,
+              "positive": true,
+              "url_name": "damage_vs_grineer"
+            },
+            {
+              "value": 0.5,
+              "positive": true,
+              "url_name": "punch_through"
+            },
+            {
+              "value": -11.4,
+              "positive": false,
+              "url_name": "critical_chance"
+            }
+          ],
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 12,
+          "polarity": "vazarin",
+          "name": "lexicon"
+        }
+      },
+      {
+        "starting_price": 20,
+        "buyout_price": 20,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-19T03:01:30.000+00:00",
+        "updated": "2026-09-28T17:30:19.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aadfb0a51f7f2165e50bce9",
+        "item": {
+          "polarity": "vazarin",
+          "attributes": [
+            {
+              "value": 17.6,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 6.6,
+              "positive": true,
+              "url_name": "reload_speed"
+            },
+            {
+              "value": 12.9,
+              "positive": true,
+              "url_name": "electric_damage"
+            },
+            {
+              "value": -9.8,
+              "positive": false,
+              "url_name": "critical_damage"
+            }
+          ],
+          "re_rolls": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 11,
+          "name": "sati-vexitak",
+          "mod_rank": 0,
+          "type": "riven"
+        }
+      },
+      {
+        "starting_price": 20,
+        "buyout_price": 20,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-22T04:56:59.000+00:00",
+        "updated": "2026-09-22T04:56:59.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab20a9b51f7f2184fb9b0bd",
+        "item": {
+          "polarity": "vazarin",
+          "attributes": [
+            {
+              "value": 15.4,
+              "positive": true,
+              "url_name": "projectile_speed"
+            },
+            {
+              "value": 42.1,
+              "positive": true,
+              "url_name": "base_damage_/_melee_damage"
+            },
+            {
+              "value": -6.5,
+              "positive": false,
+              "url_name": "ammo_maximum"
+            }
+          ],
+          "re_rolls": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 8,
+          "name": "visinak",
+          "mod_rank": 0,
+          "type": "riven"
+        }
+      },
+      {
+        "buyout_price": 20,
+        "starting_price": 20,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-30T20:43:04.000+00:00",
+        "updated": "2026-09-30T20:43:04.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abd7458c94ce401f0be7ac2",
+        "item": {
+          "mastery_level": 16,
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "attributes": [
+            {
+              "value": 15.8,
+              "positive": true,
+              "url_name": "projectile_speed"
+            },
+            {
+              "value": 16.4,
+              "positive": true,
+              "url_name": "toxin_damage"
+            },
+            {
+              "value": 0.97,
+              "positive": false,
+              "url_name": "damage_vs_corpus"
+            }
+          ],
+          "weapon_url_name": "kulstar",
+          "type": "riven",
+          "name": "concitox",
+          "polarity": "naramon"
+        }
+      },
+      {
+        "buyout_price": 20,
+        "starting_price": 20,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-07T18:45:02.000+00:00",
+        "updated": "2026-10-07T18:45:02.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac6932ec94ce40419d0c8d7",
+        "item": {
+          "mastery_level": 14,
+          "re_rolls": 2,
+          "mod_rank": 0,
+          "attributes": [
+            {
+              "value": 17.1,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 13.6,
+              "positive": true,
+              "url_name": "toxin_damage"
+            }
+          ],
+          "weapon_url_name": "kulstar",
+          "type": "riven",
+          "name": "toxican",
+          "polarity": "naramon"
+        }
+      },
+      {
+        "buyout_price": 20,
+        "starting_price": 20,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-07T20:20:23.000+00:00",
+        "updated": "2026-10-07T20:20:23.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac6a987c94ce404205f95db",
+        "item": {
+          "mastery_level": 10,
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "attributes": [
+            {
+              "value": 106.1,
+              "positive": true,
+              "url_name": "status_duration"
+            },
+            {
+              "value": 80.4,
+              "positive": true,
+              "url_name": "electric_damage"
+            },
+            {
+              "value": 1.43,
+              "positive": true,
+              "url_name": "damage_vs_infested"
+            }
+          ],
+          "weapon_url_name": "kulstar",
+          "type": "riven",
+          "name": "deci-vexiada",
+          "polarity": "vazarin"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 20,
+        "buyout_price": 20,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-09T08:44:30.000+00:00",
+        "updated": "2026-10-09T08:44:30.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac8a96e068576007024e401",
+        "item": {
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 14.0,
+              "positive": true,
+              "url_name": "toxin_damage"
+            },
+            {
+              "value": -12.8,
+              "positive": true,
+              "url_name": "recoil"
+            }
+          ],
+          "mod_rank": 0,
+          "name": "toximag",
+          "polarity": "vazarin",
+          "mastery_level": 9
+        }
+      },
+      {
+        "buyout_price": 20,
+        "starting_price": 20,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-09T16:46:57.000+00:00",
+        "updated": "2026-10-09T16:46:57.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac91a8195e00c00844b2cb4",
+        "item": {
+          "polarity": "naramon",
+          "name": "feva-vexitin",
+          "weapon_url_name": "kulstar",
+          "mod_rank": 0,
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 5.9,
+              "positive": true,
+              "url_name": "reload_speed"
+            },
+            {
+              "value": 5.5,
+              "positive": true,
+              "url_name": "magazine_capacity"
+            },
+            {
+              "value": 9.9,
+              "positive": true,
+              "url_name": "electric_damage"
+            }
+          ],
+          "mastery_level": 13,
+          "type": "riven"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 20,
+        "buyout_price": 20,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-12T06:33:54.000+00:00",
+        "updated": "2026-10-12T06:38:52.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acc7f520685760149696f7b",
+        "item": {
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 9.1,
+              "positive": true,
+              "url_name": "status_chance"
+            },
+            {
+              "value": 10.0,
+              "positive": true,
+              "url_name": "toxin_damage"
+            },
+            {
+              "value": 14.1,
+              "positive": true,
+              "url_name": "multishot"
+            }
+          ],
+          "mod_rank": 0,
+          "name": "sati-toxidex",
+          "polarity": "naramon",
+          "mastery_level": 11
+        }
+      },
+      {
+        "buyout_price": 20,
+        "starting_price": 20,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-12T17:36:39.000+00:00",
+        "updated": "2026-10-12T17:36:39.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acd1aa795e00c016c5aed81",
+        "item": {
+          "polarity": "vazarin",
+          "name": "ignican",
+          "weapon_url_name": "kulstar",
+          "mod_rank": 8,
+          "re_rolls": 9,
+          "attributes": [
+            {
+              "value": 177.7,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 145.7,
+              "positive": true,
+              "url_name": "heat_damage"
+            },
+            {
+              "value": -69.9,
+              "positive": false,
+              "url_name": "status_duration"
+            }
+          ],
+          "mastery_level": 9,
+          "type": "riven"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 16,
+        "buyout_price": 16,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-22T11:48:04.000+00:00",
+        "updated": "2026-09-22T11:48:04.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab26af44103b518720a5983",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 78.7,
+              "positive": true,
+              "url_name": "zoom"
+            },
+            {
+              "value": 77.4,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 111.5,
+              "positive": true,
+              "url_name": "impact_damage"
+            }
+          ],
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 9,
+          "polarity": "vazarin",
+          "name": "hera-croniton"
+        }
+      },
+      {
+        "buyout_price": 15,
+        "visible": true,
+        "starting_price": 15,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2023-12-14T12:41:13.000+00:00",
+        "updated": "2026-09-20T20:11:58.000+00:00",
+        "is_direct_sell": true,
+        "id": "657af7e985339a21851162c3",
+        "item": {
+          "name": "acri-decitio",
+          "polarity": "vazarin",
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "type": "riven",
+          "mastery_level": 10,
+          "attributes": [
+            {
+              "value": 123.5,
+              "positive": true,
+              "url_name": "status_duration"
+            },
+            {
+              "value": 100.5,
+              "positive": true,
+              "url_name": "electric_damage"
+            },
+            {
+              "value": 113.6,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 93.5,
+              "positive": false,
+              "url_name": "recoil"
+            }
+          ],
+          "weapon_url_name": "kulstar"
+        }
+      },
+      {
+        "buyout_price": 15,
+        "starting_price": 15,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2024-09-08T03:50:04.000+00:00",
+        "updated": "2024-09-08T03:50:04.000+00:00",
+        "is_direct_sell": true,
+        "id": "66dd1eecadc83a2ed6d6e053",
+        "item": {
+          "name": "zeti-acritox",
+          "re_rolls": 0,
+          "mastery_level": 10,
+          "polarity": "naramon",
+          "attributes": [
+            {
+              "value": 11.9,
+              "positive": true,
+              "url_name": "toxin_damage"
+            },
+            {
+              "value": -13.3,
+              "positive": true,
+              "url_name": "recoil"
+            },
+            {
+              "value": 12.5,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": -22.7,
+              "positive": false,
+              "url_name": "base_damage_/_melee_damage"
+            }
+          ],
+          "weapon_url_name": "kulstar",
+          "type": "riven",
+          "mod_rank": 0
+        }
+      },
+      {
+        "starting_price": 15,
+        "buyout_price": 15,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2024-11-15T23:35:04.000+00:00",
+        "updated": "2026-09-24T14:32:12.000+00:00",
+        "is_direct_sell": true,
+        "id": "6737daa8b69dfa00367f54df",
+        "item": {
+          "weapon_url_name": "kulstar",
+          "attributes": [
+            {
+              "value": 13.7,
+              "positive": true,
+              "url_name": "projectile_speed"
+            },
+            {
+              "value": 1.07,
+              "positive": true,
+              "url_name": "damage_vs_infested"
+            }
+          ],
+          "type": "riven",
+          "polarity": "madurai",
+          "name": "puranak",
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "mastery_level": 9
+        }
+      },
+      {
+        "starting_price": 15,
+        "visible": true,
+        "buyout_price": 15,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-03-10T15:42:54.000+00:00",
+        "updated": "2025-03-10T15:42:54.000+00:00",
+        "is_direct_sell": true,
+        "id": "67cf087e42576700086d0956",
+        "item": {
+          "mastery_level": 16,
+          "attributes": [
+            {
+              "value": 10.1,
+              "positive": true,
+              "url_name": "heat_damage"
+            },
+            {
+              "value": 0.3,
+              "positive": true,
+              "url_name": "punch_through"
+            },
+            {
+              "value": -10.3,
+              "positive": true,
+              "url_name": "recoil"
+            }
+          ],
+          "polarity": "vazarin",
+          "re_rolls": 0,
+          "weapon_url_name": "kulstar",
+          "name": "zeti-igninok",
+          "type": "riven",
+          "mod_rank": 0
+        }
+      },
+      {
+        "buyout_price": 15,
+        "starting_price": 15,
+        "visible": true,
+        "platform": "ps4",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-03-17T18:37:57.000+00:00",
+        "updated": "2026-05-04T04:08:45.000+00:00",
+        "is_direct_sell": true,
+        "id": "69b99f854a1f6500346472e0",
+        "item": {
+          "polarity": "vazarin",
+          "type": "riven",
+          "mod_rank": 0,
+          "weapon_url_name": "kulstar",
+          "attributes": [
+            {
+              "value": 142.0,
+              "positive": true,
+              "url_name": "status_chance"
+            },
+            {
+              "value": 151.3,
+              "positive": true,
+              "url_name": "toxin_damage"
+            },
+            {
+              "value": 0.74,
+              "positive": false,
+              "url_name": "damage_vs_infested"
+            }
+          ],
+          "re_rolls": 4,
+          "mastery_level": 15,
+          "name": "toxidex"
+        }
+      },
+      {
+        "buyout_price": 15,
+        "starting_price": 15,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-26T09:13:41.000+00:00",
+        "updated": "2026-06-26T09:17:06.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a3e42c5de1e9a013ad21b7f",
+        "item": {
+          "name": "decidex",
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 19.1,
+              "positive": true,
+              "url_name": "status_duration"
+            },
+            {
+              "value": 15.0,
+              "positive": true,
+              "url_name": "status_chance"
+            },
+            {
+              "value": -15.5,
+              "positive": false,
+              "url_name": "base_damage_/_melee_damage"
+            }
+          ],
+          "re_rolls": 0,
+          "polarity": "madurai",
+          "weapon_url_name": "kulstar",
+          "mastery_level": 9,
+          "mod_rank": 0
+        }
+      },
+      {
+        "starting_price": 15,
+        "visible": true,
+        "buyout_price": 15,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-07-25T22:43:18.000+00:00",
+        "updated": "2026-07-25T22:43:18.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a653c0624cd40054d0c1f12",
+        "item": {
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 22.3,
+              "positive": true,
+              "url_name": "impact_damage"
+            },
+            {
+              "value": 0.5,
+              "positive": true,
+              "url_name": "punch_through"
+            },
+            {
+              "value": -5.7,
+              "positive": false,
+              "url_name": "fire_rate_/_attack_speed"
+            }
+          ],
+          "type": "riven",
+          "polarity": "vazarin",
+          "mod_rank": 0,
+          "mastery_level": 15,
+          "weapon_url_name": "kulstar",
+          "name": "lexiton"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 15,
+        "buyout_price": 15,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-18T04:28:04.000+00:00",
+        "updated": "2026-08-18T04:28:04.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a83df54624e7404d35076ac",
+        "item": {
+          "mod_rank": 0,
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "mastery_level": 16,
+          "name": "visiton",
+          "polarity": "madurai",
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 41.4,
+              "positive": true,
+              "url_name": "base_damage_/_melee_damage"
+            },
+            {
+              "value": 22.5,
+              "positive": true,
+              "url_name": "impact_damage"
+            },
+            {
+              "value": -11.5,
+              "positive": false,
+              "url_name": "critical_chance"
+            }
+          ]
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 15,
+        "buyout_price": 15,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-22T07:53:52.000+00:00",
+        "updated": "2026-09-22T07:53:52.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab234104103b51864c5e3fd",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 12.9,
+              "positive": true,
+              "url_name": "status_chance"
+            },
+            {
+              "value": 1.06,
+              "positive": true,
+              "url_name": "damage_vs_infested"
+            },
+            {
+              "value": 6.1,
+              "positive": true,
+              "url_name": "reload_speed"
+            },
+            {
+              "value": -16.4,
+              "positive": false,
+              "url_name": "critical_chance"
+            }
+          ],
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 15,
+          "polarity": "vazarin",
+          "name": "pura-hexatak"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 15,
+        "buyout_price": 15,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-22T11:57:03.000+00:00",
+        "updated": "2026-09-22T11:57:03.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab26d0f624e74186eb33ec4",
+        "item": {
+          "mod_rank": 0,
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "mastery_level": 10,
+          "name": "vexi-acribin",
+          "polarity": "madurai",
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 9.1,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 10.1,
+              "positive": true,
+              "url_name": "electric_damage"
+            },
+            {
+              "value": 8.8,
+              "positive": true,
+              "url_name": "ammo_maximum"
+            }
+          ]
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 15,
+        "buyout_price": 15,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-29T05:31:01.000+00:00",
+        "updated": "2026-09-29T05:31:01.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abb4d1564a7ca012d73f360",
+        "item": {
+          "attributes": [
+            {
+              "value": 11.1,
+              "positive": true,
+              "url_name": "projectile_speed"
+            },
+            {
+              "value": 11.5,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 12.4,
+              "positive": true,
+              "url_name": "ammo_maximum"
+            },
+            {
+              "value": -8.0,
+              "positive": false,
+              "url_name": "fire_rate_/_attack_speed"
+            }
+          ],
+          "mod_rank": 0,
+          "type": "riven",
+          "polarity": "madurai",
+          "re_rolls": 0,
+          "name": "conci-acribin",
+          "weapon_url_name": "kulstar",
+          "mastery_level": 16
+        }
+      },
+      {
+        "buyout_price": 15,
+        "starting_price": 15,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-30T11:47:26.000+00:00",
+        "updated": "2026-09-30T11:47:26.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abcf6cec94ce401b8608c7c",
+        "item": {
+          "mastery_level": 13,
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "attributes": [
+            {
+              "value": 25.8,
+              "positive": true,
+              "url_name": "base_damage_/_melee_damage"
+            },
+            {
+              "value": 10.4,
+              "positive": true,
+              "url_name": "status_chance"
+            },
+            {
+              "value": 1.05,
+              "positive": true,
+              "url_name": "damage_vs_grineer"
+            }
+          ],
+          "weapon_url_name": "kulstar",
+          "type": "riven",
+          "name": "visi-hexacon",
+          "polarity": "madurai"
+        }
+      },
+      {
+        "buyout_price": 15,
+        "starting_price": 15,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-07T22:43:19.000+00:00",
+        "updated": "2026-10-07T22:43:19.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac6cb07c94ce40419d0c9f6",
+        "item": {
+          "mastery_level": 13,
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "attributes": [
+            {
+              "value": 11.8,
+              "positive": true,
+              "url_name": "cold_damage"
+            },
+            {
+              "value": 1.07,
+              "positive": true,
+              "url_name": "damage_vs_corpus"
+            }
+          ],
+          "weapon_url_name": "kulstar",
+          "type": "riven",
+          "name": "mantido",
+          "polarity": "vazarin"
+        }
+      },
+      {
+        "starting_price": 15,
+        "buyout_price": 15,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-11T22:09:54.000+00:00",
+        "updated": "2026-10-11T22:09:54.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acc0932dd18e501350a5ce6",
+        "item": {
+          "mastery_level": 10,
+          "weapon_url_name": "kulstar",
+          "name": "puralis",
+          "type": "riven",
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 135.6,
+              "positive": true,
+              "url_name": "zoom"
+            },
+            {
+              "value": 1.77,
+              "positive": true,
+              "url_name": "damage_vs_infested"
+            },
+            {
+              "value": -59.4,
+              "positive": false,
+              "url_name": "projectile_speed"
+            }
+          ],
+          "polarity": "madurai",
+          "mod_rank": 0
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 14,
+        "starting_price": 14,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-05-27T15:23:48.000+00:00",
+        "updated": "2026-05-27T15:23:48.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a170c84dcc12301ce35158a",
+        "item": {
+          "weapon_url_name": "kulstar",
+          "polarity": "madurai",
+          "attributes": [
+            {
+              "value": 14.4,
+              "positive": true,
+              "url_name": "status_duration"
+            },
+            {
+              "value": 11.8,
+              "positive": true,
+              "url_name": "ammo_maximum"
+            }
+          ],
+          "re_rolls": 0,
+          "name": "decibin",
+          "type": "riven",
+          "mastery_level": 8,
+          "mod_rank": 0
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 14,
+        "buyout_price": 14,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-28T16:38:17.000+00:00",
+        "updated": "2026-10-05T12:47:47.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a414df999b97902063b5299",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 10.1,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 13.1,
+              "positive": true,
+              "url_name": "ammo_maximum"
+            },
+            {
+              "value": 15.2,
+              "positive": true,
+              "url_name": "impact_damage"
+            },
+            {
+              "value": -8.9,
+              "positive": false,
+              "url_name": "critical_damage"
+            }
+          ],
+          "weapon_url_name": "kulstar",
+          "re_rolls": 0,
+          "mastery_level": 9,
+          "mod_rank": 0,
+          "name": "ampi-croniton",
+          "polarity": "madurai"
+        }
+      },
+      {
+        "buyout_price": 13,
+        "starting_price": 13,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-11T14:07:29.000+00:00",
+        "updated": "2026-10-11T14:07:29.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acb982195e00c011100a5ba",
+        "item": {
+          "polarity": "madurai",
+          "name": "zeti-purapha",
+          "weapon_url_name": "kulstar",
+          "mod_rank": 0,
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 1.05,
+              "positive": true,
+              "url_name": "damage_vs_infested"
+            },
+            {
+              "value": -10.5,
+              "positive": true,
+              "url_name": "recoil"
+            },
+            {
+              "value": 8.9,
+              "positive": true,
+              "url_name": "heat_damage"
+            }
+          ],
+          "mastery_level": 12,
+          "type": "riven"
+        }
+      },
+      {
+        "starting_price": 12,
+        "buyout_price": 12,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-08-29T18:27:23.000+00:00",
+        "updated": "2026-10-10T15:18:36.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a93248b51f7f20a95ccf758",
+        "item": {
+          "polarity": "madurai",
+          "attributes": [
+            {
+              "value": 6.3,
+              "positive": true,
+              "url_name": "magazine_capacity"
+            },
+            {
+              "value": 10.7,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 12.5,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": -15.2,
+              "positive": false,
+              "url_name": "critical_chance"
+            }
+          ],
+          "re_rolls": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 14,
+          "name": "croni-acritin",
+          "mod_rank": 0,
+          "type": "riven"
+        }
+      },
+      {
+        "starting_price": 10,
+        "buyout_price": 10,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2023-07-05T04:52:33.000+00:00",
+        "updated": "2025-05-21T07:31:55.000+00:00",
+        "is_direct_sell": true,
+        "id": "64a4f711ef049528deda95be",
+        "item": {
+          "mod_rank": 0,
+          "mastery_level": 9,
+          "polarity": "naramon",
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 1.09,
+              "positive": true,
+              "url_name": "damage_vs_corpus"
+            },
+            {
+              "value": 15.0,
+              "positive": true,
+              "url_name": "zoom"
+            },
+            {
+              "value": -3.5,
+              "positive": false,
+              "url_name": "magazine_capacity"
+            }
+          ],
+          "re_rolls": 0,
+          "name": "mantilis",
+          "weapon_url_name": "kulstar"
+        }
+      },
+      {
+        "starting_price": 10,
+        "buyout_price": 10,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2023-08-10T07:43:29.000+00:00",
+        "updated": "2025-05-21T07:31:48.000+00:00",
+        "is_direct_sell": true,
+        "id": "64d4952112c65404bd06904e",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "positive": true,
+              "value": 10.6,
+              "url_name": "projectile_speed"
+            },
+            {
+              "positive": true,
+              "value": 17.4,
+              "url_name": "critical_chance"
+            },
+            {
+              "positive": true,
+              "value": 1.05,
+              "url_name": "damage_vs_grineer"
+            }
+          ],
+          "mod_rank": 0,
+          "polarity": "madurai",
+          "re_rolls": 0,
+          "weapon_url_name": "kulstar",
+          "name": "conci-critacon",
+          "mastery_level": 8
+        }
+      },
+      {
+        "buyout_price": 10,
+        "starting_price": 10,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-10-05T05:44:12.000+00:00",
+        "updated": "2026-08-07T07:19:50.000+00:00",
+        "is_direct_sell": true,
+        "id": "68e205ac36a60d0048290138",
+        "item": {
+          "type": "riven",
+          "polarity": "vazarin",
+          "mod_rank": 0,
+          "name": "visinok",
+          "mastery_level": 13,
+          "weapon_url_name": "kulstar",
+          "attributes": [
+            {
+              "value": 0.5,
+              "positive": true,
+              "url_name": "punch_through"
+            },
+            {
+              "value": 41.3,
+              "positive": true,
+              "url_name": "base_damage_/_melee_damage"
+            },
+            {
+              "value": -6.0,
+              "positive": false,
+              "url_name": "ammo_maximum"
+            }
+          ],
+          "re_rolls": 0
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 10,
+        "buyout_price": 10,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-09T11:03:27.000+00:00",
+        "updated": "2026-09-09T11:09:50.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aa13cff4103b51014e16c6b",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 13.3,
+              "positive": true,
+              "url_name": "status_chance"
+            },
+            {
+              "value": 0.4,
+              "positive": true,
+              "url_name": "punch_through"
+            }
+          ],
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 9,
+          "polarity": "naramon",
+          "name": "hexanok"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 10,
+        "buyout_price": 10,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-18T22:27:13.000+00:00",
+        "updated": "2026-09-18T23:09:48.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aadbac14103b5163b39d121",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 1.5,
+              "positive": true,
+              "url_name": "damage_vs_infested"
+            },
+            {
+              "value": 110.9,
+              "positive": true,
+              "url_name": "status_duration"
+            },
+            {
+              "value": 200.7,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": -76.2,
+              "positive": false,
+              "url_name": "zoom"
+            }
+          ],
+          "re_rolls": 5,
+          "mod_rank": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 8,
+          "polarity": "vazarin",
+          "name": "pura-decicron"
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 10,
+        "starting_price": 10,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-28T01:25:44.000+00:00",
+        "updated": "2026-09-28T01:25:44.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ab9c21827b8c0009a28c421",
+        "item": {
+          "name": "croni-armaada",
+          "re_rolls": 0,
+          "type": "riven",
+          "mastery_level": 16,
+          "polarity": "vazarin",
+          "attributes": [
+            {
+              "value": 98.0,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 60.0,
+              "positive": true,
+              "url_name": "magazine_capacity"
+            },
+            {
+              "value": 1.5,
+              "positive": true,
+              "url_name": "damage_vs_infested"
+            },
+            {
+              "value": -111.1,
+              "positive": false,
+              "url_name": "impact_damage"
+            }
+          ],
+          "weapon_url_name": "kulstar",
+          "mod_rank": 0
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 10,
+        "starting_price": 10,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-28T14:12:07.000+00:00",
+        "updated": "2026-09-28T14:12:07.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aba75b727b8c000e7e109bd",
+        "item": {
+          "name": "feva-visitis",
+          "re_rolls": 0,
+          "type": "riven",
+          "mastery_level": 8,
+          "polarity": "naramon",
+          "attributes": [
+            {
+              "value": 100.9,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 67.0,
+              "positive": true,
+              "url_name": "reload_speed"
+            },
+            {
+              "value": 265.1,
+              "positive": true,
+              "url_name": "base_damage_/_melee_damage"
+            },
+            {
+              "value": 0.54,
+              "positive": false,
+              "url_name": "damage_vs_corpus"
+            }
+          ],
+          "weapon_url_name": "kulstar",
+          "mod_rank": 0
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 10,
+        "buyout_price": 10,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-01T09:40:17.000+00:00",
+        "updated": "2026-10-01T09:40:17.000+00:00",
+        "is_direct_sell": true,
+        "id": "6abe2a8164a7ca01f8058994",
+        "item": {
+          "attributes": [
+            {
+              "value": 13.0,
+              "positive": true,
+              "url_name": "heat_damage"
+            },
+            {
+              "value": 12.9,
+              "positive": true,
+              "url_name": "status_chance"
+            },
+            {
+              "value": 13.1,
+              "positive": true,
+              "url_name": "projectile_speed"
+            },
+            {
+              "value": -15.1,
+              "positive": false,
+              "url_name": "critical_chance"
+            }
+          ],
+          "mod_rank": 0,
+          "type": "riven",
+          "polarity": "naramon",
+          "re_rolls": 0,
+          "name": "conci-ignidex",
+          "weapon_url_name": "kulstar",
+          "mastery_level": 10
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 10,
+        "starting_price": 10,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-03T16:07:35.000+00:00",
+        "updated": "2026-10-03T16:07:35.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac1284727b8c002e6779fef",
+        "item": {
+          "name": "toximag",
+          "re_rolls": 0,
+          "type": "riven",
+          "mastery_level": 10,
+          "polarity": "vazarin",
+          "attributes": [
+            {
+              "value": -16.0,
+              "positive": true,
+              "url_name": "recoil"
+            },
+            {
+              "value": 16.5,
+              "positive": true,
+              "url_name": "toxin_damage"
+            },
+            {
+              "value": -3.2,
+              "positive": false,
+              "url_name": "magazine_capacity"
+            }
+          ],
+          "weapon_url_name": "kulstar",
+          "mod_rank": 0
+        }
+      },
+      {
+        "buyout_price": 10,
+        "starting_price": 10,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-06T16:51:03.000+00:00",
+        "updated": "2026-10-09T17:04:36.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac526f7c94ce403cc802919",
+        "item": {
+          "mastery_level": 14,
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "attributes": [
+            {
+              "value": 17.0,
+              "positive": true,
+              "url_name": "cold_damage"
+            },
+            {
+              "value": 16.1,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 0.97,
+              "positive": false,
+              "url_name": "damage_vs_infested"
+            }
+          ],
+          "weapon_url_name": "kulstar",
+          "type": "riven",
+          "name": "gelitis",
+          "polarity": "vazarin"
+        }
+      },
+      {
+        "starting_price": 10,
+        "buyout_price": 10,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-08T01:33:35.000+00:00",
+        "updated": "2026-10-08T01:33:35.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac6f2efdd18e5000af2a445",
+        "item": {
+          "mastery_level": 8,
+          "weapon_url_name": "kulstar",
+          "name": "ampi-magnanok",
+          "type": "riven",
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 2.4,
+              "positive": true,
+              "url_name": "punch_through"
+            },
+            {
+              "value": 94.2,
+              "positive": true,
+              "url_name": "ammo_maximum"
+            },
+            {
+              "value": 116.0,
+              "positive": true,
+              "url_name": "impact_damage"
+            }
+          ],
+          "polarity": "madurai",
+          "mod_rank": 0
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 10,
+        "buyout_price": 10,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-11T11:50:31.000+00:00",
+        "updated": "2026-10-11T11:50:31.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acb78070685760118053294",
+        "item": {
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 10.3,
+              "positive": true,
+              "url_name": "electric_damage"
+            },
+            {
+              "value": 9.4,
+              "positive": true,
+              "url_name": "cold_damage"
+            },
+            {
+              "value": 1.05,
+              "positive": true,
+              "url_name": "damage_vs_infested"
+            }
+          ],
+          "mod_rank": 0,
+          "name": "vexi-geliada",
+          "polarity": "madurai",
+          "mastery_level": 12
+        }
+      },
+      {
+        "starting_price": 10,
+        "buyout_price": 10,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-11T14:04:37.000+00:00",
+        "updated": "2026-10-11T14:04:37.000+00:00",
+        "is_direct_sell": true,
+        "id": "6acb9775dd18e5010b10ac7a",
+        "item": {
+          "mastery_level": 9,
+          "weapon_url_name": "kulstar",
+          "name": "puradra",
+          "type": "riven",
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 10.6,
+              "positive": true,
+              "url_name": "fire_rate_/_attack_speed"
+            },
+            {
+              "value": 1.07,
+              "positive": true,
+              "url_name": "damage_vs_infested"
+            }
+          ],
+          "polarity": "vazarin",
+          "mod_rank": 0
+        }
+      },
+      {
+        "buyout_price": 10,
+        "starting_price": 9,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-29T12:54:55.000+00:00",
+        "updated": "2026-10-06T15:52:36.000+00:00",
+        "is_direct_sell": false,
+        "id": "6abbb51fc94ce4014101a4c7",
+        "item": {
+          "mastery_level": 11,
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "attributes": [
+            {
+              "value": 13.0,
+              "positive": true,
+              "url_name": "multishot"
+            },
+            {
+              "value": 9.4,
+              "positive": true,
+              "url_name": "electric_damage"
+            },
+            {
+              "value": 5.8,
+              "positive": true,
+              "url_name": "magazine_capacity"
+            }
+          ],
+          "weapon_url_name": "kulstar",
+          "type": "riven",
+          "name": "arma-satitio",
+          "polarity": "vazarin"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 9,
+        "buyout_price": 9,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-04-24T23:15:08.000+00:00",
+        "updated": "2026-08-07T17:33:04.000+00:00",
+        "is_direct_sell": true,
+        "id": "69ebf97c34493d03feef01ff",
+        "item": {
+          "polarity": "naramon",
+          "mod_rank": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 16,
+          "type": "riven",
+          "name": "mantiada",
+          "attributes": [
+            {
+              "value": 1.09,
+              "positive": true,
+              "url_name": "damage_vs_corpus"
+            },
+            {
+              "value": 1.08,
+              "positive": true,
+              "url_name": "damage_vs_infested"
+            },
+            {
+              "value": -7.7,
+              "positive": false,
+              "url_name": "impact_damage"
+            }
+          ],
+          "re_rolls": 0
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 9,
+        "starting_price": 9,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-06-14T08:36:13.000+00:00",
+        "updated": "2026-08-07T17:33:21.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a2e67fd53147700cbf8dbe6",
+        "item": {
+          "mastery_level": 13,
+          "re_rolls": 0,
+          "type": "riven",
+          "polarity": "naramon",
+          "weapon_url_name": "kulstar",
+          "attributes": [
+            {
+              "value": 11.1,
+              "positive": true,
+              "url_name": "ammo_maximum"
+            },
+            {
+              "value": 12.2,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 0.4,
+              "positive": true,
+              "url_name": "punch_through"
+            },
+            {
+              "value": 0.95,
+              "positive": false,
+              "url_name": "damage_vs_infested"
+            }
+          ],
+          "name": "acri-lexibin",
+          "mod_rank": 0
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 9,
+        "buyout_price": 9,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-28T15:53:06.000+00:00",
+        "updated": "2026-09-28T15:57:55.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aba8d6264a7ca00e7761e46",
+        "item": {
+          "attributes": [
+            {
+              "value": 11.8,
+              "positive": true,
+              "url_name": "electric_damage"
+            },
+            {
+              "value": 18.2,
+              "positive": true,
+              "url_name": "impact_damage"
+            }
+          ],
+          "mod_rank": 0,
+          "type": "riven",
+          "polarity": "madurai",
+          "re_rolls": 0,
+          "name": "vexiton",
+          "weapon_url_name": "kulstar",
+          "mastery_level": 13
+        }
+      },
+      {
+        "buyout_price": 9,
+        "starting_price": 9,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-03T08:24:35.000+00:00",
+        "updated": "2026-10-03T08:24:35.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac0bbc3c94ce402d7bb996e",
+        "item": {
+          "mastery_level": 8,
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "attributes": [
+            {
+              "value": 1.0,
+              "positive": true,
+              "url_name": "ammo_maximum"
+            },
+            {
+              "value": 1.0,
+              "positive": true,
+              "url_name": "damage_vs_corpus"
+            }
+          ],
+          "weapon_url_name": "kulstar",
+          "type": "riven",
+          "name": "ampitron",
+          "polarity": "naramon"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 7,
+        "buyout_price": 7,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-15T09:03:30.000+00:00",
+        "updated": "2026-09-15T09:03:30.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aa909e24103b513fd20e17e",
+        "item": {
+          "type": "riven",
+          "attributes": [
+            {
+              "value": 16.0,
+              "positive": true,
+              "url_name": "impact_damage"
+            },
+            {
+              "value": 1.06,
+              "positive": true,
+              "url_name": "damage_vs_corpus"
+            }
+          ],
+          "re_rolls": 0,
+          "mod_rank": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 14,
+          "polarity": "vazarin",
+          "name": "mantiton"
+        }
+      },
+      {
+        "visible": true,
+        "starting_price": 7,
+        "buyout_price": 7,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-15T09:03:37.000+00:00",
+        "updated": "2026-09-15T09:03:37.000+00:00",
+        "is_direct_sell": true,
+        "id": "6aa909e9624e7413eb1c7e44",
+        "item": {
+          "mod_rank": 0,
+          "type": "riven",
+          "weapon_url_name": "kulstar",
+          "mastery_level": 11,
+          "name": "toxicron",
+          "polarity": "madurai",
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 16.3,
+              "positive": true,
+              "url_name": "toxin_damage"
+            },
+            {
+              "value": 26.1,
+              "positive": true,
+              "url_name": "critical_chance"
+            },
+            {
+              "value": -5.9,
+              "positive": false,
+              "url_name": "zoom"
+            }
+          ]
+        }
+      },
+      {
+        "starting_price": 6,
+        "buyout_price": 6,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-09-01T13:50:27.000+00:00",
+        "updated": "2026-09-12T14:39:54.000+00:00",
+        "is_direct_sell": true,
+        "id": "6a96d82351f7f20c01d6a882",
+        "item": {
+          "polarity": "vazarin",
+          "attributes": [
+            {
+              "value": 13.4,
+              "positive": true,
+              "url_name": "zoom"
+            },
+            {
+              "value": 8.8,
+              "positive": true,
+              "url_name": "reload_speed"
+            },
+            {
+              "value": -8.3,
+              "positive": false,
+              "url_name": "impact_damage"
+            }
+          ],
+          "re_rolls": 0,
+          "weapon_url_name": "kulstar",
+          "mastery_level": 10,
+          "name": "fevalis",
+          "mod_rank": 0,
+          "type": "riven"
+        }
+      },
+      {
+        "buyout_price": 5,
+        "starting_price": 5,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2025-02-24T21:14:51.000+00:00",
+        "updated": "2025-02-24T21:19:02.000+00:00",
+        "is_direct_sell": true,
+        "id": "67bce14b40c8b3000a3291be",
+        "item": {
+          "type": "riven",
+          "mastery_level": 13,
+          "weapon_url_name": "kulstar",
+          "re_rolls": 0,
+          "name": "fevatio",
+          "mod_rank": 0,
+          "polarity": "naramon",
+          "attributes": [
+            {
+              "value": 7.3,
+              "positive": true,
+              "url_name": "reload_speed"
+            },
+            {
+              "value": 12.6,
+              "positive": true,
+              "url_name": "electric_damage"
+            }
+          ]
+        }
+      },
+      {
+        "visible": true,
+        "buyout_price": 5,
+        "starting_price": 5,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-04-17T17:53:22.000+00:00",
+        "updated": "2026-05-19T20:26:04.000+00:00",
+        "is_direct_sell": true,
+        "id": "69e273921e9a6c0277ce81af",
+        "item": {
+          "name": "fevacon",
+          "mod_rank": 0,
+          "attributes": [
+            {
+              "value": 8.6,
+              "positive": true,
+              "url_name": "reload_speed"
+            },
+            {
+              "value": 1.08,
+              "positive": true,
+              "url_name": "damage_vs_grineer"
+            },
+            {
+              "value": -15.4,
+              "positive": false,
+              "url_name": "base_damage_/_melee_damage"
+            }
+          ],
+          "type": "riven",
+          "mastery_level": 12,
+          "re_rolls": 0,
+          "weapon_url_name": "kulstar",
+          "polarity": "vazarin"
+        }
+      },
+      {
+        "starting_price": 5,
+        "buyout_price": 5,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-13T10:34:44.000+00:00",
+        "updated": "2026-10-13T10:34:44.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ace0944dd18e501a5775037",
+        "item": {
+          "mastery_level": 13,
+          "weapon_url_name": "kulstar",
+          "name": "argi-acritak",
+          "type": "riven",
+          "re_rolls": 15,
+          "attributes": [
+            {
+              "value": 6.2,
+              "positive": true,
+              "url_name": "reload_speed"
+            },
+            {
+              "value": 1.06,
+              "positive": true,
+              "url_name": "damage_vs_grineer"
+            },
+            {
+              "value": 11.9,
+              "positive": true,
+              "url_name": "critical_damage"
+            },
+            {
+              "value": 0.95,
+              "positive": false,
+              "url_name": "damage_vs_corpus"
+            }
+          ],
+          "polarity": "naramon",
+          "mod_rank": 0
+        }
+      },
+      {
+        "starting_price": 3,
+        "buyout_price": 3,
+        "visible": true,
+        "platform": "pc",
+        "closed": false,
+        "top_bid": null,
+        "created": "2026-10-09T02:37:52.000+00:00",
+        "updated": "2026-10-12T20:45:10.000+00:00",
+        "is_direct_sell": true,
+        "id": "6ac85380dd18e5004e846536",
+        "item": {
+          "mastery_level": 12,
+          "weapon_url_name": "kulstar",
+          "name": "concitron",
+          "type": "riven",
+          "re_rolls": 0,
+          "attributes": [
+            {
+              "value": 1.08,
+              "positive": true,
+              "url_name": "damage_vs_corpus"
+            },
+            {
+              "value": 16.8,
+              "positive": true,
+              "url_name": "projectile_speed"
+            },
+            {
+              "value": -6.0,
+              "positive": false,
+              "url_name": "zoom"
+            }
+          ],
+          "polarity": "vazarin",
+          "mod_rank": 0
+        }
+      }
+    ]
+  }
+}

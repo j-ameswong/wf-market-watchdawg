@@ -31,6 +31,7 @@ class ContractSync(
     registry: MeterRegistry,
     private val clock: Clock = Clock.systemUTC(),
     private val baselineBudget: BaselineBudget? = null,
+    private val operator: com.watchdawg.market.operator.OperatorState? = null,
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
     val cadence = Cadence(props.interval, props.initialDelay, clock)
@@ -39,7 +40,7 @@ class ContractSync(
     }
     init {
         require(
-            props.watches.none { target ->
+            (operator?.activeContracts(props.watches) ?: props.watches.filter { it.enabled }).none { target ->
                 watches.all.any { it.name == target.name }
             },
         ) { "item and contract watch names must be distinct" }
@@ -47,8 +48,12 @@ class ContractSync(
     }
 
     fun initialize(catalog: com.watchdawg.market.sync.CollectionSyncScheduler) {
-        if (props.allWeapons || props.watches.isNotEmpty()) catalog.tick()
-        for (watch in props.watches) {
+        val document = operator?.snapshot?.view?.document
+        val active = (document?.contracts ?: props.watches).filter { it.enabled }
+        if ((document?.allWeapons ?: props.allWeapons) || active.isNotEmpty()) {
+            catalog.tick()
+        }
+        for (watch in active) {
             require(
                 jdbc.queryForObject(
                     "select count(*) from contract_weapon where kind = ? and slug = ?",
@@ -70,14 +75,16 @@ class ContractSync(
                 }
             }
         }
-        checkTopics(Watches(props.watches.map { it.asWatch() }), notify.topics)
+        checkTopics(Watches(active.map { it.asWatch() }), notify.topics)
     }
 
     private var detailCursor = 0
 
     fun targets(): List<Pair<String, String>> {
-        val prioritized = props.watches.sortedByDescending { it.priority.ntfy }.map { it.kind to it.weapon }
-        val all = if (props.allWeapons) {
+        val document = operator?.snapshot?.view?.document
+        val prioritized = (document?.contracts ?: props.watches).filter { it.enabled }
+            .sortedByDescending { it.priority.ntfy }.map { it.kind to it.weapon }
+        val all = if (document?.allWeapons ?: props.allWeapons) {
             jdbc.query("select kind, slug from contract_weapon order by kind, slug") { rs, _ ->
                 rs.getString(1) to
                     rs.getString(2)

@@ -37,6 +37,7 @@ class BaselineBudget(
     private val contractsEnabled: Boolean = false,
     @org.springframework.beans.factory.annotation.Value("\${wfm.poll.interval:2m}")
     private val pollInterval: Duration = Duration.ofMinutes(2),
+    private val operator: com.watchdawg.market.operator.OperatorState? = null,
 ) {
     private val run = UUID.randomUUID().toString()
 
@@ -70,6 +71,7 @@ class BaselineBudget(
         if (baselineWatches.isEmpty()) return false
         val parts =
             mutableListOf(run, watches.all.toString(), contracts.toString(), context.toString(), budget.toString())
+        parts += "operator-revision=${operator?.snapshot?.view?.revision ?: 0}"
         var complete = true
         var fresh = true
         for (target in baselineWatches.sortedBy { it.name }) {
@@ -103,7 +105,14 @@ class BaselineBudget(
         val required = watches.all.map { "item|${it.itemId}" }.toMutableSet()
         required += baselineWatches.filter { it.rule == VOLUME_SPIKE }.map { "statistics|${it.slug}" }
         if (socketEnabled) required += "socket"
-        if (contractsEnabled) required += contracts.watches.map { "contract|${it.kind}|${it.weapon}" }
+        if (contractsEnabled) {
+            required +=
+                (
+                    operator?.activeContracts(contracts.watches) ?: contracts.watches.filter {
+                        it.enabled
+                    }
+                    ).map { "contract|${it.kind}|${it.weapon}" }
+        }
         val coverage = jdbc.query(
             "select stream, started_at, last_at, max_gap_seconds from baseline_coverage where run = ?",
             { rs, _ ->
@@ -189,7 +198,7 @@ class BaselineBudget(
             },
             Timestamp.from(start),
         )
-        val report = replay(shadow, budget.dailyCeiling, firstDay, seeds)
+        val report = replay(shadow, operator?.ceiling(budget.dailyCeiling) ?: budget.dailyCeiling, firstDay, seeds)
         jdbc.update(
             "update baseline_budget_epoch set checked_until = ?, budget_suppressed = ?, status = ?",
             Timestamp.from(until),

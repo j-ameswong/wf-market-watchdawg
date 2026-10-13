@@ -9,9 +9,11 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 /** The configured watches, checked against the catalog. */
-class Watches(val all: List<Watch>) {
+class Watches(private val initial: List<Watch>, private val source: (() -> List<Watch>?)? = null) {
+    val all: List<Watch> get() = source?.invoke() ?: initial
+
     /** The items to poll (R6.1), each once however many watches name it. */
-    val itemSlugs: List<String> = all.map { it.slug }.distinct()
+    val itemSlugs: List<String> get() = all.map { it.slug }.distinct()
 
     fun forItem(itemId: String): List<Watch> = all.filter { it.itemId == itemId }
 }
@@ -21,8 +23,19 @@ class Watches(val all: List<Watch>) {
 class WatchConfig {
     /** Resolved while the context starts, so a bad watch stops the service starting (R9a.2). */
     @Bean
-    fun watches(props: WatchProperties, items: ItemRepository, catalog: CollectionSyncScheduler) =
-        Watches(loadWatches(props.watches, items::findBySlug, catalog::tick))
+    fun watches(
+        props: WatchProperties,
+        items: ItemRepository,
+        catalog: CollectionSyncScheduler,
+        state: com.watchdawg.market.operator.OperatorState,
+    ): Watches {
+        val saved = state.snapshot?.view
+        val entries = saved?.document?.watches ?: props.watches
+        val enabled = entries.filter { it.enabled }.map { it.name }.toSet()
+        val loaded = loadWatches(entries, items::findBySlug, catalog::tick).filter { it.name in enabled }
+        if (saved != null) state.publish(saved, loaded)
+        return Watches(loaded) { state.snapshot?.watches }
+    }
 }
 
 private val log = LoggerFactory.getLogger(Watches::class.java)

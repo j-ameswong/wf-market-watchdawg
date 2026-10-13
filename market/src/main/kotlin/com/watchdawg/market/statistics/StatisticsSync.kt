@@ -46,11 +46,15 @@ class StatisticsSync(
         Counter.builder("wfm.statistics.fetches").tag("outcome", it).register(registry)
     }
     private val pending = java.util.ArrayDeque<String>()
+    private var selected = emptySet<String>()
     private var nextRun = clock.instant().plus(props.initialDelay)
     val trigger = org.springframework.scheduling.Trigger { nextRun }
 
     fun round() {
-        if (pending.isEmpty()) pending.addAll(watches.itemSlugs)
+        val active = watches.itemSlugs
+        pending.removeIf { it !in active }
+        if (pending.isEmpty()) pending.addAll(active) else pending.addAll(active.filter { it !in selected })
+        selected = active.toSet()
         repeat(pending.size) {
             val slug = pending.removeFirst()
             try {

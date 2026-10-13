@@ -74,6 +74,7 @@ data class ContractWatch(
     val priority: Priority = Priority.DEFAULT,
     val cooldown: Duration = Duration.ofHours(1),
     val topic: String = "default",
+    val enabled: Boolean = true,
 ) {
     init {
         require(name.isNotBlank() && kind in CONTRACT_KINDS && weapon.matches(Regex("[a-z0-9_]+"))) {

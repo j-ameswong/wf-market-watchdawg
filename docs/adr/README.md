@@ -18,9 +18,9 @@ are the original decision dates, not the dates the records were written.
 | [0008](0008-vanished-only-from-full-book-polls.md) | `vanished` is inferred only from full book polls | accepted | 2026-09-09 |
 | [0009](0009-detection-on-order-book-events.md) | Move detection runs on order-book events, not the trade series | accepted | 2026-09-09 |
 | [0010](0010-item-stat-market-keyed-two-series.md) | `item_stat` is market-keyed, two-series, and crossplay-identified | accepted | 2026-09-09 |
-| [0011](0011-no-query-api-postgres-is-the-read-surface.md) | No query API; Postgres is the read surface | accepted | 2026-09-09 |
+| [0011](0011-no-query-api-postgres-is-the-read-surface.md) | No query API; Postgres is the read surface | superseded by 0024 | 2026-09-09 |
 | [0012](0012-kafka-stays-unwired.md) | Kafka stays unwired | accepted | 2026-09-09 |
-| [0013](0013-watches-in-version-controlled-yaml.md) | Watches in version-controlled YAML with a keyed rule registry | accepted | 2026-09-09 |
+| [0013](0013-watches-in-version-controlled-yaml.md) | Watches in version-controlled YAML with a keyed rule registry | superseded by 0024 | 2026-09-09 |
 | [0014](0014-alert-budget-is-a-requirement.md) | A 10–50/day alert budget is a requirement, not a preference | accepted | 2026-09-09 |
 | [0015](0015-at-least-once-delivery-through-an-outbox.md) | At-least-once notification delivery through an outbox | accepted | 2026-09-09 |
 | [0016](0016-ntfy-high-entropy-topic-as-credential.md) | ntfy.sh with a high-entropy topic treated as a bearer credential | accepted | 2026-09-09 |
@@ -32,6 +32,7 @@ are the original decision dates, not the dates the records were written.
 
 | [0022](0022-whole-market-socket-feed.md) | Record the whole-market socket feed | accepted | 2026-10-13 |
 | [0023](0023-calibrated-rules-require-shared-observed-budget.md) | Calibrated rules require shared observed budget evidence | accepted | 2026-10-13 |
+| [0024](0024-private-operator-dashboard.md) | Private operator dashboard and durable runtime configuration | accepted | 2026-10-13 |
 
 Decisions scoped to a single capability's implementation are recorded in that capability's plan:
 `tasks/plan.md` for the capability in progress, `tasks/archive/` for finished ones. A decision

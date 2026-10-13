@@ -10,16 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-/**
- * R12.5: actuator is the service's **only** HTTP surface, and no data endpoint is ever added.
- *
- * Postgres is the read surface for the warehouse
- * ([ADR-0011](docs/adr/0011-no-query-api-postgres-is-the-read-surface.md)). So a controller
- * turning up here is a design decision that was never taken, not an oversight.
- *
- * This is a standing guard rather than a one-off check. It enumerates the context, so it fails on
- * a controller added later without anyone editing this file.
- */
+/** ADR-0024 permits the private operator surface while keeping actuator bounded. */
 @SpringBootTest
 @Import(TestcontainersConfiguration::class)
 class HttpSurfaceTest {
@@ -27,13 +18,14 @@ class HttpSurfaceTest {
     @Autowired lateinit var context: ApplicationContext
 
     @Test
-    fun `the service exposes no controllers of its own`() {
+    fun `application controllers belong to the operator surface`() {
         val controllers = context.getBeansWithAnnotation(Controller::class.java) +
             context.getBeansWithAnnotation(RestController::class.java)
 
         val ours = controllers.filterValues { it.javaClass.packageName.startsWith("com.watchdawg") }
 
-        assertTrue(ours.isEmpty(), "R12.5 allows actuator and nothing else, but found ${ours.keys}")
+        assertTrue(ours.isNotEmpty())
+        assertTrue(ours.values.all { it.javaClass.packageName == "com.watchdawg.market.operator" })
     }
 
     @Test

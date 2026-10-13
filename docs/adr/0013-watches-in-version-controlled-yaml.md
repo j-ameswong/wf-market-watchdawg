@@ -1,7 +1,7 @@
 # ADR-0013: Watches in version-controlled YAML with a keyed rule registry
 
 **Date**: 2026-09-09
-**Status**: accepted
+**Status**: superseded (UI/runtime configuration) by [ADR-0024](0024-private-operator-dashboard.md)
 **Deciders**: project author (spec review)
 
 ## Context

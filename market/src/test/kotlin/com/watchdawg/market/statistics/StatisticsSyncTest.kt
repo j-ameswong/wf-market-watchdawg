@@ -41,6 +41,50 @@ class StatisticsSyncTest {
     lateinit var legacy: RestClient
 
     @Test
+    fun `new watches join retries even while an existing watch keeps failing`() {
+        listOf("a", "b").forEach {
+            items.upsert(ItemRecord(it, it))
+            items.recordDetail(it, true, null, null)
+        }
+        val all = (
+            resolveWatches(
+                listOf("a", "b").map {
+                    WatchEntry(it, it, maxUnitPrice = BigDecimal.ONE)
+                },
+                items::findBySlug,
+            ) as Resolution.Resolved
+            ).watches
+        var selected = all.take(1)
+        val watches = Watches(emptyList()) { selected }
+        val builder = legacy.mutate()
+        val server = MockRestServiceServer.bindTo(builder).build()
+        repeat(2) {
+            server.expect(requestTo("https://api.warframe.market/v1/items/a/statistics"))
+                .andRespond(org.springframework.test.web.client.response.MockRestResponseCreators.withServerError())
+        }
+        server.expect(requestTo("https://api.warframe.market/v1/items/b/statistics"))
+            .andRespond(
+                withSuccess(javaClass.getResource("/fixtures/v1-statistics.json")!!.readText(), APPLICATION_JSON),
+            )
+        val registry = SimpleMeterRegistry()
+        val sync = StatisticsSync(
+            watches,
+            items,
+            WfmLegacyClient(builder.build()),
+            ingest,
+            details,
+            registry,
+            StatisticsProperties(),
+            MutableClock(),
+        )
+        sync.round()
+        selected = all
+        sync.round()
+        server.verify()
+        assertEquals(1.0, registry.get("wfm.statistics.fetches").tag("outcome", "success").counter().count())
+    }
+
+    @Test
     fun `throttled rounds resume unfinished slugs promptly instead of restarting daily`() {
         val clock = MutableClock()
         listOf("a", "b").forEach {

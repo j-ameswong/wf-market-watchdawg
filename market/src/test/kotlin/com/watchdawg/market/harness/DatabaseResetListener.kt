@@ -18,6 +18,8 @@ import org.springframework.test.context.support.AbstractTestExecutionListener
 class DatabaseResetListener : AbstractTestExecutionListener() {
     override fun beforeTestMethod(testContext: TestContext) {
         testContext.applicationContext.getBeanProvider(JdbcTemplate::class.java).ifAvailable(::reset)
+        testContext.applicationContext.getBeanProvider(com.watchdawg.market.operator.OperatorState::class.java)
+            .ifAvailable { it.reload() }
     }
 
     private fun reset(jdbc: JdbcTemplate) {

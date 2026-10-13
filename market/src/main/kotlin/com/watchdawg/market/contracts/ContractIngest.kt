@@ -22,6 +22,7 @@ class ContractIngest(
     private val props: ContractProperties,
     private val alerts: Alerts,
     transactions: PlatformTransactionManager,
+    private val operator: com.watchdawg.market.operator.OperatorState? = null,
 ) {
     private val tx = TransactionTemplate(transactions)
 
@@ -50,7 +51,11 @@ class ContractIngest(
                     event(auction, previous, at, missing)
                 }
                 if (!missing) {
-                    props.watches.filter { it.matches(auction, inverted) }.forEach { target ->
+                    (
+                        operator?.activeContracts(props.watches) ?: props.watches.filter {
+                            it.enabled
+                        }
+                        ).filter { it.matches(auction, inverted) }.forEach { target ->
                         candidates += candidate(target, auction)
                     }
                 }

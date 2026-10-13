@@ -35,6 +35,7 @@ class Alerts(
     private val metrics: AlertMetrics,
     private val baselines: com.watchdawg.market.baseline.BaselineRules? = null,
     private val baselineBudget: com.watchdawg.market.baseline.BaselineBudget? = null,
+    private val operator: com.watchdawg.market.operator.OperatorState? = null,
 ) {
 
     /**
@@ -128,6 +129,7 @@ class Alerts(
 
     private fun overCeiling(seenAt: Instant): Boolean {
         val day = seenAt.atZone(UTC).truncatedTo(DAYS).toInstant()
-        return signals.admittedBetween(day, day.plus(1, DAYS)) >= props.dailyCeiling
+        return signals.admittedBetween(day, day.plus(1, DAYS)) >=
+            (operator?.ceiling(props.dailyCeiling) ?: props.dailyCeiling)
     }
 }

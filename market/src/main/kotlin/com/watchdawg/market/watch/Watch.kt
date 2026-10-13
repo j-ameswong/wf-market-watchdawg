@@ -40,6 +40,7 @@ data class WatchEntry(
     val minSpreadPercent: BigDecimal? = null,
     val minSamples: Int = 35,
     val targetRate: BigDecimal = BigDecimal("0.1"),
+    val enabled: Boolean = true,
 )
 
 /** ntfy's five priorities, by the names ntfy gives them (R10.5). */

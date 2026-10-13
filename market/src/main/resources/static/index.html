@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#101214" />
+    <title>Watchdawg · Market console</title>
+    <link rel="icon" href="/mark.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/app.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <aside class="sidebar">
+      <a class="brand" href="#watches"
+        ><img src="/mark.svg" width="32" height="32" alt="" /><span
+          >watchdawg<span class="brand-sub">WARFRAME MARKET</span></span
+        ></a
+      >
+      <div class="sidebar-label">WORKSPACE</div>
+      <nav aria-label="Main navigation">
+        <a href="#watches" data-page="watches"
+          ><span class="nav-icon">◉</span> Watches
+          <span id="watch-count" class="nav-count">—</span></a
+        >
+        <a href="#statistics" data-page="statistics"
+          ><span class="nav-icon">▥</span> Statistics</a
+        >
+        <a href="#settings" data-page="settings"
+          ><span class="nav-icon">⚙</span> Settings</a
+        >
+      </nav>
+      <div class="sidebar-bottom">
+        <span class="small-dot"></span>
+        <div>Private workspace<small>Self-hosted · tailnet</small></div>
+        <span class="key-icon">⌘</span>
+      </div>
+    </aside>
+    <div class="workspace">
+      <header class="topbar">
+        <div>
+          <span class="muted">Console</span><span class="slash">/</span
+          ><span id="breadcrumb">Watches</span>
+        </div>
+        <div class="topbar-right">
+          <span id="last-refresh" class="muted">Connecting…</span
+          ><button
+            id="refresh"
+            class="icon-button"
+            aria-label="Refresh dashboard"
+            title="Refresh dashboard"
+          >
+            ↻</button
+          ><span class="avatar" title="Local operator">OP</span>
+        </div>
+      </header>
+      <main id="content" tabindex="-1">
+        <div class="loading-state">Connecting to your workspace…</div>
+      </main>
+      <footer class="footer">
+        <span>WATCHDAWG <span class="muted">/ operator console</span></span
+        ><span
+          >Prices in platinum <span class="separator">·</span> Times in your
+          local timezone</span
+        >
+      </footer>
+    </div>
+    <div id="toast" class="toast" role="status" hidden></div>
+    <dialog id="watch-dialog" aria-labelledby="dialog-title"></dialog>
+    <dialog id="confirm-dialog" aria-labelledby="confirm-title"></dialog>
+    <noscript
+      ><p class="noscript">
+        JavaScript is required to use this console.
+      </p></noscript
+    >
+  </body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "watchdawg-browser-checks",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "format": "prettier --write ../market/src/main/resources/static/*.{js,css,html} tests/*.js playwright.config.js",
+    "format:check": "prettier --check ../market/src/main/resources/static/*.{js,css,html} tests/*.js playwright.config.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.0",
+    "prettier": "3.9.10"
+  }
+}

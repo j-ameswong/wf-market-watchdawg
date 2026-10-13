@@ -31,3 +31,8 @@ result-*
 deploy/.env
 deploy/market.jar
 deploy/backups/
+
+# Browser verification only; production assets are shipped directly in the jar.
+frontend/node_modules/
+frontend/test-results/
+frontend/playwright-report/

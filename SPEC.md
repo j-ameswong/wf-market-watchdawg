@@ -1,7 +1,7 @@
 # SPEC — wf-market-watchdawg
 
-> **Status: under review.** No code is written against a capability until it is broken into tasks
-> in `tasks/plan.md` and `tasks/todo.md`. Finished plans, with the evidence for each requirement,
+> **Status: full-scope implementation delivered.** Capabilities are broken into tasks before implementation
+> in `tasks/plan.md` and `tasks/todo.md`. Finished plans, with acceptance evidence,
 > are archived under `tasks/archive/`.
 >
 > | Capability | State |
@@ -10,13 +10,13 @@
 > | C2 | **Built and reviewed.** |
 > | C3 | **Built and reviewed.** The item detail sweep is off until a rule or query reads its fields. |
 > | C4 | **Built and reviewed.** |
-> | C5 | **Planned** in `tasks/plan.md`, confirmed by the author 2026-09-26. T1's live socket capture is complete; T2–T6 remain. |
+> | C5 | **Built and independently reviewed.** Live socket delivery and reconnect/gap-fill verified on homelab; accelerated lifecycle and budget tests. |
 > | C6 | **Built and reviewed.** Watched items are polled on a fixed cadence, honouring a throttle's `Retry-After`. |
-> | C7, C8 | Not started. |
-> | C9a | **Built and reviewed** for the underpriced rule, with dedup, a per-watch cooldown and a daily ceiling. The 72h budget run is planned as the last task of C5; the spread and crossing rules are still to do. |
-> | C9b | Not started. |
+> | C7, C8 | **Built and independently reviewed.** Statistics warehouse and configured riven/lich/sister collection and alerts, with captured fixtures. |
+> | C9a | **Built and independently reviewed.** Underpriced, crossing and spread share transactional dedup, cooldown and daily ceiling. |
+> | C9b | **Implemented with evidence gates.** Data-derived thresholds, time-separated validation and shared prospective budget replay. Production delivery stays disabled until real calibration and collection coverage qualify; lifetime history is still accumulating. |
 > | C10 | **Built and reviewed**, and delivered a real push on 2026-09-26. An outbox and one dispatcher send to ntfy, retrying with backoff to a cap, across restarts. |
-> | C12 | Not started beyond the meters each capability registers. |
+> | C12 | **Built and independently reviewed.** Request/ingest/recovery/poll metrics and durable UTC-day admission/finalized-delivery gauges; actuator only. |
 >
 > Grounded in `docs/v2/` (API `v0.25.0`, WebSocket `v0.13.0`), `docs/v1.yml`, and the live-verified
 > route table in `bruno/README.md`. This document describes the system to be built; the reasoning
@@ -24,6 +24,18 @@
 > [`docs/adr/`](docs/adr/README.md).
 
 ---
+
+## Delivery agreement (2026-10-13)
+
+The author requests all capabilities, including C7, C8, the remaining C9a rules and C9b.
+The earlier on-demand sequencing is now activated. Deploy one instance to `homelab` on the
+operator's tailnet. Existing dev data may be discarded. Healthy-path alerts must reach an
+ntfy listener in under 10 seconds; phone confirmation is not required. Long-duration checks
+may use injected clocks and shortened development timings rather than 72 elapsed hours.
+Baseline thresholds still require calibration from API statistics or recorded events; lack
+of event history must disable those rules, not substitute invented thresholds.
+Contract watches support configurable weapon/attribute selection and priority, for both
+historical research and actionable alerts. Exact rule semantics are recorded in capability plans.
 
 ## 1. Objective
 
@@ -341,7 +353,7 @@ flowchart TD
   class C7,C8,C9B later
 ```
 
-Thick nodes are the spine — the shortest path to a real push notification, by polling. Dashed nodes are built when operation shows a need for them. C9b also needs C7 *plus* accumulated history before any threshold in it can be chosen honestly.
+Thick nodes are the spine — the shortest path to a real push notification, by polling. Dashed nodes were originally sequenced on demand; the full-scope delivery agreement activates them. C9b also needs C7 *plus* accumulated history before any threshold in it can be chosen honestly.
 
 ### 3.4 Capability table
 
@@ -511,7 +523,7 @@ The first poll loop is deliberately small ([ADR-0021](docs/adr/0021-limiter-owns
 
 ### C7 — Trade statistics
 
-*Built on demand, for watched markets first, when the historical-price use case needs it.*
+*Activated by the full-scope delivery agreement; watched markets are collected first.*
 
 Schema: §2.6 and `docs/v1-statistics.md`. Design rationale: [ADR-0010](docs/adr/0010-item-stat-market-keyed-two-series.md).
 
@@ -539,7 +551,7 @@ Schema: §2.6 and `docs/v1-statistics.md`. Design rationale: [ADR-0010](docs/adr
 
 ### C8 — Contracts / auctions
 
-*Optional; built only when operation gives a reason.*
+*Activated by the full-scope delivery agreement; configured weapons are prioritized.*
 
 - **R8.1** Riven, lich and sister auctions recorded with their polymorphic item payload.
 - **R8.2** Riven attributes are normalized — the attribute *combination* is what carries value, so it must be queryable.
@@ -628,7 +640,7 @@ sequenceDiagram
 **Acceptance**
 - Mock ntfy: one signal → one POST; forced failure retries to cap then marks failed.
 - Killing the process between signal write and send yields delivery on restart. A duplicate here passes; a loss fails.
-- One real end-to-end push arrives on a phone.
+- One real end-to-end push reaches an ntfy listener (delivery agreement).
 - `git grep` over the repo finds no real topic name; logs at DEBUG contain no topic name.
 
 ### C12 — Observability
@@ -639,7 +651,7 @@ sequenceDiagram
 - **R12.4** Poll lateness: how long after its due time each poll started.
 - **R12.5** These metrics are the service's **only** HTTP surface. Actuator only; no data endpoints.
 
-**Acceptance** — after an hour running, the metrics answer "are we under the limit", "is the socket up", "are polls keeping up", and "how many pushes today" without reading logs.
+**Acceptance** — with a live observation sample and accelerated UTC-day tests, the metrics answer "are we under the limit", "is the socket up", "are polls keeping up", and "how many pushes today" without reading logs.
 
 ---
 

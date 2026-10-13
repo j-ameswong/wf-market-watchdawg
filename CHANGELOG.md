@@ -7,6 +7,18 @@ design rationale in [`docs/adr/`](docs/adr/README.md).
 
 ### Added
 
+- Full-scope delivery on homelab: reconnecting whole-market socket ingest and sub-second measured
+  observation-to-ntfy-listener delivery; statistics warehouse; riven/lich/sister history and
+  configurable alerts; crossing/spread rules; calibrated volume/lifetime rules with shared-budget
+  evidence gates. Baselines remain quiet until real evidence qualifies them.
+- Serialized transactional alert admission across polling, socket and auctions; exact market
+  separation, recorded crossplay for lifetime evidence, and additional throttle/recovery metrics.
+- Single-instance container deployment, external credentials, atomic backups, isolated Timescale
+  restore verification and an operations guide. Development timelines can be accelerated.
+- Independent feature reviews and regression tests for concurrency, throttle continuation,
+  price-condition reentry, auction verification, statistics mapping and calibration boundaries.
+
+
 - **C5 T1 — Live socket capture.** A dependency-free JDK capture script under `bruno/` and a
   scrubbed fixture with 74 real new orders, the subscription acknowledgement and an online report.
   All captured orders carry item, status and platform fields; 29 report `offline`, so socket

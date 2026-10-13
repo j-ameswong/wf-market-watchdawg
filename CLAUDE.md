@@ -35,10 +35,14 @@ Packages under `com.watchdawg.market`:
 | `sync` | Catalog refresh (`CollectionSync`, `ItemSync`) and the item detail sweep |
 | `ingest` | Book reconciliation, partial ingest, quotes, one-book polling |
 | `store` | Repositories, `MarketResolver`, `OrderStore` |
-| `watch` | Watches from `watches.yaml`, the underpriced rule, and the `signal` outbox |
+| `watch` | Watches, underpriced/crossing/spread rules, and the `signal` outbox |
 | `poll` | The poll loop (C6): every watched item's book, once per interval, on its own thread |
 | `notify` | The dispatcher and the ntfy client (C10) |
-| planned | `wfm/ws` (socket) |
+| `wfm/ws` | Whole-market socket feed, reconnect and recent-order gap fill |
+| `statistics` | Closed/live hourly/daily upstream statistics and watched-item scheduler |
+| `contracts` | Weapon manifests, auction snapshots/events, filters and detail verification |
+| `baseline` | Empirical calibration and shared candidate-budget validation |
+| `observability` | Committed ingest throughput and durable UTC-day signal/delivery gauges |
 
 ## Commands
 
@@ -193,10 +197,12 @@ The jar excludes `developmentOnly` deps, so it starts no Postgres: pass `SPRING_
 | Relation | Kept | Policy |
 | --- | --- | --- |
 | `order_event` | forever | compressed after 7 days, segmented by `market_id` |
+| `item_stat` | forever | closed/live statistics compressed after 100 days |
+| `auction_event` | forever | contract transitions compressed after 7 days |
 | `market_quote` | 90 days raw | dropped by retention |
 | `market_quote_hourly`, `market_quote_daily` | forever | continuous aggregates, refreshed over the last 2 / 4 days |
 
-- Fact tables are hypertables on `observed_at`, so every unique index includes it
+- Fact tables are hypertables on their observation/bucket time, so every unique index includes it
   (`FactTablesTest`).
 - Every policy value lives in `R__storage_policies.sql`; changing one is ask-first (SPEC §9).
   Dropping a table or rollup drops its policy, so a migration that recreates one must change that
@@ -245,3 +251,18 @@ The jar excludes `developmentOnly` deps, so it starts no Postgres: pass `SPRING_
   in `com.fasterxml.jackson.annotation`). DTOs declare only the fields the code reads.
 - Kafka starters are on the classpath, but nothing publishes
   ([ADR-0012](docs/adr/0012-kafka-stays-unwired.md)).
+
+### Baseline readiness
+
+Statistical calibration is separate from delivery readiness. `BaselineRules.prepare` refreshes all
+configured baseline markets before any baseline admission. `BaselineBudget` records every rule's
+candidates before admission and replays complete UTC days with dedup/cooldown state and the shared
+ceiling. Every required collector must show continuous successful observations within twice its
+cadence, including zero-candidate observations. Restarts, coverage gaps, threshold changes, new
+markets and permanent delivery failures invalidate the evidence epoch. Do not bypass this gate
+with imported statistics or synthetic history. See ADR-0023 and deploy/OPERATIONS.md.
+
+`WATCHDAWG_CONTRACTS_ENABLED=true` enables contract manifest collection and scheduling. Statistics
+and socket collection default on outside the test harness. Statistics fetches item details before
+mapping charge/rank dimensions. Contract metadata preserves inverted beneficial attributes such as
+recoil; stored values remain raw, configured minimums use benefit magnitude.

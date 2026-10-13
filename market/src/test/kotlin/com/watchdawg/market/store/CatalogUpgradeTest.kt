@@ -49,19 +49,20 @@ class CatalogUpgradeTest {
     }
 
     @Test
-    fun `upgrading forgets the stored items hash so the next tick refetches`() = scratch.use { db ->
+    fun `upgrades invalidate changed collection hashes while preserving unchanged ones`() = scratch.use { db ->
         migrate(db, to = BEFORE_C3)
         JdbcTemplate(db).update(
-            "insert into collection_version (name, hash, updated_at) values ('items', 'h1', ?), ('rivens', 'h2', ?)",
+            "insert into collection_version (name, hash, updated_at) values ('items', 'h1', ?), ('rivens', 'h2', ?), ('liches', 'h3', ?)",
+            Timestamp.from(Instant.EPOCH),
             Timestamp.from(Instant.EPOCH),
             Timestamp.from(Instant.EPOCH),
         )
 
         migrate(db, to = "latest")
 
-        // Only the catalog whose columns changed is refetched; other collections keep their hash.
+        // V5 changes item metadata and V16 adds inverted riven-attribute metadata.
         assertEquals(
-            listOf("rivens"),
+            listOf("liches"),
             JdbcTemplate(db).queryForList("select name from collection_version", String::class.java),
         )
     }

@@ -44,3 +44,11 @@ do $$ begin
         call add_columnstore_policy('item_stat', after => interval '100 days');
     end if;
 end $$;
+
+-- C8 keeps auction observations indefinitely as well.
+do $$ begin
+    if to_regclass('public.auction_event') is not null then
+        call remove_columnstore_policy('auction_event', if_exists => true);
+        call add_columnstore_policy('auction_event', after => interval '7 days');
+    end if;
+end $$;

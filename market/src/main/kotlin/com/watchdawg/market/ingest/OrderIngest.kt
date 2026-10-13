@@ -68,7 +68,7 @@ class OrderIngest(
 
             val quotes = quotes(markets.marketsOf(itemId), book)
             store.insertQuotes(quotes, at)
-            val marketKeys = keys.entries.mapNotNull { (key, id) -> id?.let { it to key } }.toMap()
+            val marketKeys = markets.keysOf(itemId)
             BookOutcome.Reconciled(events.size, quotes.size, alerts.evaluate(itemId, book, marketKeys, at))
         }
     }

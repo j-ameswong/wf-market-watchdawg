@@ -39,6 +39,9 @@ data class Outgoing(
     val topic: String,
     val seenAt: Instant,
     val attempts: Int,
+    val title: String? = null,
+    val message: String? = null,
+    val click: String? = null,
 )
 
 /** The `signal` outbox. Every method runs in the caller's transaction. */
@@ -53,6 +56,40 @@ class SignalStore(private val jdbc: NamedParameterJdbcTemplate) {
         jdbc.jdbcTemplate.execute("select pg_advisory_xact_lock(726193504)")
     }
 
+    /** Returns true once per false-to-true transition; called under the admission lock. */
+    fun transition(watch: String, market: Long, definition: String, active: Boolean, seenAt: Instant): Boolean {
+        val previous = jdbc.query(
+            "select active, observed_at from watch_condition where watch = :watch and market_id = :market and definition = :definition",
+            mapOf("watch" to watch, "market" to market, "definition" to definition),
+        ) { rs, _ -> rs.getBoolean(1) to rs.getTimestamp(2).toInstant() }.singleOrNull()
+        if (previous != null && !seenAt.isAfter(previous.second)) return false
+        jdbc.update(
+            """
+            insert into watch_condition(watch, market_id, definition, active, observed_at)
+            values (:watch, :market, :definition, :active, :at)
+            on conflict(watch, market_id, definition) do update set active = excluded.active, observed_at = excluded.observed_at
+            """,
+            mapOf(
+                "watch" to watch,
+                "market" to market,
+                "definition" to definition,
+                "active" to active,
+                "at" to Timestamp.from(seenAt),
+            ),
+        )
+        return active && previous?.first != true
+    }
+
+    fun retryCondition(watch: String, market: Long, definition: String) {
+        jdbc.update(
+            """
+            update watch_condition set active = false
+            where watch = :watch and market_id = :market and definition = :definition
+            """,
+            mapOf("watch" to watch, "market" to market, "definition" to definition),
+        )
+    }
+
     /**
      * Writes [candidate] in [state] and returns true, or returns false when its dedup key is
      * already taken, whatever that signal's state (R9a.5).
@@ -60,16 +97,16 @@ class SignalStore(private val jdbc: NamedParameterJdbcTemplate) {
     fun admit(candidate: Candidate, state: SignalState, seenAt: Instant): Boolean = jdbc.query(
         """
         insert into signal (watch, rule, market_id, order_id, dedup_key, unit_price, threshold,
-                            platinum, per_trade, priority, topic, state, seen_at)
+                            platinum, per_trade, priority, topic, state, seen_at, title, message, click)
         values (:watch, :rule, :marketId, :orderId, :dedupKey, :unitPrice, :threshold,
-                :platinum, :perTrade, :priority, :topic, :state, :seenAt)
+                :platinum, :perTrade, :priority, :topic, :state, :seenAt, :title, :message, :click)
         on conflict (dedup_key) do nothing
         returning id
         """,
         MapSqlParameterSource()
             .addValue("watch", candidate.watch.name)
             .addValue("rule", candidate.rule)
-            .addValue("marketId", candidate.order.marketId)
+            .addValue("marketId", candidate.signalMarketId)
             .addValue("orderId", candidate.order.id)
             .addValue("dedupKey", candidate.dedupKey)
             .addValue("unitPrice", candidate.order.unitPrice)
@@ -79,7 +116,10 @@ class SignalStore(private val jdbc: NamedParameterJdbcTemplate) {
             .addValue("priority", candidate.watch.priority.ntfy)
             .addValue("topic", candidate.watch.topic)
             .addValue("state", state.db)
-            .addValue("seenAt", Timestamp.from(seenAt)),
+            .addValue("seenAt", Timestamp.from(seenAt))
+            .addValue("title", candidate.title)
+            .addValue("message", candidate.message)
+            .addValue("click", candidate.click),
     ) { rs, _ -> rs.getLong(1) }.isNotEmpty()
 
     fun exists(dedupKey: String): Boolean = jdbc.queryForObject(
@@ -118,10 +158,10 @@ class SignalStore(private val jdbc: NamedParameterJdbcTemplate) {
         """
         select s.id, s.watch, coalesce(i.name, i.slug) as item_name, i.slug, m.subtype, m.rank,
                m.charges, m.amber_stars, m.cyan_stars, s.unit_price, s.platinum, s.per_trade,
-               s.priority, s.topic, s.seen_at, s.attempts
+               s.priority, s.topic, s.seen_at, s.attempts, s.title, s.message, s.click
         from signal s
-        join market m on m.id = s.market_id
-        join item i on i.id = m.item_id
+        left join market m on m.id = s.market_id
+        left join item i on i.id = m.item_id
         where s.state = 'pending' and (s.next_attempt_at is null or s.next_attempt_at <= :now)
         order by s.id
         limit :limit
@@ -157,8 +197,8 @@ class SignalStore(private val jdbc: NamedParameterJdbcTemplate) {
     private fun ResultSet.toOutgoing() = Outgoing(
         id = getLong("id"),
         watch = getString("watch"),
-        itemName = getString("item_name"),
-        slug = getString("slug"),
+        itemName = getString("item_name") ?: getString("title") ?: "Market alert",
+        slug = getString("slug") ?: "",
         dimensions = listOfNotNull(
             getString("subtype"),
             (getObject("rank") as Int?)?.let { "rank $it" },
@@ -173,5 +213,8 @@ class SignalStore(private val jdbc: NamedParameterJdbcTemplate) {
         topic = getString("topic"),
         seenAt = getTimestamp("seen_at").toInstant(),
         attempts = getInt("attempts"),
+        title = getString("title"),
+        message = getString("message"),
+        click = getString("click"),
     )
 }

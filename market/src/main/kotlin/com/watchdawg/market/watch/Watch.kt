@@ -26,12 +26,16 @@ data class WatchEntry(
     val amberStars: String? = null,
     val cyanStars: String? = null,
     /** Platinum a unit. A sell listing at or below it qualifies. */
-    val maxUnitPrice: BigDecimal,
+    val maxUnitPrice: BigDecimal = BigDecimal.ZERO,
     val priority: Priority = Priority.DEFAULT,
     /** After a signal is admitted, only a cheaper listing is admitted for this long (R9a.5). */
     val cooldown: Duration = Duration.ofHours(1),
     /** A logical topic. The real ntfy topic comes from the environment, never from this file (R10.6). */
     val topic: String = "default",
+    val rule: String = UNDERPRICED,
+    val side: String = "sell",
+    val minSpread: BigDecimal? = null,
+    val minSpreadPercent: BigDecimal? = null,
 )
 
 /** ntfy's five priorities, by the names ntfy gives them (R10.5). */
@@ -76,6 +80,10 @@ data class Watch(
     val priority: Priority,
     val cooldown: Duration,
     val topic: String,
+    val rule: String = UNDERPRICED,
+    val side: String = "sell",
+    val minSpread: BigDecimal? = null,
+    val minSpreadPercent: BigDecimal? = null,
 ) {
     /** Whether a market of this watch's item is one the watch selects. */
     fun selects(market: MarketKey): Boolean = market.itemId == itemId &&
@@ -122,7 +130,22 @@ private fun WatchEntry.resolve(item: ItemRecord): Watch {
     fun fail(problem: String): Nothing = throw InvalidWatchException("watch '$name' on ${item.slug}: $problem")
 
     if (name.isBlank()) throw InvalidWatchException("a watch on ${item.slug} has no name")
-    if (maxUnitPrice.signum() <= 0) fail("max-unit-price must be above zero, not $maxUnitPrice")
+    if (rule !in setOf(UNDERPRICED, PRICE_CROSSING, SPREAD)) fail("unknown rule '$rule'")
+    if (side !in setOf("buy", "sell")) fail("side must be buy or sell")
+    if (rule == SPREAD) {
+        if (minSpread == null && minSpreadPercent == null) fail("spread needs min-spread or min-spread-percent")
+        if (listOfNotNull(minSpread, minSpreadPercent).any {
+                it.signum() <= 0
+            }
+        ) {
+            fail("spread thresholds must be positive")
+        }
+    }
+    if (rule in setOf(UNDERPRICED, PRICE_CROSSING) &&
+        maxUnitPrice.signum() <= 0
+    ) {
+        fail("max-unit-price must be above zero, not $maxUnitPrice")
+    }
     if (!topic.matches(LOGICAL_TOPIC)) {
         fail("topic '$topic' must be lowercase letters and digits, to map from WATCHDAWG_NOTIFY_TOPICS_<NAME>")
     }
@@ -151,6 +174,10 @@ private fun WatchEntry.resolve(item: ItemRecord): Watch {
         priority = priority,
         cooldown = cooldown,
         topic = topic,
+        rule = rule,
+        side = side,
+        minSpread = minSpread,
+        minSpreadPercent = minSpreadPercent,
     )
 }
 

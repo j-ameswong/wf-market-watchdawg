@@ -49,19 +49,41 @@ class Alerts(
         fullBook: Boolean = true,
     ): Int = watches.forItem(itemId).sumOf { watch ->
         val selected = markets.filterValues(watch::selects).keys
-        admit(watch, underpriced(watch, book, selected), seenAt)
+        if (watch.rule == UNDERPRICED) {
+            admit(watch, underpriced(watch, book, selected), seenAt)
+        } else if (fullBook) {
+            signals.lockAdmission()
+            selected.sumOf { market ->
+                val result = BOOK_RULES.getValue(watch.rule)(watch, book.filter { it.marketId == market })
+                val entered = signals.transition(watch.name, market, watch.definitionKey(), result != null, seenAt)
+                if (entered &&
+                    result != null
+                ) {
+                    val candidate = bookCandidate(watch, market, result, seenAt)
+                    val admitted = admit(watch, listOf(candidate), seenAt)
+                    if (!signals.exists(candidate.dedupKey)) {
+                        signals.retryCondition(watch.name, market, watch.definitionKey())
+                    }
+                    admitted
+                } else {
+                    0
+                }
+            }
+        } else {
+            0
+        }
     }
 
     private fun admit(watch: Watch, candidates: List<Candidate>, seenAt: Instant): Int {
-        if (candidates.isEmpty()) return 0
         signals.lockAdmission()
+        if (candidates.isEmpty()) return 0
         var last = signals.lastAdmitted(watch.name)
         var admitted = 0
         for (candidate in candidates) {
             if (signals.exists(candidate.dedupKey)) continue
             val price = candidate.order.unitPrice
             val cooling = last != null && seenAt.isBefore(last.seenAt.plus(watch.cooldown))
-            if (cooling && price >= last!!.unitPrice) continue
+            if (cooling && (watch.rule != UNDERPRICED || price >= last!!.unitPrice)) continue
 
             val state = if (overCeiling(seenAt)) SignalState.SUPPRESSED else SignalState.PENDING
             if (!signals.admit(candidate, state, seenAt)) continue

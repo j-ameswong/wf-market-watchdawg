@@ -62,10 +62,10 @@ fun Outgoing.toPush(): Push {
         else -> "$platinum plat for a lot of $size"
     }
     return Push(
-        title = "$itemName$dims at $unit plat",
-        message = "$lot. Seen ${SEEN.format(seenAt)} UTC. Watch: $watch.",
+        title = title?.let { "$it$dims" } ?: "$itemName$dims at $unit plat",
+        message = "${message ?: lot}. Seen ${SEEN.format(seenAt)} UTC. Watch: $watch.",
         priority = priority,
-        click = "https://warframe.market/items/$slug",
+        click = click ?: "https://warframe.market/items/$slug",
     )
 }
 

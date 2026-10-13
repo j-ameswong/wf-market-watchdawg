@@ -71,6 +71,20 @@ class MarketResolver(
         MapSqlParameterSource("itemId", itemId).addValue("platform", platform),
     ) { rs, _ -> rs.getLong(1) }
 
+    fun keysOf(itemId: String): Map<Long, MarketKey> = jdbc.query(
+        "select * from market where item_id = :itemId and platform = :platform order by id",
+        mapOf("itemId" to itemId, "platform" to platform),
+    ) { rs, _ ->
+        rs.getLong("id") to MarketKey(
+            itemId,
+            rs.getString("subtype"),
+            rs.getObject("rank") as Int?,
+            rs.getObject("charges") as Int?,
+            rs.getObject("amber_stars") as Int?,
+            rs.getObject("cyan_stars") as Int?,
+        )
+    }.toMap()
+
     private fun find(key: MarketKey): Long? = jdbc.query(FIND, parameters(key)) { rs, _ ->
         rs.getLong(1)
     }.singleOrNull()

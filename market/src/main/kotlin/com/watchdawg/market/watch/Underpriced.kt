@@ -4,9 +4,19 @@ import com.watchdawg.market.ingest.ObservedOrder
 import com.watchdawg.market.wfm.OrderType
 
 /** A listing a rule found, before suppression decides whether it becomes a signal. */
-data class Candidate(val watch: Watch, val rule: String, val order: ObservedOrder) {
+data class Candidate(
+    val watch: Watch,
+    val rule: String,
+    val order: ObservedOrder,
+    val key: String? = null,
+    val title: String? = null,
+    val message: String? = null,
+    val click: String? = null,
+    val signalMarketId: Long? = order.marketId,
+) {
     /** Watch, order and unit price: the same listing at the same price is one condition (R9a.5). */
-    val dedupKey: String get() = "${watch.name}|${order.id}|${order.unitPrice.stripTrailingZeros().toPlainString()}"
+    val dedupKey: String get() = key
+        ?: "${watch.name}|${order.id}|${order.unitPrice.stripTrailingZeros().toPlainString()}"
 }
 
 const val UNDERPRICED = "underpriced"

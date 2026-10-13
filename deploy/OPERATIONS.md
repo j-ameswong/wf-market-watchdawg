@@ -33,12 +33,34 @@ curl -fsS http://127.0.0.1:8081/actuator/health
 
 The database lives in the named `watchdawg_database` volume. Do not use `down -v` on an established
 warehouse. PostgreSQL is exposed on host loopback port 55432; use an SSH tunnel for remote queries.
-Actuator is exposed on loopback and the explicit tailnet address, on port 8081.
+The operator dashboard and actuator share loopback and the explicit tailnet address, on port 8081.
+Open `http://homelab:8081` from the tailnet. `OPERATOR_HOSTS` optionally extends the accepted host
+names (comma-separated); defaults include `homelab`, loopback and the configured `TAILNET_IP`.
+Add the full MagicDNS name there if you use it. Do not expose this single-operator server publicly.
 
 ## Watches and rules
 
-Edit `watches.yaml`, then `docker compose restart market`. Settings are per operator. There is
-no query API or web UI; PostgreSQL is the read surface.
+The dashboard manages item and contract watches, including pause, priorities, thresholds and
+attributes. Its Settings screen changes the daily alert ceiling and manifest-wide contract
+collection. Saves validate the complete configuration and take effect immediately for subsequent
+evaluations/collection rounds; an in-flight observation can finish with its previous selection.
+New targets join their collector's next scheduled round. Pending notifications still deliver after
+a watch is paused or deleted, and historical facts remain stored. A zero ceiling suppresses new
+admissions; it does not cancel the outbox. Baseline evidence restarts after configuration changes.
+
+Before the first browser save, edit `watches.yaml` and restart as before. After a browser save,
+the newest `operator_configuration` revision takes precedence over YAML for watches and the two
+editable service settings, across restarts. Every edit is retained in the database and its backups.
+Two tabs saving the same revision conflict; reload the stale tab before retrying. To recover a prior
+definition, inspect `operator_configuration.document`, then PUT it through `/api/operator/configuration`
+with the current revision and `X-Watchdawg-Request: 1`; the same validation applies. Never delete
+revisions to roll back while the process is running. Credentials, observer context, collector enablement
+and cadence remain host configuration, shown read-only in Settings, and require a restart to change.
+
+Statistics reads are local and do not fetch upstream. Select an exact market, closed/live series,
+side, resolution and crossplay population. Charts show observed buckets only, with gaps for missing
+history and an accessible data table. Contract listings are the latest 100 stored observations,
+not a live market or a valuation. PostgreSQL remains available for broader historical SQL queries.
 
 Every item dimension must be named as a value or `any`. Existing watches default to `underpriced`.
 Other `rule` values are:

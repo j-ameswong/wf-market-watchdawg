@@ -34,6 +34,7 @@ services:
       WATCHDAWG_STATISTICS_ENABLED: 'true'
       WATCHDAWG_SOCKET_ENABLED: 'true'
       SPRING_DOCKER_COMPOSE_ENABLED: 'false'
+      WATCHDAWG_OPERATOR_ALLOWEDHOSTS: ${OPERATOR_HOSTS:-localhost,127.0.0.1,::1,homelab},${TAILNET_IP}
     volumes:
       - ./watches.yaml:/config/watches.yaml:ro
     ports:

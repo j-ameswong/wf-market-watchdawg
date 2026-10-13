@@ -1,14 +1,10 @@
-# Full-scope delivery checklist
+# Operator dashboard delivery
 
-- [x] Analyze documentation and resolve scope/feature questions with the author.
-- [x] Implement C5, C7, remaining C9a, C8 and evidence-gated C9b.
-- [x] Independently review each feature and address findings.
-- [x] Complete observability, including durable UTC-day gauges.
-- [x] Exercise transaction rollback, concurrent admissions, clock boundaries and recovery.
-- [x] Verify actual WebSocket signal receipt through a live ntfy listener below ten seconds.
-- [x] Verify automatic live socket reconnect and gap-fill without process restart.
-- [x] Verify an isolated Timescale backup restoration.
-- [x] Document deployment, configurable watches, data limitations and recovery.
+- [x] Implement and independently review runtime configuration and bounded reads.
+- [x] Build and iterate on responsive watch, statistics and settings screens.
+- [x] Pass backend/browser checks, inspect screenshots and verify restart recovery.
+- [x] Commit features with tests separately and deploy the verified artifact to homelab.
+- [x] Verify existing watches, stored statistics, service health and realtime connection live.
 
-Build/deployment evidence and production readiness limits are in
-[full-scope-acceptance.md](full-scope-acceptance.md). Original capability checks are archived.
+See [acceptance evidence](operator-dashboard-acceptance.md) and
+[archived checklist](archive/operator-dashboard-todo.md).

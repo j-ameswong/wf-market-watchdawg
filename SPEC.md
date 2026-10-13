@@ -16,7 +16,8 @@
 > | C9a | **Built and independently reviewed.** Underpriced, crossing and spread share transactional dedup, cooldown and daily ceiling. |
 > | C9b | **Implemented with evidence gates.** Data-derived thresholds, time-separated validation and shared prospective budget replay. Production delivery stays disabled until real calibration and collection coverage qualify; lifetime history is still accumulating. |
 > | C10 | **Built and reviewed**, and delivered a real push on 2026-09-26. An outbox and one dispatcher send to ntfy, retrying with backoff to a cap, across restarts. |
-> | C12 | **Built and independently reviewed.** Request/ingest/recovery/poll metrics and durable UTC-day admission/finalized-delivery gauges; actuator only. |
+> | C13 | **Built and independently reviewed.** Private operator dashboard, runtime configuration and bounded statistics reads; deployed on homelab with browser and restart verification. |
+> | C12 | **Built and independently reviewed.** Request/ingest/recovery/poll metrics and durable UTC-day admission/finalized-delivery gauges. |
 >
 > Grounded in `docs/v2/` (API `v0.25.0`, WebSocket `v0.13.0`), `docs/v1.yml`, and the live-verified
 > route table in `bruno/README.md`. This document describes the system to be built; the reasoning
@@ -44,7 +45,7 @@ A single-operator service that watches warframe.market and does two things off o
 1. **Watchdog** — detect market moves worth acting on and push them to ntfy within seconds.
 2. **Warehouse** — retain order-book and auction history indefinitely, so questions can be asked later that nobody thought to ask up front.
 
-**User:** one operator (the author). Watches are declared in a version-controlled YAML file ([ADR-0013](docs/adr/0013-watches-in-version-controlled-yaml.md)). The warehouse is read directly from Postgres (`mpsql`, or any BI tool pointed at it) — there is no query API and no UI. The service only writes.
+**User:** one operator (the author). The private dashboard on homelab configures watches and inspects stored statistics. YAML bootstraps watches until the first browser save; subsequent revisions persist in PostgreSQL. SQL remains available for broader analysis ([ADR-0024](docs/adr/0024-private-operator-dashboard.md)).
 
 **Outcome that defines success:** a push notification arrives on a phone, within seconds of a qualifying order being posted, containing enough information to act — and a year later the database can answer what that item's price did over that year.
 
@@ -53,7 +54,7 @@ A single-operator service that watches warframe.market and does two things off o
 - Mirroring or replacing the warframe.market website (`docs/v2/rules/overview.md` forbids it).
 - Multi-platform coverage. **PC is the only platform context.** Crossplay-enabled orders from `ps4`, `xbox` and `mobile` *are* in scope — a PC operator can trade with them (§2.7, [ADR-0001](docs/adr/0001-pc-observer-context-with-crossplay.md)). Per-platform non-PC markets (an `xbox` view of the market in its own right) are not.
 - Any claim about completed trades beyond what §2 says is observable.
-- A query API or UI over the warehouse. Read it with psql ([ADR-0011](docs/adr/0011-no-query-api-postgres-is-the-read-surface.md)).
+- Public hosting or multi-user account management. The operator dashboard is tailnet-only (ADR-0024).
 
 ---
 
@@ -563,7 +564,7 @@ Schema: §2.6 and `docs/v1-statistics.md`. Design rationale: [ADR-0010](docs/adr
 
 ### C9a — Threshold rules
 
-- **R9a.1** Watches are declared in a version-controlled YAML file loaded at startup ([ADR-0013](docs/adr/0013-watches-in-version-controlled-yaml.md)).
+- **R9a.1** YAML bootstraps watches at startup. The operator may replace them with validated, versioned runtime configuration through the private dashboard (ADR-0024).
 - **R9a.2** Invalid config fails startup loudly, naming the offending entry.
 - **R9a.3** Three families: **underpriced listing** (order-scoped), **best price crosses** (book-scoped), **spread above margin** (book-scoped). The first milestone ships underpriced listing alone, evaluated as polled books are reconciled; the socket later makes it seconds-level.
 - **R9a.4** A watch selects a market by item plus optional subtype dimensions.
@@ -649,11 +650,31 @@ sequenceDiagram
 - **R12.2** Socket connection state and reconnect count.
 - **R12.3** Ingest throughput, plus signal and notification counts — the latter is how R9a.8's alert budget is measured rather than guessed at.
 - **R12.4** Poll lateness: how long after its due time each poll started.
-- **R12.5** These metrics are the service's **only** HTTP surface. Actuator only; no data endpoints.
+- **R12.5** Actuator exposes only health and metrics. ADR-0024 additionally permits the private operator dashboard and its bounded `/api/operator` surface.
 
 **Acceptance** — with a live observation sample and accelerated UTC-day tests, the metrics answer "are we under the limit", "is the socket up", "are polls keeping up", and "how many pushes today" without reading logs.
 
 ---
+
+### C13 — Private operator dashboard
+
+Activated by the author's frontend request on 2026-10-13: compact dark styling, desktop and phone
+support, and immediate application where supported. ADR-0024 supersedes the old no-UI and
+startup-only configuration decisions.
+
+- Item and riven/lich/sister watch forms expose all existing rule selectors, thresholds, priorities,
+  cooldowns and logical topics. Create, edit, pause, resume and delete preserve collected history.
+- Validate complete definitions before publishing a committed snapshot. Persist every revision;
+  reject stale writes. In-flight observations may finish under their prior selection. Subsequent
+  evaluations use the saved watches; collection additions join the next scheduled round.
+- Edit the daily admission ceiling and all-weapons collection live. Collector cadence, credentials
+  and observer context remain host settings with a clear restart requirement. No upstream mutations.
+- Read stored item statistics by exact market, series, side, resolution and crossplay. Charts expose
+  observed buckets, gaps, source timestamps and calibration evidence. Never fabricate trade data.
+- Serve local assets and bounded data reads from the jar, restricted to allowed loopback/tailnet
+  hosts with same-origin JSON mutation checks. No public or multi-user authentication flow.
+- Acceptance: backend validation/concurrency/persistence tests, browser CRUD and filtering tests,
+  empty/error states, mobile layout, keyboard chart inspection, process restart and independent review.
 
 ## 5–8. Development
 

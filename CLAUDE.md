@@ -114,7 +114,7 @@ The jar excludes `developmentOnly` deps, so it starts no Postgres: pass `SPRING_
 - Meter names live in `WfmMetrics` (transport and polling) and `AlertMetrics` (signals and
   deliveries), and are registered at startup, so a quiet service reads as zero
   rather than a missing series. Renaming one breaks whatever dashboard watches it. Actuator exposes `health,metrics` and nothing else;
-  `HttpSurfaceTest` fails on a controller or a wider exposure list.
+  `HttpSurfaceTest` allows only operator controllers (ADR-0024) and guards the actuator exposure list.
 
 ### Catalog sync
 
@@ -162,8 +162,12 @@ The jar excludes `developmentOnly` deps, so it starts no Postgres: pass `SPRING_
 
 ### Watches
 
-- `watches.yaml` is imported by `spring.config.import` and bound as `watchdawg.watches`; there is no
-  YAML dependency. `WATCHDAWG_WATCHES_FILE=file:/path` replaces it.
+- `watches.yaml` bootstraps configuration via `spring.config.import`; `WATCHDAWG_WATCHES_FILE=file:/path`
+  replaces it. After the first operator save, the latest `operator_configuration` revision takes
+  precedence for item/contract watches, alert ceiling and all-weapons collection (ADR-0024).
+- Runtime changes go through `OperatorConfiguration.save`: validate, compare revision under the
+  admission lock, persist, invalidate shared baseline evidence, then publish the committed snapshot.
+  Capture one snapshot when reading related settings. Do not write individual mutable properties.
 - Watches resolve against the catalog while the context starts, and a bad one fails startup. A
   missing slug gets one hash-gated catalog refresh first, so a fresh database can start.
 - A watch names every dimension its item has, as a value or `any`, and none it lacks. Charges are
@@ -266,3 +270,18 @@ with imported statistics or synthetic history. See ADR-0023 and deploy/OPERATION
 and socket collection default on outside the test harness. Statistics fetches item details before
 mapping charge/rank dimensions. Contract metadata preserves inverted beneficial attributes such as
 recoil; stored values remain raw, configured minimums use benefit magnitude.
+
+### Operator frontend
+
+Browser-native ES modules/CSS live in `market/src/main/resources/static` and ship in the jar.
+No frontend build or production dependency installation. `frontend/` contains development-only
+Playwright/Prettier tooling; its lock does not change `nix/deps.json`. Run `npm ci` and
+`npx playwright install chromium` there, then `nix develop --command bash frontend/run-tests.sh`
+after building the jar. The script creates/removes its own disposable TimescaleDB, disables every
+collector, seeds synthetic UI facts, runs browser checks and verifies process restart. It never
+uses production credentials or data. `npm run format:check` checks browser asset formatting.
+
+The private API never triggers upstream requests. Data reads must bound both result size and query
+work. Keep market dimensions/series/crossplay separate, display observation timestamps, and clear
+all dependent UI evidence on selection changes/errors. Capture revision alongside the rendered
+document when saving; stale async requests must not overwrite a newer form or configuration.

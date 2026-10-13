@@ -7,6 +7,14 @@ design rationale in [`docs/adr/`](docs/adr/README.md).
 
 ### Added
 
+- Private, self-hosted dark operator dashboard for item/riven/lich/sister watches, runtime settings,
+  exact-market statistics, contract listings and calibration readiness. Responsive browser-native
+  assets ship in the existing jar; no separate frontend production server or CDN.
+- Validated, versioned database configuration with pause/resume, persistent revision history and
+  stale-edit rejection. YAML remains the bootstrap source until the first dashboard save.
+- Same-origin JSON mutation checks, explicit hostname allowlist, bounded/indexed warehouse reads,
+  and browser integration tests against a disposable TimescaleDB and the packaged application.
+
 - Full-scope delivery on homelab: reconnecting whole-market socket ingest and sub-second measured
   observation-to-ntfy-listener delivery; statistics warehouse; riven/lich/sister history and
   configurable alerts; crossing/spread rules; calibrated volume/lifetime rules with shared-budget
